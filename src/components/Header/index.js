@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
 import {
   Header,
@@ -21,7 +22,7 @@ import search from '~/assets/search.svg';
 import bag from '~/assets/bag.svg';
 import user from '~/assets/user-check.svg';
 
-export default function PageHeader() {
+export default function PageHeader({ login }) {
   const [selectedPage, setSelectedPage] = useState('Principal');
 
   useEffect(() => {
@@ -113,7 +114,10 @@ export default function PageHeader() {
           </MenuItem>
           <MenuItem
             selected={selectedPage === 'Perfil'}
-            onClick={() => setSelectedPage('Perfil')}
+            onClick={() => {
+              login();
+              setSelectedPage('Perfil');
+            }}
           >
             <img src={user} alt="user" />
           </MenuItem>
@@ -140,3 +144,7 @@ export default function PageHeader() {
     </>
   );
 }
+
+PageHeader.propTypes = {
+  login: PropTypes.func.isRequired,
+};

@@ -5,7 +5,7 @@ export const Title = styled.strong`
   display: block;
   font-weight: bold;
   text-align: left;
-  font: bold 12px/16px 'Roboto';
+  font: bold 12px/16px 'SFProBold';
   letter-spacing: 0px;
   color: #424242;
   margin-bottom: 5px;
@@ -41,7 +41,7 @@ export const Menu = styled.button.attrs({
 
   font-size: 12px;
   line-height: 16px;
-  font-family: 'Roboto';
+  font-family: 'SFPro';
   letter-spacing: 0px;
 
   span {

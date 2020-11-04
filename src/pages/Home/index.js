@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   Container,
@@ -23,6 +23,9 @@ import {
 import Header from '~/components/Header';
 import Product from '~/components/Product';
 
+import DeliveryModal from '~/pages/DeliveryModal';
+import LoginModal from '~/pages/LoginModal';
+
 import data from '~/data';
 
 import banner from '~/assets/banner@2x.jpg';
@@ -35,11 +38,16 @@ import appStore from '~/assets/appStore.svg';
 import playStore from '~/assets/playStore.svg';
 
 export default function Home() {
+  const [deliveryModal, setDeliveryModal] = useState(false);
+  const [loginModal, setLoginModal] = useState(false);
+
   return (
     <>
-      <Header />
+      <Header login={() => setLoginModal(true)} />
       <Container>
-        <Banner src={banner} alt="banner" />
+        <Banner onClick={() => setDeliveryModal(true)}>
+          <img src={banner} alt="banner" />
+        </Banner>
         <OptionsContainer>
           <Option>
             <img src={envio} alt="Envio Gratuito" />
@@ -74,7 +82,8 @@ export default function Home() {
         </ProductsContainer>
         <SecurityContainer>
           <span>
-            Segurança:&nbsp; <b>Pague somente na entrega!</b>
+            Segurança:&nbsp;
+            <b style={{ fontFamily: 'SFProBold' }}>Pague somente na entrega!</b>
           </span>
         </SecurityContainer>
         <SectionTitle>
@@ -88,7 +97,8 @@ export default function Home() {
         </ProductsContainer>
         <SecurityContainer style={{ height: 166 }}>
           <span>
-            Encomende com o App AM Frutas: <b>Notificação na Entrega</b>
+            Encomende com o App AM Frutas:&nbsp;
+            <b style={{ fontFamily: 'SFProBold' }}>Notificação na Entrega</b>
           </span>
           <StoreButtonContainer>
             <StoreButton>
@@ -273,6 +283,10 @@ export default function Home() {
           </div>
         </Section>
       </Container>
+      {deliveryModal && (
+        <DeliveryModal closeModal={() => setDeliveryModal(false)} />
+      )}
+      {loginModal && <LoginModal closeModal={() => setLoginModal(false)} />}
     </>
   );
 }

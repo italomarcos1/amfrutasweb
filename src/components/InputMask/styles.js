@@ -1,40 +1,39 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  width: 221px;
+  width: 171px;
   height: 53px;
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-`;
 
-export const Input = styled.input`
-  width: 100%;
-  height: 32px;
-  padding: 7px;
-  padding-left: 8px;
-  text-align: left;
-  color: #424242;
-  border: 1px solid #bec2c8;
-  border-color: ${({ active, error }) =>
-    error ? '#f53030' : active ? '#1DC167' : '#BEC2C8'};
-  border-width: ${({ active, error }) => (error || active ? 2 : 1)}px;
-  padding: ${({ active }) => (active ? 6 : 7)}px;
-
-  border-radius: 2px;
-  font-size: 12px;
-  background: #fff;
-
-  &::placeholder {
+  input {
+    width: 100%;
+    height: 32px;
+    padding: 7px;
+    padding-left: 8px;
     text-align: left;
-    font-style: italic;
+    color: #424242;
+    border: 1px solid #bec2c8;
+    border-color: ${({ active }) => (active ? '#1DC167' : '#BEC2C8')};
+    border-width: ${({ active }) => (active ? 2 : 1)}px;
+    padding: ${({ active }) => (active ? 6 : 7)}px;
+
+    border-radius: 2px;
     font-size: 12px;
-    font-family: 'SFPro';
-    line-height: 16px;
-    letter-spacing: 0px;
-    color: #bbbfc6;
-    opacity: 1;
+    background: #fff;
+
+    &::placeholder {
+      text-align: left;
+      font-style: italic;
+      font-size: 12px;
+      font-family: 'SFPro';
+      line-height: 16px;
+      letter-spacing: 0px;
+      color: #bbbfc6;
+      opacity: 1;
+    }
   }
 `;
 
@@ -43,6 +42,7 @@ export const Title = styled.small`
   font-weight: bold;
 
   text-align: left;
+  font-weight: bold;
   font-family: 'SFProBold';
   font-size: 12px;
   line-height: 16px;

@@ -9,10 +9,17 @@ export const Container = styled.div`
   padding: 21px 30px;
 `;
 
-export const Banner = styled.img`
+export const Banner = styled.button.attrs({
+  type: 'button',
+})`
   width: 1240px;
   height: 300px;
   margin: 0 auto;
+
+  img {
+    width: 1240px;
+    height: 300px;
+  }
 `;
 
 export const OptionsContainer = styled.div`

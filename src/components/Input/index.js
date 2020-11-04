@@ -4,8 +4,6 @@ import { useField } from '@unform/core';
 
 import { Container, Title, Input, VerifiedEmail } from './styles';
 
-// import Input from './input';
-
 export default function CustomInput({
   name,
   title,
@@ -92,7 +90,7 @@ CustomInput.defaultProps = {
   placeholder: 'Text here...',
   hasMarginLeft: false,
   fontSize: 12,
-  customWidth: 170.5,
+  customWidth: 221,
   style: {},
   inputStyle: {},
   titleStyle: {},

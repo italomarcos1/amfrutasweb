@@ -116,7 +116,7 @@ export default function BankingSelect({
           // width: isFocused ? 223 : 221,
           borderWidth: isFocused ? 0.5 : 1,
           borderStyle: 'solid',
-          borderColor: customColor || (menuIsOpen ? '#2CA01C' : '#bec2c8'),
+          borderColor: customColor || (menuIsOpen ? '#1DC167' : '#bec2c8'),
           paddingLeft: 4,
           padding: 0,
           color: customColor || '#424242',
@@ -132,7 +132,7 @@ export default function BankingSelect({
           fontSize: 12,
           fontStyle: 'italic',
           lineHeight: 16,
-          fontFamily: 'Roboto',
+          fontFamily: 'SFPro',
           letterSpacing: 0,
           color: customColor || '#BBBFC6',
           padding: 0,
@@ -169,18 +169,18 @@ export default function BankingSelect({
           zIndex: 1099,
         }),
         option: (styles, { isDisabled, isFocused, isSelected }) => {
-          const color = chroma('#2CA01C');
+          const color = chroma('#1DC167');
           return {
             ...styles,
             fontSize: 12,
             backgroundColor: isDisabled
               ? null
               : isSelected
-              ? '#2CA01C'
+              ? '#1DC167'
               : isFocused
               ? '#f4f5f8'
               : null,
-            color: isSelected ? '#fff' : isFocused ? '#2CA01C' : '#424242',
+            color: isSelected ? '#fff' : isFocused ? '#1DC167' : '#424242',
             width: customWidth - 8,
             marginLeft: 4,
             marginTop: 4,
@@ -201,8 +201,8 @@ export default function BankingSelect({
         borderWidth: 1.5,
         colors: {
           ...theme.colors,
-          primary25: '#2CA01C',
-          primary: '#2CA01C',
+          primary25: '#1DC167',
+          primary: '#1DC167',
         },
       })}
     />
