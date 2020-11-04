@@ -22,6 +22,7 @@ import {
 
 import Header from '~/components/Header';
 import Product from '~/components/Product';
+import Footer from '~/components/Footer';
 
 import DeliveryModal from '~/pages/DeliveryModal';
 import LoginModal from '~/pages/LoginModal';
@@ -283,6 +284,7 @@ export default function Home() {
           </div>
         </Section>
       </Container>
+      <Footer />
       {deliveryModal && (
         <DeliveryModal closeModal={() => setDeliveryModal(false)} />
       )}

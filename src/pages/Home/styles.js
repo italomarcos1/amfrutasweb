@@ -6,7 +6,7 @@ export const Container = styled.div`
   flex-direction: column;
   background-color: #fff;
   width: 100%;
-  padding: 21px 30px;
+  padding: 21px 30px 87px;
 `;
 
 export const Banner = styled.button.attrs({
@@ -320,10 +320,4 @@ export const SendButton = styled.button.attrs({
   &:hover {
     background-color: ${darken('0.15', '#0cb68b')};
   }
-`;
-
-export const Footer = styled.div`
-  width: 1300px;
-  height: 212px;
-  background: #f8f9fb;
 `;
