@@ -53,6 +53,12 @@ export const Content = styled.div`
   height: 466px;
 `;
 
+export const InfoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 export const PeriodDelivery = styled.div`
   display: flex;
   align-items: center;

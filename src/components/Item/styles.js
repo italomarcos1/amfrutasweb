@@ -1,16 +1,13 @@
 import styled from 'styled-components';
 
 export const Container = styled.li`
-  width: 100%;
-  height: 162px;
+  width: 400px;
+  height: 147px;
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 6px;
   padding: 6px;
-
-  & + li {
-    margin-top: 10px;
-  }
+  list-style: none;
 `;
 
 export const ItemPicture = styled.img`
@@ -21,7 +18,7 @@ export const ItemPicture = styled.img`
 export const Title = styled.h1`
   text-align: left;
   font-family: 'SFPro';
-  font-size: 18px;
+  font-size: 15px;
   line-height: 22px;
   letter-spacing: 0px;
   color: #393939;
@@ -53,7 +50,7 @@ export const Separator = styled.hr`
   color: #e0e0e0;
   opacity: 0.3;
   height: 1px;
-  margin: 10.5px auto 8.5px;
+  margin: 10.5px auto 0;
 `;
 
 export const Options = styled.div`

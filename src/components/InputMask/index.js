@@ -69,8 +69,8 @@ export default function CustomInput({
         break;
       }
       case 'phone': {
-        setMask('99999 999999');
-        setPlaceholder('00000 000000');
+        setMask('99 999 99 99');
+        setPlaceholder('00 000 00 00');
         break;
       }
       case 'number': {

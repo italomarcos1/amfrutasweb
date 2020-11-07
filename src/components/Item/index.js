@@ -40,12 +40,12 @@ export default function Item({ item }) {
   );
 
   return (
-    <Container key={id}>
+    <Container key={id} style={id > 2 ? { marginTop: 40 } : {}}>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <ItemPicture src={picture} />
         <ProductInfo>
           <Title>{title}</Title>
-          <Price>&euro;{newPrice}</Price>
+          <Price>€{newPrice}</Price>
         </ProductInfo>
       </div>
       <Separator />
@@ -66,7 +66,7 @@ export default function Item({ item }) {
             <img src={plus} alt="icon" />
           </button>
         </div>
-        <Price style={{ alignSelf: 'center' }}>&euro;{newPrice}</Price>
+        <Price style={{ alignSelf: 'center' }}>€{newPrice}</Price>
       </Options>
     </Container>
   );

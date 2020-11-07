@@ -84,7 +84,7 @@ export default function Home() {
         <SecurityContainer>
           <span>
             Segurança:&nbsp;
-            <b style={{ fontFamily: 'SFProBold' }}>Pague somente na entrega!</b>
+            <b>Pague somente na entrega!</b>
           </span>
         </SecurityContainer>
         <SectionTitle>
@@ -99,7 +99,7 @@ export default function Home() {
         <SecurityContainer style={{ height: 166 }}>
           <span>
             Encomende com o App AM Frutas:&nbsp;
-            <b style={{ fontFamily: 'SFProBold' }}>Notificação na Entrega</b>
+            <b>Notificação na Entrega</b>
           </span>
           <StoreButtonContainer>
             <StoreButton>

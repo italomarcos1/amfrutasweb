@@ -177,6 +177,116 @@ export const menuCategories = [
   { id: 22, title: 'Tropicais', childrenCategories: [] },
 ];
 
+export const products = [
+  {
+    id: 1,
+    picture: frito,
+    title: 'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
+    oldPrice: '10.99',
+    newPrice: '9.80',
+    amount: 0,
+  },
+  {
+    id: 2,
+    picture: frito,
+    title: 'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
+    oldPrice: '10.99',
+    newPrice: '9.80',
+    amount: 0,
+  },
+  {
+    id: 3,
+    picture: frito,
+    title: 'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
+    oldPrice: '10.99',
+    newPrice: '9.80',
+    amount: 0,
+  },
+  {
+    id: 4,
+    picture: frito,
+    title: 'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
+    oldPrice: '10.99',
+    newPrice: '9.80',
+    amount: 0,
+  },
+  {
+    id: 5,
+    picture: frito,
+    title: 'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
+    oldPrice: '10.99',
+    newPrice: '9.80',
+    amount: 0,
+  },
+  {
+    id: 6,
+    picture: frito,
+    title: 'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
+    oldPrice: '10.99',
+    newPrice: '9.80',
+    amount: 0,
+  },
+  {
+    id: 7,
+    picture: frito,
+    title: 'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
+    oldPrice: '10.99',
+    newPrice: '9.80',
+    amount: 0,
+  },
+  {
+    id: 8,
+    picture: frito,
+    title: 'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
+    oldPrice: '10.99',
+    newPrice: '9.80',
+    amount: 0,
+  },
+];
+
+export const periodicProducts = [
+  {
+    id: 1,
+    picture: frito,
+    selected: true,
+  },
+  {
+    id: 2,
+    picture: frito,
+    selected: true,
+  },
+  {
+    id: 3,
+    picture: frito,
+    selected: true,
+  },
+  {
+    id: 4,
+    picture: frito,
+    selected: false,
+  },
+  {
+    id: 5,
+    picture: frito,
+    selected: false,
+  },
+  {
+    id: 6,
+    picture: frito,
+    selected: true,
+  },
+  {
+    id: 7,
+    picture: frito,
+    selected: true,
+  },
+  {
+    id: 8,
+    picture: frito,
+    selected: false,
+  },
+];
+
 export const phoneCodes = [
   { code: '93', country: 'AFG' },
   { code: '355', country: 'ALB' },

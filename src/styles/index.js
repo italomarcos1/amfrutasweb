@@ -22,7 +22,10 @@ export default createGlobalStyle`
     }
 
     body {
-        -webkit-font-smoothing: antialiased;
+        font-smoothing: antialiased !important;
+        -moz-font-smoothing: antialiased !important;
+        -webkit-font-smoothing: antialiased !important;
+        /* text-rendering: optimizeLegibility; */
     }
 
     textarea, input[type="text"] {
@@ -42,6 +45,7 @@ export default createGlobalStyle`
     @font-face {
       font-family: "SFProBold";
       src: local('SFProBold'), url(${SFProBold}) format('opentype');
+      font-weight: bold;
     }
 
     @font-face {

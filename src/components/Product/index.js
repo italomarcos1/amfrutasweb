@@ -48,14 +48,14 @@ export default function Product({ product, index }) {
             alt="coins"
             style={{ width: '15%', marginRight: 1 }}
           />
-          <strong>&euro;1.290,08</strong>
+          <strong>€1.290,08</strong>
           DE CRÉDITO
         </span>
         <small>
           antes
-          <p>&euro;{oldPrice}</p>
+          <p>€{oldPrice}</p>
         </small>
-        <strong>&euro;{newPrice}</strong>
+        <strong>€{newPrice}</strong>
       </PriceContainer>
       <Options>
         <div>

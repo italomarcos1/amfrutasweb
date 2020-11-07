@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 
 import {
   Header,
@@ -24,6 +25,9 @@ import user from '~/assets/user-check.svg';
 
 export default function PageHeader({ login }) {
   const [selectedPage, setSelectedPage] = useState('Principal');
+  const loggedIn = useState(true);
+
+  const history = useHistory();
 
   useEffect(() => {
     function stickHeader() {
@@ -115,8 +119,11 @@ export default function PageHeader({ login }) {
           <MenuItem
             selected={selectedPage === 'Perfil'}
             onClick={() => {
-              login();
-              setSelectedPage('Perfil');
+              if (loggedIn) history.push('/painel');
+              else {
+                login();
+                setSelectedPage('Perfil');
+              }
             }}
           >
             <img src={user} alt="user" />
@@ -125,13 +132,16 @@ export default function PageHeader({ login }) {
             <BadgeContainer>
               <MenuItem
                 selected={selectedPage === 'Cesto'}
-                onClick={() => setSelectedPage('Cesto')}
+                onClick={() => {
+                  setSelectedPage('Cesto');
+                  history.push('/cesto');
+                }}
               >
                 <img src={bag} alt="bag" />
               </MenuItem>
               <Badge>02</Badge>
             </BadgeContainer>
-            <Price>&euro; 45,00</Price>
+            <Price>€ 45,00</Price>
           </div>
         </MenuContent>
       </Menu>
