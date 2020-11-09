@@ -38,7 +38,7 @@ export default function CustomInput({
       full={full}
       style={
         hasMarginLeft
-          ? { ...style, width: customWidth, marginLeft: 15.5 }
+          ? { ...style, width: customWidth, marginLeft: 20 }
           : { ...style, width: customWidth }
       }
     >

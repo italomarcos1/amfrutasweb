@@ -224,7 +224,7 @@ BankingSelect.propTypes = {
 BankingSelect.defaultProps = {
   data: [],
   defaultValue: '',
-  customWidth: 170.5,
+  customWidth: 221,
   fontSize: 12,
   customColor: '',
   hasMarginLeft: false,

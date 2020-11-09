@@ -71,22 +71,24 @@ export default function Account({ children }) {
               </Option>
 
               <Option
-                onClick={() => history.push('/painel')}
+                onClick={() => history.push('/conta')}
                 active={active === '/conta'}
               >
                 <img
-                  src={active === 'account' ? myAccountIcon : myAccountIconOff}
+                  src={active === '/conta' ? myAccountIcon : myAccountIconOff}
                   alt=""
                   style={{ width: 22, height: 18 }}
                 />
                 <strong>Minha conta</strong>
               </Option>
               <Option
-                onClick={() => history.push('/painel')}
-                active={active === 'orders'}
+                onClick={() => history.push('/encomendas')}
+                active={active === '/encomendas'}
               >
                 <img
-                  src={active === 'orders' ? myOrdersIcon : myOrdersIconOff}
+                  src={
+                    active === '/encomendas' ? myOrdersIcon : myOrdersIconOff
+                  }
                   alt=""
                   style={{ width: 16.7, height: 18.5 }}
                 />
@@ -104,22 +106,22 @@ export default function Account({ children }) {
                 <strong>Entrega periódica</strong>
               </Option>
               <Option
-                onClick={() => history.push('/painel')}
-                active={active === 'address'}
+                onClick={() => history.push('/endereco')}
+                active={active === '/endereco'}
               >
                 <img
-                  src={active === 'address' ? addressIcon : addressIconOff}
+                  src={active === '/endereco' ? addressIcon : addressIconOff}
                   alt=""
                   style={{ width: 15.6, height: 21 }}
                 />
                 <strong>Meu endereço</strong>
               </Option>
               <Option
-                onClick={() => history.push('/painel')}
-                active={active === 'favorites'}
+                onClick={() => history.push('/favoritos')}
+                active={active === '/favoritos'}
               >
                 <img
-                  src={active === 'favorites' ? myFavorites : myFavoritesOff}
+                  src={active === '/favoritos' ? myFavorites : myFavoritesOff}
                   alt=""
                   style={{ width: 18, height: 16.5 }}
                 />
@@ -127,7 +129,7 @@ export default function Account({ children }) {
               </Option>
             </div>
           </Menu>
-          <div>{children}</div>
+          <div style={{ marginTop: 26 }}>{children}</div>
         </Content>
       </Container>
     </>
