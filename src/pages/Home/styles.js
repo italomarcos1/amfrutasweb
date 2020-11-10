@@ -155,7 +155,6 @@ export const SectionTitle = styled.div`
     font-family: 'SFProBold';
     letter-spacing: 0px;
     color: #000;
-    background-color: #8d8d8d;
   }
 
   small {
@@ -166,7 +165,6 @@ export const SectionTitle = styled.div`
     font-family: 'SFPro';
     letter-spacing: 0px;
     color: #8d8d8d;
-    background-color: #000;
   }
 `;
 
