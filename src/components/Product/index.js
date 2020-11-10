@@ -43,19 +43,19 @@ export default function Product({ product, index }) {
       <Title to={`/product/${index}`}>{title}</Title>
       <PriceContainer to={`/product/${index}`}>
         <span>
-          <img
-            src={coins}
-            alt="coins"
-            style={{ width: '15%', marginRight: 1 }}
-          />
+          <img src={coins} alt="coins" />
           <strong>€1.290,08</strong>
           DE CRÉDITO
         </span>
-        <small>
-          antes
-          <p>€{oldPrice}</p>
-        </small>
-        <strong>€{newPrice}</strong>
+        {oldPrice ? (
+          <small>
+            antes
+            <p>€ {oldPrice}</p>
+          </small>
+        ) : (
+          <small>&nbsp;</small>
+        )}
+        <strong>€ {newPrice}</strong>
       </PriceContainer>
       <Options>
         <div>
@@ -67,7 +67,9 @@ export default function Product({ product, index }) {
           >
             <img src={minus} alt="icon" />
           </button>
-          <strong>{amount}</strong>
+          <strong>
+            {amount === 0 ? 0 : amount < 10 ? `0${amount}` : amount}
+          </strong>
           <button
             type="button"
             onClick={() => setAmount(amount + 1)}

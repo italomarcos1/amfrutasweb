@@ -32,7 +32,7 @@ export const Container = styled.button.attrs({
     font-weight: normal;
     font-size: 22px;
     line-height: 29px;
-    font-family: 'SFProLight';
+    font-family: 'SFPro';
     letter-spacing: 0px;
     color: #424242;
   }

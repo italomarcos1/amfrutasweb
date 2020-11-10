@@ -82,6 +82,6 @@ export const BottomFooterContent = styled.div`
   }
 
   b {
-    font-family: 'SFProSemibold';
+    font-family: 'SFProBold';
   }
 `;

@@ -10,6 +10,7 @@ import {
   ConfirmationText,
   ShippingWarning,
   DeliveryButton,
+  DeliveryButtonContainer,
   DeliveryButtonContent,
   DeliveryOptionsContainer,
   DeliveryDateContainer,
@@ -24,6 +25,12 @@ import { InputContainer, Button, SecureLogin } from '~/components/LoginModal';
 
 import lock from '~/assets/lock.svg';
 import facebook from '~/assets/facebook.svg';
+
+import truckBlack from '~/assets/orders/truck-black.svg';
+import truckWhite from '~/assets/orders/truck-white.svg';
+
+import lojaBlack from '~/assets/orders/loja-black.svg';
+import lojaWhite from '~/assets/orders/loja-white.svg';
 
 import Footer from '~/components/Footer';
 import TextArea from '~/components/TextArea';
@@ -142,26 +149,39 @@ export default function Delivery() {
                 onClick={() => setDeliveryOption('shop')}
                 style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
               >
-                <DeliveryButtonContent>
-                  <span>
-                    <img src={facebook} alt="Envio" />
+                <DeliveryButtonContainer>
+                  <DeliveryButtonContent selected={deliveryOption === 'shop'}>
+                    <img
+                      src={deliveryOption === 'shop' ? truckWhite : truckBlack}
+                      alt="Entrega"
+                      style={{ width: 36, height: 30 }}
+                    />
                     Entrega Própria
-                  </span>
+                  </DeliveryButtonContent>
                   <div>Grátis</div>
-                </DeliveryButtonContent>
+                </DeliveryButtonContainer>
               </DeliveryButton>
               <DeliveryButton
                 selected={deliveryOption === 'customer'}
                 onClick={() => setDeliveryOption('customer')}
                 style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
               >
-                <DeliveryButtonContent>
-                  <span>
-                    <img src={facebook} alt="Envio" />
-                    Entrega Própria
-                  </span>
+                <DeliveryButtonContainer>
+                  <DeliveryButtonContent
+                    selected={deliveryOption === 'customer'}
+                  >
+                    <img
+                      src={
+                        deliveryOption === 'customer' ? lojaWhite : lojaBlack
+                      }
+                      alt="Retirar na loja"
+                      style={{ width: 28, height: 25 }}
+                    />
+                    Retirar
+                    <br /> na Loja
+                  </DeliveryButtonContent>
                   <div>Grátis</div>
-                </DeliveryButtonContent>
+                </DeliveryButtonContainer>
               </DeliveryButton>
             </div>
             <DeliveryDateContainer>

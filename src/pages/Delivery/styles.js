@@ -67,28 +67,30 @@ export const DeliveryButton = styled.button`
   text-transform: uppercase;
 `;
 
-export const DeliveryButtonContent = styled.div`
+export const DeliveryButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   width: 104px;
   height: 59px;
+`;
 
-  span {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 42px;
+export const DeliveryButtonContent = styled.span`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 42px;
 
-    border-bottom: 2px solid #fff;
-    padding-bottom: 4.5px;
-    margin-bottom: 4.5px;
+  border-bottom: 2px solid #fff;
+  border-color: ${({ selected }) => (selected ? '#fff' : '#000')};
+  padding-bottom: 4.5px;
+  margin-bottom: 4.5px;
 
-    img {
-      width: 27px;
-      height: 27px;
-    }
+  img {
+    width: 27px;
+    height: 27px;
+    margin-right: 7.5px;
   }
 `;
 

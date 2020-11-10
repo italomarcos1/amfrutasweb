@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { darken } from 'polished';
 
 export const Container = styled.li`
   width: 370px;
@@ -72,31 +73,42 @@ export const Options = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: 12px;
+`;
 
-  button {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    text-align: center;
-    width: 185px;
-    height: 27px;
-    padding: 5px 7px;
-    background-color: #0cb68b;
-    border-radius: 4px;
+export const Button = styled.button.attrs({ type: 'button' })`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-    small {
-      font-family: 'SFPro';
-      font-size: 12px;
-      line-height: 12px;
-      letter-spacing: 0px;
-      color: #fff;
-    }
+  text-align: center;
+  width: 185px;
+  height: 27px;
+  padding: 0 7px;
+  background-color: ${({ color }) => color};
 
-    img {
-      width: 17px;
-      margin: 17px;
-      margin-right: 5px;
-      margin-left: 0px;
-    }
+  border-radius: 4px;
+
+  &:hover {
+    background-color: ${({ color }) => darken(0.05, color)};
+    transition: all 0.2s;
+  }
+
+  small {
+    font-family: 'SFPro';
+    font-size: 11px;
+    margin-top: 0;
+    padding: 0;
+    border: 0;
+
+    /* line-height: 12px; */
+    letter-spacing: 0px;
+    color: #fff;
+  }
+
+  img {
+    width: 17px;
+    height: 17px;
+    margin-right: 5px;
+    margin-left: 0px;
   }
 `;

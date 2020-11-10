@@ -24,7 +24,7 @@ export const Button = styled.button.attrs({
   }
 
   b {
-    font-family: 'SFProSemibold';
+    font-family: 'SFProBold';
   }
 `;
 
@@ -114,6 +114,6 @@ export const ForgotPassword = styled.button.attrs({
   }
 
   &:hover {
-    font-family: 'SFProSemibold';
+    font-family: 'SFProBold';
   }
 `;

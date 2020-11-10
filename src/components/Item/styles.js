@@ -45,6 +45,37 @@ export const Price = styled.strong`
   align-self: flex-end;
 `;
 
+export const PriceAndAmount = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-self: flex-end;
+  width: 75%;
+  margin-top: 10px;
+  height: 21px;
+
+  small {
+    text-align: right;
+    text-decoration: line-through;
+    font-family: 'SFProBold';
+    font-size: 18px;
+    line-height: 22px;
+    letter-spacing: 0px;
+    color: #f03f39;
+    align-self: flex-end;
+  }
+
+  strong {
+    text-align: right;
+    font-family: 'SFProBold';
+    font-size: 18px;
+    line-height: 22px;
+    letter-spacing: 0px;
+    color: #393939;
+    align-self: flex-end;
+  }
+`;
+
 export const Separator = styled.hr`
   width: 100%;
   color: #e0e0e0;
@@ -88,6 +119,7 @@ export const Options = styled.div`
       height: 45px;
       padding-left: 0;
       background-color: #f2f2f2;
+      border-radius: 4px;
 
       img {
         width: 35%;

@@ -27,20 +27,20 @@ const Placeholder = props => {
   return <components.Placeholder {...props} />;
 };
 
-const MenuList = ({ selectProps, children, ...rest }) => {
-  const { customWidth } = selectProps;
-  return (
-    <components.MenuList {...rest}>
-      <Menu style={{ width: customWidth - 8 }} onClick={() => {}}>
-        <span>
-          <img src={addItem} alt="addItem" />
-          Add new
-        </span>
-      </Menu>
-      {children}
-    </components.MenuList>
-  );
-};
+// const MenuList = ({ selectProps, children, ...rest }) => {
+//   const { customWidth } = selectProps;
+//   return (
+//     <components.MenuList {...rest}>
+//       <Menu style={{ width: customWidth - 8 }} onClick={() => {}}>
+//         <span>
+//           <img src={addItem} alt="addItem" />
+//           Add new
+//         </span>
+//       </Menu>
+//       {children}
+//     </components.MenuList>
+//   );
+// };
 
 const IndicatorSeparator = ({ innerProps, selectProps, isFocused }) => {
   const { customColor } = selectProps;
@@ -98,7 +98,6 @@ export default function BankingSelect({
         Placeholder,
         IndicatorSeparator,
         DropdownIndicator,
-        MenuList,
       }}
       onChange={({ label }) => setValue(label)}
       options={data || colourOptions}

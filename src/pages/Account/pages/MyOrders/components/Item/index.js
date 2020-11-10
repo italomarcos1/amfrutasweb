@@ -2,10 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 // import { Container } from './styles';
 
-import minus from '~/assets/icons/minus.svg';
-import plus from '~/assets/icons/plus.svg';
-import close from '~/assets/icons/close.svg';
-
 import delivery from '~/assets/myAccount/delivery_white.svg';
 import orders from '~/assets/myAccount/orders_white.svg';
 
@@ -16,6 +12,7 @@ import {
   ProductInfo,
   Options,
   PriceAndAmount,
+  Button,
 } from './styles';
 
 export default function Item({ item }) {
@@ -34,17 +31,14 @@ export default function Item({ item }) {
         </ProductInfo>
       </div>
       <Options>
-        <button type="button">
+        <Button color="#0cb68b">
           <img src={delivery} alt="" />
           <small>Adicionar a entrega periódica</small>
-        </button>
-        <button
-          type="button"
-          style={{ width: 132, backgroundColor: '#29B4CC' }}
-        >
+        </Button>
+        <Button style={{ width: 132 }} color="#29B4CC">
           <img src={orders} alt="" style={{ width: 15, height: 15 }} />
           <small>Adicionar ao cesto</small>
-        </button>
+        </Button>
       </Options>
     </Container>
   );

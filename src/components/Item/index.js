@@ -17,6 +17,7 @@ import {
   ItemPicture,
   Title,
   Price,
+  PriceAndAmount,
   ProductInfo,
   Separator,
   Options,
@@ -45,7 +46,10 @@ export default function Item({ item }) {
         <ItemPicture src={picture} />
         <ProductInfo>
           <Title>{title}</Title>
-          <Price>€{newPrice}</Price>
+          <PriceAndAmount>
+            <small>€ {Number(newPrice) + 2}</small>
+            <strong>€{newPrice}</strong>
+          </PriceAndAmount>
         </ProductInfo>
       </div>
       <Separator />
@@ -58,11 +62,16 @@ export default function Item({ item }) {
             type="button"
             disabled={amount === 1}
             onClick={() => handleUpdateAmount(amount - 1)}
+            style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
           >
             <img src={minus} alt="icon" />
           </button>
           <strong>{amount}</strong>
-          <button type="button" onClick={() => handleUpdateAmount(amount + 1)}>
+          <button
+            type="button"
+            onClick={() => handleUpdateAmount(amount + 1)}
+            style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+          >
             <img src={plus} alt="icon" />
           </button>
         </div>

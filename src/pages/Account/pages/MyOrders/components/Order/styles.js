@@ -9,7 +9,7 @@ export const Container = styled(Form)`
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 4px;
-  padding: 18px 20px 12.5px 30px;
+  padding: 15px 20px 12.5px 20px;
 
   ul {
     display: ${({ open }) => (open ? 'flex' : 'none')};
@@ -64,10 +64,10 @@ export const OpenTab = styled.button`
   height: 45px;
   border-radius: 50%;
   background-color: #ededed;
-  margin-left: 15px;
+  margin-left: 25px;
 
   img {
-    width: 30px;
+    width: 45px;
   }
 `;
 
@@ -105,6 +105,7 @@ export const OrderInfoContainer = styled.div`
   display: flex;
   width: 689px;
   /* background-color: #ff00e0; */
+  margin-top: 5px;
 `;
 
 export const OrderInfo = styled.div`
@@ -123,52 +124,13 @@ export const OrderInfo = styled.div`
     color: #9e9e9e;
 
     b {
+      font-weight: normal;
       color: #424242;
     }
   }
 
   & + div {
     margin-left: 30px;
-  }
-`;
-
-export const StatusContainer = styled.div`
-  display: flex;
-  width: 447px;
-  height: 28px;
-  align-items: center;
-  justify-content: space-between;
-  /* background-color: #6600e0; */
-  margin-top: 10px;
-
-  span {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    height: 50px;
-    margin-top: 15px;
-
-    img {
-      width: 28px;
-      height: 28px;
-    }
-    small {
-      margin-top: 8px;
-      font-weight: normal;
-      font-size: 12px;
-      line-height: 14px;
-      font-family: 'SFPro';
-      letter-spacing: 0px;
-      color: #29b4cc;
-    }
-  }
-
-  div {
-    width: 80px;
-    height: 0px;
-    border: 1.5px solid #29b4cc;
-    margin: 0 10.5px;
   }
 `;
 

@@ -112,7 +112,7 @@ export const CashbackCredit = styled.div`
     font-weight: normal;
     font-size: 47px;
     line-height: 56px;
-    font-family: 'SFProLight';
+    font-family: 'SFPro';
     letter-spacing: 0px;
     color: #0cb68b;
   }
@@ -361,5 +361,6 @@ export const Options = styled.div`
     padding: 10px;
     height: 45px;
     background-color: #f2f2f2;
+    border-radius: 4px;
   }
 `;

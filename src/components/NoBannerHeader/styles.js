@@ -77,7 +77,7 @@ export const SubTitle = styled.div`
   justify-content: center;
   align-items: center;
   text-transform: uppercase;
-  font-family: 'SFProSemibold';
+  font-family: 'SFProBold';
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0px;

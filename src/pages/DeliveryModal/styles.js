@@ -93,7 +93,7 @@ export const Title = styled.div`
   margin-top: 23px;
 
   b {
-    font-family: 'SFProSemibold';
+    font-family: 'SFProBold';
   }
 `;
 
@@ -111,7 +111,7 @@ export const Item = styled.div`
     margin-left: 7.5px;
 
     strong {
-      font-family: 'SFProSemibold';
+      font-family: 'SFProBold';
       font-size: 20px;
       line-height: 22px;
       color: #4d4d4d;

@@ -18,6 +18,8 @@ import {
   PromotionsSubTitle,
   Input,
   SendButton,
+  SectionTitleMenu,
+  MenuButtons,
 } from './styles';
 
 import Header from '~/components/Header';
@@ -37,6 +39,22 @@ import cashback from '~/assets/cashback.svg';
 import whatsapp from '~/assets/whatsapp.svg';
 import appStore from '~/assets/appStore.svg';
 import playStore from '~/assets/playStore.svg';
+
+import chevronL from '~/assets/chevron-l.svg';
+import chevronR from '~/assets/chevron-r.svg';
+
+import macas from '~/assets/categories/macas.jpeg';
+import tuberculos from '~/assets/categories/tuberculos.jpeg';
+import molhos from '~/assets/categories/molhos.jpg';
+import legumes from '~/assets/categories/legumes.jpeg';
+import ervas from '~/assets/categories/ervas.png';
+import tropicais from '~/assets/categories/tropicais.jpeg';
+import citrinos from '~/assets/categories/citrinos.jpeg';
+
+import clementina from '~/assets/blog/clementina.jpg';
+import frutas from '~/assets/blog/frutas.jpeg';
+import limao from '~/assets/blog/limao.jpg';
+import receitas from '~/assets/blog/receitas.jpg';
 
 export default function Home() {
   const [deliveryModal, setDeliveryModal] = useState(false);
@@ -110,6 +128,7 @@ export default function Home() {
             </StoreButton>
           </StoreButtonContainer>
         </SecurityContainer>
+
         <Section>
           <Location>
             <h1>A.M. Frutas Oeiras</h1>
@@ -171,39 +190,51 @@ export default function Home() {
             <button type="button">Localização</button>
           </Location>
         </Section>
-        <SectionTitle>
-          <strong>Categorias</strong>
-          <small>Visite todas as categorias do site</small>
-        </SectionTitle>
+        <SectionTitleMenu>
+          <SectionTitle style={{ margin: 0, width: 600 }}>
+            <div>
+              <strong>Categorias</strong>
+              <small>Visite todas as categorias do site</small>
+            </div>
+          </SectionTitle>
+          <MenuButtons>
+            <button type="button">
+              <img src={chevronL} alt="" />
+            </button>
+            <button type="button">
+              <img src={chevronR} alt="" />
+            </button>
+          </MenuButtons>
+        </SectionTitleMenu>
         <Section style={{ height: 146 }}>
           <Category>
-            <img src={graos} alt="" />
+            <img src={macas} alt="" />
             <small>Maçãs e Pêras</small>
           </Category>
           <Category>
-            <img src={graos} alt="" />
+            <img src={tuberculos} alt="" />
             <small>Tubérculos</small>
           </Category>
           <Category>
-            <img src={graos} alt="" />
+            <img src={molhos} alt="" />
             <small>
               Molhos, Temperos <br />e Especiarias
             </small>
           </Category>
           <Category>
-            <img src={graos} alt="" />
+            <img src={legumes} alt="" />
             <small>Legumes</small>
           </Category>
           <Category>
-            <img src={graos} alt="" />
+            <img src={ervas} alt="" />
             <small>Ervas Aromáticas</small>
           </Category>
           <Category>
-            <img src={graos} alt="" />
+            <img src={tropicais} alt="" />
             <small>Tropicais</small>
           </Category>
           <Category>
-            <img src={graos} alt="" />
+            <img src={citrinos} alt="" />
             <small>Citrinos</small>
           </Category>
         </Section>
@@ -213,7 +244,7 @@ export default function Home() {
         </SectionTitle>
         <Section style={{ height: 332 }}>
           <BlogPost>
-            <img src={graos} alt="" />
+            <img src={clementina} alt="" />
             <strong>Os benefícios da clementina</strong>
             <small>
               Todos nós sabemos que os <br />
@@ -223,7 +254,7 @@ export default function Home() {
             </small>
           </BlogPost>
           <BlogPost>
-            <img src={graos} alt="" />
+            <img src={limao} alt="" />
             <strong>
               DIETA DO LIMÃO, PERCA PESO <br />
               JÁ
@@ -236,7 +267,7 @@ export default function Home() {
             </small>
           </BlogPost>
           <BlogPost>
-            <img src={graos} alt="" />
+            <img src={receitas} alt="" />
             <strong>
               RECEITAS DE PRATOS VEGAN <br />
               DELICIOSAS
@@ -249,7 +280,7 @@ export default function Home() {
             </small>
           </BlogPost>
           <BlogPost>
-            <img src={graos} alt="" />
+            <img src={frutas} alt="" />
             <strong>
               Como conservar as frutas <br />
               por mais tempo

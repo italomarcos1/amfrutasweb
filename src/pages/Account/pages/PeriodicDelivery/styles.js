@@ -87,6 +87,7 @@ export const Options = styled.div`
     padding: 10px;
     height: 45px;
     background-color: #f2f2f2;
+    border-radius: 4px;
   }
 `;
 

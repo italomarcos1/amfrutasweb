@@ -8,7 +8,6 @@ import {
   OrderInfoContainer,
   OrderInfo,
   Separator,
-  StatusContainer,
   StatusIcon,
   OpenTab,
   ShippingInfoSeparator,
@@ -18,16 +17,28 @@ import {
 } from './styles';
 
 import CheckoutItem from '../Item';
+import StatusContainer from '../StatusContainer';
 
 import Input from '~/components/Input';
 
 import star from '~/assets/star.svg';
-import check from '~/assets/check-circle.svg';
-import cancelled from '~/assets/x-circle.svg';
-import chevron from '~/assets/chevron-down.svg';
-import chevronUp from '~/assets/chevron-up.svg';
+
+import cancelado from '~/assets/orders/cancelado.svg';
+import completo from '~/assets/orders/completo.svg';
+
+import novo from '~/assets/orders/novo.svg';
+import setaDown from '~/assets/orders/seta-down.svg';
+import setaUp from '~/assets/orders/seta-up.svg';
+import starOne from '~/assets/orders/star-1.svg';
+import starTwo from '~/assets/orders/star-2.svg';
 
 import { products } from '~/data';
+
+// new
+// approved
+// onCourse
+// completed
+// cancelled
 
 export default function Order({ order, isOpen, setOrder }) {
   const {
@@ -56,16 +67,20 @@ export default function Order({ order, isOpen, setOrder }) {
       <OrderStatus>
         <StatusIcon
           src={
-            status === 'new' ? star : status === 'completed' ? check : cancelled
+            status === 'completed'
+              ? completo
+              : status === 'cancelled'
+              ? cancelado
+              : novo
           }
         />
         <Info>
           <h1>
-            {status === 'new'
-              ? 'Novo'
-              : status === 'completed'
+            {status === 'completed'
               ? 'Completo'
-              : 'Cancelado'}
+              : status === 'cancelled'
+              ? 'Cancelado'
+              : 'Novo'}
           </h1>
           <OrderInfoContainer>
             <OrderInfo>
@@ -102,30 +117,10 @@ export default function Order({ order, isOpen, setOrder }) {
             </OrderInfo>
           </OrderInfoContainer>
           <Separator />
-          <StatusContainer status="newOrder">
-            <span>
-              <img src={check} alt="" />
-              <small>Novo</small>
-            </span>
-            <div />
-            <span>
-              <img src={check} alt="" />
-              <small>Validado</small>
-            </span>
-            <div />
-            <span style={{ width: 60 }}>
-              <img src={check} alt="" />
-              <small>Em curso</small>
-            </span>
-            <div />
-            <span>
-              <img src={check} alt="" />
-              <small>Completo</small>
-            </span>
-          </StatusContainer>
+          <StatusContainer status={status} />
         </Info>
         <OpenTab onClick={handleOpenOrder}>
-          <img src={isOpen === id ? chevronUp : chevron} alt="" />
+          <img src={isOpen === id ? setaUp : setaDown} alt="" />
         </OpenTab>
       </OrderStatus>
       <div style={{ marginLeft: 69, marginTop: 12.5 }}>

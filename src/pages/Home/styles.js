@@ -98,7 +98,7 @@ export const Option = styled.div`
       font-weight: normal;
       font-size: 22px;
       line-height: 29px;
-      font-family: 'SFProLight';
+      font-family: 'SFPro';
       letter-spacing: 0px;
       color: #0cb68b;
     }
@@ -115,6 +115,33 @@ export const Option = styled.div`
   }
 `;
 
+export const SectionTitleMenu = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 1240px;
+  margin: 35px auto 0;
+  height: 55px;
+`;
+
+export const MenuButtons = styled.div`
+  height: 55px;
+  width: 99px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 3px solid #393939;
+  }
+`;
+
 export const SectionTitle = styled.div`
   display: block;
   text-align: left;
@@ -128,6 +155,7 @@ export const SectionTitle = styled.div`
     font-family: 'SFProBold';
     letter-spacing: 0px;
     color: #000;
+    background-color: #8d8d8d;
   }
 
   small {
@@ -138,6 +166,7 @@ export const SectionTitle = styled.div`
     font-family: 'SFPro';
     letter-spacing: 0px;
     color: #8d8d8d;
+    background-color: #000;
   }
 `;
 
@@ -241,7 +270,7 @@ export const BlogPost = styled.div`
 
   strong {
     text-align: center;
-    font-family: 'SFPro';
+    font-family: 'SFProBold';
     font-size: 15px;
     line-height: 20px;
     letter-spacing: 0px;
@@ -249,6 +278,7 @@ export const BlogPost = styled.div`
     text-transform: uppercase;
     margin-top: 10px;
     width: 229px;
+    height: 42px;
   }
 
   small {
