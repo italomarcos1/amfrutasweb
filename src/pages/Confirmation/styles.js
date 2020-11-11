@@ -303,6 +303,7 @@ export const CheckoutItem = styled.div`
   padding: 13.5px 0;
 
   h1 {
+    font-weight: normal;
     text-align: left;
     font-family: 'SFPro';
     font-size: 15px;

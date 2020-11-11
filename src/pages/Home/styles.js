@@ -139,6 +139,7 @@ export const MenuButtons = styled.div`
     height: 42px;
     border-radius: 50%;
     border: 3px solid #393939;
+    background: none;
   }
 `;
 
@@ -188,6 +189,13 @@ export const Location = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
+
+  small {
+    color: #ebff29;
+    font-family: 'SFPro';
+    font-size: 15px;
+    line-height: 22px;
+  }
 
   h1 {
     text-align: center;
@@ -293,7 +301,7 @@ export const BlogPost = styled.div`
 
 export const Promotions = styled.strong`
   text-align: center;
-  font-family: 'SFPro';
+  font-family: 'SFProBold';
   font-size: 40px;
   line-height: 48px;
   letter-spacing: 0px;

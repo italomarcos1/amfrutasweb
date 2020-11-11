@@ -44,7 +44,7 @@ export default function Product({ product, index }) {
       <PriceContainer to={`/product/${index}`}>
         <span>
           <img src={coins} alt="coins" />
-          <strong>€1.290,08</strong>
+          <strong>€&nbsp;1.290,08</strong>
           DE CRÉDITO
         </span>
         {oldPrice ? (

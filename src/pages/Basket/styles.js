@@ -58,6 +58,7 @@ export const CheckoutItem = styled.div`
   padding: 13.5px 0;
 
   h1 {
+    font-weight: normal;
     text-align: left;
     font-family: 'SFPro';
     font-size: 15px;
@@ -66,6 +67,7 @@ export const CheckoutItem = styled.div`
     color: #393939;
 
     b {
+      font-weight: bold;
       font-family: 'SFProBold';
     }
   }

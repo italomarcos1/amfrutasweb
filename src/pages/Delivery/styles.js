@@ -307,3 +307,28 @@ export const ShippingWarning = styled.div`
     margin-left: 3px;
   }
 `;
+
+export const TakeOnShop = styled.div`
+  border-radius: 6px;
+
+  padding: 17px 25px;
+  width: 360px;
+  height: 100px;
+
+  text-align: left;
+  font-family: 'SFPro';
+  font-size: 12px;
+  line-height: 22px;
+  letter-spacing: 0px;
+  background-color: #0cb68b;
+
+  color: #fff;
+
+  b {
+    font-family: 'SFPro';
+    font-size: 12px;
+    line-height: 22px;
+    font-family: 'SFProBold';
+    margin-left: 3px;
+  }
+`;

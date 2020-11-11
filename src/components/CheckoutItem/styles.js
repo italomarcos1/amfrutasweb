@@ -16,6 +16,7 @@ export const ItemPicture = styled.img`
 
 export const Title = styled.h1`
   text-align: left;
+  font-weight: normal;
   font-family: 'SFPro';
   font-size: 15px;
   line-height: 22px;
@@ -45,7 +46,7 @@ export const PriceAndAmount = styled.div`
 
   small {
     text-align: right;
-    font-family: 'SFProBold';
+    font-family: 'SFProCustomBold';
     font-size: 14px;
     line-height: 22px;
     letter-spacing: 0px;
@@ -55,7 +56,7 @@ export const PriceAndAmount = styled.div`
 
   strong {
     text-align: right;
-    font-family: 'SFProBold';
+    font-family: 'SFProCustomBold';
     font-size: 18px;
     line-height: 22px;
     letter-spacing: 0px;

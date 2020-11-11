@@ -285,14 +285,14 @@ export default function Confirmation() {
           color="#2CBDD3"
           shadowColor="#26A5BB"
           style={{
-            width: 197,
+            width: 217,
             marginTop: 49,
             marginLeft: 'auto',
             marginRight: 'auto',
           }}
-          onClick={() => history.push('/cesto')}
+          onClick={() => history.push('/encomendas')}
         >
-          Meus&nbsp;<b>Produtos</b>
+          Minhas&nbsp;<b>Encomendas</b>
         </Button>
       </Container>
       <Footer />

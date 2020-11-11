@@ -46,7 +46,7 @@ export const BackButton = styled(Link)`
 `;
 
 export const MyOrdersButton = styled(Link)`
-  width: 144px;
+  width: 154px;
   height: 45px;
   background: #088061;
   border-radius: 6px;
@@ -59,7 +59,7 @@ export const MyOrdersButton = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 16px;
+  margin-left: 6px;
 
   &:hover {
     transition: background 0.1s;

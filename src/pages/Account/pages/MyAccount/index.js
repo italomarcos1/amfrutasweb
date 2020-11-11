@@ -15,6 +15,15 @@ export default function MyAccount() {
   const [place, setPlace] = useState('');
   const [country, setCountry] = useState('');
 
+  const genderData = [
+    {
+      label: 'Masculino',
+      value: 'Masculino',
+    },
+    { label: 'Feminino', value: 'Feminino' },
+    { label: 'Outro', value: 'Outro' },
+  ];
+
   return (
     <>
       <Container>
@@ -52,6 +61,7 @@ export default function MyAccount() {
                 placeholder="Escolha o gênero"
                 setValue={setGender}
                 customWidth={221}
+                data={genderData}
               />
             </InputContainer>
             <InputContainer>

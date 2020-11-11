@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 // import { Container } from './styles';
@@ -29,16 +29,18 @@ export default function Item({ item }) {
 
   const dispatch = useDispatch();
 
+  const [productAmount, setProductAmount] = useState(amount);
+
   const handleRemoveFromCart = useCallback(() => {
     dispatch(removeFromCartRequest(id));
   }, [id, dispatch]);
 
-  const handleUpdateAmount = useCallback(
-    updatedAmount => {
-      dispatch(updateAmount(id, updatedAmount));
-    },
-    [id, dispatch]
-  );
+  // const handleUpdateAmount = useCallback(
+  //   updatedAmount => {
+  //     dispatch(updateAmount(id, updatedAmount));
+  //   },
+  //   [id, dispatch]
+  // );
 
   return (
     <Container key={id} style={id > 2 ? { marginTop: 40 } : {}}>
@@ -47,8 +49,8 @@ export default function Item({ item }) {
         <ProductInfo>
           <Title>{title}</Title>
           <PriceAndAmount>
-            <small>€ {Number(newPrice) + 2}</small>
-            <strong>€{newPrice}</strong>
+            <small>€&nbsp;11.8</small>
+            <strong>€&nbsp;{newPrice}</strong>
           </PriceAndAmount>
         </ProductInfo>
       </div>
@@ -60,16 +62,18 @@ export default function Item({ item }) {
         <div>
           <button
             type="button"
-            disabled={amount === 1}
-            onClick={() => handleUpdateAmount(amount - 1)}
+            disabled={productAmount === 0}
+            // onClick={() => handleUpdateAmount(amount - 1)}
+            onClick={() => setProductAmount(productAmount - 1)}
             style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
           >
             <img src={minus} alt="icon" />
           </button>
-          <strong>{amount}</strong>
+          <strong>{productAmount}</strong>
           <button
             type="button"
-            onClick={() => handleUpdateAmount(amount + 1)}
+            // onClick={() => handleUpdateAmount(amount + 1)}
+            onClick={() => setProductAmount(productAmount + 1)}
             style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
           >
             <img src={plus} alt="icon" />

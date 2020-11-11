@@ -19,6 +19,7 @@ import {
   CouponInput,
   SendButton,
   CouponIsValid,
+  TakeOnShop,
 } from './styles';
 
 import { InputContainer, Button, SecureLogin } from '~/components/LoginModal';
@@ -130,6 +131,7 @@ export default function Delivery() {
   const [coupon, setCoupon] = useState('');
   const [couponIsValid, setCouponIsValid] = useState('');
   const [hoverCouponValid, setHoverCouponValid] = useState('');
+  const [hoverButton, setHoverButton] = useState('none');
 
   const history = useHistory();
 
@@ -145,14 +147,28 @@ export default function Delivery() {
           <DeliveryOptionsContainer>
             <div style={{ width: 416, display: 'flex' }}>
               <DeliveryButton
-                selected={deliveryOption === 'shop'}
+                selected={deliveryOption === 'shop' || hoverButton === 'shop'}
                 onClick={() => setDeliveryOption('shop')}
                 style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+                onMouseOver={() => {
+                  if (deliveryOption !== 'shop') setHoverButton('shop');
+                }}
+                onMouseLeave={() => {
+                  if (deliveryOption !== 'shop') setHoverButton('none');
+                }}
               >
                 <DeliveryButtonContainer>
-                  <DeliveryButtonContent selected={deliveryOption === 'shop'}>
+                  <DeliveryButtonContent
+                    selected={
+                      deliveryOption === 'shop' || hoverButton === 'shop'
+                    }
+                  >
                     <img
-                      src={deliveryOption === 'shop' ? truckWhite : truckBlack}
+                      src={
+                        deliveryOption === 'shop' || hoverButton === 'shop'
+                          ? truckWhite
+                          : truckBlack
+                      }
                       alt="Entrega"
                       style={{ width: 36, height: 30 }}
                     />
@@ -162,17 +178,31 @@ export default function Delivery() {
                 </DeliveryButtonContainer>
               </DeliveryButton>
               <DeliveryButton
-                selected={deliveryOption === 'customer'}
+                selected={
+                  deliveryOption === 'customer' || hoverButton === 'customer'
+                }
                 onClick={() => setDeliveryOption('customer')}
                 style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+                onMouseOver={() => {
+                  if (deliveryOption !== 'customer') setHoverButton('customer');
+                }}
+                onMouseLeave={() => {
+                  if (deliveryOption !== 'customer') setHoverButton('none');
+                }}
               >
                 <DeliveryButtonContainer>
                   <DeliveryButtonContent
-                    selected={deliveryOption === 'customer'}
+                    selected={
+                      deliveryOption === 'customer' ||
+                      hoverButton === 'customer'
+                    }
                   >
                     <img
                       src={
-                        deliveryOption === 'customer' ? lojaWhite : lojaBlack
+                        deliveryOption === 'customer' ||
+                        hoverButton === 'customer'
+                          ? lojaWhite
+                          : lojaBlack
                       }
                       alt="Retirar na loja"
                       style={{ width: 28, height: 25 }}
@@ -184,15 +214,31 @@ export default function Delivery() {
                 </DeliveryButtonContainer>
               </DeliveryButton>
             </div>
-            <DeliveryDateContainer>
-              <div>
-                <strong>Selecione o melhor dia e horário para entrega</strong>
+            {hoverButton === 'customer' || deliveryOption === 'customer' ? (
+              <TakeOnShop>
+                A retirada na loja deve ocorrer no endereço abaixo:
+                <br />
+                <b>Av. da República 1058 2775-271 Parede</b>
+              </TakeOnShop>
+            ) : (
+              <DeliveryDateContainer>
                 <div>
-                  <NoTitleSelect setValue={setDeliveryDay} customWidth={125} />
-                  <NoTitleSelect setValue={setDeliveryHour} customWidth={190} />
+                  <strong style={{ width: 269 }}>
+                    Selecione o melhor dia e horário para entrega
+                  </strong>
+                  <div>
+                    <NoTitleSelect
+                      setValue={setDeliveryDay}
+                      customWidth={125}
+                    />
+                    <NoTitleSelect
+                      setValue={setDeliveryHour}
+                      customWidth={190}
+                    />
+                  </div>
                 </div>
-              </div>
-            </DeliveryDateContainer>
+              </DeliveryDateContainer>
+            )}
             <ShippingWarning>
               Levantamento na loja:
               <b>Grátis</b>

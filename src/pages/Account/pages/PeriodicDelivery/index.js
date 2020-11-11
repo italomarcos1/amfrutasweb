@@ -40,7 +40,7 @@ export default function PeriodicDelivery() {
         <DeliveryContainer />
       </InfoContainer>
       <Receive>
-        <ReceiveContainer>
+        <ReceiveContainer style={{ paddingLeft: 20, paddingRight: 20 }}>
           <small>Receber a cada</small>
           <Options>
             <button
@@ -63,13 +63,13 @@ export default function PeriodicDelivery() {
               <img src={plus} alt="icon" />
             </button>
           </Options>
-          semanas
+          <small>semanas</small>
         </ReceiveContainer>
         <StartDate>
           <strong>Início</strong>
           <Select placeholder="00/00/0000" setValue={() => {}} />
         </StartDate>
-        <ReceiveContainer>
+        <ReceiveContainer style={{ paddingLeft: 15, paddingRight: 15 }}>
           <StartStop
             selected={selected === 'start'}
             style={{ marginRight: 30 }}

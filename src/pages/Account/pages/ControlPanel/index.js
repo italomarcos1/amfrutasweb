@@ -37,6 +37,7 @@ export default function ControlPanel() {
             icon={delivery}
             alt="Entrega"
             title="Minhas entregas periódicas"
+            titleStyle={{ fontSize: 20.5 }}
             subTitle="Você não tem pedidos em andamento"
           />
           <Info

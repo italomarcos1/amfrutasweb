@@ -5,6 +5,7 @@ export const Header = styled.div`
   height: 71px;
   background-color: #000;
   position: relative;
+  z-index: 999;
 `;
 
 export const HeaderContent = styled.div`
@@ -23,6 +24,7 @@ export const Menu = styled.div`
   background-color: #0cb68b;
   position: relative;
   transition: all 0.2s;
+  z-index: 999;
 `;
 
 export const MenuContent = styled.div`
@@ -102,4 +104,5 @@ export const SubTitle = styled.div`
   color: #000;
   position: relative;
   transition: all 0.2s;
+  z-index: 999;
 `;

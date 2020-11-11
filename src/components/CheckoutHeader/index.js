@@ -61,7 +61,7 @@ export default function CheckoutHeader({ active }) {
             <Line />
           </SubHeader>
           {active === 3 ? (
-            <MyOrdersButton to="/entrega">Meus Pedidos</MyOrdersButton>
+            <MyOrdersButton to="/encomendas">Minhas Encomendas</MyOrdersButton>
           ) : (
             <BackButton to={active === 2 ? 'cesto' : '/'}>Voltar</BackButton>
           )}

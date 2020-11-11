@@ -24,11 +24,8 @@ export default function MyAddress() {
         <strong>
           <b>Isabella Oliveira</b>
         </strong>
-        <br />
         <strong>Rua 23 de Março, RC</strong>
-        <br />
         <strong>2740-198, Porto Salvo</strong>
-        <br />
         <strong>Lisboa. Portugal</strong>
       </AddressInfo>
     </Container>

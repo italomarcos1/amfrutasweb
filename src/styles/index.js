@@ -1,6 +1,8 @@
 import { createGlobalStyle } from 'styled-components';
 import SFPro from '../assets/fonts/SanFrancisco.otf';
 import SFProBold from '../assets/fonts/SanFranciscoBold.otf';
+import SFProCustom from '../assets/fonts/SFPrice.otf';
+import SFProBoldCustom from '../assets/fonts/SFBoldPrice.otf';
 
 export default createGlobalStyle`
     * {
@@ -36,6 +38,17 @@ export default createGlobalStyle`
     @font-face {
       font-family: "SFProBold";
       src: local('SFProBold'), url(${SFProBold}) format('opentype');
+      font-weight: bold;
+    }
+
+    @font-face {
+      font-family: "SFProCustom";
+      src: local('SFProCustom'), url(${SFProCustom}) format('opentype');
+    }
+
+    @font-face {
+      font-family: "SFProCustomBold";
+      src: local('SFProCustomBold'), url(${SFProBoldCustom}) format('opentype');
       font-weight: bold;
     }
 

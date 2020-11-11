@@ -12,13 +12,13 @@ export const Container = styled.div`
   border: 1px solid #f0f0f0;
 
   justify-content: space-between;
-  font-family: 'SFPro';
+  font-family: 'SFProCustom';
   padding: 6px;
 `;
 
 export const Title = styled(Link)`
   color: #393939;
-  font-family: 'SFPro';
+  font-family: 'SFProCustom';
   font-size: 15px;
   line-height: 22px;
   padding: 0 5px 0 4px;
@@ -52,24 +52,29 @@ export const ImageContainer = styled(Link)`
   justify-content: center;
   align-self: center;
   border-radius: 4px;
+  /* background-color: #ff4; */
 
-  width: 100%;
+  /* margin-top: 6px; */
+  /* -moz-margin-top: 0; */
+
+  width: 164px;
+  height: 164px;
 
   img {
     border-radius: 4px;
-    width: 100%;
+    width: 164px;
   }
 `;
 
 export const PriceContainer = styled(Link)`
   display: flex;
   flex-direction: column;
-  height: 70px;
+  height: 44px;
   width: 100%;
   padding: 0 10px;
   padding-left: 5px;
-  font-family: 'SFPro';
-  margin-top: 10px;
+  font-family: 'SFProCustom';
+  margin: 10px 0;
   letter-spacing: 0px;
 
   /* background-color: #404; */
@@ -84,17 +89,17 @@ export const PriceContainer = styled(Link)`
     padding: 0;
     display: flex;
     color: #e2a63b;
-    font-size: 10.5px;
+    font-size: 10px;
     height: 20px;
     align-items: center;
     letter-spacing: 0px;
-    font-family: 'SFPro';
+    font-family: 'SFProCustom';
 
     /* background-color: #4f4; */
 
     strong {
       font-size: 10.5px;
-      font-family: 'SFProBold';
+      font-family: 'SFProCustomBold';
       margin-right: 3px;
       letter-spacing: 0px;
     }
@@ -105,9 +110,9 @@ export const PriceContainer = styled(Link)`
     text-align: left;
     font-size: 10px;
     line-height: 22px;
-    margin-top: 2px;
+    margin-top: 6px;
     letter-spacing: 0px;
-    font-family: 'SFPro';
+    font-family: 'SFProCustom';
 
     /* background-color: #4f4; */
 
@@ -124,7 +129,7 @@ export const PriceContainer = styled(Link)`
     text-align: left;
     font-size: 20px;
     line-height: 20px;
-    font-family: 'SFProBold';
+    font-family: 'SFProCustomBold';
   }
 `;
 
@@ -150,7 +155,7 @@ export const Options = styled.div`
       color: #393939;
       margin: 0 10px;
       font-weight: normal;
-      font-family: 'SFPro';
+      font-family: 'SFProCustom';
     }
 
     button {

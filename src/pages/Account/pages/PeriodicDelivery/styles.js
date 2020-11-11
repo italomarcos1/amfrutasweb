@@ -20,8 +20,8 @@ export const Receive = styled.div`
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   margin-top: 20px;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding-left: 5px;
+  padding-right: 5px;
 
   small {
     display: inline-block;
@@ -38,8 +38,7 @@ export const ReceiveContainer = styled.div`
   display: flex;
   align-items: center;
   height: 74px;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding: 0 15px;
 `;
 
 export const StartDate = styled.div`
@@ -150,6 +149,7 @@ export const CheckoutItem = styled.div`
   padding: 13.5px 0;
 
   h1 {
+    font-weight: normal;
     text-align: left;
     font-family: 'SFPro';
     font-size: 15px;

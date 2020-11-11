@@ -164,6 +164,12 @@ export const ShippingInfo = styled.div`
     /* background-color: #ff4242; */
 
     b {
+      text-align: left;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 14px;
+      font-family: 'SFPro';
+      letter-spacing: 0px;
       color: #9e9e9e;
     }
 
