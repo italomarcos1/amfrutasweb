@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import { useScrollYPosition } from 'react-use-scroll-position';
 
 import {
   Header,
@@ -29,24 +30,21 @@ export default function PageHeader({ login }) {
 
   const history = useHistory();
 
-  useEffect(() => {
-    function stickHeader() {
-      const header = document.getElementById('header');
-      const sticky = header.offsetTop;
-      console.log('ah');
-      if (window.pageYOffset > sticky) {
-        header.classList.add('sticky');
-      } else {
-        header.classList.remove('sticky');
-      }
-    }
+  const scrollY = useScrollYPosition();
 
-    stickHeader();
-  }, []);
+  const [headerFixed, setHeaderFixed] = useState(false);
+
+  useEffect(() => {
+    if (scrollY >= 71) {
+      setHeaderFixed(true);
+    } else {
+      setHeaderFixed(false);
+    }
+  }, [scrollY]);
 
   return (
     <>
-      <Header id="header">
+      <Header>
         <HeaderContent>
           <img
             src={fruits1}
@@ -72,7 +70,7 @@ export default function PageHeader({ login }) {
           />
         </HeaderContent>
       </Header>
-      <Menu>
+      <Menu style={headerFixed ? { position: 'fixed', top: 0 } : {}}>
         <MenuContent>
           <MenuItem
             selected={selectedPage === 'Principal'}
@@ -145,7 +143,7 @@ export default function PageHeader({ login }) {
           </div>
         </MenuContent>
       </Menu>
-      <SubTitle>
+      <SubTitle style={headerFixed ? { position: 'fixed', top: 41 } : {}}>
         GARANTIMOS A MÁXIMA QUALIDADE DE TODOS OS PRODUTOS | COVID-19 -
         REALIZAMOS TESTES PERIODICAMENTE E SEGUIMOS
         <br /> AS NORMAS DE PREVENÇÃO DA D.G.S | SE NÃO FICAR SATISFEITO

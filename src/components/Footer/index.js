@@ -47,13 +47,31 @@ export default function Footer() {
             AM Frutas, LDA <b>NIF</b> 503628360
           </small>
           <div>
-            <img src={facebook} alt="Visit Facebook page" />
-            <img
-              src={instagram}
-              alt="Visit Instagram page"
-              style={{ marginLeft: 46, marginRight: 46 }}
-            />
-            <img src={youtube} alt="Visit YouTube channel" />
+            <a
+              href="https://www.facebook.com/amfrutas/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <img src={facebook} alt="Visit Facebook page" />
+            </a>
+            <a
+              href="https://www.instagram.com/amfrutas/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <img
+                src={instagram}
+                alt="Visit Instagram page"
+                style={{ marginLeft: 46, marginRight: 46 }}
+              />
+            </a>
+            <a
+              href="https://www.youtube.com/channel/UCYzO5SWwFOUX-6uheZv8eag"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <img src={youtube} alt="Visit YouTube channel" />
+            </a>
           </div>
           <div
             style={{

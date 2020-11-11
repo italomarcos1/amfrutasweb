@@ -4,7 +4,8 @@ export const Menu = styled.div`
   width: 100%;
   height: 41px;
   background-color: #0cb68b;
-  top: 71px;
+  top: 0px;
+  position: fixed;
 `;
 
 export const MenuContent = styled.div`
@@ -82,5 +83,7 @@ export const SubTitle = styled.div`
   line-height: 16px;
   letter-spacing: 0px;
   color: #000;
-  top: 112px;
+  /* top: 112px; */
+  top: 41px;
+  position: fixed;
 `;

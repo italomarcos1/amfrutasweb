@@ -8,6 +8,7 @@ export const Container = styled.div`
   padding: 27px 30px 0;
   overflow-x: hidden;
   overflow-y: hidden;
+  margin-top: 81px;
 `;
 
 export const Content = styled.div`

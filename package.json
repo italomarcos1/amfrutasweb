@@ -24,6 +24,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
     "react-select": "^3.1.0",
+    "react-use-scroll-position": "^2.0.0",
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0",
     "redux-saga": "^1.1.3",

@@ -14,14 +14,15 @@ export const HeaderContent = styled.div`
   width: 862px;
   height: 71px;
   margin: 0 auto;
-  position: relative;
+  /* position: relative; */
 `;
 
 export const Menu = styled.div`
   width: 100%;
   height: 41px;
   background-color: #0cb68b;
-  top: 71px;
+  position: relative;
+  transition: all 0.2s;
 `;
 
 export const MenuContent = styled.div`
@@ -99,5 +100,6 @@ export const SubTitle = styled.div`
   line-height: 16px;
   letter-spacing: 0px;
   color: #000;
-  top: 112px;
+  position: relative;
+  transition: all 0.2s;
 `;
