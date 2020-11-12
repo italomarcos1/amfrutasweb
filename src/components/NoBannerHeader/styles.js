@@ -6,6 +6,7 @@ export const Menu = styled.div`
   background-color: #0cb68b;
   top: 0px;
   position: fixed;
+  z-index: 999;
 `;
 
 export const MenuContent = styled.div`
@@ -86,4 +87,5 @@ export const SubTitle = styled.div`
   /* top: 112px; */
   top: 41px;
   position: fixed;
+  z-index: 999;
 `;
