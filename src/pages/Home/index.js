@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import {
   Container,
@@ -16,15 +16,19 @@ import {
   Category,
   Promotions,
   PromotionsSubTitle,
-  Input,
   SendButton,
   SectionTitleMenu,
   MenuButtons,
 } from './styles';
 
+import { nameIsValid, mailIsValid, dateIsValid } from '~/utils/validation';
+import { onlyValues } from '~/utils/onlyValues';
+
 import Header from '~/components/Header';
 import Product from '~/components/Product';
 import Footer from '~/components/Footer';
+import Input from '~/components/HomeInput';
+import InputMask from '~/components/HomeInputMask';
 
 import DeliveryModal from '~/pages/DeliveryModal';
 import LoginModal from '~/pages/LoginModal';
@@ -60,10 +64,50 @@ export default function Home() {
   const [deliveryModal, setDeliveryModal] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
 
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState(false);
+  const [birthDate, setBirthDate] = useState('');
+  const [birthDateError, setBirthDateError] = useState(false);
+
+  const [invalidFields, setInvalidFields] = useState([
+    false,
+    false,
+    false,
+    false,
+  ]);
+
+  const handleSubmit = useCallback(
+    formData => {
+      const formattedData = Object.values(formData);
+      invalidFields.fill(false);
+      setBirthDateError(false);
+      setEmailError(false);
+
+      const anyEmptyField = formattedData.some(field => nameIsValid(field));
+
+      if (anyEmptyField) {
+        setInvalidFields(formattedData.map(field => nameIsValid(field)));
+        return;
+      }
+
+      if (!dateIsValid(birthDate)) {
+        setBirthDateError(!dateIsValid(birthDate));
+        return;
+      }
+      if (!mailIsValid(email)) {
+        setEmailError(!mailIsValid(email));
+        return;
+      }
+
+      console.log('done');
+    },
+    [email, birthDate, invalidFields]
+  );
+
   return (
     <>
       <Header login={() => setLoginModal(true)} />
-      <Container>
+      <Container onSubmit={handleSubmit}>
         <Banner onClick={() => setDeliveryModal(true)}>
           <img src={banner} alt="banner" />
         </Banner>
@@ -298,20 +342,41 @@ export default function Home() {
           Deixe o seu e-mail e receba promoções e descontos <br />
           exclusivos.
         </PromotionsSubTitle>
-        <Section style={{ height: 50, marginTop: 42, width: 1015 }}>
-          <Input placeholder="Nome" />
-          <Input placeholder="Apelido" />
-          <Input placeholder="Data de Nascimento" />
-          <div style={{ display: 'flex' }}>
+        <Section
+          style={{
+            height: 50,
+            marginTop: 42,
+            width: 915,
+            justifyContent: 'flex-start',
+          }}
+        >
+          <Input name="name" error={invalidFields[0]} placeholder="Nome" />
+          <Input
+            name="nickname"
+            error={invalidFields[1]}
+            placeholder="Apelido"
+          />
+          <InputMask
+            name="birthDate"
+            error={invalidFields[2] || birthDateError}
+            placeholder="Data de Nascimento"
+            value={birthDate}
+            onChange={({ target: { value } }) => setBirthDate(value)}
+          />
+          <div style={{ display: 'flex', marginLeft: 20 }}>
             <Input
+              name="email"
               placeholder="Email"
               style={{
                 width: 274,
                 borderTopRightRadius: 0,
                 borderBottomRightRadius: 0,
               }}
+              value={email}
+              onChange={({ target: { value } }) => onlyValues(value, setEmail)}
+              error={invalidFields[3] || emailError}
             />
-            <SendButton>Enviar</SendButton>
+            <SendButton type="submit">Enviar</SendButton>
           </div>
         </Section>
       </Container>

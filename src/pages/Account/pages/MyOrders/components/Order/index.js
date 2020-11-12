@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -29,8 +29,8 @@ import completo from '~/assets/orders/completo.svg';
 import novo from '~/assets/orders/novo.svg';
 import setaDown from '~/assets/orders/seta-down.svg';
 import setaUp from '~/assets/orders/seta-up.svg';
-import starOne from '~/assets/orders/star-1.svg';
-import starTwo from '~/assets/orders/star-2.svg';
+import starOn from '~/assets/orders/starOn.svg';
+import starOff from '~/assets/orders/starOff.svg';
 
 import { products } from '~/data';
 
@@ -57,6 +57,8 @@ export default function Order({ order, isOpen, setOrder }) {
     if (isOpen === id) setOrder(0);
     else setOrder(id);
   }, [id, isOpen, setOrder]);
+
+  const [productRating, setProductRating] = useState(rating);
 
   return (
     <Container
@@ -188,11 +190,21 @@ export default function Order({ order, isOpen, setOrder }) {
       >
         <RatingTitle>Avaliação do Serviço</RatingTitle>
         <StarsContainer>
-          <img src={star} alt="" />
-          <img src={star} alt="" />
-          <img src={star} alt="" />
-          <img src={star} alt="" />
-          <img src={star} alt="" />
+          <button onClick={() => setProductRating(1)} type="button">
+            <img src={productRating >= 1 ? starOn : starOff} alt="" />
+          </button>
+          <button onClick={() => setProductRating(2)} type="button">
+            <img src={productRating >= 2 ? starOn : starOff} alt="" />
+          </button>
+          <button onClick={() => setProductRating(3)} type="button">
+            <img src={productRating >= 3 ? starOn : starOff} alt="" />
+          </button>
+          <button onClick={() => setProductRating(4)} type="button">
+            <img src={productRating >= 4 ? starOn : starOff} alt="" />
+          </button>
+          <button onClick={() => setProductRating(5)} type="button">
+            <img src={productRating === 5 ? starOn : starOff} alt="" />
+          </button>
         </StarsContainer>
       </div>
       <Input

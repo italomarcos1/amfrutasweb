@@ -48,7 +48,7 @@ export default function MyOrders() {
       deliveryDate: '13/10/2020',
       startHour: '15:30',
       endHour: '18:30',
-      rating: 5,
+      rating: 1,
     },
     {
       id: 5,
@@ -59,7 +59,7 @@ export default function MyOrders() {
       deliveryDate: '13/10/2020',
       startHour: '15:30',
       endHour: '18:30',
-      rating: 5,
+      rating: 2,
     },
   ];
 

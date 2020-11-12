@@ -37,10 +37,20 @@ export const StarsContainer = styled.div`
   width: 230px;
   align-items: center;
   justify-content: space-between;
+  margin-top: 10px;
 
-  img {
+  button {
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 37px;
     height: 37px;
+
+    img {
+      width: 37px;
+      height: 37px;
+    }
   }
 `;
 
@@ -88,7 +98,7 @@ export const Info = styled.div`
     line-height: 26px;
     font-family: 'SFPro';
     letter-spacing: 0px;
-    color: #424242;
+    color: ${({ color }) => color};
   }
 `;
 

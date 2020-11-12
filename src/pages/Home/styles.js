@@ -1,7 +1,8 @@
 import styled from 'styled-components';
+import { Form } from '@unform/web';
 import { darken } from 'polished';
 
-export const Container = styled.div`
+export const Container = styled(Form)`
   display: flex;
   flex-direction: column;
   background-color: #fff;
@@ -319,25 +320,7 @@ export const PromotionsSubTitle = styled.small`
   margin-top: 12px;
 `;
 
-export const Input = styled.input.attrs({
-  type: 'text',
-})`
-  width: 180px;
-  height: 50px;
-  background: #f8f9fb;
-  border: 1px solid #abacae;
-  border-radius: 2px;
-  padding: 14px 19px;
-  color: #666;
-
-  &::placeholder {
-    color: #abacae;
-  }
-`;
-
-export const SendButton = styled.button.attrs({
-  type: 'button',
-})`
+export const SendButton = styled.button`
   width: 140px;
   height: 50px;
   background: #0cb68b;

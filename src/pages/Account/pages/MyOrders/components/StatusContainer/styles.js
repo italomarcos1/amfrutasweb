@@ -8,7 +8,7 @@ export const Container = styled.div`
   align-items: flex-start;
   justify-content: space-between;
   /* background-color: #6600e0; */
-  margin-top: 10px;
+  margin-top: 0px;
 `;
 
 export const BadgeContainer = styled.div`
@@ -21,10 +21,12 @@ export const BadgeContainer = styled.div`
 
 export const BadgeTitleContainer = styled.div`
   display: flex;
-  width: 447px;
+  width: 487px;
+
   height: 14px;
   align-items: center;
   justify-content: flex-start;
+  margin-top: 8px;
 `;
 
 export const Badge = styled.span`
@@ -42,15 +44,16 @@ export const Badge = styled.span`
 
 export const BadgeTitle = styled.small`
   display: block;
-  margin-top: 8px;
-  margin-left: 101px;
   font-weight: normal;
   font-size: 12px;
+  width: ${({ width }) => `${width}px`};
+  /* margin-left: ${({ margin }) => `${margin}px`}; */
   line-height: 14px;
   font-family: 'SFPro';
   letter-spacing: 0px;
   color: #e0e0e0;
-  color: ${({ active }) => (active ? '#29b4cc' : '#e0e0e0')};
+  color: ${({ active, wasCancelled }) =>
+    wasCancelled ? '#F64847' : active ? '#29b4cc' : '#e0e0e0'};
 `;
 
 export const Separator = styled.div`

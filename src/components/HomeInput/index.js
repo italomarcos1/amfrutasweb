@@ -2,17 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useField } from '@unform/core';
 
-import { Container, Title, Input, VerifiedEmail } from './styles';
+import Input from './styles';
 
 export default function CustomInput({
   name,
-  title,
   full,
   fontSize,
   style,
   customWidth,
   error,
-  verified,
   setError,
   placeholder,
   inputStyle,
@@ -34,40 +32,24 @@ export default function CustomInput({
   }, [fieldName, registerField]);
 
   return (
-    <Container
-      full={full}
-      style={
-        hasMarginLeft
-          ? { ...style, width: customWidth, marginLeft: 20 }
-          : { ...style, width: customWidth }
-      }
-    >
-      <Title style={{ ...titleStyle, fontSize }} error={error}>
-        {title}
-        {verified && (
-          <VerifiedEmail verified={verified === 'yes'}>Verified</VerifiedEmail>
-        )}
-      </Title>
-      <Input
-        name={name}
-        placeholder={placeholder}
-        error={error}
-        ref={inputRef}
-        defaultValue={defaultValue}
-        style={inputStyle}
-        active={active}
-        type="text"
-        onFocus={() => setActive(true)}
-        onBlur={({ target: { value } }) => setActive(false)}
-        {...rest}
-      />
-    </Container>
+    <Input
+      name={name}
+      placeholder={placeholder}
+      error={error}
+      ref={inputRef}
+      defaultValue={defaultValue}
+      style={inputStyle}
+      active={active}
+      type="text"
+      onFocus={() => setActive(true)}
+      onBlur={() => setActive(false)}
+      {...rest}
+    />
   );
 }
 
 CustomInput.propTypes = {
   name: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
   fontSize: PropTypes.number,
   full: PropTypes.bool,

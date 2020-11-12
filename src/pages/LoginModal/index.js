@@ -71,7 +71,7 @@ export default function LoginModal({ closeModal }) {
           {page === 'main' ? (
             <Main setPage={value => setPage(value)} />
           ) : page === 'login' ? (
-            <Login setPage={value => setPage(value)} />
+            <Login closeModal={closeModal} setPage={value => setPage(value)} />
           ) : page === 'forgot' ? (
             <ForgotPassword setPage={value => setPage(value)} />
           ) : (

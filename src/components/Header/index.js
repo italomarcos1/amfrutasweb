@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { useScrollYPosition } from 'react-use-scroll-position';
 
+import { useSelector } from 'react-redux';
+
 import {
   Header,
   HeaderContent,
@@ -26,7 +28,8 @@ import user from '~/assets/user-check.svg';
 
 export default function PageHeader({ login }) {
   const [selectedPage, setSelectedPage] = useState('Principal');
-  const loggedIn = useState(true);
+
+  const loggedIn = useSelector(state => state.auth.signed);
 
   const history = useHistory();
 
@@ -74,7 +77,10 @@ export default function PageHeader({ login }) {
         <MenuContent>
           <MenuItem
             selected={selectedPage === 'Principal'}
-            onClick={() => setSelectedPage('Principal')}
+            onClick={() => {
+              setSelectedPage('Principal');
+              history.push('/');
+            }}
           >
             <img src={home} alt="home" />
           </MenuItem>

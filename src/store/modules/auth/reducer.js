@@ -23,6 +23,11 @@ export default (state = INITIAL_STATE, { type, payload }) => {
         draft.loading = false;
         break;
       }
+
+      case '@auth/SIGN_IN_ALPHA': {
+        draft.signed = true;
+        break;
+      }
       case '@auth/SIGN_FAILURE': {
         draft.loading = false;
         break;

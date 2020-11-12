@@ -38,6 +38,7 @@ module.exports = {
     camelcase: 'off',
     'no-useless-escape': 'off',
     'no-console': 'warn',
+    'consistent-return': 'off',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'react/prop-types': 'warn',

@@ -28,7 +28,10 @@ export default function Header() {
         <MenuContent>
           <MenuItem
             selected={selectedPage === 'Principal'}
-            onClick={() => setSelectedPage('Principal')}
+            onClick={() => {
+              setSelectedPage('Principal');
+              history.push('/');
+            }}
           >
             <img src={home} alt="home" />
           </MenuItem>

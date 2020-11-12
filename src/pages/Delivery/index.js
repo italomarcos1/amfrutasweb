@@ -22,6 +22,9 @@ import {
   TakeOnShop,
 } from './styles';
 
+import { mailIsValid } from '~/utils/validation';
+import { onlyValues } from '~/utils/onlyValues';
+
 import { InputContainer, Button, SecureLogin } from '~/components/LoginModal';
 
 import lock from '~/assets/lock.svg';
@@ -138,6 +141,9 @@ export default function Delivery() {
   const validateCoupon = useCallback(() => {
     setCouponIsValid(!!coupon);
   }, [coupon]);
+
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState(false);
 
   return (
     <>
@@ -271,8 +277,14 @@ export default function Delivery() {
             <InputContainer>
               <Input
                 name="email"
-                title="E-mail"
+                title="Email"
                 placeholder="Escreve o teu e-mail"
+                setError={value => setEmailError(!mailIsValid(value))}
+                value={email}
+                onChange={({ target: { value } }) =>
+                  onlyValues(value, setEmail)
+                }
+                error={emailError}
               />
 
               <InputMask name="dateOfBirth" title="Data de nascimento" />

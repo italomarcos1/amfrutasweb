@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Title, Button, SecureLogin, GoBack } from '~/components/LoginModal';
@@ -7,7 +7,13 @@ import Input from '~/components/Input';
 
 import lock from '~/assets/lock.svg';
 
+import { mailIsValid } from '~/utils/validation';
+import { onlyValues } from '~/utils/onlyValues';
+
 export default function ForgotPassword({ setPage }) {
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState(false);
+
   return (
     <>
       <Title>
@@ -21,6 +27,10 @@ export default function ForgotPassword({ setPage }) {
         placeholder="Escreve o teu e-mail"
         customWidth={462}
         style={{ marginTop: 20 }}
+        setError={value => setEmailError(!mailIsValid(value))}
+        value={email}
+        onChange={({ target: { value } }) => onlyValues(value, setEmail)}
+        error={emailError}
       />
       <Button
         onClick={() => {}}

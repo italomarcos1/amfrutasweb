@@ -32,7 +32,7 @@ export default function StatusContainer({ status }) {
   return (
     <Container status={status}>
       <BadgeContainer>
-        <Badge active>
+        <Badge active style={status === 'cancelled' ? { paddingLeft: 5 } : {}}>
           <img src={status === 'cancelled' ? cancelado : novo} alt="" />
         </Badge>
         <Separator
@@ -77,12 +77,48 @@ export default function StatusContainer({ status }) {
         </Badge>
       </BadgeContainer>
       <BadgeTitleContainer>
-        <BadgeTitle style={{ marginLeft: 0 }}>
+        <BadgeTitle
+          active={
+            status === 'new' ||
+            status === 'approved' ||
+            status === 'onCourse' ||
+            status === 'completed' ||
+            status === 'cancelled'
+          }
+          wasCancelled={status === 'cancelled'}
+          width={26}
+          style={
+            status === 'cancelled' ? { marginLeft: -5 } : { marginLeft: 0 }
+          }
+        >
           {status === 'cancelled' ? 'Cancelado' : 'Novo'}
         </BadgeTitle>
-        <BadgeTitle>Validado</BadgeTitle>
-        <BadgeTitle>Em curso</BadgeTitle>
-        <BadgeTitle>Completo</BadgeTitle>
+        <BadgeTitle
+          active={
+            status === 'approved' ||
+            status === 'onCourse' ||
+            status === 'completed'
+          }
+          style={
+            status === 'cancelled' ? { marginLeft: 114 } : { marginLeft: 107 }
+          }
+        >
+          Validado
+        </BadgeTitle>
+        <BadgeTitle
+          active={status === 'onCourse' || status === 'completed'}
+          width={106}
+          style={{ marginLeft: 95 }}
+        >
+          Em curso
+        </BadgeTitle>
+        <BadgeTitle
+          active={status === 'completed'}
+          width={48}
+          style={{ marginLeft: 33 }}
+        >
+          Completo
+        </BadgeTitle>
       </BadgeTitleContainer>
     </Container>
   );

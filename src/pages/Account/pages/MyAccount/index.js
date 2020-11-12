@@ -4,6 +4,9 @@ import { Container, Content, InfoContainer, SectionTitle } from './styles';
 
 import { InputContainer, Button } from '~/components/LoginModal';
 
+import { mailIsValid } from '~/utils/validation';
+import { onlyValues } from '~/utils/onlyValues';
+
 import Input from '~/components/Input';
 
 import InputMask from '~/components/InputMask';
@@ -14,6 +17,9 @@ export default function MyAccount() {
   const [residence, setResidence] = useState('');
   const [place, setPlace] = useState('');
   const [country, setCountry] = useState('');
+
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState(false);
 
   const genderData = [
     {
@@ -48,8 +54,14 @@ export default function MyAccount() {
             <InputContainer>
               <Input
                 name="email"
-                title="E-mail"
+                title="Email"
                 placeholder="Escreve o teu e-mail"
+                setError={value => setEmailError(!mailIsValid(value))}
+                value={email}
+                onChange={({ target: { value } }) =>
+                  onlyValues(value, setEmail)
+                }
+                error={emailError}
               />
 
               <InputMask name="dateOfBirth" title="Data de nascimento" />
@@ -93,12 +105,14 @@ export default function MyAccount() {
               title="Palavra-passe"
               placeholder="Escolhe tua palavra-passe"
               style={{ marginTop: 20 }}
+              type="password"
             />
             <Input
               name="repeatPassword"
               title="Repita palavra-passe"
               placeholder="Repita a tua palavra-passe"
               style={{ marginTop: 20 }}
+              type="password"
             />
             <InputMask
               name="passwordMailCode"
