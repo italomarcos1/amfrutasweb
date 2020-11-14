@@ -35,3 +35,9 @@ const nameValidation = new RegExp(/^\s+$/);
 export const nameIsValid = name => {
   return nameValidation.test(name) || name === '';
 };
+
+const postcodeValidation = new RegExp(/^[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9]$/);
+
+export const postcodeIsValid = postcode => {
+  return postcodeValidation.test(postcode);
+};

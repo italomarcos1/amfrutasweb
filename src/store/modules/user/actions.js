@@ -36,3 +36,7 @@ export function resetOrder() {
 export function resetTrigger() {
   return { type: '@user/RESET_TRIGGER' };
 }
+
+export function addAddress(address) {
+  return { type: '@user/ADD_ADDRESS', payload: { address } };
+}

@@ -18,7 +18,7 @@ export const Input = styled.input`
   color: #424242;
   border: 1px solid #bec2c8;
   border-color: ${({ active, error }) =>
-    error ? '#f53030' : active ? '#1DC167' : '#BEC2C8'};
+    active ? '#1DC167' : error ? '#f53030' : '#BEC2C8'};
   border-width: ${({ active, error }) => (error || active ? 2 : 1)}px;
   padding: ${({ active }) => (active ? 6 : 7)}px;
 

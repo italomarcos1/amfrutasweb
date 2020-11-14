@@ -16,8 +16,9 @@ export const Container = styled.div`
     text-align: left;
     color: #424242;
     border: 1px solid #bec2c8;
-    border-color: ${({ active }) => (active ? '#1DC167' : '#BEC2C8')};
-    border-width: ${({ active }) => (active ? 2 : 1)}px;
+    border-color: ${({ active, error }) =>
+      active ? '#1DC167' : error ? '#f53030' : '#BEC2C8'};
+    border-width: ${({ active, error }) => (active || error ? 2 : 1)}px;
     padding: ${({ active }) => (active ? 6 : 7)}px;
 
     border-radius: 2px;

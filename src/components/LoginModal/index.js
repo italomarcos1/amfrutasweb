@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 import { darken } from 'polished';
 
-export const Button = styled.button.attrs({
-  type: 'button',
-})`
+export const Button = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;

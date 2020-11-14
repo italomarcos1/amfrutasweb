@@ -4,6 +4,7 @@ const INITIAL_STATE = {
   profile: null,
   order: null,
   info: null,
+  addresses: [],
 };
 
 export default function user(state = INITIAL_STATE, { type, payload }) {
@@ -55,6 +56,14 @@ export default function user(state = INITIAL_STATE, { type, payload }) {
 
       case '@user/RESET_TRIGGER': {
         draft.triggered = false;
+
+        break;
+      }
+
+      case '@user/ADD_ADDRESS': {
+        const { address } = payload;
+        console.tron.log(address);
+        draft.addresses.push(address);
 
         break;
       }
