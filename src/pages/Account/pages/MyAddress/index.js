@@ -44,6 +44,7 @@ export default function MyAccount() {
     false,
     false,
     false,
+    false,
   ]);
 
   const lookupAddress = useCallback(async () => {
@@ -147,7 +148,7 @@ export default function MyAccount() {
                 onBlur={lookupAddress}
               />
               <Input
-                name="full_address"
+                name="street_name"
                 title="Morada"
                 placeholder="Morada"
                 customWidth={215}
@@ -183,10 +184,11 @@ export default function MyAccount() {
                 error={invalidFields[5]}
                 disabled={addressInfo === {}}
               />
-              <Select
+              <Input
+                name="localidade"
                 title="Localidade"
                 placeholder="Escolha a localidade"
-                setValue={setPlace}
+                error={invalidFields[6]}
                 hasMarginLeft
               />
               <Select
