@@ -47,6 +47,8 @@ export default function MyAccount() {
     false,
   ]);
 
+  const data = [{ label: 'Portugal', value: 'Portugal' }];
+
   const lookupAddress = useCallback(async () => {
     if (!postcodeIsValid(postcode) || tempPostcode === postcode) {
       return;
@@ -197,6 +199,7 @@ export default function MyAccount() {
                 setValue={setCountry}
                 customWidth={173}
                 defaultValue={{ label: 'Portugal', value: 'Portugal' }}
+                data={data}
                 hasMarginLeft
               />
             </InputContainer>
