@@ -41,3 +41,27 @@ const postcodeValidation = new RegExp(/^[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9]$/);
 export const postcodeIsValid = postcode => {
   return postcodeValidation.test(postcode);
 };
+
+const phoneValidation = new RegExp(
+  /^[0-9][0-9][\s][0-9][0-9][0-9][\s][0-9][0-9][\s][0-9][0-9]$/
+);
+
+export const phoneIsValid = phone => {
+  return phoneValidation.test(phone);
+};
+
+const nifValidation = new RegExp(
+  /^[0-9][0-9][\s][0-9][0-9][\s][0-9][0-9][\s][0-9][0-9]$/
+);
+
+export const nifIsValid = nif => {
+  return nifValidation.test(nif);
+};
+
+const mailCodeValidation = new RegExp(
+  /^[0-9][0-9][\s][0-9][0-9][\s][0-9][0-9]$/
+);
+
+export const mailCodeIsValid = nif => {
+  return mailCodeValidation.test(nif);
+};

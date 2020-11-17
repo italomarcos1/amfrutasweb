@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Container, Content, InfoContainer, SectionTitle } from './styles';
 
 import { InputContainer, Button } from '~/components/LoginModal';
 
-import { mailIsValid } from '~/utils/validation';
+import {
+  nameIsValid,
+  dateIsValid,
+  phoneIsValid,
+  nifIsValid,
+  mailCodeIsValid,
+  mailIsValid,
+} from '~/utils/validation';
 import { onlyValues } from '~/utils/onlyValues';
 
 import Input from '~/components/Input';
@@ -12,14 +20,34 @@ import Input from '~/components/Input';
 import InputMask from '~/components/InputMask';
 import Select from '~/components/Select';
 
-export default function MyAccount() {
-  const [gender, setGender] = useState('');
-  const [residence, setResidence] = useState('');
-  const [place, setPlace] = useState('');
-  const [country, setCountry] = useState('');
+import { updateProfileRequest } from '~/store/modules/user/actions';
 
-  const [email, setEmail] = useState('');
+export default function MyAccount() {
   const [emailError, setEmailError] = useState(false);
+  const [invalidDateOfBirth, setInvalidDateOfBirth] = useState(false);
+
+  const profile = useSelector(state => state.user.profile);
+  const dispatch = useDispatch();
+
+  console.tron.log(profile);
+
+  const [email, setEmail] = useState(profile !== null ? profile.email : '');
+  const [gender, setGender] = useState(profile !== null ? profile.gender : '');
+
+  const [invalidFields, setInvalidFields] = useState([
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
+
+  const [invalidNif, setInvalidNif] = useState(false);
+  const [invalidGender, setInvalidGender] = useState(false);
+  const [invalidPhone, setInvalidPhone] = useState(false);
+  const [invalidMailCode, setInvalidMailCode] = useState(false);
 
   const genderData = [
     {
@@ -30,11 +58,49 @@ export default function MyAccount() {
     { label: 'Outro', value: 'Outro' },
   ];
 
+  const handleSubmit = useCallback(
+    formData => {
+      const formattedData = Object.values(formData);
+      invalidFields.fill(false);
+      setInvalidNif(false);
+      setInvalidPhone(false);
+      setInvalidMailCode(false);
+      setInvalidGender(false);
+      setEmailError(false);
+      setInvalidDateOfBirth(false);
+
+      const anyEmptyField = formattedData.some(field => nameIsValid(field));
+
+      if (anyEmptyField) {
+        setInvalidFields(formattedData.map(field => nameIsValid(field)));
+        setEmailError(!mailIsValid(formData.email));
+        setInvalidNif(!nifIsValid(formData.nif));
+        setInvalidPhone(!phoneIsValid(formData.phone));
+        setInvalidMailCode(!mailCodeIsValid(formData.mailCode));
+        setInvalidGender(nameIsValid(gender));
+        setInvalidDateOfBirth(!dateIsValid(formData.dateOfBirth));
+
+        return;
+      }
+
+      const profileData = {
+        ...formData,
+        gender,
+      };
+
+      dispatch(updateProfileRequest(profileData));
+    },
+    [dispatch, gender, invalidFields]
+  );
+
   return (
     <>
       <Container>
         <Content>
-          <InfoContainer onSubmit={() => {}}>
+          <InfoContainer
+            onSubmit={handleSubmit}
+            initialData={profile !== null ? profile : {}}
+          >
             <SectionTitle>
               <strong>Dados de contato</strong>
               <small>Confira e atualize caso necessário.</small>
@@ -44,11 +110,13 @@ export default function MyAccount() {
                 name="name"
                 title="Nome"
                 placeholder="Escreve o teu nome"
+                error={invalidFields[0]}
               />
               <Input
                 name="nickname"
                 title="Apelido"
                 placeholder="Escolhe o teu apelido"
+                error={invalidFields[1]}
               />
             </InputContainer>
             <InputContainer>
@@ -63,26 +131,53 @@ export default function MyAccount() {
                 }
                 error={emailError}
               />
-
-              <InputMask name="dateOfBirth" title="Data de nascimento" />
-            </InputContainer>
-            <InputContainer>
-              <InputMask name="nif" type="9d" title="NIF" />
-              <Select
-                title="Gênero"
-                placeholder="Escolha o gênero"
-                setValue={setGender}
-                customWidth={221}
-                data={genderData}
+              <InputMask
+                name="dateOfBirth"
+                title="Data de nascimento"
+                error={invalidFields[2] || invalidDateOfBirth}
               />
             </InputContainer>
             <InputContainer>
-              <InputMask name="phone" type="phone" title="Telemóvel" />
+              <InputMask
+                name="nif"
+                type="9d"
+                title="NIF"
+                error={invalidFields[3] || invalidNif}
+              />
+              {gender !== '' ? (
+                <Select
+                  title="Gênero"
+                  placeholder="Escolha o gênero"
+                  setValue={setGender}
+                  defaultValue={{ label: gender, value: gender }}
+                  customWidth={221}
+                  data={genderData}
+                  error={invalidGender}
+                />
+              ) : (
+                <Select
+                  title="Gênero"
+                  placeholder="Escolha o gênero"
+                  setValue={setGender}
+                  customWidth={221}
+                  data={genderData}
+                  error={invalidGender}
+                />
+              )}
+            </InputContainer>
+            <InputContainer>
+              <InputMask
+                name="phone"
+                type="phone"
+                title="Telemóvel"
+                error={invalidFields[4] || invalidPhone}
+              />
               <InputMask
                 name="mailCode"
                 mask="99 99 99"
                 placeholder="00 00 00"
                 title="Código de validação por e-mail"
+                error={invalidFields[5] || invalidMailCode}
               />
             </InputContainer>
             <Button
@@ -90,6 +185,7 @@ export default function MyAccount() {
               color="#1DC167"
               shadowColor="#17A75B"
               style={{ width: 221 }}
+              type="submit"
             >
               <b>Gravar</b>
             </Button>

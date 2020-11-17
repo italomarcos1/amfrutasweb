@@ -19,7 +19,7 @@ export default function CustomInput({
   ...rest
 }) {
   const inputRef = useRef(null);
-  const { fieldName, registerField /* error */ } = useField(name);
+  const { fieldName, registerField, defaultValue /* error */ } = useField(name);
 
   const [mask, setMask] = useState('');
   const [placeholder, setPlaceholder] = useState('');
@@ -155,6 +155,7 @@ export default function CustomInput({
         placeholder={placeholder}
         mask={mask}
         ref={inputRef}
+        defaultValue={defaultValue}
         {...rest}
         type="text"
         style={

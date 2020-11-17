@@ -39,13 +39,17 @@ import CheckoutHeader from '~/components/CheckoutHeader';
 import Item from '~/components/CheckoutItem';
 import PeriodicDeliveryListItem from '~/components/PeriodicDeliveryListItem';
 
-import { products, periodicProducts } from '~/data';
+import { periodicProducts } from '~/data';
 
 export default function Confirmation() {
   const [amount, setAmount] = useState(4);
   const [periodicDelivery, setPeriodicDelivery] = useState(true);
 
   const history = useHistory();
+
+  const { name, nickname, phone, email, dateOfBirth, nif } = useSelector(
+    state => state.user.profile
+  );
 
   const cart = useSelector(state => state.cart.products);
 
@@ -78,27 +82,27 @@ export default function Confirmation() {
             <CustomInputContainer>
               <Info>
                 <strong>Nome</strong>
-                <small>Michel Oliveira</small>
+                <small>{`${name} ${nickname}`}</small>
               </Info>
               <Info>
                 <strong>Telemóvel</strong>
-                <small>92 760 94 40</small>
+                <small>{phone}</small>
               </Info>
             </CustomInputContainer>
             <CustomInputContainer>
               <Info>
                 <strong>Email</strong>
-                <small>michel.oliveira@me.com</small>
+                <small>{email}</small>
               </Info>
               <Info>
                 <strong>Data de Nascimento</strong>
-                <small>15/04/1973</small>
+                <small>{dateOfBirth}</small>
               </Info>
             </CustomInputContainer>
             <CustomInputContainer>
               <Info>
                 <strong>NIF</strong>
-                <small>261 571 972</small>
+                <small>{nif}</small>
               </Info>
             </CustomInputContainer>
           </InfoContainer>

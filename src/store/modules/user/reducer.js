@@ -16,6 +16,8 @@ export default function user(state = INITIAL_STATE, { type, payload }) {
       }
 
       case '@user/UPDATE_PROFILE_SUCCESS': {
+        console.tron.log(payload.profile);
+        console.tron.log('updated');
         draft.profile = payload.profile;
         break;
       }

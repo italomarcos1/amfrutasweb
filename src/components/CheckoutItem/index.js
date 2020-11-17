@@ -20,7 +20,7 @@ export default function Item({ item, index }) {
         <ProductInfo>
           <Title>{title}</Title>
           <PriceAndAmount>
-            <small>7 unidades</small>
+            <small>{amount} unidades</small>
             <strong>€&nbsp;{newPrice}</strong>
           </PriceAndAmount>
         </ProductInfo>

@@ -20,7 +20,7 @@ export const Content = styled.div`
 
   ul {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     flex-wrap: wrap;
     width: 840px;

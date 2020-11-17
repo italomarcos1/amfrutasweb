@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, Redirect } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
   Container,
@@ -23,7 +23,6 @@ import {
   TakeOnShop,
 } from './styles';
 
-import { mailIsValid } from '~/utils/validation';
 import { onlyValues } from '~/utils/onlyValues';
 
 import { InputContainer, Button, SecureLogin } from '~/components/LoginModal';
@@ -48,87 +47,21 @@ import Select from '~/components/Select';
 import CheckoutHeader from '~/components/CheckoutHeader';
 import Item from '~/components/CheckoutItem';
 
-import agua1l from '~/assets/products/agua1l@2x.png';
+import { updateProfileRequest } from '~/store/modules/user/actions';
+
+import {
+  nameIsValid,
+  dateIsValid,
+  phoneIsValid,
+  nifIsValid,
+  mailCodeIsValid,
+  mailIsValid,
+} from '~/utils/validation';
 
 export default function Delivery() {
-  const items = [
-    {
-      id: 1,
-      picture: agua1l,
-      title:
-        'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
-      oldPrice: '10.99',
-      newPrice: '9.80',
-      amount: 0,
-    },
-    {
-      id: 2,
-      picture: agua1l,
-      title:
-        'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
-      oldPrice: '10.99',
-      newPrice: '9.80',
-      amount: 0,
-    },
-    {
-      id: 3,
-      picture: agua1l,
-      title:
-        'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
-      oldPrice: '10.99',
-      newPrice: '9.80',
-      amount: 0,
-    },
-    {
-      id: 4,
-      picture: agua1l,
-      title:
-        'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
-      oldPrice: '10.99',
-      newPrice: '9.80',
-      amount: 0,
-    },
-    {
-      id: 5,
-      picture: agua1l,
-      title:
-        'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
-      oldPrice: '10.99',
-      newPrice: '9.80',
-      amount: 0,
-    },
-    {
-      id: 6,
-      picture: agua1l,
-      title:
-        'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
-      oldPrice: '10.99',
-      newPrice: '9.80',
-      amount: 0,
-    },
-    {
-      id: 7,
-      picture: agua1l,
-      title:
-        'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
-      oldPrice: '10.99',
-      newPrice: '9.80',
-      amount: 0,
-    },
-    {
-      id: 8,
-      picture: agua1l,
-      title:
-        'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
-      oldPrice: '10.99',
-      newPrice: '9.80',
-      amount: 0,
-    },
-  ];
   const [deliveryOption, setDeliveryOption] = useState('shop');
   const [deliveryDay, setDeliveryDay] = useState('');
   const [deliveryHour, setDeliveryHour] = useState('');
-  const [gender, setGender] = useState('');
   const [residence, setResidence] = useState('');
   const [place, setPlace] = useState('');
   const [country, setCountry] = useState('');
@@ -138,8 +71,11 @@ export default function Delivery() {
   const [hoverButton, setHoverButton] = useState('none');
 
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const cart = useSelector(state => state.cart.products);
+
+  const profile = useSelector(state => state.user.profile);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -149,8 +85,69 @@ export default function Delivery() {
     setCouponIsValid(!!coupon);
   }, [coupon]);
 
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(profile !== null ? profile.email : '');
   const [emailError, setEmailError] = useState(false);
+  const [gender, setGender] = useState(profile !== null ? profile.gender : '');
+
+  const [invalidFields, setInvalidFields] = useState([
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
+  const [invalidDateOfBirth, setInvalidDateOfBirth] = useState(false);
+
+  const [invalidNif, setInvalidNif] = useState(false);
+  const [invalidGender, setInvalidGender] = useState(false);
+  const [invalidPhone, setInvalidPhone] = useState(false);
+  const [invalidMailCode, setInvalidMailCode] = useState(false);
+
+  const handleSubmit = useCallback(
+    formData => {
+      const formattedData = Object.values(formData);
+      invalidFields.fill(false);
+      setInvalidNif(false);
+      setInvalidPhone(false);
+      setInvalidMailCode(false);
+      setInvalidGender(false);
+      setEmailError(false);
+      setInvalidDateOfBirth(false);
+
+      const anyEmptyField = formattedData.some(field => nameIsValid(field));
+
+      if (anyEmptyField) {
+        setInvalidFields(formattedData.map(field => nameIsValid(field)));
+        setEmailError(!mailIsValid(formData.email));
+        setInvalidNif(!nifIsValid(formData.nif));
+        setInvalidPhone(!phoneIsValid(formData.phone));
+        setInvalidMailCode(!mailCodeIsValid(formData.mailCode));
+        setInvalidGender(nameIsValid(gender));
+        setInvalidDateOfBirth(!dateIsValid(formData.dateOfBirth));
+
+        return;
+      }
+
+      const profileData = {
+        ...formData,
+        gender,
+      };
+
+      dispatch(updateProfileRequest(profileData));
+    },
+    [dispatch, gender, invalidFields]
+  );
+
+  const genderData = [
+    {
+      label: 'Masculino',
+      value: 'Masculino',
+    },
+    { label: 'Feminino', value: 'Feminino' },
+    { label: 'Outro', value: 'Outro' },
+  ];
 
   if (cart.length === 0) {
     return <Redirect to="/cesto" />;
@@ -270,7 +267,10 @@ export default function Delivery() {
         </Content>
 
         <Content style={{ marginTop: 40 }}>
-          <InfoContainer onSubmit={() => {}}>
+          <InfoContainer
+            onSubmit={handleSubmit}
+            initialData={profile !== null ? profile : {}}
+          >
             <SectionTitle>
               <strong>Dados de contato</strong>
               <small>Confira e atualize caso necessário.</small>
@@ -303,13 +303,28 @@ export default function Delivery() {
               <InputMask name="dateOfBirth" title="Data de nascimento" />
             </InputContainer>
             <InputContainer>
-              <InputMask name="nif" mask="9d" title="NIF" />
-              <Select
-                title="Gênero"
-                placeholder="Escolha o gênero"
-                setValue={setGender}
-                customWidth={221}
-              />
+              <InputMask name="nif" type="9d" title="NIF" />
+
+              {gender !== '' ? (
+                <Select
+                  title="Gênero"
+                  placeholder="Escolha o gênero"
+                  setValue={setGender}
+                  defaultValue={{ label: gender, value: gender }}
+                  customWidth={221}
+                  data={genderData}
+                  error={invalidGender}
+                />
+              ) : (
+                <Select
+                  title="Gênero"
+                  placeholder="Escolha o gênero"
+                  setValue={setGender}
+                  customWidth={221}
+                  data={genderData}
+                  error={invalidGender}
+                />
+              )}
             </InputContainer>
             <InputContainer>
               <InputMask name="phone" type="phone" title="Telemóvel" />
