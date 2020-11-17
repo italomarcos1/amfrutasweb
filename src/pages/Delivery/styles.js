@@ -317,7 +317,7 @@ export const TakeOnShop = styled.div`
 
   text-align: left;
   font-family: 'SFPro';
-  font-size: 12px;
+  font-size: 13px;
   line-height: 22px;
   letter-spacing: 0px;
   background-color: #0cb68b;
@@ -326,7 +326,7 @@ export const TakeOnShop = styled.div`
 
   b {
     font-family: 'SFPro';
-    font-size: 12px;
+    font-size: 13px;
     line-height: 22px;
     font-family: 'SFProBold';
     margin-left: 3px;

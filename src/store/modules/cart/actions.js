@@ -39,10 +39,16 @@ export function addFavorites(favorites) {
   };
 }
 
-export function addToFavoritesRequest(id) {
+// export function addToFavoritesRequest(id) {
+//   return {
+//     type: '@cart/ADD_TO_FAVORITES_REQUEST',
+//     payload: { id },
+//   };
+// }
+export function addToFavoritesRequest(product) {
   return {
     type: '@cart/ADD_TO_FAVORITES_REQUEST',
-    payload: { id },
+    payload: { product },
   };
 }
 

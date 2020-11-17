@@ -13,9 +13,10 @@ export default function Info({
   style,
   titleStyle,
   noButton,
+  ...rest
 }) {
   return (
-    <Container style={style}>
+    <Container style={style} {...rest}>
       <img src={icon} alt={alt} />
       <Content>
         <strong style={titleStyle}>{title}</strong>

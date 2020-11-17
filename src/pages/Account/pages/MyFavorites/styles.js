@@ -8,10 +8,10 @@ export const Container = styled.div`
 
   ul {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     flex-wrap: wrap;
     width: 760px;
-    height: 540px;
+    max-height: 540px;
   }
 `;

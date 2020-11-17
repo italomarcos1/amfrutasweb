@@ -247,10 +247,12 @@ export default function Delivery() {
                     <NoTitleSelect
                       setValue={setDeliveryDay}
                       customWidth={125}
+                      placeholder="Dia"
                     />
                     <NoTitleSelect
                       setValue={setDeliveryHour}
                       customWidth={190}
+                      placeholder="Hora"
                     />
                   </div>
                 </div>

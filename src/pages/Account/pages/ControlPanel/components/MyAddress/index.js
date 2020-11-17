@@ -1,13 +1,15 @@
 import React from 'react';
-
+import { useHistory } from 'react-router-dom';
 import { Container, Content, InfoContainer, AddressInfo } from './styles';
 
 import location from '~/assets/myAccount/location.svg';
 import chevron from '~/assets/chevron-right.svg';
 
 export default function MyAddress() {
+  const history = useHistory();
+
   return (
-    <Container>
+    <Container onClick={() => history.push('/endereco')}>
       <InfoContainer>
         <img src={location} alt="Seus endereços" />
         <Content>

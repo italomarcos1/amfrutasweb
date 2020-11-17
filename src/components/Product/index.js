@@ -1,6 +1,6 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import coins from '~/assets/coins.svg';
 import basket_active from '~/assets/icons/basket_active.svg';
@@ -9,7 +9,11 @@ import plus from '~/assets/icons/plus.svg';
 import heartOn from '~/assets/icons/heart-on.svg';
 import heartOff from '~/assets/icons/heart-off.svg';
 
-import { addToCartRequest } from '~/store/modules/cart/actions';
+import {
+  addToCartRequest,
+  addToFavoritesRequest,
+  removeFromFavoritesRequest,
+} from '~/store/modules/cart/actions';
 
 import {
   Container,
@@ -22,20 +26,43 @@ import {
 
 export default function Product({ product, index }) {
   const dispatch = useDispatch();
-  const [isFavorite, setIsFavorite] = useState(product.isFavorite);
+  const [favorite, setFavorite] = useState(false);
+
+  const favorites = useSelector(state => state.cart.favorites);
+  const updating = useSelector(state => state.cart.updating);
+
   const [amount, setAmount] = useState(0);
 
-  const { title, picture, oldPrice, newPrice } = product;
+  const { id, title, picture, oldPrice, newPrice } = product;
 
   const handleAddToCart = useCallback(() => {
     dispatch(addToCartRequest(product, amount));
     setAmount(0);
   }, [product, amount, dispatch]);
 
+  useEffect(() => {
+    const fvt = favorites.findIndex(fav => fav.id === id);
+    setFavorite(fvt >= 0);
+  }, [favorites, id]);
+
+  const handleFavorite = () => {
+    console.log('crack');
+    dispatch(
+      !favorite
+        ? addToFavoritesRequest(product)
+        : removeFromFavoritesRequest(id)
+    );
+    setFavorite(!favorite);
+  };
+
   return (
     <Container>
-      <FavoriteButton type="button" onClick={() => setIsFavorite(!isFavorite)}>
-        <img src={isFavorite ? heartOn : heartOff} alt="Favorite" />
+      <FavoriteButton
+        type="button"
+        onClick={handleFavorite}
+        disabled={updating}
+      >
+        <img src={favorite ? heartOn : heartOff} alt="Favorite" />
       </FavoriteButton>
       <ImageContainer to={`/product/${index}`}>
         <img src={picture} alt="Product" />
@@ -88,6 +115,7 @@ export default function Product({ product, index }) {
 
 Product.propTypes = {
   product: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     title: PropTypes.string,
     picture: PropTypes.string,
     oldPrice: PropTypes.string,

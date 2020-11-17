@@ -23,120 +23,14 @@ import Item from '~/components/Item';
 
 import { Button, SecureLogin } from '~/components/LoginModal';
 
-import agua1l from '~/assets/products/agua1l@2x.png';
-
 export default function Basket() {
-  // const items = [
-  //   {
-  //     id: 1,
-  //     picture: agua1l,
-  //     title:
-  //       'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
-  //     oldPrice: '10.99',
-  //     newPrice: '9.80',
-  //     amount: 0,
-  //   },
-  //   {
-  //     id: 2,
-  //     picture: agua1l,
-  //     title:
-  //       'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
-  //     oldPrice: '10.99',
-  //     newPrice: '9.80',
-  //     amount: 0,
-  //   },
-  //   {
-  //     id: 3,
-  //     picture: agua1l,
-  //     title:
-  //       'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
-  //     oldPrice: '10.99',
-  //     newPrice: '9.80',
-  //     amount: 0,
-  //   },
-  //   {
-  //     id: 4,
-  //     picture: agua1l,
-  //     title:
-  //       'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
-  //     oldPrice: '10.99',
-  //     newPrice: '9.80',
-  //     amount: 0,
-  //   },
-  //   {
-  //     id: 5,
-  //     picture: agua1l,
-  //     title:
-  //       'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
-  //     oldPrice: '10.99',
-  //     newPrice: '9.80',
-  //     amount: 0,
-  //   },
-  //   {
-  //     id: 6,
-  //     picture: agua1l,
-  //     title:
-  //       'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
-  //     oldPrice: '10.99',
-  //     newPrice: '9.80',
-  //     amount: 0,
-  //   },
-  //   {
-  //     id: 7,
-  //     picture: agua1l,
-  //     title:
-  //       'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
-  //     oldPrice: '10.99',
-  //     newPrice: '9.80',
-  //     amount: 0,
-  //   },
-  //   {
-  //     id: 8,
-  //     picture: agua1l,
-  //     title:
-  //       'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
-  //     oldPrice: '10.99',
-  //     newPrice: '9.80',
-  //     amount: 0,
-  //   },
-  //   {
-  //     id: 9,
-  //     picture: agua1l,
-  //     title:
-  //       'Água com Gás Mineral Natural Gaseificada 25 cl Castello PH de 20º',
-  //     oldPrice: '10.99',
-  //     newPrice: '9.80',
-  //     amount: 0,
-  //   },
-  // ];
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const cart = useSelector(state => state.cart.products);
-
-  console.log(cart);
+  const { products, price } = useSelector(state => state.cart);
 
   const history = useHistory();
-
-  const [totalPrice, setTotalPrice] = useState('');
-
-  const calculatePrice = useCallback(() => {
-    const price = cart.reduce((totalSum, { newPrice, amount }) => {
-      console.tron.log(newPrice);
-      console.tron.log(Number(newPrice));
-      console.tron.log(amount);
-      const formattedPrice = newPrice.replace(',', '.');
-      return totalSum + Number(formattedPrice) * amount;
-    }, 0);
-
-    setTotalPrice(price);
-  }, [cart]);
-
-  useEffect(() => {
-    calculatePrice();
-  }, [calculatePrice]);
 
   return (
     <>
@@ -145,9 +39,9 @@ export default function Basket() {
         <Content>
           <div>
             <Title>Cesto de Compras</Title>
-            {cart.length !== 0 ? (
+            {products.length !== 0 ? (
               <ul>
-                {cart.map((item, index) => (
+                {products.map((item, index) => (
                   <Item key={item.id} item={item} index={index} />
                 ))}
               </ul>
@@ -163,11 +57,11 @@ export default function Basket() {
             <CheckoutDetails>
               <CheckoutItem>
                 <h1>Produtos</h1>
-                <h2>{cart.length !== 0 ? `€ ${totalPrice}` : '---'}</h2>
+                <h2>{products.length !== 0 ? `€ ${price}` : '---'}</h2>
               </CheckoutItem>
               <CheckoutItem>
                 <h1>Economizou</h1>
-                <h2>{cart.length !== 0 ? `€ 22,9` : '---'}</h2>
+                <h2>{products.length !== 0 ? `€ 22,9` : '---'}</h2>
               </CheckoutItem>
               <CheckoutItem style={{ height: 77 }}>
                 <h1>
@@ -188,7 +82,7 @@ export default function Basket() {
               <CheckoutItem>
                 <h2>Total</h2>
                 <h2 style={{ fontSize: 25, color: '#0CB68B' }}>
-                  {cart.length !== 0 ? `€ 179,14` : '---'}
+                  {products.length !== 0 ? `€ 179,14` : '---'}
                 </h2>
               </CheckoutItem>
               <ConfirmationText>
@@ -197,7 +91,7 @@ export default function Basket() {
                 colaboradores no dia da entrega.
               </ConfirmationText>
               <Button
-                disabled={cart.length === 0}
+                disabled={products.length === 0}
                 color="#1DC167"
                 shadowColor="#17A75B"
                 onClick={() => history.push('entrega')}

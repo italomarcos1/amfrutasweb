@@ -1,6 +1,6 @@
-import { all, call, put, select, takeLatest } from 'redux-saga/effects';
+import { all, /* call, */ put, select, takeLatest } from 'redux-saga/effects';
 
-import api from '~/services/api';
+// import api from '~/services/api';
 
 import {
   addToCartSuccess,
@@ -16,7 +16,6 @@ export function* addToCart({ payload }) {
   const { product, amount } = payload;
 
   const products = yield select(state => state.cart.products);
-  // console.tron.log(product);
   const alreadyInCart = products.findIndex(p => p.id === product.id);
 
   if (alreadyInCart >= 0) {
@@ -53,19 +52,22 @@ export function* removeFromCart({ payload }) {
 }
 
 export function* addToFavorites({ payload }) {
-  const { id } = payload;
-  const {
-    data: { data },
-  } = yield call(api.get, `ecommerce/products/${id}`);
+  const { product } = payload;
+  console.tron.log('adding...');
 
-  yield call(api.post, `clients/wishlists/${id}`);
-  yield put(addToFavoritesSuccess(data));
+  console.tron.log(product);
+  // const {
+  //   data: { data },
+  // } = yield call(api.get, `ecommerce/products/${id}`);
+
+  // yield call(api.post, `clients/wishlists/${id}`);
+  yield put(addToFavoritesSuccess(product));
 }
 
 export function* removeFromFavorites({ payload }) {
   const { id } = payload;
 
-  yield call(api.delete, `clients/wishlists/${id}`);
+  // yield call(api.delete, `clients/wishlists/${id}`);
   yield put(removeFromFavoritesSuccess(id));
 }
 

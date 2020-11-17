@@ -23,7 +23,6 @@ export const Content = styled.div`
     width: 840px;
     max-height: 708px;
     margin-top: 27px;
-    background-color: #f90;
   }
 `;
 

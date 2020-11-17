@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 import {
   Container,
@@ -13,8 +14,10 @@ import myAccount from '~/assets/myAccount/minha-conta.svg';
 import chevron from '~/assets/chevron-right.svg';
 
 export default function MyAccount() {
+  const history = useHistory();
+
   return (
-    <Container>
+    <Container onClick={() => history.push('/conta')}>
       <InfoContainer>
         <IconAndDataContainer>
           <img src={myAccount} alt="Minha conta" />

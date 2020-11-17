@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 import { InfoContainer, DeliveryAndCardsContainer } from './styles';
 
@@ -12,6 +13,8 @@ import delivery from '~/assets/myAccount/delivery.svg';
 import cards from '~/assets/myAccount/cards.svg';
 
 export default function ControlPanel() {
+  const history = useHistory();
+
   return (
     <>
       <InfoContainer>
@@ -28,6 +31,7 @@ export default function ControlPanel() {
           alt="Encomendas"
           title="As minhas encomendas"
           subTitle="Você não tem pedidos em andamento"
+          onClick={() => history.push('/encomendas')}
         />
       </InfoContainer>
       <InfoContainer>
@@ -39,6 +43,7 @@ export default function ControlPanel() {
             title="Minhas entregas periódicas"
             titleStyle={{ fontSize: 20.5 }}
             subTitle="Você não tem pedidos em andamento"
+            onClick={() => history.push('/entregas')}
           />
           <Info
             icon={cards}

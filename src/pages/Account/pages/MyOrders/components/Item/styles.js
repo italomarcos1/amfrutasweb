@@ -96,7 +96,7 @@ export const Button = styled.button.attrs({ type: 'button' })`
 
   small {
     font-family: 'SFPro';
-    font-size: 11px;
+    font-size: 12px;
     margin-top: 0;
     padding: 0;
     border: 0;
