@@ -47,7 +47,7 @@ export default [
     id: 5,
     picture: graos,
     title: 'Grãos Diversos',
-    // oldPrice: '10,99',
+    oldPrice: '10,99',
     newPrice: '9,80',
     amount: 0,
   },

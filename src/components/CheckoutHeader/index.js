@@ -15,19 +15,23 @@ import {
   HeaderContent,
   BackButton,
   MyOrdersButton,
+  Logo,
 } from './styles';
 
 import logo from '~/assets/amfrutas-white.svg';
 
 export default function CheckoutHeader({ active }) {
   const userData = useSelector(state => state.user.info);
+  const cart = useSelector(state => state.cart.products);
   const history = useHistory();
 
   return (
     <Header>
       <div className="content">
         <HeaderContent>
-          <img src={logo} alt="Logo" style={{ width: 196, height: 43 }} />
+          <Logo to="/">
+            <img src={logo} alt="Logo" style={{ width: 196, height: 43 }} />
+          </Logo>
           <SubHeader>
             <OptionContainer onClick={() => history.push('/cesto')}>
               <OptionTitle>Cesto</OptionTitle>
@@ -42,7 +46,7 @@ export default function CheckoutHeader({ active }) {
               <OptionTitle>Entrega</OptionTitle>
               <OptionBorder active={active === 2 || active === 3}>
                 <OptionNumber
-                  disabled={active === 3}
+                  disabled={active === 3 || cart.length === 0}
                   active={active === 2 || active === 3}
                 >
                   2
@@ -50,7 +54,7 @@ export default function CheckoutHeader({ active }) {
               </OptionBorder>
             </OptionContainer>
             <OptionContainer
-              disabled={!userData?.postCode}
+              disabled={cart.length === 0}
               onClick={() => history.push('/confirmacao')}
             >
               <OptionTitle>Confirmação</OptionTitle>

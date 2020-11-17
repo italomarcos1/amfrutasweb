@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useHistory, Redirect } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import {
   Container,
@@ -45,6 +46,16 @@ export default function Confirmation() {
   const [periodicDelivery, setPeriodicDelivery] = useState(true);
 
   const history = useHistory();
+
+  const cart = useSelector(state => state.cart.products);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  if (cart.length === 0) {
+    return <Redirect to="/cesto" />;
+  }
 
   return (
     <>
@@ -142,8 +153,8 @@ export default function Confirmation() {
           <div>
             <Title>Produtos</Title>
             <ul>
-              {products.map(item => (
-                <Item key={item.id} item={item} />
+              {cart.map((item, index) => (
+                <Item key={item.id} item={item} index={index} />
               ))}
             </ul>
           </div>

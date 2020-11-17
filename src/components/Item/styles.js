@@ -8,6 +8,7 @@ export const Container = styled.li`
   border-radius: 6px;
   padding: 6px;
   list-style: none;
+  z-index: 1;
 `;
 
 export const ItemPicture = styled.img`

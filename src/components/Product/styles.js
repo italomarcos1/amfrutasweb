@@ -22,8 +22,8 @@ export const Title = styled(Link)`
   font-size: 15px;
   line-height: 22px;
   padding: 0 5px 0 4px;
-  margin: 10px 0;
-  height: 64px;
+  margin: 10px 0 0;
+  height: 74px;
   width: 156px;
   letter-spacing: 0px;
   overflow: hidden;
@@ -52,10 +52,7 @@ export const ImageContainer = styled(Link)`
   justify-content: center;
   align-self: center;
   border-radius: 4px;
-  /* background-color: #ff4; */
-
-  /* margin-top: 6px; */
-  /* -moz-margin-top: 0; */
+  background-color: #ff4;
 
   width: 164px;
   height: 164px;
@@ -69,12 +66,12 @@ export const ImageContainer = styled(Link)`
 export const PriceContainer = styled(Link)`
   display: flex;
   flex-direction: column;
-  height: 44px;
+  height: 64px;
   width: 100%;
   padding: 0 10px;
   padding-left: 5px;
   font-family: 'SFProCustom';
-  margin: 10px 0;
+  margin: 10px 0 0;
   letter-spacing: 0px;
 
   /* background-color: #404; */
@@ -109,12 +106,12 @@ export const PriceContainer = styled(Link)`
     color: #989898;
     text-align: left;
     font-size: 10px;
-    line-height: 22px;
+    line-height: 15px;
     margin-top: 6px;
     letter-spacing: 0px;
     font-family: 'SFProCustom';
 
-    /* background-color: #4f4; */
+    /* background-color: #404; */
 
     p {
       margin-left: 5px;
@@ -141,6 +138,7 @@ export const Options = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: 10px;
+  user-select: none;
 
   div {
     display: flex;

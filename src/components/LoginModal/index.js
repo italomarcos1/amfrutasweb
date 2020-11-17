@@ -7,8 +7,9 @@ export const Button = styled.button`
   justify-content: center;
   width: 441px;
   height: 55px;
-  background-color: ${({ color }) => color};
-  box-shadow: 0px 4px 0px ${({ shadowColor }) => shadowColor};
+  background-color: ${({ color, disabled }) => (disabled ? '#666' : color)};
+  box-shadow: 0px 4px 0px
+    ${({ shadowColor, disabled }) => (disabled ? '#444' : shadowColor)};
   border-radius: 4px;
   font-family: 'SFPro';
   font-size: 18px;
@@ -17,8 +18,13 @@ export const Button = styled.button`
   margin-top: 20px;
 
   &:hover {
-    background-color: ${({ color }) => darken(0.05, color)};
+    background-color: ${({ color, disabled }) =>
+      disabled ? '#666' : darken(0.05, color)};
     transition: all 0.2s;
+  }
+
+  &[disabled] {
+    cursor: not-allowed;
   }
 
   b {

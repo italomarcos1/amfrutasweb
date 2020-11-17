@@ -1,5 +1,6 @@
-import React, { useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useHistory, Redirect } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import {
   Container,
@@ -138,12 +139,22 @@ export default function Delivery() {
 
   const history = useHistory();
 
+  const cart = useSelector(state => state.cart.products);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const validateCoupon = useCallback(() => {
     setCouponIsValid(!!coupon);
   }, [coupon]);
 
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
+
+  if (cart.length === 0) {
+    return <Redirect to="/cesto" />;
+  }
 
   return (
     <>
@@ -392,8 +403,8 @@ export default function Delivery() {
         <Content style={{ marginTop: 20 }}>
           <div>
             <ul>
-              {items.map(item => (
-                <Item key={item.id} item={item} />
+              {cart.map((item, index) => (
+                <Item key={item.id} item={item} index={index} />
               ))}
             </ul>
             <TextArea

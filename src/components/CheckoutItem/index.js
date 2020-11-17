@@ -10,11 +10,11 @@ import {
   ProductInfo,
 } from './styles';
 
-export default function Item({ item }) {
+export default function Item({ item, index }) {
   const { id, picture, title, newPrice, amount } = item;
 
   return (
-    <Container key={id} style={id > 2 ? { marginTop: 40 } : {}}>
+    <Container key={id} style={index > 1 ? { marginTop: 40 } : {}}>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <ItemPicture src={picture} />
         <ProductInfo>
@@ -37,4 +37,5 @@ Item.propTypes = {
     newPrice: PropTypes.string,
     amount: PropTypes.number,
   }).isRequired,
+  index: PropTypes.number.isRequired,
 };

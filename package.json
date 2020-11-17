@@ -26,6 +26,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
     "react-select": "^3.1.0",
+    "react-toast-notifications": "^2.4.0",
     "react-use-scroll-position": "^2.0.0",
     "reactotron-react-js": "^3.3.7",
     "reactotron-redux": "^3.1.3",

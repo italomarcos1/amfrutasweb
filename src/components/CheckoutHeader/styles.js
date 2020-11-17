@@ -28,6 +28,12 @@ export const HeaderContent = styled.div`
   width: 880px;
 `;
 
+export const Logo = styled(Link)`
+  background: none;
+  width: 196px;
+  height: 43px;
+`;
+
 export const BackButton = styled(Link)`
   width: 100px;
   height: 45px;

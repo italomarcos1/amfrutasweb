@@ -191,6 +191,7 @@ export default function MyAccount() {
                 title="Localidade"
                 placeholder="Escolha a localidade"
                 error={invalidFields[6]}
+                value="Lisboa"
                 hasMarginLeft
               />
               <Select

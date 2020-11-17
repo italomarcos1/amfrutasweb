@@ -17,12 +17,13 @@ export const Content = styled.div`
 
   ul {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     flex-wrap: wrap;
     width: 840px;
-    height: 708px;
+    max-height: 708px;
     margin-top: 27px;
+    background-color: #f90;
   }
 `;
 
@@ -112,5 +113,34 @@ export const ShippingWarning = styled.div`
   b {
     font-family: 'SFProBold';
     margin-left: 3px;
+  }
+`;
+
+export const EmptyCartContainer = styled.div`
+  width: 840px;
+  height: 454px;
+  /* background-color: #2cbdd3; */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 27px;
+
+  img {
+    width: 168px;
+    height: 168px;
+  }
+
+  strong {
+    display: inline-block;
+    font-family: 'SFPro';
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 36px;
+    letter-spacing: 0px;
+    color: #666;
+    margin-top: 27px;
   }
 `;
