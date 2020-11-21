@@ -88,8 +88,6 @@ export const DeliveryButtonContent = styled.span`
   margin-bottom: 4.5px;
 
   img {
-    width: 27px;
-    height: 27px;
     margin-right: 7.5px;
   }
 `;

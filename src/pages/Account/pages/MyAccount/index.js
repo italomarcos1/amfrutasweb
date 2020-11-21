@@ -60,6 +60,7 @@ export default function MyAccount() {
 
   const handleSubmit = useCallback(
     formData => {
+      console.tron.log(formData);
       const formattedData = Object.values(formData);
       invalidFields.fill(false);
       setInvalidNif(false);
@@ -134,7 +135,7 @@ export default function MyAccount() {
               <InputMask
                 name="dateOfBirth"
                 title="Data de nascimento"
-                error={invalidFields[2] || invalidDateOfBirth}
+                error={invalidDateOfBirth}
               />
             </InputContainer>
             <InputContainer>

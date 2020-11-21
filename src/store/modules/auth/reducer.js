@@ -28,6 +28,7 @@ export default (state = INITIAL_STATE, { type, payload }) => {
         draft.signed = true;
         break;
       }
+
       case '@auth/SIGN_FAILURE': {
         draft.loading = false;
         break;

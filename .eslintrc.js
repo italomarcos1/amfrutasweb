@@ -35,6 +35,7 @@ module.exports = {
     'no-param-reassign': 'off',
     'no-unused-vars': 'warn',
     'no-underscore-dangle': 'off',
+    'no-extra-boolean-cast': 'off',
     camelcase: 'off',
     'no-useless-escape': 'off',
     'no-console': 'warn',

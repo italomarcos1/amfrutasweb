@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import {
   Container,
@@ -15,6 +16,8 @@ import chevron from '~/assets/chevron-right.svg';
 
 export default function MyAccount() {
   const history = useHistory();
+
+  const { name, nickname, email } = useSelector(state => state.user.profile);
 
   return (
     <Container onClick={() => history.push('/conta')}>
@@ -34,15 +37,15 @@ export default function MyAccount() {
       <UserInfoContainer>
         <UserInfo>
           <strong>Nome</strong>
-          <small>Isabella</small>
+          <small>{name}</small>
         </UserInfo>
         <UserInfo>
           <strong>Apelido</strong>
-          <small>Oliveira</small>
+          <small>{nickname}</small>
         </UserInfo>
         <UserInfo>
           <strong>Email</strong>
-          <small>isabella.oliveira@me.com</small>
+          <small>{email}</small>
         </UserInfo>
         <UserInfo>
           <strong>Contra-senha</strong>

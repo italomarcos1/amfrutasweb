@@ -73,6 +73,7 @@ export default function CustomSelect({
   customWidth,
   customColor,
   hasMarginLeft,
+  ...rest
 }) {
   return (
     <Select
@@ -88,6 +89,7 @@ export default function CustomSelect({
       customColor={customColor}
       defaultValue={defaultValue}
       fontSize={fontSize}
+      {...rest}
       styles={{
         control: (styles, { isFocused, selectProps: { menuIsOpen } }) => ({
           ...styles,

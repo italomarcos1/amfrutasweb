@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -48,6 +48,11 @@ import CheckoutHeader from '~/components/CheckoutHeader';
 import Item from '~/components/CheckoutItem';
 
 import { updateProfileRequest } from '~/store/modules/user/actions';
+import { updateShippingInfoRequest } from '~/store/modules/addresses/actions';
+
+import { finishOrder } from '~/store/modules/cart/actions';
+
+import { hours, returnNumberOfDays } from '~/utils/listMonths';
 
 import {
   nameIsValid,
@@ -56,6 +61,7 @@ import {
   nifIsValid,
   mailCodeIsValid,
   mailIsValid,
+  postcodeIsValid,
 } from '~/utils/validation';
 
 export default function Delivery() {
@@ -72,18 +78,46 @@ export default function Delivery() {
 
   const history = useHistory();
   const dispatch = useDispatch();
+  const accountButtonRef = useRef();
+  const shippingButtonRef = useRef();
 
   const cart = useSelector(state => state.cart.products);
+  const hasOrder = useSelector(state => state.cart.hasOrder);
 
   const profile = useSelector(state => state.user.profile);
+  const addresses = useSelector(state => state.addresses.addresses);
+  const primaryAddress = useSelector(state => state.addresses.primaryAddress);
+
+  const [formattedAddresses, setFormattedAddresses] = useState(null);
+  const [formattedPrimaryAddress, setFormattedPrimaryAddress] = useState(() => {
+    if (!!primaryAddress) return primaryAddress.street_name; //eslint-disable-line
+    return '';
+  });
+
+  const formatAddresses = useCallback(() => {
+    if (addresses.length === 0) return;
+
+    const formattingAddresses = addresses.map(({ street_name }) => ({
+      value: street_name,
+      label: street_name,
+    }));
+
+    setFormattedAddresses(formattingAddresses);
+  }, [addresses]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    formatAddresses();
+    console.tron.log('a');
   }, []);
 
   const validateCoupon = useCallback(() => {
     setCouponIsValid(!!coupon);
   }, [coupon]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const [email, setEmail] = useState(profile !== null ? profile.email : '');
   const [emailError, setEmailError] = useState(false);
@@ -95,19 +129,57 @@ export default function Delivery() {
     false,
     false,
     false,
+  ]);
+
+  const [locationInvalidFields, setLocationInvalidFields] = useState([
+    false,
+    false,
+    false,
+    false,
+    false,
     false,
     false,
   ]);
+
   const [invalidDateOfBirth, setInvalidDateOfBirth] = useState(false);
 
   const [invalidNif, setInvalidNif] = useState(false);
   const [invalidGender, setInvalidGender] = useState(false);
   const [invalidPhone, setInvalidPhone] = useState(false);
   const [invalidMailCode, setInvalidMailCode] = useState(false);
+  const [invalidResidence, setInvalidResidence] = useState(false);
+  const [invalidPostcode, setInvalidPostcode] = useState(false);
+  const [invalidLocation, setInvalidLocation] = useState(false);
+
+  const [validUserInfo, setValidUserInfo] = useState(false);
+  const [validShippingInfo, setValidShippingInfo] = useState(false);
+
+  const validateData = useCallback((formData, invalidateFields) => {
+    const formattedData = Object.values(formData);
+
+    const anyEmptyField = formattedData.some(field => nameIsValid(field));
+
+    if (anyEmptyField) {
+      invalidateFields(formattedData.map(field => nameIsValid(field)));
+    }
+
+    return anyEmptyField;
+  }, []);
+
+  const handleFinishOrder = useCallback(() => {
+    dispatch(finishOrder());
+
+    history.push('/confirmacao');
+  }, [dispatch, history]);
+
+  useEffect(() => {
+    if (validUserInfo && validShippingInfo) {
+      handleFinishOrder();
+    } else console.tron.log('ate agora ta safe');
+  }, [validUserInfo, validShippingInfo, handleFinishOrder]);
 
   const handleSubmit = useCallback(
     formData => {
-      const formattedData = Object.values(formData);
       invalidFields.fill(false);
       setInvalidNif(false);
       setInvalidPhone(false);
@@ -116,16 +188,17 @@ export default function Delivery() {
       setEmailError(false);
       setInvalidDateOfBirth(false);
 
-      const anyEmptyField = formattedData.some(field => nameIsValid(field));
+      const anyEmptyField = validateData(formData, setInvalidFields);
 
       if (anyEmptyField) {
-        setInvalidFields(formattedData.map(field => nameIsValid(field)));
         setEmailError(!mailIsValid(formData.email));
         setInvalidNif(!nifIsValid(formData.nif));
         setInvalidPhone(!phoneIsValid(formData.phone));
         setInvalidMailCode(!mailCodeIsValid(formData.mailCode));
         setInvalidGender(nameIsValid(gender));
         setInvalidDateOfBirth(!dateIsValid(formData.dateOfBirth));
+        console.tron.log('erro no account');
+        window.scrollTo(0, 0);
 
         return;
       }
@@ -136,8 +209,44 @@ export default function Delivery() {
       };
 
       dispatch(updateProfileRequest(profileData));
+
+      setValidUserInfo(true);
     },
-    [dispatch, gender, invalidFields]
+    [dispatch, validateData, gender, invalidFields]
+  );
+
+  const handleShippingInfo = useCallback(
+    formData => {
+      // validar pra caso seja o input ou select
+      locationInvalidFields.fill(false);
+      setInvalidResidence(false);
+      setInvalidPostcode(false);
+      setInvalidLocation(false);
+
+      const anyEmptyField = validateData(formData, setLocationInvalidFields);
+
+      if (anyEmptyField) {
+        setInvalidResidence(nameIsValid(residence));
+        setInvalidPostcode(!postcodeIsValid(formData.cod_postal));
+        setInvalidLocation(nameIsValid(country));
+        console.tron.log('erro no shipping');
+        window.scrollTo(0, 0);
+
+        return;
+      }
+
+      const shippingData = {
+        ...formData,
+        residence,
+        country,
+        postCode: formData.cod_postal,
+      };
+
+      dispatch(updateShippingInfoRequest(shippingData));
+
+      setValidShippingInfo(true);
+    },
+    [dispatch, residence, country, validateData, locationInvalidFields]
   );
 
   const genderData = [
@@ -149,7 +258,7 @@ export default function Delivery() {
     { label: 'Outro', value: 'Outro' },
   ];
 
-  if (cart.length === 0) {
+  if (cart.length === 0 || !hasOrder) {
     return <Redirect to="/cesto" />;
   }
 
@@ -245,11 +354,13 @@ export default function Delivery() {
                       setValue={setDeliveryDay}
                       customWidth={125}
                       placeholder="Dia"
+                      data={returnNumberOfDays(new Date())}
                     />
                     <NoTitleSelect
                       setValue={setDeliveryHour}
                       customWidth={190}
                       placeholder="Hora"
+                      data={hours}
                     />
                   </div>
                 </div>
@@ -280,11 +391,13 @@ export default function Delivery() {
                 name="name"
                 title="Nome"
                 placeholder="Escreve o teu nome"
+                error={invalidFields[0]}
               />
               <Input
                 name="nickname"
                 title="Apelido"
                 placeholder="Escolhe o teu apelido"
+                error={invalidFields[1]}
               />
             </InputContainer>
             <InputContainer>
@@ -300,10 +413,14 @@ export default function Delivery() {
                 error={emailError}
               />
 
-              <InputMask name="dateOfBirth" title="Data de nascimento" />
+              <InputMask
+                name="dateOfBirth"
+                title="Data de nascimento"
+                error={invalidDateOfBirth}
+              />
             </InputContainer>
             <InputContainer>
-              <InputMask name="nif" type="9d" title="NIF" />
+              <InputMask name="nif" type="9d" title="NIF" error={invalidNif} />
 
               {gender !== '' ? (
                 <Select
@@ -325,55 +442,92 @@ export default function Delivery() {
                   error={invalidGender}
                 />
               )}
+              <button
+                type="submit"
+                ref={accountButtonRef}
+                style={{ display: 'none' }}
+              >
+                accountButton
+              </button>
             </InputContainer>
             <InputContainer>
-              <InputMask name="phone" type="phone" title="Telemóvel" />
+              <InputMask
+                name="phone"
+                type="phone"
+                title="Telemóvel"
+                error={invalidPhone}
+              />
             </InputContainer>
           </InfoContainer>
-          <InfoContainer onSubmit={() => {}} style={{ width: 683 }}>
+          <InfoContainer
+            onSubmit={handleShippingInfo}
+            style={{ width: 683 }}
+            initialData={primaryAddress !== null ? primaryAddress : {}}
+          >
             <SectionTitle>
               <strong>Morada de entrega</strong>
               <small>Confira e atualize caso necessário.</small>
             </SectionTitle>
             <InputContainer style={{ width: 628 }}>
-              <Select
-                title="Selecione a morada"
-                placeholder="Escolha a morada"
-                setValue={setResidence}
-                customWidth={325}
-              />
+              {addresses.length === 0 ? (
+                <Input
+                  name="street_name"
+                  title="Nome da morada (para futuras entregas)"
+                  placeholder="Escreve o nome da morada"
+                  customWidth={325}
+                  error={invalidResidence}
+                />
+              ) : (
+                <Select
+                  title="Selecione a morada"
+                  placeholder="Escolha a morada"
+                  setValue={setResidence}
+                  defaultValue={{
+                    value: `${formattedPrimaryAddress}`,
+                    label: `${formattedPrimaryAddress}`,
+                  }}
+                  customWidth={325}
+                  data={formattedAddresses}
+                  error={invalidResidence}
+                />
+              )}
               <Input
-                name="recipientName"
+                name="full_name"
                 title="Nome completo do destinatário"
                 placeholder="Escreve o nome do destinatário"
                 customWidth={283}
+                error={locationInvalidFields[1]}
               />
             </InputContainer>
             <InputContainer style={{ width: 628 }}>
               <InputMask
-                name="postCode"
+                name="cod_postal"
                 mask="9999-999"
                 placeholder="0000-000"
                 title="Código Postal"
                 customWidth={90}
+                error={invalidPostcode}
               />
               <Input
-                name="residence"
+                name="street_name"
                 title="Morada"
                 placeholder="Escreve a tua morada"
                 customWidth={215}
+                error={locationInvalidFields[2]}
               />
               <Input
                 name="number"
                 title="Número"
                 placeholder="Escreve o teu número"
                 customWidth={90}
+                error={locationInvalidFields[3]}
               />
               <Input
-                name="district"
+                name="distrito"
                 title="Distrito"
                 placeholder="Escreve o teu distrito"
                 customWidth={173}
+                error={locationInvalidFields[4]}
               />
             </InputContainer>
             <InputContainer style={{ width: 628 }}>
@@ -382,20 +536,32 @@ export default function Delivery() {
                 title="Cidade"
                 placeholder="Escreve a tua cidade"
                 customWidth={194}
+                error={locationInvalidFields[5]}
               />
-              <Select
+              <Input
+                name="location"
                 title="Localidade"
                 placeholder="Escolha a Localidade"
-                setValue={setPlace}
+                defaultValue="Lisboa"
                 customWidth={221}
+                error={locationInvalidFields[6]}
               />
               <Select
                 title="Localidade"
                 placeholder="Escolha o país"
                 setValue={setCountry}
+                defaultValue={{ value: 'Portugal', label: 'Portugal' }}
                 customWidth={173}
+                error={invalidLocation}
               />
             </InputContainer>
+            <button
+              type="submit"
+              ref={shippingButtonRef}
+              style={{ display: 'none' }}
+            >
+              shippingButton
+            </button>
           </InfoContainer>
         </Content>
         <Content
@@ -488,7 +654,10 @@ export default function Delivery() {
             <Button
               color="#1DC167"
               shadowColor="#17A75B"
-              onClick={() => history.push('/confirmacao')}
+              onClick={() => {
+                accountButtonRef.current.click();
+                shippingButtonRef.current.click();
+              }}
               style={{ width: 309 }}
             >
               <b>Concluir a Encomenda</b>

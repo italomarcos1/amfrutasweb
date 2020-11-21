@@ -3,9 +3,12 @@ import { call, put, all, takeLatest } from 'redux-saga/effects';
 
 // import api from '~/services/api';
 
-import { updateProfileSuccess, updateProfileFailure } from './actions';
+import {
+  updateShippingInfoSuccess,
+  updateShippingInfoFailure,
+} from './actions';
 
-export function* updateProfile({ payload }) {
+export function* updateShippingInfo({ payload }) {
   try {
     // const { name, email, ...rest } = payload.data;
     const { data } = payload;
@@ -21,12 +24,15 @@ export function* updateProfile({ payload }) {
     // Toast.show('Perfil atualizado com sucesso!');
 
     // yield put(updateProfileSuccess(response.data));
-    console.tron.log('updating. profile..');
-    yield put(updateProfileSuccess(data));
+    console.tron.log('updating shipping...');
+    console.tron.log(`updating shipping...: ${data}`);
+    yield put(updateShippingInfoSuccess(data));
   } catch (error) {
     // Toast.show('Houve um erro na atualização do perfil, verifique seus dados.');
-    yield put(updateProfileFailure());
+    yield put(updateShippingInfoFailure());
   }
 }
 
-export default all([takeLatest('@user/UPDATE_PROFILE_REQUEST', updateProfile)]);
+export default all([
+  takeLatest('@addresses/UPDATE_SHIPPING_INFO_REQUEST', updateShippingInfo),
+]);

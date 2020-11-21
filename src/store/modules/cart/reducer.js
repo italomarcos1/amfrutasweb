@@ -5,6 +5,8 @@ const INITIAL_STATE = {
   favorites: [],
   price: '',
   updating: false,
+  hasOrder: false,
+  orderFinished: false,
 };
 
 export default function cart(state = INITIAL_STATE, { type, payload }) {
@@ -33,6 +35,24 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
             );
           }
         }
+
+        break;
+      }
+
+      case '@cart/PROCESS_ORDER': {
+        draft.hasOrder = payload.value;
+        break;
+      }
+
+      case '@cart/FINISH_ORDER': {
+        draft.orderFinished = true;
+
+        break;
+      }
+      case '@cart/ORDER_FINISHED': {
+        draft.orderFinished = false;
+        draft.hasOrder = false;
+        draft.products = [];
 
         break;
       }

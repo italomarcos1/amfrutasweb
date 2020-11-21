@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 
-import { Container, StartStop } from './styles';
+import { Container, StartStop, Options, TitleContainer } from './styles';
 
 import checked from '~/assets/checked.svg';
+import options from '~/assets/options.svg';
 
-export default function Address({ address, selected, setSelected }) {
+import {
+  setPrimaryAddress,
+  deleteAddress,
+} from '~/store/modules/addresses/actions';
+
+export default function Address({ address, selected, setEdit }) {
   const {
     id,
     name,
@@ -16,11 +23,28 @@ export default function Address({ address, selected, setSelected }) {
     distrito,
   } = address;
 
+  const dispatch = useDispatch();
+
+  const [visible, setVisible] = useState(false);
+
+  const handleSetPrimaryAddress = useCallback(() => {
+    dispatch(setPrimaryAddress(id));
+  }, [id, dispatch]);
+
+  const handleDeleteAddress = useCallback(() => {
+    dispatch(deleteAddress(id));
+  }, [id, dispatch]);
+
   return (
     <Container>
-      <small>
-        <b>Endereço de envio</b>
-      </small>
+      <TitleContainer>
+        <small>
+          <b>Endereço de envio</b>
+        </small>
+        <button type="button" onClick={() => setVisible(!visible)}>
+          <img src={options} alt="" />
+        </button>
+      </TitleContainer>
       <small>{name}</small>
       <small>{street_name}</small>
 
@@ -30,11 +54,37 @@ export default function Address({ address, selected, setSelected }) {
       <small>92 760 94 40</small>
 
       <StartStop selected={selected === id} style={{ marginRight: 30 }}>
-        <button type="button" onClick={() => setSelected(id)}>
+        <button type="button" onClick={handleSetPrimaryAddress}>
           <img src={checked} alt="Item selecionado" />
         </button>
         <strong>Endereço Principal</strong>
       </StartStop>
+      <Options visible={visible}>
+        <button
+          type="button"
+          className="edit"
+          onClick={() => {
+            setEdit(address);
+            setVisible(false);
+          }}
+        >
+          Editar
+        </button>
+        <button
+          type="button"
+          style={{
+            borderTopLeftRadius: 0,
+            borderTopRightRadius: 0,
+          }}
+          className="delete"
+          onClick={() => {
+            handleDeleteAddress();
+            setVisible(false);
+          }}
+        >
+          Deletar
+        </button>
+      </Options>
     </Container>
   );
 }
@@ -42,5 +92,5 @@ export default function Address({ address, selected, setSelected }) {
 Address.propTypes = {
   address: PropTypes.oneOfType([PropTypes.object]).isRequired,
   selected: PropTypes.bool.isRequired,
-  setSelected: PropTypes.func.isRequired,
+  setEdit: PropTypes.func.isRequired,
 };

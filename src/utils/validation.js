@@ -1,7 +1,7 @@
 import { getYear, isExists } from 'date-fns';
 
 const dateValidation = new RegExp(
-  /^[0-9][0-9]\/[0-9][0-9]\/[0-9][0-9][0-9][0-9]$/
+  /^[0-3][0-9]\/[0-1][0-9]\/[1-2][0|9][0-9][0-9]$/
 );
 
 const doesDateExists = date => {
@@ -10,7 +10,7 @@ const doesDateExists = date => {
   const formattedMonth = Number(month) - 1;
   const formattedDay = Number(day);
   const formattedYear = Number(year);
-  const currentYear = getYear(new Date());
+  const currentYear = Number(getYear(new Date()));
 
   return (
     isExists(formattedYear, formattedMonth, formattedDay) &&
@@ -51,7 +51,7 @@ export const phoneIsValid = phone => {
 };
 
 const nifValidation = new RegExp(
-  /^[0-9][0-9][\s][0-9][0-9][\s][0-9][0-9][\s][0-9][0-9]$/
+  /^[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$/
 );
 
 export const nifIsValid = nif => {

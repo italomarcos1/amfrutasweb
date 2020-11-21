@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
   Container,
@@ -21,16 +21,29 @@ import Footer from '~/components/Footer';
 import CheckoutHeader from '~/components/CheckoutHeader';
 import Item from '~/components/Item';
 
+import { processOrder } from '~/store/modules/cart/actions';
+
 import { Button, SecureLogin } from '~/components/LoginModal';
 
 export default function Basket() {
+  const { products, price } = useSelector(state => state.cart);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
   useEffect(() => {
     window.scrollTo(0, 0);
+    dispatch(processOrder(false));
+    console.tron.log('vasco');
   }, []);
 
-  const { products, price } = useSelector(state => state.cart);
+  useEffect(() => {
+    dispatch(processOrder(false));
+  }, [dispatch]);
 
-  const history = useHistory();
+  const handleProcessOrder = useCallback(() => {
+    dispatch(processOrder(true));
+    history.push('/entrega');
+  }, [dispatch, history]);
 
   return (
     <>
@@ -94,7 +107,7 @@ export default function Basket() {
                 disabled={products.length === 0}
                 color="#1DC167"
                 shadowColor="#17A75B"
-                onClick={() => history.push('entrega')}
+                onClick={() => handleProcessOrder()}
                 style={{ width: 309 }}
               >
                 <b>Processar Encomenda</b>

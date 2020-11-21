@@ -64,7 +64,7 @@ export const Content = styled.div`
 `;
 
 export const AddressInfo = styled.div`
-  width: 117px;
+  width: 267px;
   height: 91px;
   margin-top: 15px;
   display: flex;
@@ -95,5 +95,14 @@ export const AddressInfo = styled.div`
 
   b {
     font-family: 'SFProBold';
+  }
+
+  h3 {
+    font-size: 14px;
+    line-height: 19px;
+    font-family: 'SFPro';
+    letter-spacing: 0px;
+    color: #9e9e9e;
+    text-align: left;
   }
 `;

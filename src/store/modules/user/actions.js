@@ -33,10 +33,7 @@ export function viewOrder() {
 export function resetOrder() {
   return { type: '@user/RESET_ORDER' };
 }
+
 export function resetTrigger() {
   return { type: '@user/RESET_TRIGGER' };
-}
-
-export function addAddress(address) {
-  return { type: '@user/ADD_ADDRESS', payload: { address } };
 }

@@ -1,21 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 
-import {
-  Container,
-  Content,
-  Menu,
-  InfoContainer,
-  DeliveryAndCardsContainer,
-  Option,
-} from './styles';
+import { Container, Content, Menu, Option } from './styles';
 
 import Header from '~/components/NoBannerHeader';
-
-import cashback from '~/assets/myAccount/cashback.svg';
-import orders from '~/assets/myAccount/orders.svg';
-import delivery from '~/assets/myAccount/delivery.svg';
-import cards from '~/assets/myAccount/cards.svg';
+import { Button } from '~/components/LoginModal';
 
 import deliveryIcon from '~/assets/myAccount/entrega-periodica-on.svg';
 import deliveryIconOff from '~/assets/myAccount/entrega-periodica-off.svg';
@@ -35,15 +26,26 @@ import controlPanelOff from '~/assets/myAccount/painel-controlo-off.svg';
 import myFavorites from '~/assets/myAccount/meus-favoritos-on.svg';
 import myFavoritesOff from '~/assets/myAccount/meus-favoritos-off.svg';
 
+import { signOut } from '~/store/modules/auth/actions';
+
 export default function Account({ children }) {
   const history = useHistory();
+  const dispatch = useDispatch();
   const { pathname } = useLocation();
 
   const [active, setActive] = useState(pathname);
 
+  const profile = useSelector(state => state.user.profile);
+
   useEffect(() => {
     setActive(pathname);
   }, [pathname]);
+
+  const handleSignOut = useCallback(() => {
+    dispatch(signOut());
+    history.push('/');
+  }, [dispatch, history]);
+
   return (
     <>
       <Header />
@@ -51,9 +53,13 @@ export default function Account({ children }) {
         <Content>
           <Menu>
             <strong>
-              Olá,&nbsp;<b>Isabella Oliveira!</b>
+              Olá,&nbsp;<b>{profile.name}</b>
             </strong>
-            <div>
+            <div
+              style={{
+                marginTop: 26,
+              }}
+            >
               <Option
                 style={{
                   borderTopStyle: 'solid',
@@ -128,10 +134,22 @@ export default function Account({ children }) {
                 <strong>Meus favoritos</strong>
               </Option>
             </div>
+            <Button
+              color="#f53030"
+              shadowColor="#9c1e1e"
+              style={{ width: 246, marginTop: 20, height: 55 }}
+              onClick={handleSignOut}
+            >
+              <b>Sair do AMFrutas</b>
+            </Button>
           </Menu>
-          <div style={{ marginTop: 26 }}>{children}</div>
+          <div style={{ marginTop: 0 }}>{children}</div>
         </Content>
       </Container>
     </>
   );
 }
+
+Account.propTypes = {
+  children: PropTypes.element.isRequired,
+};

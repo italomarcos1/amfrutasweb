@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, Redirect } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
   Container,
@@ -39,6 +39,8 @@ import CheckoutHeader from '~/components/CheckoutHeader';
 import Item from '~/components/CheckoutItem';
 import PeriodicDeliveryListItem from '~/components/PeriodicDeliveryListItem';
 
+import { orderFinished } from '~/store/modules/cart/actions';
+
 import { periodicProducts } from '~/data';
 
 export default function Confirmation() {
@@ -46,20 +48,32 @@ export default function Confirmation() {
   const [periodicDelivery, setPeriodicDelivery] = useState(true);
 
   const history = useHistory();
+  const dispatch = useDispatch();
 
-  const { name, nickname, phone, email, dateOfBirth, nif } = useSelector(
-    state => state.user.profile
-  );
+  const profile = useSelector(state => state.user.profile);
+
+  const isOrderFinished = useSelector(state => state.cart.orderFinished);
+  const hasOrder = useSelector(state => state.cart.hasOrder);
 
   const cart = useSelector(state => state.cart.products);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    return () => {
+      dispatch(orderFinished());
+    };
   }, []);
 
-  if (cart.length === 0) {
+  if (!hasOrder) {
+    return <Redirect to="/entrega" />;
+  }
+
+  if (cart.length === 0 || !isOrderFinished) {
     return <Redirect to="/cesto" />;
   }
+
+  const { name, nickname, phone, email, dateOfBirth, nif } = profile;
 
   return (
     <>

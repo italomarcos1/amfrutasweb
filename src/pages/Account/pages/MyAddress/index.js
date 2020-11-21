@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaSpinner } from 'react-icons/fa';
 
@@ -18,7 +18,7 @@ import Select from '~/components/Select';
 import Address from '~/components/Address';
 
 import api from '~/services/api';
-import { addAddress } from '~/store/modules/user/actions';
+import { addAddress } from '~/store/modules/addresses/actions';
 import { nameIsValid, postcodeIsValid } from '~/utils/validation';
 
 export default function MyAccount() {
@@ -30,9 +30,14 @@ export default function MyAccount() {
 
   const dispatch = useDispatch();
 
-  const addresses = useSelector(state => state.user.addresses);
+  const addresses = useSelector(state => state.addresses.addresses);
+  const primaryAddress = useSelector(state => state.addresses.primaryAddress);
 
-  const [selected, setSelected] = useState('start');
+  const [selected, setSelected] = useState(() => {
+    if (!!primaryAddress) return primaryAddress.id; //eslint-disable-line
+    return '';
+  });
+
   const [loading, setLoading] = useState(false);
 
   const [addressInfo, setAddressInfo] = useState({});
@@ -46,6 +51,12 @@ export default function MyAccount() {
     false,
     false,
   ]);
+
+  useEffect(() => {
+    if (!!primaryAddress) {
+      setSelected(primaryAddress.id);
+    } else setSelected('');
+  }, [primaryAddress]);
 
   const data = [{ label: 'Portugal', value: 'Portugal' }];
 
@@ -66,7 +77,7 @@ export default function MyAccount() {
       setAddressInfo(address[0]);
       setLoading(false);
 
-      console.log(address[0]);
+      console.tron.log(address[0]);
     } catch (err) {
       setLoading(false);
       alert('Informe um código postal válido.');
@@ -76,7 +87,7 @@ export default function MyAccount() {
   const addNewAddress = useCallback(
     formData => {
       const formattedData = Object.values(formData);
-      console.log(formattedData);
+      console.tron.log(formattedData);
       invalidFields.fill(false);
 
       const anyEmptyField = formattedData.some(field => nameIsValid(field));
@@ -90,20 +101,29 @@ export default function MyAccount() {
         street_name,
         num_cod_postal,
         ext_cod_postal,
+        nome_localidade,
         distrito,
       } = addressInfo;
 
       const { name, number } = formData;
 
+      const [newName, ...restOfName] = name.split(' ');
+
+      const newNickname = restOfName.join(' ');
+
       dispatch(
         addAddress({
           id,
-          name,
+          name: newName,
+          nickname: newNickname,
+          full_name: name,
           street_name,
           number,
           num_cod_postal,
           ext_cod_postal,
+          cod_postal: `${num_cod_postal}-${ext_cod_postal}`,
           distrito,
+          city: nome_localidade,
         })
       );
     },
@@ -191,7 +211,7 @@ export default function MyAccount() {
                 title="Localidade"
                 placeholder="Escolha a localidade"
                 error={invalidFields[6]}
-                value="Lisboa"
+                defaultValue="Lisboa"
                 hasMarginLeft
               />
               <Select
@@ -224,6 +244,7 @@ export default function MyAccount() {
                 address={address}
                 selected={selected}
                 setSelected={setSelected}
+                setEdit={setAddressInfo}
               />
             ))
           ) : (

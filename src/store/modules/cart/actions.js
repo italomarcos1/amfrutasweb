@@ -79,3 +79,15 @@ export function updateAmount(id, amount) {
     payload: { id, amount },
   };
 }
+
+export function processOrder(value) {
+  return { type: '@cart/PROCESS_ORDER', payload: { value } };
+}
+
+export function finishOrder() {
+  return { type: '@cart/FINISH_ORDER' };
+}
+
+export function orderFinished() {
+  return { type: '@cart/ORDER_FINISHED' };
+}

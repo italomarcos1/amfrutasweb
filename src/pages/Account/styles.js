@@ -26,25 +26,15 @@ export const DeliveryAndCardsContainer = styled.div`
   justify-content: space-between;
 `;
 
-export const InfoContainer = styled.div`
-  width: 841px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  & + div {
-    margin-top: 18px;
-  }
-`;
-
 export const Menu = styled.div`
   width: 252px;
-  height: 316px;
+  height: 451px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin-right: 32px;
+  /* background-color: #ff4242; */
 
   strong {
     font-weight: normal;
@@ -139,49 +129,4 @@ export const SectionTitle = styled.div`
   text-align: left;
   width: 1240px;
   margin: 0 auto;
-`;
-
-export const CheckoutDetails = styled.div`
-  width: 360px;
-  height: 661px;
-  background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  padding: 25px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 27px;
-`;
-
-export const CheckoutItem = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 47.5px;
-  width: 100%;
-  border-bottom: 1px solid #e0e0e0;
-  padding: 13.5px 0;
-
-  h1 {
-    text-align: left;
-    font-family: 'SFPro';
-    font-size: 15px;
-    line-height: 22px;
-    letter-spacing: 0px;
-    color: #393939;
-
-    b {
-      font-family: 'SFProBold';
-    }
-  }
-
-  h2 {
-    text-align: right;
-    font-family: 'SFProBold';
-    font-size: 20px;
-    line-height: 22px;
-    letter-spacing: 0px;
-    color: #393939;
-  }
 `;

@@ -4,7 +4,6 @@ const INITIAL_STATE = {
   profile: null,
   order: null,
   info: null,
-  addresses: [],
 };
 
 export default function user(state = INITIAL_STATE, { type, payload }) {
@@ -12,6 +11,22 @@ export default function user(state = INITIAL_STATE, { type, payload }) {
     switch (type) {
       case '@auth/SIGN_IN_SUCCESS': {
         draft.profile = payload.user;
+        break;
+      }
+
+      case '@auth/SIGN_IN_ALPHA': {
+        const guestUser = {
+          name: 'Usuário',
+          nickname: 'AMFrutas',
+          email: 'johndoe@mail.pt',
+          dateOfBirth: '31/01/1970',
+          nif: '123123123',
+          phone: '12 312 31 23',
+          gender: 'Masculino',
+        };
+
+        draft.profile = guestUser;
+
         break;
       }
 
@@ -58,14 +73,6 @@ export default function user(state = INITIAL_STATE, { type, payload }) {
 
       case '@user/RESET_TRIGGER': {
         draft.triggered = false;
-
-        break;
-      }
-
-      case '@user/ADD_ADDRESS': {
-        const { address } = payload;
-        console.tron.log(address);
-        draft.addresses.push(address);
 
         break;
       }
