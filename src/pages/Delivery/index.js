@@ -385,8 +385,6 @@ export default function Delivery() {
     return <Redirect to="/cesto" />;
   }
 
-  console.tron.log('aaaaaaaaaaaa');
-
   return (
     <>
       <CheckoutHeader active={2} />
