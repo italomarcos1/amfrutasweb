@@ -69,14 +69,10 @@ export function returnNumberOfDays(date) {
   ];
 
   const month = getMonth(date) + 1;
-  console.tron.log(month);
   if (month === 2) {
     if (isLeapYear(date)) {
-      console.tron.log('leap');
       thirtyDaysArray.splice(29);
     } else {
-      console.tron.log('not leap');
-
       thirtyDaysArray.splice(28);
     }
 
@@ -89,7 +85,6 @@ export function returnNumberOfDays(date) {
 
     return thirtyDaysArray;
   }
-  console.tron.log('31 dias');
 
   return thirtyDaysArray;
 }

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { Form } from '@unform/web';
 import { darken } from 'polished';
 
@@ -36,6 +36,33 @@ export const Title = styled.h1`
   letter-spacing: 0px;
   color: #000;
   font-weight: normal;
+`;
+
+const rotate = keyframes` /** animação para rotacionar o icon. */
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+export const LoadingContainer = styled.div`
+  position: absolute;
+  width: 683px;
+  height: 431px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    z-index: 998;
+    animation: ${rotate} 2s linear infinite;
+  }
 `;
 
 export const DeliveryOptionsContainer = styled.div`
@@ -328,5 +355,40 @@ export const TakeOnShop = styled.div`
     line-height: 22px;
     font-family: 'SFProBold';
     margin-left: 3px;
+  }
+`;
+
+export const StartStop = styled.div`
+  display: flex;
+  align-items: center;
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background-color: #fff;
+    border: 3px solid #0cb68b;
+    border-color: ${({ selected }) => (selected ? '#0cb68b' : '#ccc')};
+    border-radius: 50%;
+    margin-left: 0;
+    padding: 2px;
+    text-align: center;
+
+    img {
+      display: ${({ selected }) => (selected ? 'block' : 'none')};
+      width: 15px;
+      height: 15px;
+    }
+  }
+
+  strong {
+    font-size: 15px;
+    line-height: 22px;
+    font-weight: normal;
+    font-family: 'SFPro';
+    color: #393939;
+    margin-left: 12px;
   }
 `;

@@ -32,6 +32,11 @@ export const Logo = styled(Link)`
   background: none;
   width: 196px;
   height: 43px;
+  user-select: none;
+
+  img {
+    user-select: none;
+  }
 `;
 
 export const BackButton = styled(Link)`

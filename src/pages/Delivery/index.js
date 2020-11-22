@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { FaSpinner } from 'react-icons/fa';
 
 import {
   Container,
@@ -21,14 +22,19 @@ import {
   SendButton,
   CouponIsValid,
   TakeOnShop,
+  StartStop,
+  LoadingContainer,
 } from './styles';
 
 import { onlyValues } from '~/utils/onlyValues';
+
+import api from '~/services/api';
 
 import { InputContainer, Button, SecureLogin } from '~/components/LoginModal';
 
 import lock from '~/assets/lock.svg';
 import facebook from '~/assets/facebook.svg';
+import checked from '~/assets/checked.svg';
 
 import truckBlack from '~/assets/orders/truck-black.svg';
 import truckWhite from '~/assets/orders/truck-white.svg';
@@ -48,7 +54,11 @@ import CheckoutHeader from '~/components/CheckoutHeader';
 import Item from '~/components/CheckoutItem';
 
 import { updateProfileRequest } from '~/store/modules/user/actions';
-import { updateShippingInfoRequest } from '~/store/modules/addresses/actions';
+import {
+  addAddress,
+  setPrimaryAddress,
+  updateShippingInfoRequest,
+} from '~/store/modules/addresses/actions';
 
 import { finishOrder } from '~/store/modules/cart/actions';
 
@@ -68,18 +78,19 @@ export default function Delivery() {
   const [deliveryOption, setDeliveryOption] = useState('shop');
   const [deliveryDay, setDeliveryDay] = useState('');
   const [deliveryHour, setDeliveryHour] = useState('');
-  const [residence, setResidence] = useState('');
-  const [place, setPlace] = useState('');
-  const [country, setCountry] = useState('');
+  const [country, setCountry] = useState('Portugal');
   const [coupon, setCoupon] = useState('');
   const [couponIsValid, setCouponIsValid] = useState('');
   const [hoverCouponValid, setHoverCouponValid] = useState('');
   const [hoverButton, setHoverButton] = useState('none');
 
+  const [loading, setLoading] = useState(false);
+
   const history = useHistory();
   const dispatch = useDispatch();
   const accountButtonRef = useRef();
   const shippingButtonRef = useRef();
+  const shippingInfoRef = useRef();
 
   const cart = useSelector(state => state.cart.products);
   const hasOrder = useSelector(state => state.cart.hasOrder);
@@ -89,15 +100,43 @@ export default function Delivery() {
   const primaryAddress = useSelector(state => state.addresses.primaryAddress);
 
   const [formattedAddresses, setFormattedAddresses] = useState(null);
-  const [formattedPrimaryAddress, setFormattedPrimaryAddress] = useState(() => {
+  const [selectedAddress, setSelectedAddress] = useState(() => {
+    if (!!primaryAddress) {
+      return primaryAddress;
+    }
+    return {};
+  });
+
+  const [postcode, setPostcode] = useState(() => {
+    if (!!primaryAddress) {
+      return primaryAddress.cod_postal;
+    }
+    return '';
+  });
+
+  const [tempPostcode, setTempPostcode] = useState(() => {
+    if (!!primaryAddress) {
+      return primaryAddress.cod_postal;
+    }
+    return '';
+  });
+
+  const [residence, setResidence] = useState(() => {
     if (!!primaryAddress) return primaryAddress.street_name; //eslint-disable-line
     return '';
   });
 
+  const [hasLookup, setHasLookup] = useState(false);
+  const [newAddressPrimary, setNewAddressPrimary] = useState(false);
+
+  // os endereços são o objeto inteiro, com id e etc
+  // o residence é só o label, pois o select mexe apenas com o label. se não, teríamos que mudar o Select ou criar um novo
+
   const formatAddresses = useCallback(() => {
     if (addresses.length === 0) return;
 
-    const formattingAddresses = addresses.map(({ street_name }) => ({
+    const formattingAddresses = addresses.map(({ id, street_name }) => ({
+      id,
       value: street_name,
       label: street_name,
     }));
@@ -108,7 +147,6 @@ export default function Delivery() {
   useEffect(() => {
     window.scrollTo(0, 0);
     formatAddresses();
-    console.tron.log('a');
   }, []);
 
   const validateCoupon = useCallback(() => {
@@ -132,7 +170,6 @@ export default function Delivery() {
   ]);
 
   const [locationInvalidFields, setLocationInvalidFields] = useState([
-    false,
     false,
     false,
     false,
@@ -166,11 +203,57 @@ export default function Delivery() {
     return anyEmptyField;
   }, []);
 
+  useEffect(() => {
+    if (addresses.length === 0) return;
+    const newAddress = addresses.findIndex(
+      address => address.street_name === residence
+    );
+
+    if (newAddress < 0) return;
+
+    console.tron.log(addresses[newAddress]);
+
+    setSelectedAddress(addresses[newAddress]);
+    shippingInfoRef.current.setData(addresses[newAddress]);
+  }, [residence, addresses]);
+
+  const updatePrimaryAddress = useCallback(() => {
+    dispatch(setPrimaryAddress(selectedAddress.id));
+  }, [dispatch, selectedAddress]);
+
   const handleFinishOrder = useCallback(() => {
     dispatch(finishOrder());
 
     history.push('/confirmacao');
   }, [dispatch, history]);
+
+  const lookupAddress = useCallback(async () => {
+    if (!postcodeIsValid(postcode) || tempPostcode === postcode) {
+      return;
+    }
+    setHasLookup(true);
+    setLoading(true);
+
+    setTempPostcode(postcode);
+    const [cod, ext] = postcode.split('-');
+
+    try {
+      const {
+        data: { address },
+      } = await api.get(`/postcodes/${cod}-${ext}`);
+
+      setLoading(false);
+
+      setSelectedAddress({ ...address[0], cod_postal: postcode });
+      shippingInfoRef.current.setData({ ...address[0], cod_postal: postcode });
+
+      console.tron.log(address[0]);
+      console.tron.log('codigo postal carregado');
+    } catch (err) {
+      setLoading(false);
+      alert('Informe um código postal válido.');
+    }
+  }, [postcode, tempPostcode]);
 
   useEffect(() => {
     if (validUserInfo && validShippingInfo) {
@@ -223,11 +306,14 @@ export default function Delivery() {
       setInvalidPostcode(false);
       setInvalidLocation(false);
 
+      delete formData.cod_postal;
+      delete formData.residence;
+
       const anyEmptyField = validateData(formData, setLocationInvalidFields);
 
       if (anyEmptyField) {
         setInvalidResidence(nameIsValid(residence));
-        setInvalidPostcode(!postcodeIsValid(formData.cod_postal));
+        setInvalidPostcode(!postcodeIsValid(postcode));
         setInvalidLocation(nameIsValid(country));
         console.tron.log('erro no shipping');
         window.scrollTo(0, 0);
@@ -235,18 +321,35 @@ export default function Delivery() {
         return;
       }
 
+      if (!postcodeIsValid(postcode) || nameIsValid(residence)) {
+        setInvalidPostcode(!postcodeIsValid(postcode));
+        setInvalidResidence(nameIsValid(residence));
+        window.scrollTo(0, 0);
+
+        return;
+      }
+
       const shippingData = {
         ...formData,
+        id: selectedAddress.id,
         residence,
         country,
-        postCode: formData.cod_postal,
+        postCode: postcode,
       };
 
       dispatch(updateShippingInfoRequest(shippingData));
 
       setValidShippingInfo(true);
     },
-    [dispatch, residence, country, validateData, locationInvalidFields]
+    [
+      dispatch,
+      residence,
+      country,
+      validateData,
+      locationInvalidFields,
+      postcode,
+      selectedAddress,
+    ]
   );
 
   const genderData = [
@@ -459,110 +562,153 @@ export default function Delivery() {
               />
             </InputContainer>
           </InfoContainer>
-          <InfoContainer
-            onSubmit={handleShippingInfo}
-            style={{ width: 683 }}
-            initialData={primaryAddress !== null ? primaryAddress : {}}
-          >
-            <SectionTitle>
-              <strong>Morada de entrega</strong>
-              <small>Confira e atualize caso necessário.</small>
-            </SectionTitle>
-            <InputContainer style={{ width: 628 }}>
-              {addresses.length === 0 ? (
+          <div>
+            {loading && (
+              <LoadingContainer>
+                <FaSpinner color="#666" size={42} />
+              </LoadingContainer>
+            )}
+            <InfoContainer
+              onSubmit={handleShippingInfo}
+              style={{ width: 683 }}
+              initialData={selectedAddress}
+              ref={shippingInfoRef}
+            >
+              <SectionTitle>
+                <strong>Morada de entrega</strong>
+                <small>Confira e atualize caso necessário.</small>
+              </SectionTitle>
+              <InputContainer style={{ width: 628 }}>
+                {addresses.length === 0 || hasLookup ? (
+                  <Input
+                    name="residence"
+                    title="Nome da morada (para futuras entregas)"
+                    placeholder="Escreve o nome da morada"
+                    customWidth={325}
+                    value={residence}
+                    onChange={({ target: { value } }) => setResidence(value)}
+                    error={invalidResidence}
+                  />
+                ) : (
+                  <Select
+                    title="Selecione a morada"
+                    placeholder="Escolha a morada"
+                    setValue={setResidence}
+                    defaultValue={{
+                      value: `${selectedAddress.street_name}`,
+                      label: `${selectedAddress.street_name}`,
+                    }}
+                    customWidth={325}
+                    data={formattedAddresses}
+                    error={invalidResidence}
+                  />
+                )}
+                <Input
+                  name="full_name"
+                  title="Nome completo do destinatário"
+                  placeholder="Escreve o nome do destinatário"
+                  customWidth={283}
+                  error={locationInvalidFields[0]}
+                />
+              </InputContainer>
+              <InputContainer style={{ width: 628 }}>
+                <InputMask
+                  name="cod_postal"
+                  mask="9999-999"
+                  placeholder="0000-000"
+                  title="Código Postal"
+                  customWidth={90}
+                  value={postcode}
+                  onChange={({ target: { value } }) => setPostcode(value)}
+                  error={invalidPostcode}
+                  onBlur={lookupAddress}
+                />
                 <Input
                   name="street_name"
-                  title="Nome da morada (para futuras entregas)"
-                  placeholder="Escreve o nome da morada"
-                  customWidth={325}
-                  error={invalidResidence}
+                  title="Morada"
+                  placeholder="Escreve a tua morada"
+                  customWidth={215}
+                  error={locationInvalidFields[1]}
                 />
-              ) : (
+                <Input
+                  name="number"
+                  title="Número"
+                  placeholder="Escreve o teu número"
+                  customWidth={90}
+                  error={locationInvalidFields[2]}
+                />
+                <Input
+                  name="distrito"
+                  title="Distrito"
+                  placeholder="Escreve o teu distrito"
+                  customWidth={173}
+                  error={locationInvalidFields[3]}
+                />
+              </InputContainer>
+              <InputContainer style={{ width: 628 }}>
+                <Input
+                  name="nome_localidade"
+                  title="Cidade"
+                  placeholder="Escreve a tua cidade"
+                  customWidth={194}
+                  error={locationInvalidFields[4]}
+                />
+                <Input
+                  name="localidade"
+                  title="Localidade"
+                  placeholder="Escolha a Localidade"
+                  defaultValue="Lisboa"
+                  customWidth={221}
+                  error={locationInvalidFields[5]}
+                />
                 <Select
-                  title="Selecione a morada"
-                  placeholder="Escolha a morada"
-                  setValue={setResidence}
-                  defaultValue={{
-                    value: `${formattedPrimaryAddress}`,
-                    label: `${formattedPrimaryAddress}`,
-                  }}
-                  customWidth={325}
-                  data={formattedAddresses}
-                  error={invalidResidence}
+                  title="Localidade"
+                  placeholder="Escolha o país"
+                  setValue={setCountry}
+                  defaultValue={{ value: 'Portugal', label: 'Portugal' }}
+                  customWidth={173}
+                  error={invalidLocation}
                 />
-              )}
-              <Input
-                name="full_name"
-                title="Nome completo do destinatário"
-                placeholder="Escreve o nome do destinatário"
-                customWidth={283}
-                error={locationInvalidFields[1]}
-              />
-            </InputContainer>
-            <InputContainer style={{ width: 628 }}>
-              <InputMask
-                name="cod_postal"
-                mask="9999-999"
-                placeholder="0000-000"
-                title="Código Postal"
-                customWidth={90}
-                error={invalidPostcode}
-              />
-              <Input
-                name="street_name"
-                title="Morada"
-                placeholder="Escreve a tua morada"
-                customWidth={215}
-                error={locationInvalidFields[2]}
-              />
-              <Input
-                name="number"
-                title="Número"
-                placeholder="Escreve o teu número"
-                customWidth={90}
-                error={locationInvalidFields[3]}
-              />
-              <Input
-                name="distrito"
-                title="Distrito"
-                placeholder="Escreve o teu distrito"
-                customWidth={173}
-                error={locationInvalidFields[4]}
-              />
-            </InputContainer>
-            <InputContainer style={{ width: 628 }}>
-              <Input
-                name="city"
-                title="Cidade"
-                placeholder="Escreve a tua cidade"
-                customWidth={194}
-                error={locationInvalidFields[5]}
-              />
-              <Input
-                name="location"
-                title="Localidade"
-                placeholder="Escolha a Localidade"
-                defaultValue="Lisboa"
-                customWidth={221}
-                error={locationInvalidFields[6]}
-              />
-              <Select
-                title="Localidade"
-                placeholder="Escolha o país"
-                setValue={setCountry}
-                defaultValue={{ value: 'Portugal', label: 'Portugal' }}
-                customWidth={173}
-                error={invalidLocation}
-              />
-            </InputContainer>
-            <button
-              type="submit"
-              ref={shippingButtonRef}
-              style={{ display: 'none' }}
-            >
-              shippingButton
-            </button>
-          </InfoContainer>
+              </InputContainer>
+              <div
+                style={{
+                  // backgroundColor: '#f90',
+                  marginTop: 40,
+                }}
+              >
+                <button
+                  type="submit"
+                  ref={shippingButtonRef}
+                  style={{ display: 'none' }}
+                >
+                  shippingButton
+                </button>
+                {addresses.length === 0 || hasLookup ? (
+                  <StartStop selected={newAddressPrimary}>
+                    <button
+                      type="button"
+                      onClick={() => setNewAddressPrimary(!newAddressPrimary)}
+                    >
+                      <img src={checked} alt="Item selecionado" />
+                    </button>
+                    <strong>Definir como endereço principal</strong>
+                  </StartStop>
+                ) : (
+                  <StartStop
+                    selected={
+                      !!primaryAddress &&
+                      selectedAddress.id === primaryAddress.id
+                    }
+                  >
+                    <button type="button" onClick={updatePrimaryAddress}>
+                      <img src={checked} alt="Item selecionado" />
+                    </button>
+                    <strong>Definir como endereço principal</strong>
+                  </StartStop>
+                )}
+              </div>
+            </InfoContainer>
+          </div>
         </Content>
         <Content
           style={{
@@ -659,6 +805,7 @@ export default function Delivery() {
                 shippingButtonRef.current.click();
               }}
               style={{ width: 309 }}
+              disabled={loading}
             >
               <b>Concluir a Encomenda</b>
             </Button>

@@ -123,7 +123,7 @@ export default function MyAccount() {
           ext_cod_postal,
           cod_postal: `${num_cod_postal}-${ext_cod_postal}`,
           distrito,
-          city: nome_localidade,
+          nome_localidade,
         })
       );
     },
