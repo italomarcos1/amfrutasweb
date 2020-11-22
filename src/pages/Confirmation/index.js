@@ -50,12 +50,10 @@ export default function Confirmation() {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const profile = useSelector(state => state.user.profile);
-
   const isOrderFinished = useSelector(state => state.cart.orderFinished);
   const hasOrder = useSelector(state => state.cart.hasOrder);
 
-  const cart = useSelector(state => state.cart.products);
+  const { profile, shipping, cart } = useSelector(state => state.user.order);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -74,6 +72,7 @@ export default function Confirmation() {
   }
 
   const { name, nickname, phone, email, dateOfBirth, nif } = profile;
+  const { street_name, nome_localidade, cod_postal, localidade } = shipping;
 
   return (
     <>
@@ -128,27 +127,27 @@ export default function Confirmation() {
             <CustomInputContainer>
               <Info>
                 <strong>Morada</strong>
-                <small>Rua 7 de Junho</small>
+                <small>{street_name}</small>
               </Info>
               <Info>
                 <strong>Cidade</strong>
-                <small>Oeiras</small>
+                <small>{nome_localidade}</small>
               </Info>
             </CustomInputContainer>
             <CustomInputContainer>
               <Info>
                 <strong>Código Postal</strong>
-                <small>2740-164</small>
+                <small>{cod_postal}</small>
               </Info>
               <Info>
                 <strong>Localidade</strong>
-                <small>Portugal Continental</small>
+                <small>{localidade}</small>
               </Info>
             </CustomInputContainer>
             <CustomInputContainer>
               <Info>
                 <strong>NIF</strong>
-                <small>261 571 972</small>
+                <small>{nif}</small>
               </Info>
               <Info>
                 <strong>País</strong>

@@ -40,15 +40,20 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
       }
 
       case '@cart/PROCESS_ORDER': {
+        console.tron.log('aqui deu erro4');
+
         draft.hasOrder = payload.value;
         break;
       }
 
       case '@cart/FINISH_ORDER': {
+        console.tron.log('aqui deu erro3');
+
         draft.orderFinished = true;
 
         break;
       }
+
       case '@cart/ORDER_FINISHED': {
         draft.orderFinished = false;
         draft.hasOrder = false;

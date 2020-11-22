@@ -84,8 +84,8 @@ export function processOrder(value) {
   return { type: '@cart/PROCESS_ORDER', payload: { value } };
 }
 
-export function finishOrder() {
-  return { type: '@cart/FINISH_ORDER' };
+export function finishOrder(order) {
+  return { type: '@cart/FINISH_ORDER', payload: { order } };
 }
 
 export function orderFinished() {

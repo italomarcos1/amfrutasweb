@@ -90,6 +90,7 @@ export default function Delivery() {
   const dispatch = useDispatch();
   const accountButtonRef = useRef();
   const shippingButtonRef = useRef();
+  const profileInfoRef = useRef();
   const shippingInfoRef = useRef();
 
   const cart = useSelector(state => state.cart.products);
@@ -220,10 +221,38 @@ export default function Delivery() {
   }, [dispatch, selectedAddress]);
 
   const handleFinishOrder = useCallback(() => {
-    dispatch(finishOrder());
+    const allDataProfile = profileInfoRef.current.getData();
+    const allDataShipping = shippingInfoRef.current.getData();
+
+    const profileData = { ...allDataProfile, gender };
+    const shippingData = {
+      ...allDataShipping,
+      id: selectedAddress.id,
+      residence,
+      country,
+      cod_postal: postcode,
+    };
+
+    if (selectedAddress.id === primaryAddress.id) updatePrimaryAddress();
+
+    dispatch(
+      finishOrder({ profile: profileData, shipping: shippingData, cart })
+    );
+    // os objetos usados para popular o form irão para cá, junto com os dados do carrinho
 
     history.push('/confirmacao');
-  }, [dispatch, history]);
+  }, [
+    dispatch,
+    history,
+    gender,
+    selectedAddress,
+    residence,
+    country,
+    postcode,
+    cart,
+    primaryAddress,
+    updatePrimaryAddress,
+  ]);
 
   const lookupAddress = useCallback(async () => {
     if (!postcodeIsValid(postcode) || tempPostcode === postcode) {
@@ -325,7 +354,7 @@ export default function Delivery() {
         id: selectedAddress.id,
         residence,
         country,
-        postCode: postcode,
+        cod_postal: postcode,
       };
 
       dispatch(updateShippingInfoRequest(shippingData));
@@ -355,6 +384,8 @@ export default function Delivery() {
   if (cart.length === 0 || !hasOrder) {
     return <Redirect to="/cesto" />;
   }
+
+  console.tron.log('aaaaaaaaaaaa');
 
   return (
     <>
@@ -475,6 +506,7 @@ export default function Delivery() {
           <InfoContainer
             onSubmit={handleSubmit}
             initialData={profile !== null ? profile : {}}
+            ref={profileInfoRef}
           >
             <SectionTitle>
               <strong>Dados de contato</strong>

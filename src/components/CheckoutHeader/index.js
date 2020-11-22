@@ -21,7 +21,6 @@ import {
 import logo from '~/assets/amfrutas-white.svg';
 
 export default function CheckoutHeader({ active }) {
-  const userData = useSelector(state => state.user.info);
   const cart = useSelector(state => state.cart.products);
   const history = useHistory();
 

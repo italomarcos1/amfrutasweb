@@ -3,7 +3,7 @@ import produce from 'immer';
 const INITIAL_STATE = {
   profile: null,
   order: null,
-  info: null,
+  orders: [],
 };
 
 export default function user(state = INITIAL_STATE, { type, payload }) {
@@ -45,15 +45,16 @@ export default function user(state = INITIAL_STATE, { type, payload }) {
         break;
       }
 
-      case '@user/SET_INFO': {
-        const { info } = payload;
-        draft.info = { ...draft.info, ...info };
-
+      case '@user/SET_ORDER': {
+        draft.order = payload.order;
         break;
       }
 
-      case '@user/SET_ORDER': {
-        draft.order = payload.order;
+      case '@cart/FINISH_ORDER': {
+        const { order } = payload;
+        draft.orders.push(order);
+
+        draft.order = order;
         break;
       }
 
@@ -77,6 +78,7 @@ export default function user(state = INITIAL_STATE, { type, payload }) {
 
       case '@auth/SIGN_OUT': {
         draft.profile = null;
+        draft.orders = null;
         break;
       }
       default:
