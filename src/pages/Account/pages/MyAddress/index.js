@@ -76,8 +76,6 @@ export default function MyAccount() {
 
       setAddressInfo(address[0]);
       setLoading(false);
-
-      console.tron.log(address[0]);
     } catch (err) {
       setLoading(false);
       alert('Informe um código postal válido.');
@@ -87,7 +85,6 @@ export default function MyAccount() {
   const addNewAddress = useCallback(
     formData => {
       const formattedData = Object.values(formData);
-      console.tron.log(formattedData);
       invalidFields.fill(false);
 
       const anyEmptyField = formattedData.some(field => nameIsValid(field));

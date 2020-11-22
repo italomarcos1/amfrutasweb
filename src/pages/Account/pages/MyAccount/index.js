@@ -29,8 +29,6 @@ export default function MyAccount() {
   const profile = useSelector(state => state.user.profile);
   const dispatch = useDispatch();
 
-  console.tron.log(profile);
-
   const [email, setEmail] = useState(profile !== null ? profile.email : '');
   const [gender, setGender] = useState(profile !== null ? profile.gender : '');
 
@@ -60,7 +58,6 @@ export default function MyAccount() {
 
   const handleSubmit = useCallback(
     formData => {
-      console.tron.log(formData);
       const formattedData = Object.values(formData);
       invalidFields.fill(false);
       setInvalidNif(false);

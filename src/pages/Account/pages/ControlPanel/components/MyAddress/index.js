@@ -15,8 +15,6 @@ export default function MyAddress() {
   const addressInfo = useState(() => (!!primaryAddress ? primaryAddress : ''));
   const [addressMessage, setAddressMessage] = useState();
 
-  console.tron.log(addressInfo);
-
   const formatAddressMessage = useCallback(() => {
     if (addresses.length > 1)
       setAddressMessage(`${addresses.length} endereços guardados`);

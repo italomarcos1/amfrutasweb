@@ -81,7 +81,6 @@ export function returnNumberOfDays(date) {
 
   if ((month > 7 && month % 2 === 0) || (month < 7 && month % 2 !== 0)) {
     thirtyDaysArray.splice(30);
-    console.tron.log('30 dias');
 
     return thirtyDaysArray;
   }

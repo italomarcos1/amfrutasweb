@@ -53,9 +53,7 @@ export function* removeFromCart({ payload }) {
 
 export function* addToFavorites({ payload }) {
   const { product } = payload;
-  console.tron.log('adding...');
 
-  console.tron.log(product);
   // const {
   //   data: { data },
   // } = yield call(api.get, `ecommerce/products/${id}`);

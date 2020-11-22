@@ -211,8 +211,6 @@ export default function Delivery() {
 
     if (newAddress < 0) return;
 
-    console.tron.log(addresses[newAddress]);
-
     setSelectedAddress(addresses[newAddress]);
     shippingInfoRef.current.setData(addresses[newAddress]);
   }, [residence, addresses]);
@@ -246,9 +244,6 @@ export default function Delivery() {
 
       setSelectedAddress({ ...address[0], cod_postal: postcode });
       shippingInfoRef.current.setData({ ...address[0], cod_postal: postcode });
-
-      console.tron.log(address[0]);
-      console.tron.log('codigo postal carregado');
     } catch (err) {
       setLoading(false);
       alert('Informe um código postal válido.');
@@ -256,9 +251,7 @@ export default function Delivery() {
   }, [postcode, tempPostcode]);
 
   useEffect(() => {
-    if (validUserInfo && validShippingInfo) {
-      handleFinishOrder();
-    } else console.tron.log('ate agora ta safe');
+    if (validUserInfo && validShippingInfo) handleFinishOrder();
   }, [validUserInfo, validShippingInfo, handleFinishOrder]);
 
   const handleSubmit = useCallback(
@@ -280,7 +273,6 @@ export default function Delivery() {
         setInvalidMailCode(!mailCodeIsValid(formData.mailCode));
         setInvalidGender(nameIsValid(gender));
         setInvalidDateOfBirth(!dateIsValid(formData.dateOfBirth));
-        console.tron.log('erro no account');
         window.scrollTo(0, 0);
 
         return;
@@ -315,7 +307,6 @@ export default function Delivery() {
         setInvalidResidence(nameIsValid(residence));
         setInvalidPostcode(!postcodeIsValid(postcode));
         setInvalidLocation(nameIsValid(country));
-        console.tron.log('erro no shipping');
         window.scrollTo(0, 0);
 
         return;

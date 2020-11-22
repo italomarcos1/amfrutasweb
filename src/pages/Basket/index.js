@@ -33,7 +33,6 @@ export default function Basket() {
   useEffect(() => {
     window.scrollTo(0, 0);
     dispatch(processOrder(false));
-    console.tron.log('vasco');
   }, []);
 
   useEffect(() => {

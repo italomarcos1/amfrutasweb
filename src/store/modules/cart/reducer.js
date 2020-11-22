@@ -74,18 +74,13 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
 
       case '@cart/ADD_TO_FAVORITES_SUCCESS': {
         const { product } = payload;
-        console.tron.log(draft.favorites);
 
         const productIndex = draft.favorites.findIndex(
           favorite => favorite.id === product.id
         );
 
-        console.tron.log('added');
-
         if (productIndex === -1) draft.favorites.push(product);
         draft.updating = false;
-
-        console.tron.log(draft.favorites);
 
         break;
       }

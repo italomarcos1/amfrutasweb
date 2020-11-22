@@ -17,7 +17,6 @@ export default function addresses(state = INITIAL_STATE, { type, payload }) {
       // }
       case '@addresses/ADD_ADDRESS': {
         const { address } = payload;
-        console.tron.log(address);
         draft.addresses.push(address);
         if (draft.addresses.length === 1) {
           const newPrimaryAddress = draft.addresses[0];
@@ -73,14 +72,11 @@ export default function addresses(state = INITIAL_STATE, { type, payload }) {
       }
 
       case '@addresses/UPDATE_SHIPPING_INFO_SUCCESS': {
-        console.tron.log('updating address final');
+        // console.tron.log('updating address final');
         const { shipping } = payload;
         const findAddressIndex = draft.addresses.findIndex(
           address => address.id === shipping.id
         );
-
-        console.tron.log(`shipping: ${shipping.distrito}`);
-        console.tron.log(`findAddressIndex: ${findAddressIndex}`);
 
         draft.addresses[findAddressIndex] = shipping;
 

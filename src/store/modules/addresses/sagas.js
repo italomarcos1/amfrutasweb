@@ -24,8 +24,6 @@ export function* updateShippingInfo({ payload }) {
     // Toast.show('Perfil atualizado com sucesso!');
 
     // yield put(updateProfileSuccess(response.data));
-    console.tron.log('updating shipping...');
-    console.tron.log(`updating shipping...: ${data}`);
     yield put(updateShippingInfoSuccess(data));
   } catch (error) {
     // Toast.show('Houve um erro na atualização do perfil, verifique seus dados.');
