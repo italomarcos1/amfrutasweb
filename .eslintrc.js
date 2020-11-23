@@ -39,6 +39,7 @@ module.exports = {
     'no-extra-boolean-cast': 'off',
     camelcase: 'off',
     'no-useless-escape': 'off',
+    'no-return-assign': 'off',
     'no-console': 'warn',
     'consistent-return': 'off',
     'react-hooks/rules-of-hooks': 'error',

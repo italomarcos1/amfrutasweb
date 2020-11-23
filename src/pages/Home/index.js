@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
   Container,
-  Banner,
   OptionsContainer,
   Option,
   SectionTitle,
@@ -19,7 +18,7 @@ import {
   SendButton,
   SectionTitleMenu,
   MenuButtons,
-  BannerImage,
+  Categories,
 } from './styles';
 
 import { nameIsValid, mailIsValid, dateIsValid } from '~/utils/validation';
@@ -31,13 +30,14 @@ import Footer from '~/components/Footer';
 import Input from '~/components/HomeInput';
 import InputMask from '~/components/HomeInputMask';
 import SlideShow from '~/components/SlideShow';
+import CategoriesCarousel from '~/components/Categories';
 
 import DeliveryModal from '~/pages/DeliveryModal';
 import LoginModal from '~/pages/LoginModal';
 
-import data from '~/data';
+import productsData from '~/data';
 
-import { backend } from '~/services/api';
+import { api, backend } from '~/services/api';
 
 import fallbackBanner from '~/assets/banner@2x.jpg';
 import graos from '~/assets/products/nata@2x.png';
@@ -79,8 +79,10 @@ export default function Home() {
     false,
     false,
   ]);
-  const [banner, setBanner] = useState([]);
   const [bannersURL, setBannersURL] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  const carouselRef = useRef();
 
   const loadBanners = useCallback(async () => {
     const response = await backend.get('/banner/blocks');
@@ -91,8 +93,6 @@ export default function Home() {
       },
     } = response;
 
-    setBanner(message);
-
     message.forEach(({ hash }) =>
       backend.get(`/banner/${hash}`).then(({ data: { data: { banners } } }) =>
         setBannersURL(banners)
@@ -100,8 +100,21 @@ export default function Home() {
     );
   }, []);
 
+  const loadCategories = useCallback(async () => {
+    const {
+      data: {
+        data: { data },
+      },
+    } = await api.get('ecommerce/categories');
+
+    setCategories(data);
+
+    console.tron.log(data);
+  }, []);
+
   useEffect(() => {
     loadBanners();
+    loadCategories();
   }, []);
 
   console.tron.log(bannersURL);
@@ -167,7 +180,7 @@ export default function Home() {
           <small>Uma seleção especial com a qualidade garantida</small>
         </SectionTitle>
         <ProductsContainer>
-          {data.map((p, index) => (
+          {productsData.map((p, index) => (
             <Product key={p.id} index={index} product={p} />
           ))}
         </ProductsContainer>
@@ -182,7 +195,7 @@ export default function Home() {
           <small>Conheça os produtos mais vendidos todos os dias</small>
         </SectionTitle>
         <ProductsContainer>
-          {data.map((p, index) => (
+          {productsData.map((p, index) => (
             <Product key={p.id} index={index} product={p} />
           ))}
         </ProductsContainer>
@@ -262,54 +275,7 @@ export default function Home() {
             <button type="button">Localização</button>
           </Location>
         </Section>
-        <SectionTitleMenu>
-          <SectionTitle style={{ margin: 0, width: 600 }}>
-            <div>
-              <strong>Categorias</strong>
-              <small>Visite todas as categorias do site</small>
-            </div>
-          </SectionTitle>
-          <MenuButtons>
-            <button type="button">
-              <img src={chevronL} alt="" />
-            </button>
-            <button type="button">
-              <img src={chevronR} alt="" />
-            </button>
-          </MenuButtons>
-        </SectionTitleMenu>
-        <Section style={{ height: 146 }}>
-          <Category>
-            <img src={macas} alt="" />
-            <small>Maçãs e Pêras</small>
-          </Category>
-          <Category>
-            <img src={tuberculos} alt="" />
-            <small>Tubérculos</small>
-          </Category>
-          <Category>
-            <img src={molhos} alt="" />
-            <small>
-              Molhos, Temperos <br />e Especiarias
-            </small>
-          </Category>
-          <Category>
-            <img src={legumes} alt="" />
-            <small>Legumes</small>
-          </Category>
-          <Category>
-            <img src={ervas} alt="" />
-            <small>Ervas Aromáticas</small>
-          </Category>
-          <Category>
-            <img src={tropicais} alt="" />
-            <small>Tropicais</small>
-          </Category>
-          <Category>
-            <img src={citrinos} alt="" />
-            <small>Citrinos</small>
-          </Category>
-        </Section>
+        <CategoriesCarousel categories={categories} />
         <SectionTitle>
           <strong>Blog</strong>
           <small>Dicas de receitas com frutas e verduras</small>

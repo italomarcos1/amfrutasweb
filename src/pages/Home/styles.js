@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { Form } from '@unform/web';
 import { darken } from 'polished';
+import { Link } from 'react-router-dom';
+import Carousel from 'react-elastic-carousel';
 
 export const Container = styled(Form)`
   display: flex;
@@ -8,22 +10,6 @@ export const Container = styled(Form)`
   background-color: #fff;
   width: 100%;
   padding: 21px 30px 87px;
-`;
-
-export const Banner = styled.button.attrs({
-  type: 'button',
-})`
-  width: ${({ width }) => width}px;
-  height: ${({ height }) => height}px;
-  margin: 0 auto;
-
-  background-image: url(${({ image }) => image});
-  background-size: ${({ width }) => width}px ${({ height }) => height}px;
-`;
-
-export const BannerImage = styled.image`
-  width: ${({ width }) => width}px;
-  height: ${({ height }) => height}px;
 `;
 
 export const OptionsContainer = styled.div`
@@ -183,6 +169,18 @@ export const Section = styled.div`
   margin: 30px auto 0;
 `;
 
+export const Categories = styled(Carousel)`
+  width: 1240px;
+  height: 146px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 4px;
+  margin: 30px auto 0;
+  background-color: #f99;
+  padding: 0;
+`;
+
 export const Location = styled.div`
   width: 400px;
   height: 398px;
@@ -235,7 +233,7 @@ export const Location = styled.div`
   }
 `;
 
-export const Category = styled.div`
+export const Category = styled(Link)`
   display: flex;
   align-items: center;
   flex-direction: column;
