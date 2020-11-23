@@ -3,19 +3,25 @@ import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
 import PropTypes from 'prop-types';
 
+import { Container, Content } from './styles';
+
 export default function SlideShow({ data }) {
   const slideRef = useRef();
 
   const [current, setCurrent] = useState(0);
 
   const properties = {
-    duration: 5000,
-    autoplay: false,
+    duration: 4000,
+    autoplay: true,
     transitionDuration: 500,
     arrows: false,
     infinite: true,
     easing: 'ease',
-    indicators: i => <div className="indicator">{i + 1}</div>,
+    indicators: i => (
+      <div className="indicator" style={{ display: 'none' }}>
+        {i + 1}
+      </div>
+    ),
   };
 
   const slideImages = [
@@ -27,33 +33,24 @@ export default function SlideShow({ data }) {
 
   return (
     <>
-      <div>
+      <Container>
         <Slide ref={slideRef} {...properties}>
           {data.map((each, index) => (
-            <div
-              key={index}
-              className="each-slide"
-              style={{ width: each.width, height: each.height }}
-            >
-              <img
-                className="lazy"
-                src={each.url}
-                alt="sample"
-                style={{ width: each.width, height: each.height }}
-              />
-            </div>
+            <Content key={index} width={each.width} height={each.height}>
+              <img className="lazy" src={each.url} alt="sample" />
+            </Content>
           ))}
         </Slide>
-      </div>
-
-      <div className="slide-container buttons">
-        <button onClick={() => slideRef.current.goBack()} type="button">
-          Go Back
-        </button>
-        <button onClick={() => slideRef.current.goNext()} type="button">
-          Go Next
-        </button>
-      </div>
+        {/* 
+        <div>
+          <button onClick={() => slideRef.current.goBack()} type="button">
+            Go Back
+          </button>
+          <button onClick={() => slideRef.current.goNext()} type="button">
+            Go Next
+          </button>
+        </div> */}
+      </Container>
     </>
   );
 }

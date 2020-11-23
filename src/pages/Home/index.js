@@ -139,12 +139,6 @@ export default function Home() {
       <Header login={() => setLoginModal(true)} />
       <Container onSubmit={handleSubmit}>
         <SlideShow data={bannersURL} />
-        <Banner
-          onClick={() => setDeliveryModal(true)}
-          width={banner.length !== 0 ? banner[0].width : 1240}
-          height={banner.length !== 0 ? banner[0].height : 300}
-          image={bannersURL.length !== 0 ? bannersURL[0].url : fallbackBanner}
-        />
         <OptionsContainer>
           <Option>
             <img src={envio} alt="Envio Gratuito" />
