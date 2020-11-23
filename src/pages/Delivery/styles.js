@@ -164,6 +164,7 @@ export const InfoContainer = styled(Form)`
   border: 1px solid #e0e0e0;
   border-radius: 6px;
 
+  opacity: ${({ loading }) => (loading ? 0.4 : 1)};
   padding: 21px 29px 36px 27px;
 `;
 
@@ -390,5 +391,25 @@ export const StartStop = styled.div`
     font-family: 'SFPro';
     color: #393939;
     margin-left: 12px;
+  }
+`;
+
+export const UseAddress = styled.button.attrs({
+  type: 'button',
+})`
+  background: none;
+  margin-left: 140px;
+  small {
+    display: block;
+    margin-top: 2.5px;
+    font-size: 15px;
+    line-height: 20px;
+    font-family: 'SFPro';
+    letter-spacing: 0px;
+    color: #0cb68b;
+
+    &:hover {
+      color: ${darken(0.1, '#0cb68b')};
+    }
   }
 `;

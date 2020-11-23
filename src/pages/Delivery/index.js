@@ -24,11 +24,12 @@ import {
   TakeOnShop,
   StartStop,
   LoadingContainer,
+  UseAddress,
 } from './styles';
 
 import { onlyValues } from '~/utils/onlyValues';
 
-import api from '~/services/api';
+import { api } from '~/services/api';
 
 import { InputContainer, Button, SecureLogin } from '~/components/LoginModal';
 
@@ -96,6 +97,9 @@ export default function Delivery() {
   const cart = useSelector(state => state.cart.products);
   const hasOrder = useSelector(state => state.cart.hasOrder);
 
+  const [newAddress, setNewAddress] = useState(false);
+  const [newAddressPrimary, setNewAddressPrimary] = useState(false);
+
   const profile = useSelector(state => state.user.profile);
   const addresses = useSelector(state => state.addresses.addresses);
   const primaryAddress = useSelector(state => state.addresses.primaryAddress);
@@ -105,6 +109,7 @@ export default function Delivery() {
     if (!!primaryAddress) {
       return primaryAddress;
     }
+    setNewAddress(true);
     return {};
   });
 
@@ -128,7 +133,6 @@ export default function Delivery() {
   });
 
   const [hasLookup, setHasLookup] = useState(false);
-  const [newAddressPrimary, setNewAddressPrimary] = useState(false);
 
   // os endereços são o objeto inteiro, com id e etc
   // o residence é só o label, pois o select mexe apenas com o label. se não, teríamos que mudar o Select ou criar um novo
@@ -204,17 +208,21 @@ export default function Delivery() {
     return anyEmptyField;
   }, []);
 
-  useEffect(() => {
-    if (addresses.length === 0) return;
-    const newAddress = addresses.findIndex(
+  const populateAddress = useCallback(() => {
+    const findNewAddress = addresses.findIndex(
       address => address.street_name === residence
     );
 
-    if (newAddress < 0) return;
+    if (findNewAddress < 0) return;
+    // erro ta aqui
+    setSelectedAddress(addresses[findNewAddress]);
+    shippingInfoRef.current.setData(addresses[findNewAddress]);
+  }, [addresses, residence]);
 
-    setSelectedAddress(addresses[newAddress]);
-    shippingInfoRef.current.setData(addresses[newAddress]);
-  }, [residence, addresses]);
+  useEffect(() => {
+    if (addresses.length === 0) return;
+    populateAddress();
+  }, [residence, addresses, populateAddress]);
 
   const updatePrimaryAddress = useCallback(() => {
     dispatch(setPrimaryAddress(selectedAddress.id));
@@ -224,10 +232,19 @@ export default function Delivery() {
     const allDataProfile = profileInfoRef.current.getData();
     const allDataShipping = shippingInfoRef.current.getData();
 
+    const { full_name } = allDataShipping;
+
+    const [newName, ...restOfName] = full_name.split(' ');
+
+    const newNickname = restOfName.join(' ');
+
     const profileData = { ...allDataProfile, gender };
     const shippingData = {
       ...allDataShipping,
-      id: selectedAddress.id,
+      id: newAddress ? `${Date.now()}` : selectedAddress.id,
+      name: newName,
+      nickname: newNickname,
+      full_name,
       residence,
       country,
       cod_postal: postcode,
@@ -250,6 +267,7 @@ export default function Delivery() {
     country,
     postcode,
     cart,
+    newAddress,
     primaryAddress,
     updatePrimaryAddress,
   ]);
@@ -260,6 +278,7 @@ export default function Delivery() {
     }
     setHasLookup(true);
     setLoading(true);
+    setResidence('');
 
     setTempPostcode(postcode);
     const [cod, ext] = postcode.split('-');
@@ -282,6 +301,24 @@ export default function Delivery() {
   useEffect(() => {
     if (validUserInfo && validShippingInfo) handleFinishOrder();
   }, [validUserInfo, validShippingInfo, handleFinishOrder]);
+
+  useEffect(() => {
+    if (addresses.length === 0 || hasLookup) setNewAddress(true);
+    else setNewAddress(false);
+  }, [addresses, hasLookup]);
+
+  useEffect(() => {
+    if (newAddress === false) {
+      setHasLookup(false);
+      shippingInfoRef.current.setData(primaryAddress);
+      setSelectedAddress(primaryAddress);
+      console.tron.log(selectedAddress);
+      console.tron.log(primaryAddress);
+      setPostcode(primaryAddress.cod_postal);
+      setTempPostcode(primaryAddress.cod_postal);
+      setResidence(primaryAddress.street_name);
+    }
+  }, [newAddress, primaryAddress, selectedAddress]);
 
   const handleSubmit = useCallback(
     formData => {
@@ -349,15 +386,35 @@ export default function Delivery() {
         return;
       }
 
+      const [num_cod_postal, ext_cod_postal] = postcode.split('-');
+      const allDataShipping = shippingInfoRef.current.getData();
+
+      const { full_name } = allDataShipping;
+
+      const [newName, ...restOfName] = full_name.split(' ');
+
+      const newNickname = restOfName.join(' ');
+
       const shippingData = {
         ...formData,
         id: selectedAddress.id,
+        name: newName,
+        nickname: newNickname,
+        full_name,
         residence,
         country,
         cod_postal: postcode,
+        num_cod_postal,
+        ext_cod_postal,
       };
 
-      dispatch(updateShippingInfoRequest(shippingData));
+      if (newAddress) {
+        dispatch(addAddress({ ...shippingData, id: `${Date.now()}` }));
+
+        // if (newAddressPrimary) dispatch(setPrimaryAddress(selectedAddress.id)); -- vai bugar por causa do id
+      } else {
+        dispatch(updateShippingInfoRequest(shippingData));
+      }
 
       setValidShippingInfo(true);
     },
@@ -369,6 +426,7 @@ export default function Delivery() {
       locationInvalidFields,
       postcode,
       selectedAddress,
+      newAddress,
     ]
   );
 
@@ -555,6 +613,7 @@ export default function Delivery() {
                   customWidth={221}
                   data={genderData}
                   error={invalidGender}
+                  clearValue
                 />
               ) : (
                 <Select
@@ -594,13 +653,18 @@ export default function Delivery() {
               style={{ width: 683 }}
               initialData={selectedAddress}
               ref={shippingInfoRef}
+              loading={loading}
             >
               <SectionTitle>
                 <strong>Morada de entrega</strong>
-                <small>Confira e atualize caso necessário.</small>
+                <small>
+                  {newAddress
+                    ? 'Cadastre um novo endereço.'
+                    : 'Confira e atualize caso necessário.'}
+                </small>
               </SectionTitle>
               <InputContainer style={{ width: 628 }}>
-                {addresses.length === 0 || hasLookup ? (
+                {newAddress ? (
                   <Input
                     name="residence"
                     title="Nome da morada (para futuras entregas)"
@@ -616,8 +680,8 @@ export default function Delivery() {
                     placeholder="Escolha a morada"
                     setValue={setResidence}
                     defaultValue={{
-                      value: `${selectedAddress.street_name}`,
-                      label: `${selectedAddress.street_name}`,
+                      value: residence,
+                      label: residence,
                     }}
                     customWidth={325}
                     data={formattedAddresses}
@@ -693,7 +757,6 @@ export default function Delivery() {
               </InputContainer>
               <div
                 style={{
-                  // backgroundColor: '#f90',
                   marginTop: 40,
                 }}
               >
@@ -704,16 +767,23 @@ export default function Delivery() {
                 >
                   shippingButton
                 </button>
-                {addresses.length === 0 || hasLookup ? (
-                  <StartStop selected={newAddressPrimary}>
-                    <button
-                      type="button"
-                      onClick={() => setNewAddressPrimary(!newAddressPrimary)}
-                    >
-                      <img src={checked} alt="Item selecionado" />
-                    </button>
-                    <strong>Definir como endereço principal</strong>
-                  </StartStop>
+                {newAddress ? (
+                  <div style={{ display: 'flex' }}>
+                    <StartStop selected={newAddressPrimary}>
+                      <button
+                        type="button"
+                        onClick={() => setNewAddressPrimary(!newAddressPrimary)}
+                      >
+                        <img src={checked} alt="Item selecionado" />
+                      </button>
+                      <strong>Definir como endereço principal</strong>
+                    </StartStop>
+                    {addresses.length !== 0 && (
+                      <UseAddress onClick={() => setNewAddress(false)}>
+                        <small>Usar um endereço já cadastrado</small>
+                      </UseAddress>
+                    )}
+                  </div>
                 ) : (
                   <StartStop
                     selected={

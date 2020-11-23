@@ -1,5 +1,6 @@
 import axios from 'axios';
 
-const api = axios.create({ baseURL: 'http://localhost:3333' });
+const backend = axios.create({ baseURL: 'https://amfrutas.pt/backend' });
+const api = axios.create({ baseURL: 'https://amfrutas.pt/api-v2' });
 
-export default api;
+export { backend, api };

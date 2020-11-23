@@ -13,14 +13,17 @@ export const Container = styled(Form)`
 export const Banner = styled.button.attrs({
   type: 'button',
 })`
-  width: 1240px;
-  height: 300px;
+  width: ${({ width }) => width}px;
+  height: ${({ height }) => height}px;
   margin: 0 auto;
 
-  img {
-    width: 1240px;
-    height: 300px;
-  }
+  background-image: url(${({ image }) => image});
+  background-size: ${({ width }) => width}px ${({ height }) => height}px;
+`;
+
+export const BannerImage = styled.image`
+  width: ${({ width }) => width}px;
+  height: ${({ height }) => height}px;
 `;
 
 export const OptionsContainer = styled.div`

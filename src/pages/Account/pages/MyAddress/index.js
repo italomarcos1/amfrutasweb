@@ -17,7 +17,7 @@ import InputMask from '~/components/InputMask';
 import Select from '~/components/Select';
 import Address from '~/components/Address';
 
-import api from '~/services/api';
+import { api } from '~/services/api';
 import { addAddress } from '~/store/modules/addresses/actions';
 import { nameIsValid, postcodeIsValid } from '~/utils/validation';
 

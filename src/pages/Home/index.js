@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import {
   Container,
@@ -19,6 +19,7 @@ import {
   SendButton,
   SectionTitleMenu,
   MenuButtons,
+  BannerImage,
 } from './styles';
 
 import { nameIsValid, mailIsValid, dateIsValid } from '~/utils/validation';
@@ -29,13 +30,16 @@ import Product from '~/components/Product';
 import Footer from '~/components/Footer';
 import Input from '~/components/HomeInput';
 import InputMask from '~/components/HomeInputMask';
+import SlideShow from '~/components/SlideShow';
 
 import DeliveryModal from '~/pages/DeliveryModal';
 import LoginModal from '~/pages/LoginModal';
 
 import data from '~/data';
 
-import banner from '~/assets/banner@2x.jpg';
+import { backend } from '~/services/api';
+
+import fallbackBanner from '~/assets/banner@2x.jpg';
 import graos from '~/assets/products/nata@2x.png';
 
 import envio from '~/assets/envio-gratuito.svg';
@@ -75,6 +79,32 @@ export default function Home() {
     false,
     false,
   ]);
+  const [banner, setBanner] = useState([]);
+  const [bannersURL, setBannersURL] = useState([]);
+
+  const loadBanners = useCallback(async () => {
+    const response = await backend.get('/banner/blocks');
+
+    const {
+      data: {
+        meta: { message },
+      },
+    } = response;
+
+    setBanner(message);
+
+    message.forEach(({ hash }) =>
+      backend.get(`/banner/${hash}`).then(({ data: { data: { banners } } }) =>
+        setBannersURL(banners)
+      )
+    );
+  }, []);
+
+  useEffect(() => {
+    loadBanners();
+  }, []);
+
+  console.tron.log(bannersURL);
 
   const handleSubmit = useCallback(
     formData => {
@@ -108,9 +138,13 @@ export default function Home() {
     <>
       <Header login={() => setLoginModal(true)} />
       <Container onSubmit={handleSubmit}>
-        <Banner onClick={() => setDeliveryModal(true)}>
-          <img src={banner} alt="banner" />
-        </Banner>
+        <SlideShow data={bannersURL} />
+        <Banner
+          onClick={() => setDeliveryModal(true)}
+          width={banner.length !== 0 ? banner[0].width : 1240}
+          height={banner.length !== 0 ? banner[0].height : 300}
+          image={bannersURL.length !== 0 ? bannersURL[0].url : fallbackBanner}
+        />
         <OptionsContainer>
           <Option>
             <img src={envio} alt="Envio Gratuito" />

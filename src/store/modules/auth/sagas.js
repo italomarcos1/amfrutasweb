@@ -1,6 +1,6 @@
 import { call, put, all, takeLatest } from 'redux-saga/effects';
 
-import api from '~/services/api';
+import { api } from '~/services/api';
 
 import { signInSuccess, signFailure } from '~/store/modules/auth/actions';
 import { addFavorites } from '~/store/modules/cart/actions';

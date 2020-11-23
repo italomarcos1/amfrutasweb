@@ -34,6 +34,7 @@ module.exports = {
     'react-native/no-raw-text': 'off',
     'no-param-reassign': 'off',
     'no-unused-vars': 'warn',
+    'react/no-array-index-key': 'off',
     'no-underscore-dangle': 'off',
     'no-extra-boolean-cast': 'off',
     camelcase: 'off',
