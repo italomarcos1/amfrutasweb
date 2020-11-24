@@ -312,8 +312,6 @@ export default function Delivery() {
       setHasLookup(false);
       shippingInfoRef.current.setData(primaryAddress);
       setSelectedAddress(primaryAddress);
-      console.tron.log(selectedAddress);
-      console.tron.log(primaryAddress);
       setPostcode(primaryAddress.cod_postal);
       setTempPostcode(primaryAddress.cod_postal);
       setResidence(primaryAddress.street_name);

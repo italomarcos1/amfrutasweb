@@ -108,16 +108,12 @@ export default function Home() {
     } = await api.get('ecommerce/categories');
 
     setCategories(data);
-
-    console.tron.log(data);
   }, []);
 
   useEffect(() => {
     loadBanners();
     loadCategories();
   }, []);
-
-  console.tron.log(bannersURL);
 
   const handleSubmit = useCallback(
     formData => {
