@@ -10,6 +10,7 @@ import {
 
 import Header from '~/components/Header';
 import Footer from '~/components/Footer';
+import CustomHeader from '~/components/CustomHeader';
 
 import LoginModal from '~/pages/LoginModal';
 
@@ -23,13 +24,14 @@ export default function Contents() {
   const [loginModal, setLoginModal] = useState(false);
 
   const [contents, setContents] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
 
   const loadContents = useCallback(async () => {
     const {
       data: {
-        data: { data },
+        data: { data, current_page },
       },
-    } = await backend.get('blog/contents');
+    } = await backend.get('blog/contents?per_page=12');
 
     if (data.length % 4 !== 0) {
       const itemsToFill = Math.ceil(data.length / 4) * 4 - data.length;
@@ -38,7 +40,8 @@ export default function Contents() {
         data.push(null);
       }
     }
-
+    console.tron.log(data);
+    setCurrentPage(current_page);
     setContents(data);
   }, []);
 
@@ -48,31 +51,13 @@ export default function Contents() {
 
   return (
     <>
-      <Header login={() => setLoginModal(true)} />
+      <Header login={() => setLoginModal(true)} active="Dicas" />
       <Container>
-        <OptionsContainer>
-          <Option>
-            <img src={envio} alt="Envio Gratuito" />
-            <div>
-              <strong>Envio Gratuito</strong>
-              <small>Para compras acima de € 50,00</small>
-            </div>
-          </Option>
-          <Option>
-            <img src={cashback} alt="Cashback" />
-            <div>
-              <strong>Cashback</strong>
-              <small>Receba euros nas compras</small>
-            </div>
-          </Option>
-          <Option>
-            <img src={whatsapp} alt="WhatsApp" />
-            <div>
-              <strong>Atendimento</strong>
-              <small>Dúvidas online no WhatsApp</small>
-            </div>
-          </Option>
-        </OptionsContainer>
+        <CustomHeader
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          style={{ marginLeft: 'auto', marginRight: 'auto', width: 1240 }}
+        />
 
         <Section>
           {contents.map(content =>

@@ -2,10 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import {
   Container,
-  ProductsHeader,
   ProductsContainer,
   NullProduct,
-  FilterProducts,
   Menu,
   Layout,
   Content,
@@ -21,6 +19,7 @@ import Product from '~/components/Product';
 import SearchInput from '~/components/SearchInput';
 import Pagination from '~/components/Pagination';
 import MenuItem from '~/components/MenuItem';
+import CustomHeader from '~/components/CustomHeader';
 
 import LoginModal from '~/pages/LoginModal';
 
@@ -118,17 +117,10 @@ export default function Products() {
             ))}
           </Menu>
           <Content>
-            <ProductsHeader>
-              <SearchInput />
-              <FilterProducts>
-                <small>Mais Produtos</small>
-                <img src={arrow} alt="" />
-              </FilterProducts>
-              <Pagination
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-              />
-            </ProductsHeader>
+            <CustomHeader
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
             <ProductsContainer pageHeight={pageHeight}>
               {products.map((p, index) =>
                 p === null ? (
