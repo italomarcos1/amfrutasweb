@@ -19,13 +19,7 @@ import envio from '~/assets/envio-gratuito.svg';
 import cashback from '~/assets/cashback.svg';
 import whatsapp from '~/assets/whatsapp.svg';
 
-import clementina from '~/assets/blog/clementina.jpg';
-import frutas from '~/assets/blog/frutas.jpeg';
-import limao from '~/assets/blog/limao.jpg';
-import receitas from '~/assets/blog/receitas.jpg';
-
 export default function Contents() {
-  const [deliveryModal, setDeliveryModal] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
 
   const [contents, setContents] = useState([]);

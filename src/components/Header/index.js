@@ -26,8 +26,8 @@ import search from '~/assets/search.svg';
 import bag from '~/assets/bag.svg';
 import user from '~/assets/user-check.svg';
 
-export default function PageHeader({ login }) {
-  const [selectedPage, setSelectedPage] = useState('Principal');
+export default function PageHeader({ login, active }) {
+  const [selectedPage, setSelectedPage] = useState(active);
 
   const loggedIn = useSelector(state => state.auth.signed);
 
@@ -92,7 +92,10 @@ export default function PageHeader({ login }) {
           </MenuItem>
           <MenuItem
             selected={selectedPage === 'Produtos'}
-            onClick={() => setSelectedPage('Produtos')}
+            onClick={() => {
+              setSelectedPage('Produtos');
+              history.push('/produtos');
+            }}
           >
             Produtos
           </MenuItem>
@@ -164,4 +167,9 @@ export default function PageHeader({ login }) {
 
 PageHeader.propTypes = {
   login: PropTypes.func.isRequired,
+  active: PropTypes.string,
+};
+
+PageHeader.defaultProps = {
+  active: 'Principal',
 };

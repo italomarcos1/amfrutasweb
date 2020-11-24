@@ -33,7 +33,7 @@ export default function Product({ product, index }) {
 
   const [amount, setAmount] = useState(0);
 
-  const { id, title, picture, oldPrice, newPrice } = product;
+  const { id, title, thumbs, pricePromotional, hasPromotion, price } = product;
 
   const handleAddToCart = useCallback(() => {
     dispatch(addToCartRequest(product, amount));
@@ -46,7 +46,6 @@ export default function Product({ product, index }) {
   }, [favorites, id]);
 
   const handleFavorite = () => {
-    console.log('crack');
     dispatch(
       !favorite
         ? addToFavoritesRequest(product)
@@ -65,7 +64,7 @@ export default function Product({ product, index }) {
         <img src={favorite ? heartOn : heartOff} alt="Favorite" />
       </FavoriteButton>
       <ImageContainer to={`/product/${index}`}>
-        <img src={picture} alt="Product" />
+        <img src={thumbs} alt="Product" />
       </ImageContainer>
       <Title to={`/product/${index}`}>{title}</Title>
       <PriceContainer to={`/product/${index}`}>
@@ -74,15 +73,15 @@ export default function Product({ product, index }) {
           <strong>€&nbsp;1.290,08</strong>
           DE CRÉDITO
         </span>
-        {oldPrice ? (
+        {hasPromotion ? (
           <small>
             antes
-            <p>€ {oldPrice}</p>
+            <p>€&nbsp;{price}</p>
           </small>
         ) : (
           <small>&nbsp;</small>
         )}
-        <strong>€ {newPrice}</strong>
+        <strong>€&nbsp;{hasPromotion ? pricePromotional : price}</strong>
       </PriceContainer>
       <Options>
         <div>
@@ -117,9 +116,11 @@ Product.propTypes = {
   product: PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     title: PropTypes.string,
-    picture: PropTypes.string,
-    oldPrice: PropTypes.string,
-    newPrice: PropTypes.string,
+    thumbs: PropTypes.string,
+    price: PropTypes.string,
+    pricePromotional: PropTypes.string,
+    url: PropTypes.string,
+    hasPromotional: PropTypes.bool,
     isFavorite: PropTypes.bool,
   }).isRequired,
   index: PropTypes.number.isRequired,

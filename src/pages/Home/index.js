@@ -26,7 +26,7 @@ import Footer from '~/components/Footer';
 import Input from '~/components/HomeInput';
 import InputMask from '~/components/HomeInputMask';
 import SlideShow from '~/components/SlideShow';
-import CategoriesCarousel from '~/components/Categories';
+import CategoriesCarousel from '~/components/CategoriesCarousel';
 
 import DeliveryModal from '~/pages/DeliveryModal';
 import LoginModal from '~/pages/LoginModal';
