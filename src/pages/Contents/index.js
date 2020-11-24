@@ -16,10 +16,6 @@ import LoginModal from '~/pages/LoginModal';
 
 import { backend } from '~/services/api';
 
-import envio from '~/assets/envio-gratuito.svg';
-import cashback from '~/assets/cashback.svg';
-import whatsapp from '~/assets/whatsapp.svg';
-
 export default function Contents() {
   const [loginModal, setLoginModal] = useState(false);
 
