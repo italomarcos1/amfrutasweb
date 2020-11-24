@@ -16,11 +16,15 @@ export function* signIn({ payload }) {
 
     api.defaults.headers.Authorization = `Bearer ${token}`;
 
-    const favResponse = yield call(api.get, 'clients/wishlists');
+    const {
+      data: {
+        meta: { message },
+        data: favData,
+      },
+    } = yield call(api.get, 'clients/wishlists');
 
-    if (favResponse.data.meta.message === 'Não há produtos favoritados.')
-      yield put(addFavorites([]));
-    else yield put(addFavorites(favResponse.data.data));
+    if (message === 'Não há produtos favoritados.') yield put(addFavorites([]));
+    else yield put(addFavorites(favData));
 
     if (name === '' && last_name === '') {
       const { data } = yield call(api.put, 'clients', {

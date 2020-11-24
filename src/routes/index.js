@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import Home from '~/pages/Home';
+import Contents from '~/pages/Contents';
 import Basket from '~/pages/Basket';
 import Delivery from '~/pages/Delivery';
 import Confirmation from '~/pages/Confirmation';
@@ -20,6 +21,7 @@ export default function Routes() {
     <BrowserRouter>
       <Switch>
         <Route path="/" exact component={Home} />
+        <Route path="/conteudos" exact component={Contents} />
         <Route path="/cesto" component={Basket} />
         <Route path="/entrega" component={Delivery} />
         <Route path="/confirmacao" component={Confirmation} />

@@ -37,6 +37,7 @@ module.exports = {
     'react/no-array-index-key': 'off',
     'no-underscore-dangle': 'off',
     'no-extra-boolean-cast': 'off',
+    'no-plusplus': 'off',
     camelcase: 'off',
     'no-useless-escape': 'off',
     'no-return-assign': 'off',
