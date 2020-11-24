@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 import { Form } from '@unform/web';
 import { darken } from 'polished';
-import { Link } from 'react-router-dom';
-import Carousel from 'react-elastic-carousel';
 
 export const Container = styled(Form)`
   display: flex;
@@ -105,34 +103,6 @@ export const Option = styled.div`
   }
 `;
 
-export const SectionTitleMenu = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 1240px;
-  margin: 35px auto 0;
-  height: 55px;
-`;
-
-export const MenuButtons = styled.div`
-  height: 55px;
-  width: 99px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    border: 3px solid #393939;
-    background: none;
-  }
-`;
-
 export const SectionTitle = styled.div`
   display: block;
   text-align: left;
@@ -167,18 +137,6 @@ export const Section = styled.div`
   justify-content: space-between;
   border-radius: 4px;
   margin: 30px auto 0;
-`;
-
-export const Categories = styled(Carousel)`
-  width: 1240px;
-  height: 146px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 4px;
-  margin: 30px auto 0;
-  background-color: #f99;
-  padding: 0;
 `;
 
 export const Location = styled.div`
@@ -230,33 +188,6 @@ export const Location = styled.div`
     text-transform: uppercase;
     background: none;
     border: 1px solid #eee;
-  }
-`;
-
-export const Category = styled(Link)`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 146px;
-  width: 114px;
-
-  img {
-    height: 114px;
-    width: 114px;
-    border-radius: 50%;
-  }
-
-  small {
-    width: 124px;
-
-    text-align: center;
-    font-family: 'SFPro';
-    font-size: 15px;
-    line-height: 20px;
-    letter-spacing: 0px;
-    color: #000;
-    margin-top: 15px;
   }
 `;
 

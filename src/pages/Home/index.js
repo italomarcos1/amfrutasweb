@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import {
   Container,
@@ -12,13 +12,9 @@ import {
   Section,
   Location,
   BlogPost,
-  Category,
   Promotions,
   PromotionsSubTitle,
   SendButton,
-  SectionTitleMenu,
-  MenuButtons,
-  Categories,
 } from './styles';
 
 import { nameIsValid, mailIsValid, dateIsValid } from '~/utils/validation';
@@ -39,30 +35,11 @@ import productsData from '~/data';
 
 import { api, backend } from '~/services/api';
 
-import fallbackBanner from '~/assets/banner@2x.jpg';
-import graos from '~/assets/products/nata@2x.png';
-
 import envio from '~/assets/envio-gratuito.svg';
 import cashback from '~/assets/cashback.svg';
 import whatsapp from '~/assets/whatsapp.svg';
 import appStore from '~/assets/appStore.svg';
 import playStore from '~/assets/playStore.svg';
-
-import chevronL from '~/assets/chevron-l.svg';
-import chevronR from '~/assets/chevron-r.svg';
-
-import macas from '~/assets/categories/macas.jpeg';
-import tuberculos from '~/assets/categories/tuberculos.jpeg';
-import molhos from '~/assets/categories/molhos.jpg';
-import legumes from '~/assets/categories/legumes.jpeg';
-import ervas from '~/assets/categories/ervas.png';
-import tropicais from '~/assets/categories/tropicais.jpeg';
-import citrinos from '~/assets/categories/citrinos.jpeg';
-
-import clementina from '~/assets/blog/clementina.jpg';
-import frutas from '~/assets/blog/frutas.jpeg';
-import limao from '~/assets/blog/limao.jpg';
-import receitas from '~/assets/blog/receitas.jpg';
 
 export default function Home() {
   const [deliveryModal, setDeliveryModal] = useState(false);
@@ -81,38 +58,50 @@ export default function Home() {
   ]);
   const [bannersURL, setBannersURL] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [blogData, setBlogData] = useState([]);
 
-  const carouselRef = useRef();
+  const loadData = useCallback(async () => {
+    const [
+      categoriesResponse,
+      bannersResponse,
+      blogResponse,
+    ] = await Promise.all([
+      api.get('ecommerce/categories'),
+      backend.get('/banner/blocks'),
+      backend.get('/blog/contents/categories/5?per_page=4'),
+    ]);
 
-  const loadBanners = useCallback(async () => {
-    const response = await backend.get('/banner/blocks');
+    const {
+      data: {
+        data: { data },
+      },
+    } = categoriesResponse;
+
+    setCategories(data);
 
     const {
       data: {
         meta: { message },
       },
-    } = response;
+    } = bannersResponse;
 
     message.forEach(({ hash }) =>
       backend.get(`/banner/${hash}`).then(({ data: { data: { banners } } }) =>
         setBannersURL(banners)
       )
     );
-  }, []);
 
-  const loadCategories = useCallback(async () => {
     const {
       data: {
-        data: { data },
+        data: { data: blogResponseData },
       },
-    } = await api.get('ecommerce/categories');
+    } = blogResponse;
 
-    setCategories(data);
+    setBlogData(blogResponseData);
   }, []);
 
   useEffect(() => {
-    loadBanners();
-    loadCategories();
+    loadData();
   }, []);
 
   const handleSubmit = useCallback(
@@ -277,17 +266,19 @@ export default function Home() {
           <small>Dicas de receitas com frutas e verduras</small>
         </SectionTitle>
         <Section style={{ height: 332 }}>
-          <BlogPost>
-            <img src={clementina} alt="" />
-            <strong>Os benefícios da clementina</strong>
-            <small>
+          {blogData.map(post => (
+            <BlogPost>
+              <img src={post.thumbs} alt="" />
+              <strong>{post.title}</strong>
+              {/* <small>
               Todos nós sabemos que os <br />
               sumos detox são ótimos para a <br />
               saúde e para o sistema imunitário
               <br /> … infelizmente muita gente acha
-            </small>
-          </BlogPost>
-          <BlogPost>
+            </small> */}
+            </BlogPost>
+          ))}
+          {/* <BlogPost>
             <img src={limao} alt="" />
             <strong>
               DIETA DO LIMÃO, PERCA PESO <br />
@@ -325,7 +316,7 @@ export default function Home() {
               de ir mais <br />
               vezes à feira ou ao super … mercado para comprar frutas e verduras
             </small>
-          </BlogPost>
+          </BlogPost> */}
         </Section>
         <Promotions>Receba promoções exclusivas</Promotions>
         <PromotionsSubTitle>

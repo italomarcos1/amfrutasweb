@@ -104,7 +104,10 @@ export default function PageHeader({ login }) {
           </MenuItem>
           <MenuItem
             selected={selectedPage === 'Informações'}
-            onClick={() => setSelectedPage('Informações')}
+            onClick={() => {
+              setSelectedPage('Informações');
+              history.push('/conteudos');
+            }}
           >
             Informações
           </MenuItem>
