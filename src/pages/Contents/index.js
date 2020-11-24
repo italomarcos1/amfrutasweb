@@ -40,7 +40,6 @@ export default function Contents() {
         data.push(null);
       }
     }
-    console.tron.log(data);
     setCurrentPage(current_page);
     setContents(data);
   }, []);
