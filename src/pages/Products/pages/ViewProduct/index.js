@@ -60,7 +60,7 @@ export default function ViewProduct() {
     loadProduct();
   }, []);
 
-  console.tron.log(product);
+  // console.tron.log(product);
 
   return (
     <div
