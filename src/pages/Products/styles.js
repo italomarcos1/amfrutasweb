@@ -67,29 +67,46 @@ export const Content = styled.div`
   justify-content: flex-start;
 `;
 
-export const ProductsContainer = styled.ul`
+export const SectionTitle = styled.div`
+  display: block;
+  text-align: left;
+  width: 1240px;
+  margin: 48px auto 0;
+
+  strong {
+    font-weight: normal;
+    font-size: 22px;
+    line-height: 29px;
+    font-family: 'SFProBold';
+    letter-spacing: 0px;
+    color: #000;
+  }
+
+  small {
+    display: block;
+    margin-top: 2.5px;
+    font-size: 15px;
+    line-height: 20px;
+    font-family: 'SFPro';
+    letter-spacing: 0px;
+    color: #8d8d8d;
+  }
+`;
+
+export const ProductsContainer = styled.div`
   display: flex;
-  align-items: flex-start;
+  width: 1240px;
   justify-content: space-between;
-  flex-wrap: wrap;
-  width: 995px;
-  height: ${({ pageHeight }) => pageHeight}px;
-  margin-top: 18px;
-`;
-
-export const NullProduct = styled.div`
-  opacity: 0;
-  width: 176px;
   height: 376px;
+  margin: 30px auto 0;
 `;
 
-export const FooterPagination = styled.div`
+export const PromotionsContainer = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 28px;
-  width: 995px;
-  height: 48px;
-  background: #fff;
-  border-radius: 4px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  background-color: #ececec;
+  padding-bottom: 52px;
 `;

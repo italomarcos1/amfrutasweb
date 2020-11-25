@@ -1,13 +1,13 @@
 import { call, put, all, takeLatest } from 'redux-saga/effects';
 // import Toast from 'react-native-tiny-toast';
 
-// import api from '~/services/api';
+import { api } from '~/services/api';
 
 import { updateProfileSuccess, updateProfileFailure } from './actions';
 
 export function* updateProfile({ payload }) {
   try {
-    // const { name, email, ...rest } = payload.data;
+    const { name, email, ...rest } = payload.data;
     const { data } = payload;
 
     // const profile = {
@@ -16,12 +16,14 @@ export function* updateProfile({ payload }) {
     //   ...(rest.oldPassword ? rest : {}),
     // };
 
-    // const response = yield call(api.put, 'users', profile);
+    const {
+      data: { data: profileData },
+    } = yield call(api.put, 'users', data);
 
     // Toast.show('Perfil atualizado com sucesso!');
 
     // yield put(updateProfileSuccess(response.data));
-    yield put(updateProfileSuccess(data));
+    yield put(updateProfileSuccess(profileData));
   } catch (error) {
     // Toast.show('Houve um erro na atualização do perfil, verifique seus dados.');
     yield put(updateProfileFailure());

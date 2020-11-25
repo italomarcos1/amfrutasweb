@@ -17,7 +17,13 @@ export default function MenuItem({
 
   return (
     <>
-      <Container onClick={() => setSelected(id)} active={selected === id}>
+      <Container
+        onClick={() => {
+          if (selected !== id) setSelected(id);
+          else setSelected('none');
+        }}
+        active={selected === id}
+      >
         <strong>{name}</strong>
         {all_children_categories.length !== 0 && (
           <img src={arrowGreen} alt="Abrir menu" />
@@ -30,7 +36,9 @@ export default function MenuItem({
               <ChildrenCategory
                 active={childrenSelected === cc.id}
                 onClick={() => {
-                  setChildrenSelected(cc.id);
+                  if (childrenSelected !== cc.id) setChildrenSelected(cc.id);
+                  else if (cc.all_children_categories.length !== 0)
+                    setChildrenSelected('none');
                 }}
               >
                 <strong>{cc.name}</strong>

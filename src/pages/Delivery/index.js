@@ -69,7 +69,7 @@ import {
   nameIsValid,
   dateIsValid,
   phoneIsValid,
-  nifIsValid,
+  documentIsValid,
   mailCodeIsValid,
   mailIsValid,
   postcodeIsValid,
@@ -183,9 +183,9 @@ export default function Delivery() {
     false,
   ]);
 
-  const [invalidDateOfBirth, setInvalidDateOfBirth] = useState(false);
+  const [invalidBirth, setInvalidBirth] = useState(false);
 
-  const [invalidNif, setInvalidNif] = useState(false);
+  const [invalidDocument, setInvalidDocument] = useState(false);
   const [invalidGender, setInvalidGender] = useState(false);
   const [invalidPhone, setInvalidPhone] = useState(false);
   const [invalidMailCode, setInvalidMailCode] = useState(false);
@@ -243,7 +243,7 @@ export default function Delivery() {
       ...allDataShipping,
       id: newAddress ? `${Date.now()}` : selectedAddress.id,
       name: newName,
-      nickname: newNickname,
+      last_name: newNickname,
       full_name,
       residence,
       country,
@@ -321,22 +321,22 @@ export default function Delivery() {
   const handleSubmit = useCallback(
     formData => {
       invalidFields.fill(false);
-      setInvalidNif(false);
+      setInvalidDocument(false);
       setInvalidPhone(false);
       setInvalidMailCode(false);
       setInvalidGender(false);
       setEmailError(false);
-      setInvalidDateOfBirth(false);
+      setInvalidBirth(false);
 
       const anyEmptyField = validateData(formData, setInvalidFields);
 
       if (anyEmptyField) {
         setEmailError(!mailIsValid(formData.email));
-        setInvalidNif(!nifIsValid(formData.nif));
+        setInvalidDocument(!documentIsValid(formData.document));
         setInvalidPhone(!phoneIsValid(formData.phone));
         setInvalidMailCode(!mailCodeIsValid(formData.mailCode));
         setInvalidGender(nameIsValid(gender));
-        setInvalidDateOfBirth(!dateIsValid(formData.dateOfBirth));
+        setInvalidBirth(!dateIsValid(formData.birth));
         window.scrollTo(0, 0);
 
         return;
@@ -397,7 +397,7 @@ export default function Delivery() {
         ...formData,
         id: selectedAddress.id,
         name: newName,
-        nickname: newNickname,
+        last_name: newNickname,
         full_name,
         residence,
         country,
@@ -574,7 +574,7 @@ export default function Delivery() {
                 error={invalidFields[0]}
               />
               <Input
-                name="nickname"
+                name="last_name"
                 title="Apelido"
                 placeholder="Escolhe o teu apelido"
                 error={invalidFields[1]}
@@ -594,13 +594,18 @@ export default function Delivery() {
               />
 
               <InputMask
-                name="dateOfBirth"
+                name="birth"
                 title="Data de nascimento"
-                error={invalidDateOfBirth}
+                error={invalidBirth}
               />
             </InputContainer>
             <InputContainer>
-              <InputMask name="nif" type="9d" title="NIF" error={invalidNif} />
+              <InputMask
+                name="document"
+                type="9d"
+                title="NIF"
+                error={invalidDocument}
+              />
 
               {gender !== '' ? (
                 <Select
@@ -822,7 +827,7 @@ export default function Delivery() {
           <div>
             <ul>
               {cart.map((item, index) => (
-                <Item key={item.id} item={item} index={index} />
+                <Item key={item.product.id} item={item} index={index} />
               ))}
             </ul>
             <TextArea

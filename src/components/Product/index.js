@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import coins from '~/assets/coins.svg';
 import basket_active from '~/assets/icons/basket_active.svg';
@@ -15,6 +16,8 @@ import {
   removeFromFavoritesRequest,
 } from '~/store/modules/cart/actions';
 
+import { setProduct } from '~/store/modules/user/actions';
+
 import {
   Container,
   ImageContainer,
@@ -26,6 +29,7 @@ import {
 
 export default function Product({ product, index }) {
   const dispatch = useDispatch();
+  const history = useHistory();
   const [favorite, setFavorite] = useState(false);
 
   const favorites = useSelector(state => state.cart.favorites);
@@ -33,7 +37,15 @@ export default function Product({ product, index }) {
 
   const [amount, setAmount] = useState(0);
 
-  const { id, title, thumbs, pricePromotional, hasPromotion, price } = product;
+  const {
+    id,
+    title,
+    thumbs,
+    price_promotional,
+    has_promotion,
+    price,
+    url,
+  } = product;
 
   const handleAddToCart = useCallback(() => {
     dispatch(addToCartRequest(product, amount));
@@ -54,6 +66,11 @@ export default function Product({ product, index }) {
     setFavorite(!favorite);
   };
 
+  const handleNavigate = useCallback(() => {
+    history.push(`${url}`);
+    dispatch(setProduct(id));
+  }, [dispatch, history, url, id]);
+
   return (
     <Container>
       <FavoriteButton
@@ -63,17 +80,23 @@ export default function Product({ product, index }) {
       >
         <img src={favorite ? heartOn : heartOff} alt="Favorite" />
       </FavoriteButton>
-      <ImageContainer to={`/product/${index}`}>
+      <ImageContainer onClick={handleNavigate}>
         <img src={thumbs} alt="Product" />
       </ImageContainer>
-      <Title to={`/product/${index}`}>{title}</Title>
-      <PriceContainer to={`/product/${index}`}>
+      <button
+        type="button"
+        style={{ marginTop: 10, background: 'none' }}
+        onClick={handleNavigate}
+      >
+        <Title>{title}</Title>
+      </button>
+      <PriceContainer onClick={handleNavigate}>
         <span>
           <img src={coins} alt="coins" />
           <strong>€&nbsp;1.290,08</strong>
           DE CRÉDITO
         </span>
-        {hasPromotion ? (
+        {has_promotion ? (
           <small>
             antes
             <p>€&nbsp;{price}</p>
@@ -81,7 +104,7 @@ export default function Product({ product, index }) {
         ) : (
           <small>&nbsp;</small>
         )}
-        <strong>€&nbsp;{hasPromotion ? pricePromotional : price}</strong>
+        <strong>€&nbsp;{has_promotion ? price_promotional : price}</strong>
       </PriceContainer>
       <Options>
         <div>
@@ -118,9 +141,9 @@ Product.propTypes = {
     title: PropTypes.string,
     thumbs: PropTypes.string,
     price: PropTypes.string,
-    pricePromotional: PropTypes.string,
+    price_promotional: PropTypes.string,
     url: PropTypes.string,
-    hasPromotional: PropTypes.bool,
+    has_promotion: PropTypes.bool,
     isFavorite: PropTypes.bool,
   }).isRequired,
   index: PropTypes.number.isRequired,

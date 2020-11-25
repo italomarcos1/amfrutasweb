@@ -71,7 +71,7 @@ export default function Confirmation() {
     return <Redirect to="/cesto" />;
   }
 
-  const { name, nickname, phone, email, dateOfBirth, nif } = profile;
+  const { name, last_name, phone, email, birth, document } = profile;
   const { street_name, nome_localidade, cod_postal, localidade } = shipping;
 
   return (
@@ -95,7 +95,7 @@ export default function Confirmation() {
             <CustomInputContainer>
               <Info>
                 <strong>Nome</strong>
-                <small>{`${name} ${nickname}`}</small>
+                <small>{`${name} ${last_name}`}</small>
               </Info>
               <Info>
                 <strong>Telemóvel</strong>
@@ -109,13 +109,13 @@ export default function Confirmation() {
               </Info>
               <Info>
                 <strong>Data de Nascimento</strong>
-                <small>{dateOfBirth}</small>
+                <small>{birth}</small>
               </Info>
             </CustomInputContainer>
             <CustomInputContainer>
               <Info>
                 <strong>NIF</strong>
-                <small>{nif}</small>
+                <small>{document}</small>
               </Info>
             </CustomInputContainer>
           </InfoContainer>
@@ -147,7 +147,7 @@ export default function Confirmation() {
             <CustomInputContainer>
               <Info>
                 <strong>NIF</strong>
-                <small>{nif}</small>
+                <small>{document}</small>
               </Info>
               <Info>
                 <strong>País</strong>

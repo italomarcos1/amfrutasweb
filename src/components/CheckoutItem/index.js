@@ -11,17 +11,25 @@ import {
 } from './styles';
 
 export default function Item({ item, index }) {
-  const { id, picture, title, newPrice, amount } = item;
+  const { product, amount } = item;
+  const {
+    id,
+    thumbs,
+    title,
+    price,
+    price_promotional,
+    has_promotion,
+  } = product;
 
   return (
     <Container key={id} style={index > 1 ? { marginTop: 40 } : {}}>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <ItemPicture src={picture} />
+        <ItemPicture src={thumbs} />
         <ProductInfo>
           <Title>{title}</Title>
           <PriceAndAmount>
             <small>{amount} unidades</small>
-            <strong>€&nbsp;{newPrice}</strong>
+            <strong>€&nbsp;{has_promotion ? price_promotional : price}</strong>
           </PriceAndAmount>
         </ProductInfo>
       </div>

@@ -59,16 +59,22 @@ export default function Home() {
   const [bannersURL, setBannersURL] = useState([]);
   const [categories, setCategories] = useState([]);
   const [blogData, setBlogData] = useState([]);
+  const [promotions, setPromotions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const loadData = useCallback(async () => {
     const [
       categoriesResponse,
       bannersResponse,
       blogResponse,
+      promotionsResponse,
     ] = await Promise.all([
       api.get('ecommerce/categories'),
       backend.get('/banner/blocks'),
       backend.get('/blog/contents/categories/5?per_page=4'),
+      backend.get(
+        '/ecommerce/products?page=1&only_promotional=true&per_page=6'
+      ),
     ]);
 
     const {
@@ -98,10 +104,20 @@ export default function Home() {
     } = blogResponse;
 
     setBlogData(blogResponseData);
+
+    const {
+      data: {
+        data: { data: promotionsResponseData },
+      },
+    } = promotionsResponse;
+
+    setPromotions(promotionsResponseData);
   }, []);
 
   useEffect(() => {
-    loadData();
+    setLoading(true);
+    // loadData();
+    setLoading(false);
   }, []);
 
   const handleSubmit = useCallback(
@@ -165,9 +181,18 @@ export default function Home() {
           <small>Uma seleção especial com a qualidade garantida</small>
         </SectionTitle>
         <ProductsContainer>
-          {productsData.map((p, index) => (
-            <Product key={p.id} index={index} product={p} />
-          ))}
+          {
+            /* {loading ? (
+            <h1>Carregando...</h1>
+          ) : (
+            promotions.map((p, index) => (
+              <Product key={p.id} index={index} product={p} />
+            ))
+          )} */
+            productsData.map((p, index) => (
+              <Product key={p.id} index={index} product={p} />
+            ))
+          }
         </ProductsContainer>
         <SecurityContainer>
           <span>
@@ -180,9 +205,13 @@ export default function Home() {
           <small>Conheça os produtos mais vendidos todos os dias</small>
         </SectionTitle>
         <ProductsContainer>
-          {productsData.map((p, index) => (
-            <Product key={p.id} index={index} product={p} />
-          ))}
+          {loading ? (
+            <h1>Carregando...</h1>
+          ) : (
+            promotions.map((p, index) => (
+              <Product key={p.id} index={index} product={p} />
+            ))
+          )}
         </ProductsContainer>
         <SecurityContainer style={{ height: 166 }}>
           <span>
@@ -333,7 +362,7 @@ export default function Home() {
         >
           <Input name="name" error={invalidFields[0]} placeholder="Nome" />
           <Input
-            name="nickname"
+            name="last_name"
             error={invalidFields[1]}
             placeholder="Apelido"
           />

@@ -25,7 +25,15 @@ import {
 } from './styles';
 
 export default function Item({ item, index }) {
-  const { id, picture, title, oldPrice, newPrice, amount } = item;
+  const { product, amount } = item;
+  const {
+    id,
+    thumbs,
+    title,
+    price,
+    price_promotional,
+    has_promotion,
+  } = product;
 
   const dispatch = useDispatch();
 
@@ -40,15 +48,21 @@ export default function Item({ item, index }) {
     [id, dispatch]
   );
 
+  console.log(product);
+  // console.log(item);
   return (
     <Container key={id} style={index > 1 ? { marginTop: 40 } : {}}>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <ItemPicture src={picture} />
+        <ItemPicture src={thumbs} />
         <ProductInfo>
           <Title>{title}</Title>
           <PriceAndAmount>
-            {oldPrice ? <small>€&nbsp;11.8</small> : <small>&nbsp;</small>}
-            <strong>€&nbsp;{newPrice}</strong>
+            {has_promotion ? (
+              <small>€&nbsp;{price}</small>
+            ) : (
+              <small>&nbsp;</small>
+            )}
+            <strong>€&nbsp;{has_promotion ? price_promotional : price}</strong>
           </PriceAndAmount>
         </ProductInfo>
       </div>
@@ -75,7 +89,9 @@ export default function Item({ item, index }) {
             <img src={plus} alt="icon" />
           </button>
         </div>
-        <Price style={{ alignSelf: 'center' }}>€{newPrice}</Price>
+        <Price style={{ alignSelf: 'center' }}>
+          €&nbsp;{has_promotion ? price_promotional : price}
+        </Price>
       </Options>
     </Container>
   );
@@ -83,11 +99,15 @@ export default function Item({ item, index }) {
 
 Item.propTypes = {
   item: PropTypes.shape({
-    id: PropTypes.number,
-    picture: PropTypes.string,
-    title: PropTypes.string,
-    newPrice: PropTypes.string,
-    amount: PropTypes.number,
+    product: PropTypes.shape({
+      id: PropTypes.number,
+      thumbs: PropTypes.string,
+      title: PropTypes.string,
+      price_promotional: PropTypes.string,
+      has_promotion: PropTypes.bool,
+      price: PropTypes.string,
+      amount: PropTypes.number,
+    }),
   }).isRequired,
   index: PropTypes.number.isRequired,
 };

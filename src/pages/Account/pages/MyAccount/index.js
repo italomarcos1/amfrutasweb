@@ -9,7 +9,7 @@ import {
   nameIsValid,
   dateIsValid,
   phoneIsValid,
-  nifIsValid,
+  documentIsValid,
   mailCodeIsValid,
   mailIsValid,
 } from '~/utils/validation';
@@ -24,7 +24,7 @@ import { updateProfileRequest } from '~/store/modules/user/actions';
 
 export default function MyAccount() {
   const [emailError, setEmailError] = useState(false);
-  const [invalidDateOfBirth, setInvalidDateOfBirth] = useState(false);
+  const [invalidBirth, setInvalidBirth] = useState(false);
 
   const profile = useSelector(state => state.user.profile);
   const dispatch = useDispatch();
@@ -42,7 +42,7 @@ export default function MyAccount() {
     false,
   ]);
 
-  const [invalidNif, setInvalidNif] = useState(false);
+  const [invalidDocument, setInvalidDocument] = useState(false);
   const [invalidGender, setInvalidGender] = useState(false);
   const [invalidPhone, setInvalidPhone] = useState(false);
   const [invalidMailCode, setInvalidMailCode] = useState(false);
@@ -60,23 +60,23 @@ export default function MyAccount() {
     formData => {
       const formattedData = Object.values(formData);
       invalidFields.fill(false);
-      setInvalidNif(false);
+      setInvalidDocument(false);
       setInvalidPhone(false);
       setInvalidMailCode(false);
       setInvalidGender(false);
       setEmailError(false);
-      setInvalidDateOfBirth(false);
+      setInvalidBirth(false);
 
       const anyEmptyField = formattedData.some(field => nameIsValid(field));
 
       if (anyEmptyField) {
         setInvalidFields(formattedData.map(field => nameIsValid(field)));
         setEmailError(!mailIsValid(formData.email));
-        setInvalidNif(!nifIsValid(formData.nif));
+        setInvalidDocument(!documentIsValid(formData.document));
         setInvalidPhone(!phoneIsValid(formData.phone));
         setInvalidMailCode(!mailCodeIsValid(formData.mailCode));
         setInvalidGender(nameIsValid(gender));
-        setInvalidDateOfBirth(!dateIsValid(formData.dateOfBirth));
+        setInvalidBirth(!dateIsValid(formData.birth));
 
         return;
       }
@@ -111,7 +111,7 @@ export default function MyAccount() {
                 error={invalidFields[0]}
               />
               <Input
-                name="nickname"
+                name="last_name"
                 title="Apelido"
                 placeholder="Escolhe o teu apelido"
                 error={invalidFields[1]}
@@ -130,17 +130,17 @@ export default function MyAccount() {
                 error={emailError}
               />
               <InputMask
-                name="dateOfBirth"
+                name="birth"
                 title="Data de nascimento"
-                error={invalidDateOfBirth}
+                error={invalidBirth}
               />
             </InputContainer>
             <InputContainer>
               <InputMask
-                name="nif"
+                name="document"
                 type="9d"
                 title="NIF"
-                error={invalidFields[3] || invalidNif}
+                error={invalidFields[3] || invalidDocument}
               />
               {gender !== '' ? (
                 <Select

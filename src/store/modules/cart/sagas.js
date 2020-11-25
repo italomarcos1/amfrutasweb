@@ -10,21 +10,25 @@ import {
   removeFromFavoritesSuccess,
 } from './actions';
 
-import productsList from '~/data';
-
 export function* addToCart({ payload }) {
-  const { product, amount } = payload;
+  const { product: newProduct, amount } = payload;
 
   const products = yield select(state => state.cart.products);
-  const alreadyInCart = products.findIndex(p => p.id === product.id);
+  const alreadyInCart = products.findIndex(
+    ({ product, amount: actualAmount }) => {
+      console.log(product);
+      console.log(actualAmount);
+      return product.id === newProduct.id;
+    }
+  );
 
   if (alreadyInCart >= 0) {
     // const { rowId } = products[alreadyInCart];
 
     // yield call(api.put, `cart/${rowId}/${amount}`);
-
+    console.log('already');
     yield put(
-      updateAmount(product.id, products[alreadyInCart].amount + amount)
+      updateAmount(newProduct.id, products[alreadyInCart].amount + amount)
     );
   } else {
     // const {
@@ -33,14 +37,14 @@ export function* addToCart({ payload }) {
     //   product_id: product.id,
     //   quantity: amount,
     // });
-    const data = productsList.findIndex(p => {
-      // if (p.id === product.id) {
-      //   console.tron.log(p);
-      // }
-      return p.id === product.id;
-    });
+    // const data = productsList.findIndex(p => {
+    //   // if (p.id === product.id) {
+    //   //   console.tron.log(p);
+    //   // }
+    //   return p.id === product.id;
+    // });
     // console.tron.log(productsList[data]);
-    yield put(addToCartSuccess({ ...productsList[data], amount }));
+    yield put(addToCartSuccess({ product: newProduct, amount }));
   }
 }
 export function* removeFromCart({ payload }) {

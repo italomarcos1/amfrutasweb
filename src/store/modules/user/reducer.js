@@ -4,6 +4,7 @@ const INITIAL_STATE = {
   profile: null,
   order: null,
   orders: [],
+  product: null,
 };
 
 export default function user(state = INITIAL_STATE, { type, payload }) {
@@ -11,22 +12,6 @@ export default function user(state = INITIAL_STATE, { type, payload }) {
     switch (type) {
       case '@auth/SIGN_IN_SUCCESS': {
         draft.profile = payload.user;
-        break;
-      }
-
-      case '@auth/SIGN_IN_ALPHA': {
-        const guestUser = {
-          name: 'Usuário',
-          nickname: 'AMFrutas',
-          email: 'johndoe@mail.pt',
-          dateOfBirth: '31/01/1970',
-          nif: '123123123',
-          phone: '12 312 31 23',
-          gender: 'Masculino',
-        };
-
-        draft.profile = guestUser;
-
         break;
       }
 
@@ -76,9 +61,17 @@ export default function user(state = INITIAL_STATE, { type, payload }) {
         break;
       }
 
+      case '@user/SET_PRODUCT': {
+        draft.product = payload.id;
+
+        break;
+      }
+
       case '@auth/SIGN_OUT': {
         draft.profile = null;
         draft.orders = null;
+        draft.product = null;
+
         break;
       }
       default:

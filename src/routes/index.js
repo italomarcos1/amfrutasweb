@@ -3,7 +3,6 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import Home from '~/pages/Home';
 import Contents from '~/pages/Contents';
-import Products from '~/pages/Products';
 import Basket from '~/pages/Basket';
 import Delivery from '~/pages/Delivery';
 import Confirmation from '~/pages/Confirmation';
@@ -15,24 +14,29 @@ import MyAccount from '~/pages/Account/pages/MyAccount';
 import MyAddress from '~/pages/Account/pages/MyAddress';
 import MyFavorites from '~/pages/Account/pages/MyFavorites';
 
-import CustomRoute from './accountRoute';
+import Products from '~/pages/Products/pages/ListProducts';
+import Product from '~/pages/Products/pages/ViewProduct';
+
+import AccountRoute from './accountRoute';
+import ProductsRoute from './productsRoute';
 
 export default function Routes() {
   return (
     <BrowserRouter>
       <Switch>
         <Route path="/" exact component={Home} />
-        <Route path="/conteudos" exact component={Contents} />
-        <Route path="/produtos" exact component={Products} />
-        <Route path="/cesto" component={Basket} />
-        <Route path="/entrega" component={Delivery} />
-        <Route path="/confirmacao" component={Confirmation} />
-        <CustomRoute path="/painel" component={ControlPanel} />
-        <CustomRoute path="/entregas" component={PeriodicDelivery} />
-        <CustomRoute path="/encomendas" component={MyOrders} />
-        <CustomRoute path="/conta" component={MyAccount} />
-        <CustomRoute path="/endereco" component={MyAddress} />
-        <CustomRoute path="/favoritos" component={MyFavorites} />
+        <Route path="/conteudos" exact component={Contents} isPrivate />
+        <Route path="/cesto" component={Basket} isPrivate />
+        <Route path="/entrega" component={Delivery} isPrivate />
+        <Route path="/confirmacao" component={Confirmation} isPrivate />
+        <AccountRoute path="/painel" component={ControlPanel} isPrivate />
+        <AccountRoute path="/entregas" component={PeriodicDelivery} isPrivate />
+        <AccountRoute path="/encomendas" component={MyOrders} isPrivate />
+        <AccountRoute path="/conta" component={MyAccount} isPrivate />
+        <AccountRoute path="/endereco" component={MyAddress} isPrivate />
+        <AccountRoute path="/favoritos" component={MyFavorites} isPrivate />
+        <ProductsRoute path="/produtos" exact component={Products} />
+        <ProductsRoute path="/produto/:id" component={Product} />
       </Switch>
     </BrowserRouter>
   );

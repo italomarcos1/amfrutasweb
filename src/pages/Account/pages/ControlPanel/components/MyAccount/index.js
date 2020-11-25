@@ -17,7 +17,7 @@ import chevron from '~/assets/chevron-right.svg';
 export default function MyAccount() {
   const history = useHistory();
 
-  const { name, nickname, email } = useSelector(state => state.user.profile);
+  const { name, last_name, email } = useSelector(state => state.user.profile);
 
   return (
     <Container onClick={() => history.push('/conta')}>
@@ -41,7 +41,7 @@ export default function MyAccount() {
         </UserInfo>
         <UserInfo>
           <strong>Apelido</strong>
-          <small>{nickname}</small>
+          <small>{last_name}</small>
         </UserInfo>
         <UserInfo>
           <strong>Email</strong>

@@ -1,16 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import {
-  Container,
-  OptionsContainer,
-  Option,
-  Section,
-  BlogPost,
-} from './styles';
+import { Container, Section, BlogPost, FooterPagination } from './styles';
 
 import Header from '~/components/Header';
 import Footer from '~/components/Footer';
 import CustomHeader from '~/components/CustomHeader';
+import Pagination from '~/components/Pagination';
 
 import LoginModal from '~/pages/LoginModal';
 
@@ -72,6 +67,12 @@ export default function Contents() {
             )
           )}
         </Section>
+        <FooterPagination>
+          <Pagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        </FooterPagination>
       </Container>
       <Footer />
 

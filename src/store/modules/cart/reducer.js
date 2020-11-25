@@ -24,14 +24,14 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
         const { id } = payload;
 
         const productIndex = draft.products.findIndex(
-          product => product.id === id
+          ({ product }) => product.id === id
         );
 
         if (productIndex > -1) {
           if (draft.products.length === 1) draft.products.splice(0, 1);
           else {
             draft.products = draft.products.filter(
-              product => product.id !== id
+              ({ product }) => product.id !== id
             );
           }
         }
@@ -106,7 +106,9 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
       case '@cart/UPDATE_AMOUNT': {
         const { id, amount } = payload;
 
-        const productIndex = draft.products.findIndex(prod => prod.id === id);
+        const productIndex = draft.products.findIndex(
+          ({ product }) => product.id === id
+        );
 
         if (productIndex >= 0) draft.products[productIndex].amount = amount;
 

@@ -29,7 +29,7 @@ import user from '~/assets/user-check.svg';
 export default function PageHeader({ login, active }) {
   const [selectedPage, setSelectedPage] = useState(active);
 
-  const loggedIn = useSelector(state => state.auth.signed);
+  const signed = useSelector(state => state.auth.signed);
 
   const history = useHistory();
 
@@ -129,7 +129,7 @@ export default function PageHeader({ login, active }) {
           <MenuItem
             selected={selectedPage === 'Perfil'}
             onClick={() => {
-              if (loggedIn) history.push('/painel');
+              if (signed) history.push('/painel');
               else {
                 login();
                 setSelectedPage('Perfil');

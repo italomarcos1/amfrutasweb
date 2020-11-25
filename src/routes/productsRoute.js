@@ -1,22 +1,11 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Layout from '~/pages/Account';
+import Layout from '~/pages/Products';
 
 // import Toast from '~/components/Toast';
 
-export default function CustomRoute({
-  component: Component,
-  isPrivate,
-  ...rest
-}) {
-  const signed = useSelector(state => state.auth.signed);
-
-  if (!signed && isPrivate) {
-    return <Redirect to="/" />;
-  }
-
+export default function CustomRoute({ component: Component, ...rest }) {
   return (
     <Route
       {...rest}

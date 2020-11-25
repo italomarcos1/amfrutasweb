@@ -30,7 +30,7 @@ export default function Register() {
       <InputContainer>
         <Input name="name" title="Nome" placeholder="Escreve o teu nome" />
         <Input
-          name="nickname"
+          name="last_name"
           title="Apelido"
           placeholder="Escolhe o teu apelido"
         />
@@ -45,7 +45,7 @@ export default function Register() {
           onChange={({ target: { value } }) => onlyValues(value, setEmail)}
           error={emailError}
         />
-        <InputMask name="dateOfBirth" title="Data de nascimento" />
+        <InputMask name="birth" title="Data de nascimento" />
       </InputContainer>
       <InputContainer>
         <Input

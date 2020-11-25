@@ -14,7 +14,7 @@ export function* signIn({ payload }) {
 
     const { name, last_name } = user;
 
-    api.defaults.headers.Authorization = `Bearer ${token}`;
+    api.defaults.headers.authorization = `Bearer ${token}`;
 
     const {
       data: {
@@ -26,21 +26,24 @@ export function* signIn({ payload }) {
     if (message === 'Não há produtos favoritados.') yield put(addFavorites([]));
     else yield put(addFavorites(favData));
 
-    if (name === '' && last_name === '') {
-      const { data } = yield call(api.put, 'clients', {
-        name: 'Cliente',
-        last_name: 'AMFrutas',
-      });
-      const updatedUser = { ...data.data, default_address: [] };
+    // if (name === '' && last_name === '') {
+    //   const {
+    //     data: { data },
+    //   } = yield call(api.put, 'clients', {
+    //     name: 'Cliente',
+    //     last_name: 'AMFrutas',
+    //   });
 
-      yield put(signInSuccess(token, updatedUser));
+    //   const updatedUser = { ...data, default_address: [] };
 
-      return;
-    }
+    //   yield put(signInSuccess(token, updatedUser));
+
+    //   return;
+    // }
 
     yield put(signInSuccess(token, user));
   } catch (error) {
-    // Toast.show('Erro no login, confira seus dados.');
+    alert('Erro no login, confira seus dados.');
     yield put(signFailure());
   }
 }

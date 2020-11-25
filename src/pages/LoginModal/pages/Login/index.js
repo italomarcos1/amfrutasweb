@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Form } from '@unform/web';
 
@@ -15,7 +14,7 @@ import {
 
 import Input from '~/components/Input';
 
-import { signInAlpha } from '~/store/modules/auth/actions';
+import { signInRequest } from '~/store/modules/auth/actions';
 
 import { mailIsValid, nameIsValid } from '~/utils/validation';
 import { onlyValues } from '~/utils/onlyValues';
@@ -29,7 +28,6 @@ export default function Login({ closeModal, setPage }) {
   const [passwordError, setPasswordError] = useState(false);
 
   const dispatch = useDispatch();
-  const history = useHistory();
 
   const handleSubmit = useCallback(() => {
     setEmailError(false);
@@ -42,18 +40,9 @@ export default function Login({ closeModal, setPage }) {
     if (emailError || passwordError) {
       return;
     }
-    dispatch(signInAlpha());
+    dispatch(signInRequest(email, password));
     closeModal();
-    history.push('/painel');
-  }, [
-    history,
-    closeModal,
-    dispatch,
-    email,
-    password,
-    emailError,
-    passwordError,
-  ]);
+  }, [closeModal, dispatch, email, password, emailError, passwordError]);
 
   return (
     <>

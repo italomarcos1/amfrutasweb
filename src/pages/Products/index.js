@@ -1,97 +1,75 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
 
 import {
   Container,
-  ProductsContainer,
-  NullProduct,
   Menu,
   Layout,
   Content,
-  FooterPagination,
   MenuHeader,
+  SectionTitle,
+  ProductsContainer,
+  PromotionsContainer,
 } from './styles';
-
-import arrow from '~/assets/icons/arrow_white.svg';
 
 import Header from '~/components/Header';
 import Footer from '~/components/Footer';
-import Product from '~/components/Product';
-import SearchInput from '~/components/SearchInput';
-import Pagination from '~/components/Pagination';
 import MenuItem from '~/components/MenuItem';
-import CustomHeader from '~/components/CustomHeader';
+import Product from '~/components/Product';
 
 import LoginModal from '~/pages/LoginModal';
 
 import { backend } from '~/services/api';
 
-export default function Products() {
+export default function Products({ children }) {
   const [loginModal, setLoginModal] = useState(false);
-
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [lastPage, setLastPage] = useState(0);
-  const [nextPageUrl, setNextPageUrl] = useState('');
-  const [pageHeight, setPageHeight] = useState(1184);
+  const [currentRoute, setCurrentRoute] = useState('');
 
   const [selectedCategory, setSelectedCategory] = useState('none');
   const [childrenSelectedCategory, setChildrenSelectedCategory] = useState(
     'none'
   );
   const [subChildrenSelected, setSubChildrenSelected] = useState('none');
+  const [categories, setCategories] = useState([]);
+  const [promotions, setPromotions] = useState([]);
 
-  const loadProducts = useCallback(async () => {
-    const [productsResponse, categoriesResponse] = await Promise.all([
-      backend.get('ecommerce/products'),
+  const loadCategories = useCallback(async () => {
+    const [categoriesResponse, promotionsResponse] = await Promise.all([
       backend.get(
         '/ecommerce/categories?recursively=1&order_field=slug&order_direction=asc'
+      ),
+      backend.get(
+        '/ecommerce/products?page=1&only_promotional=true&per_page=6'
       ),
     ]);
 
     const {
       data: {
-        data: {
-          data,
-          per_page,
-          current_page,
-          last_page,
-          next_page_url,
-          prev_page_url,
-        },
-      },
-    } = productsResponse;
-
-    const {
-      data: {
-        data: { data: categoriesResponseData },
+        data: { data },
       },
     } = categoriesResponse;
 
-    setCategories(categoriesResponseData);
+    const {
+      data: {
+        data: { data: promotionsResponseData },
+      },
+    } = promotionsResponse;
 
-    if (data.length % 5 !== 0) {
-      const itemsToFill = Math.ceil(data.length / 5) * 5 - data.length;
+    setCategories(data);
+    setPromotions(promotionsResponseData);
+  }, []);
+  const { pathname } = useLocation();
 
-      for (let i = 0; i < itemsToFill; i++) {
-        data.push(null);
-      }
-    }
-
-    const hasLastRow =
-      data.length > 10 ? 1184 : Math.ceil(data.length / 5) * 404;
-
-    setPageHeight(hasLastRow);
-
-    setProducts(data);
-    setCurrentPage(current_page);
-    setLastPage(last_page);
-    setNextPageUrl(next_page_url);
+  useEffect(() => {
+    loadCategories();
   }, []);
 
   useEffect(() => {
-    loadProducts();
-  }, []);
+    if (pathname === '/produtos') setSelectedCategory('none');
+    const routeChanged = pathname.split('/');
+    setCurrentRoute(routeChanged[1]);
+  }, [pathname]);
 
   return (
     <>
@@ -116,32 +94,31 @@ export default function Products() {
               />
             ))}
           </Menu>
-          <Content>
-            <CustomHeader
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-            />
-            <ProductsContainer pageHeight={pageHeight}>
-              {products.map((p, index) =>
-                p === null ? (
-                  <NullProduct />
-                ) : (
-                  <Product key={p.id} index={index} product={p} />
-                )
-              )}
-            </ProductsContainer>
-            <FooterPagination>
-              <Pagination
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-              />
-            </FooterPagination>
-          </Content>
+          <Content>{children}</Content>
         </Layout>
       </Container>
+
+      {currentRoute === 'produto' && (
+        <PromotionsContainer>
+          <SectionTitle>
+            <strong>Promoções da Semana</strong>
+            <small>Todas as semanas com promoções especiais</small>
+          </SectionTitle>
+          <ProductsContainer>
+            {promotions.map((p, index) => (
+              <Product key={p.id} index={index} product={p} />
+            ))}
+          </ProductsContainer>
+        </PromotionsContainer>
+      )}
+
       <Footer />
 
       {loginModal && <LoginModal closeModal={() => setLoginModal(false)} />}
     </>
   );
 }
+
+Products.propTypes = {
+  children: PropTypes.element.isRequired,
+};

@@ -54,7 +54,7 @@ export default function Basket() {
             {products.length !== 0 ? (
               <ul>
                 {products.map((item, index) => (
-                  <Item key={item.id} item={item} index={index} />
+                  <Item key={item.product.id} item={item} index={index} />
                 ))}
               </ul>
             ) : (

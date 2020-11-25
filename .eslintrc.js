@@ -38,6 +38,7 @@ module.exports = {
     'no-underscore-dangle': 'off',
     'no-extra-boolean-cast': 'off',
     'no-plusplus': 'off',
+    'class-methods-use-this': 'off',
     camelcase: 'off',
     'no-useless-escape': 'off',
     'no-return-assign': 'off',

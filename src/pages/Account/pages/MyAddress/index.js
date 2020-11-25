@@ -112,8 +112,8 @@ export default function MyAccount() {
         addAddress({
           id,
           name: newName,
-          nickname: newNickname,
-          full_name: name,
+          last_name: newNickname,
+          full_name: name + newNickname,
           street_name,
           number,
           num_cod_postal,

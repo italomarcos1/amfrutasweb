@@ -37,3 +37,7 @@ export function resetOrder() {
 export function resetTrigger() {
   return { type: '@user/RESET_TRIGGER' };
 }
+
+export function setProduct(id) {
+  return { type: '@user/SET_PRODUCT', payload: { id } };
+}

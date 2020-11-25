@@ -50,18 +50,18 @@ export const phoneIsValid = phone => {
   return phoneValidation.test(phone);
 };
 
-const nifValidation = new RegExp(
+const documentValidation = new RegExp(
   /^[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$/
 );
 
-export const nifIsValid = nif => {
-  return nifValidation.test(nif);
+export const documentIsValid = document => {
+  return documentValidation.test(document);
 };
 
 const mailCodeValidation = new RegExp(
   /^[0-9][0-9][\s][0-9][0-9][\s][0-9][0-9]$/
 );
 
-export const mailCodeIsValid = nif => {
-  return mailCodeValidation.test(nif);
+export const mailCodeIsValid = mailCode => {
+  return mailCodeValidation.test(mailCode);
 };
