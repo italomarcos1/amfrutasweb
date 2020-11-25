@@ -31,8 +31,6 @@ import CategoriesCarousel from '~/components/CategoriesCarousel';
 import DeliveryModal from '~/pages/DeliveryModal';
 import LoginModal from '~/pages/LoginModal';
 
-import productsData from '~/data';
-
 import { api, backend } from '~/services/api';
 
 import envio from '~/assets/envio-gratuito.svg';
@@ -116,7 +114,7 @@ export default function Home() {
 
   useEffect(() => {
     setLoading(true);
-    // loadData();
+    loadData();
     setLoading(false);
   }, []);
 
@@ -181,18 +179,13 @@ export default function Home() {
           <small>Uma seleção especial com a qualidade garantida</small>
         </SectionTitle>
         <ProductsContainer>
-          {
-            /* {loading ? (
+          {loading ? (
             <h1>Carregando...</h1>
           ) : (
             promotions.map((p, index) => (
               <Product key={p.id} index={index} product={p} />
             ))
-          )} */
-            productsData.map((p, index) => (
-              <Product key={p.id} index={index} product={p} />
-            ))
-          }
+          )}
         </ProductsContainer>
         <SecurityContainer>
           <span>
@@ -307,45 +300,6 @@ export default function Home() {
             </small> */}
             </BlogPost>
           ))}
-          {/* <BlogPost>
-            <img src={limao} alt="" />
-            <strong>
-              DIETA DO LIMÃO, PERCA PESO <br />
-              JÁ
-            </strong>
-            <small>
-              Com a dieta do limão, pode-se <br />
-              emagrecer de 1 a 4 kg por mês, <br />
-              principalmente quando associada
-              <br /> a uma dieta …
-            </small>
-          </BlogPost>
-          <BlogPost>
-            <img src={receitas} alt="" />
-            <strong>
-              RECEITAS DE PRATOS VEGAN <br />
-              DELICIOSAS
-            </strong>
-            <small>
-              A base de uma alimentação
-              <br /> saudável é tentar utilizar o <br />
-              máximo de alimentos naturais e <br />
-              pouco processados …
-            </small>
-          </BlogPost>
-          <BlogPost>
-            <img src={frutas} alt="" />
-            <strong>
-              Como conservar as frutas <br />
-              por mais tempo
-            </strong>
-            <small>
-              Uma das principais dificuldades
-              <br /> que as pessoas enfrentam no dia <br />a dia é não ter tempo
-              de ir mais <br />
-              vezes à feira ou ao super … mercado para comprar frutas e verduras
-            </small>
-          </BlogPost> */}
         </Section>
         <Promotions>Receba promoções exclusivas</Promotions>
         <PromotionsSubTitle>
