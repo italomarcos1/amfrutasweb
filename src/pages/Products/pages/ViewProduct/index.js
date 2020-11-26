@@ -68,8 +68,6 @@ export default function ViewProduct() {
     loadProduct();
   }, [loadProduct]);
 
-  // console.tron.log(product);
-
   return (
     <div
       style={{

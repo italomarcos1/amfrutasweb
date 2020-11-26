@@ -72,7 +72,6 @@ export default function addresses(state = INITIAL_STATE, { type, payload }) {
       }
 
       case '@addresses/UPDATE_SHIPPING_INFO_SUCCESS': {
-        // console.tron.log('updating address final');
         const { shipping } = payload;
         const findAddressIndex = draft.addresses.findIndex(
           address => address.id === shipping.id

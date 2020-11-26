@@ -36,10 +36,6 @@ export default function Contents() {
       },
     } = await backend.get(`blog/contents?page=${currentPage}&per_page=12`);
 
-    console.tron.log('flascko');
-    console.tron.log(currentPage);
-    console.tron.log(last_page);
-
     if (data.length % 4 !== 0) {
       const itemsToFill = Math.ceil(data.length / 4) * 4 - data.length;
 

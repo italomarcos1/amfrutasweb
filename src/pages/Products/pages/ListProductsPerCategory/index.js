@@ -33,7 +33,6 @@ export default function ListProductsPerCategory() {
   }, [lastPage]);
 
   const loadProductsByCategory = useCallback(async () => {
-    console.tron.log('ah');
     const productsResponse = await backend.get(
       `ecommerce/products/categories/${state.id}?page=${currentPage}&order_field=${orderField}&order_direction=${orderDirection}`
     );
@@ -50,8 +49,6 @@ export default function ListProductsPerCategory() {
         },
       },
     } = productsResponse;
-
-    console.tron.log(data);
 
     if (data.length % 5 !== 0) {
       const itemsToFill = Math.ceil(data.length / 5) * 5 - data.length;

@@ -59,8 +59,6 @@ export default function ListProducts() {
     setLastPage(last_page);
     setNextPageUrl(next_page_url);
     setPrevPageUrl(prev_page_url);
-
-    // console.tron.log(data);
   }, [currentPage, orderDirection, orderField]);
 
   useEffect(() => {
