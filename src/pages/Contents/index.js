@@ -36,6 +36,8 @@ export default function Contents() {
       },
     } = await backend.get(`blog/contents?page=${currentPage}&per_page=12`);
 
+    console.tron.log(data);
+
     if (data.length % 4 !== 0) {
       const itemsToFill = Math.ceil(data.length / 4) * 4 - data.length;
 
@@ -70,15 +72,16 @@ export default function Contents() {
             content === null ? (
               <BlogPost isNull />
             ) : (
-              <BlogPost key={content.id} to={content.url}>
+              <BlogPost
+                key={content.id}
+                to={{
+                  pathname: `/${content.url}`,
+                  state: { id: content.id },
+                }}
+              >
                 <img src={content.thumbs} alt="" />
                 <strong>{content.title}</strong>
-                <small>
-                  Todos nós sabemos que os <br />
-                  sumos detox são ótimos para a <br />
-                  saúde e para o sistema imunitário
-                  <br /> … infelizmente muita gente acha
-                </small>
+                <small>{content.description}</small>
               </BlogPost>
             )
           )}

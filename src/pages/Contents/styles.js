@@ -66,8 +66,8 @@ export const FooterPagination = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 28px;
-  width: 995px;
+  margin: 28px auto 0;
+  width: 1240px;
   height: 48px;
   background: #fff;
   border-radius: 4px;

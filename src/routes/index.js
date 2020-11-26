@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import Home from '~/pages/Home';
 import Contents from '~/pages/Contents';
+import Content from '~/pages/Contents/pages/ViewContent';
 import Basket from '~/pages/Basket';
 import Delivery from '~/pages/Delivery';
 import Confirmation from '~/pages/Confirmation';
@@ -17,6 +18,7 @@ import MyFavorites from '~/pages/Account/pages/MyFavorites';
 import Products from '~/pages/Products/pages/ListProducts';
 import Product from '~/pages/Products/pages/ViewProduct';
 import ProductsPerCategory from '~/pages/Products/pages/ListProductsPerCategory';
+import Promotions from '~/pages/Promotions';
 
 import AccountRoute from './accountRoute';
 import ProductsRoute from './productsRoute';
@@ -39,6 +41,9 @@ export default function Routes() {
         <ProductsRoute path="/produtos" exact component={Products} />
         <ProductsRoute path="/produto" component={Product} />
         <ProductsRoute path="/produtos" component={ProductsPerCategory} />
+        <Route path="/conteudos" exact component={Contents} isPrivate />
+        <Route path="/conteudo" component={Content} />
+        <Route path="/promocoes" component={Promotions} />
       </Switch>
     </BrowserRouter>
   );

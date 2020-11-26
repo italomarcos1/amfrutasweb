@@ -101,7 +101,10 @@ export default function PageHeader({ login, active }) {
           </MenuItem>
           <MenuItem
             selected={selectedPage === 'Promoções'}
-            onClick={() => setSelectedPage('Promoções')}
+            onClick={() => {
+              setSelectedPage('Promoções');
+              history.push('/promocoes');
+            }}
           >
             Promoções da Semana
           </MenuItem>

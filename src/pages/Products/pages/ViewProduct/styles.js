@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { darken } from 'polished';
 
-export const Container = styled.ul`
+export const Container = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
