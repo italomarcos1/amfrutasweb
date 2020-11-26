@@ -17,6 +17,8 @@ export default function ListProducts() {
   const [nextPageUrl, setNextPageUrl] = useState('');
   const [pageHeight, setPageHeight] = useState(1184);
   const [paginationArray, setPaginationArray] = useState([]);
+  const [orderDirection, setOrderDirection] = useState('desc');
+  const [orderField, setOrderField] = useState('updated_at');
 
   const generatePaginationArray = useCallback(() => {
     const items = [];
@@ -30,7 +32,7 @@ export default function ListProducts() {
 
   const loadProducts = useCallback(async () => {
     const productsResponse = await backend.get(
-      `ecommerce/products?page=${currentPage}`
+      `ecommerce/products?page=${currentPage}&order_field=${orderField}&order_direction=${orderDirection}`
     );
 
     const {
@@ -59,12 +61,18 @@ export default function ListProducts() {
     setPrevPageUrl(prev_page_url);
 
     // console.tron.log(data);
-  }, [currentPage]);
+  }, [currentPage, orderDirection, orderField]);
 
   useEffect(() => {
     loadProducts(currentPage);
     generatePaginationArray();
-  }, [loadProducts, generatePaginationArray, currentPage]);
+  }, [
+    loadProducts,
+    generatePaginationArray,
+    currentPage,
+    orderDirection,
+    orderField,
+  ]);
 
   return (
     <>
@@ -73,6 +81,8 @@ export default function ListProducts() {
         lastPage={lastPage}
         setCurrentPage={setCurrentPage}
         paginationArray={paginationArray}
+        setOrderDirection={setOrderDirection}
+        setOrderField={setOrderField}
       />
       <Container pageHeight={pageHeight}>
         {products.map((p, index) =>

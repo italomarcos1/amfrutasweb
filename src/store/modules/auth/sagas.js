@@ -46,9 +46,9 @@ export function* signIn({ payload }) {
 
     yield put(signInSuccess(token, user));
   } catch (error) {
-    console.tron.log(error);
-    console.log(error);
-    console.log('ai');
+    // console.tron.log(error);
+    // console.log(error);
+    // console.log('ai');
     alert('Erro no login, confira seus dados.');
     yield put(signFailure());
   }

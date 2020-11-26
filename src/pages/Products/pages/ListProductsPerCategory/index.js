@@ -17,6 +17,8 @@ export default function ListProductsPerCategory() {
   const [pageHeight, setPageHeight] = useState(1184);
   const [loading, setLoading] = useState(true);
   const [paginationArray, setPaginationArray] = useState([]);
+  const [orderDirection, setOrderDirection] = useState('desc');
+  const [orderField, setOrderField] = useState('updated_at');
 
   const { state } = useLocation();
 
@@ -31,8 +33,9 @@ export default function ListProductsPerCategory() {
   }, [lastPage]);
 
   const loadProductsByCategory = useCallback(async () => {
+    console.tron.log('ah');
     const productsResponse = await backend.get(
-      `ecommerce/products/categories/${state.id}/?page=${currentPage}`
+      `ecommerce/products/categories/${state.id}?page=${currentPage}&order_field=${orderField}&order_direction=${orderDirection}`
     );
 
     const {
@@ -47,6 +50,8 @@ export default function ListProductsPerCategory() {
         },
       },
     } = productsResponse;
+
+    console.tron.log(data);
 
     if (data.length % 5 !== 0) {
       const itemsToFill = Math.ceil(data.length / 5) * 5 - data.length;
@@ -67,7 +72,7 @@ export default function ListProductsPerCategory() {
     setNextPageUrl(next_page_url);
 
     // console.tron.log(data);
-  }, [state.id, currentPage]);
+  }, [state.id, currentPage, orderDirection, orderField]);
 
   useEffect(() => {
     setLoading(true);
@@ -75,8 +80,13 @@ export default function ListProductsPerCategory() {
     generatePaginationArray();
 
     setLoading(false);
-  }, [loadProductsByCategory, generatePaginationArray]);
-
+  }, [
+    loadProductsByCategory,
+    generatePaginationArray,
+    currentPage,
+    orderDirection,
+    orderField,
+  ]);
   return (
     <>
       <CustomHeader
@@ -84,6 +94,8 @@ export default function ListProductsPerCategory() {
         lastPage={lastPage}
         setCurrentPage={setCurrentPage}
         paginationArray={paginationArray}
+        setOrderDirection={setOrderDirection}
+        setOrderField={setOrderField}
       />
 
       {loading ? (

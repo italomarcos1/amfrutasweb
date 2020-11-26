@@ -6,7 +6,7 @@ export const PaginationContainer = styled(Carousel)`
   width: 218px;
   height: 30px;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 `;
 
 export const ArrowButton = styled.div`

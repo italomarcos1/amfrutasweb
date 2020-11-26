@@ -334,7 +334,7 @@ export default function Delivery() {
         setEmailError(!mailIsValid(formData.email));
         setInvalidDocument(!documentIsValid(formData.document));
         setInvalidPhone(!phoneIsValid(formData.phone));
-        setInvalidMailCode(!mailCodeIsValid(formData.mailCode));
+        setInvalidMailCode(!mailCodeIsValid(formData.verification_code));
         setInvalidGender(nameIsValid(gender));
         setInvalidBirth(!dateIsValid(formData.birth));
         window.scrollTo(0, 0);

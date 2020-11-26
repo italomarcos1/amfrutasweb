@@ -57,7 +57,7 @@ export default function MyAccount() {
   ];
 
   const handleSubmit = useCallback(
-    formData => {
+    async formData => {
       const formattedData = Object.values(formData);
       invalidFields.fill(false);
       setInvalidDocument(false);
@@ -74,7 +74,7 @@ export default function MyAccount() {
         setEmailError(!mailIsValid(formData.email));
         setInvalidDocument(!documentIsValid(formData.document));
         setInvalidPhone(!phoneIsValid(formData.phone));
-        setInvalidMailCode(!mailCodeIsValid(formData.mailCode));
+        setInvalidMailCode(!mailCodeIsValid(formData.verification_code));
         setInvalidGender(nameIsValid(gender));
         setInvalidBirth(!dateIsValid(formData.birth));
 
@@ -85,7 +85,6 @@ export default function MyAccount() {
         ...formData,
         gender,
       };
-
       dispatch(updateProfileRequest(profileData));
     },
     [dispatch, gender, invalidFields]
@@ -171,7 +170,7 @@ export default function MyAccount() {
                 error={invalidFields[4] || invalidPhone}
               />
               <InputMask
-                name="mailCode"
+                name="verification_code"
                 mask="99 99 99"
                 placeholder="00 00 00"
                 title="Código de validação por e-mail"
