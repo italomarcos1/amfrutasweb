@@ -53,9 +53,9 @@ export default function Basket() {
             <Title>Cesto de Compras</Title>
             {products.length !== 0 ? (
               <ul>
-                {products.map((item, index) => (
-                  <Item key={item.product.id} item={item} index={index} />
-                ))}
+                {products.map((item, index) => {
+                  return <Item key={item.id} item={item} index={index} />;
+                })}
               </ul>
             ) : (
               <EmptyCartContainer>

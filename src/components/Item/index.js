@@ -25,7 +25,10 @@ import {
 } from './styles';
 
 export default function Item({ item, index }) {
-  const { product, amount } = item;
+  const {
+    options: { product },
+    qty,
+  } = item;
   const {
     id,
     thumbs,
@@ -48,7 +51,6 @@ export default function Item({ item, index }) {
     [id, dispatch]
   );
 
-  console.log(product);
   // console.log(item);
   return (
     <Container key={id} style={index > 1 ? { marginTop: 40 } : {}}>
@@ -74,16 +76,16 @@ export default function Item({ item, index }) {
         <div>
           <button
             type="button"
-            disabled={amount === 0}
-            onClick={() => handleUpdateAmount(amount - 1)}
+            disabled={qty === 0}
+            onClick={() => handleUpdateAmount(qty - 1)}
             style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
           >
             <img src={minus} alt="icon" />
           </button>
-          <strong>{amount}</strong>
+          <strong>{qty}</strong>
           <button
             type="button"
-            onClick={() => handleUpdateAmount(amount + 1)}
+            onClick={() => handleUpdateAmount(qty + 1)}
             style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
           >
             <img src={plus} alt="icon" />
@@ -106,7 +108,7 @@ Item.propTypes = {
       price_promotional: PropTypes.string,
       has_promotion: PropTypes.bool,
       price: PropTypes.string,
-      amount: PropTypes.number,
+      qty: PropTypes.number,
     }),
   }).isRequired,
   index: PropTypes.number.isRequired,

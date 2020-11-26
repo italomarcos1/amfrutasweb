@@ -107,10 +107,10 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
         const { id, amount } = payload;
 
         const productIndex = draft.products.findIndex(
-          ({ product }) => product.id === id
+          product => product.id === id
         );
 
-        if (productIndex >= 0) draft.products[productIndex].amount = amount;
+        if (productIndex >= 0) draft.products[productIndex].qty = amount;
 
         break;
       }
