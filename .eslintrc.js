@@ -43,6 +43,8 @@ module.exports = {
     'no-useless-escape': 'off',
     'no-return-assign': 'off',
     'no-console': 'warn',
+    'react/state-in-constructor': 'off',
+    'react/no-did-update-set-state': 'off',
     'consistent-return': 'off',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',

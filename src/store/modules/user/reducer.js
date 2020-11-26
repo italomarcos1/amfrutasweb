@@ -5,6 +5,7 @@ const INITIAL_STATE = {
   order: null,
   orders: [],
   product: null,
+  category: null,
 };
 
 export default function user(state = INITIAL_STATE, { type, payload }) {
@@ -63,6 +64,12 @@ export default function user(state = INITIAL_STATE, { type, payload }) {
 
       case '@user/SET_PRODUCT': {
         draft.product = payload.id;
+
+        break;
+      }
+
+      case '@user/SET_CATEGORY': {
+        draft.category = payload.id;
 
         break;
       }

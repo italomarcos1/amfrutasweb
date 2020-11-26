@@ -1,7 +1,7 @@
 import { call, put, all, takeLatest } from 'redux-saga/effects';
 // import Toast from 'react-native-tiny-toast';
 
-import { api } from '~/services/api';
+import backend from '~/services/api';
 
 import { updateProfileSuccess, updateProfileFailure } from './actions';
 
@@ -18,7 +18,7 @@ export function* updateProfile({ payload }) {
 
     const {
       data: { data: profileData },
-    } = yield call(api.put, 'users', data);
+    } = yield call(backend.put, 'clients', data);
 
     // Toast.show('Perfil atualizado com sucesso!');
 

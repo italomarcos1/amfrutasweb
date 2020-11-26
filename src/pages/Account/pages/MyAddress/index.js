@@ -17,7 +17,7 @@ import InputMask from '~/components/InputMask';
 import Select from '~/components/Select';
 import Address from '~/components/Address';
 
-import { api } from '~/services/api';
+import backend from '~/services/api';
 import { addAddress } from '~/store/modules/addresses/actions';
 import { nameIsValid, postcodeIsValid } from '~/utils/validation';
 
@@ -72,7 +72,7 @@ export default function MyAccount() {
     try {
       const {
         data: { address },
-      } = await api.get(`/postcodes/${cod}-${ext}`);
+      } = await backend.get(`/postcodes/${cod}-${ext}`);
 
       setAddressInfo(address[0]);
       setLoading(false);

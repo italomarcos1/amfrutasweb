@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import coins from '~/assets/coins.svg';
 import basket_active from '~/assets/icons/basket_active.svg';
@@ -16,8 +16,6 @@ import {
   removeFromFavoritesRequest,
 } from '~/store/modules/cart/actions';
 
-import { setProduct } from '~/store/modules/user/actions';
-
 import {
   Container,
   ImageContainer,
@@ -29,7 +27,7 @@ import {
 
 export default function Product({ product, index }) {
   const dispatch = useDispatch();
-  const history = useHistory();
+
   const [favorite, setFavorite] = useState(false);
 
   const favorites = useSelector(state => state.cart.favorites);
@@ -66,11 +64,6 @@ export default function Product({ product, index }) {
     setFavorite(!favorite);
   };
 
-  const handleNavigate = useCallback(() => {
-    history.push(`${url}`);
-    dispatch(setProduct(id));
-  }, [dispatch, history, url, id]);
-
   return (
     <Container>
       <FavoriteButton
@@ -80,17 +73,30 @@ export default function Product({ product, index }) {
       >
         <img src={favorite ? heartOn : heartOff} alt="Favorite" />
       </FavoriteButton>
-      <ImageContainer onClick={handleNavigate}>
+      <ImageContainer
+        to={{
+          pathname: `/${url}`,
+          state: { id },
+        }}
+      >
         <img src={thumbs} alt="Product" />
       </ImageContainer>
-      <button
-        type="button"
+      <Link
         style={{ marginTop: 10, background: 'none' }}
-        onClick={handleNavigate}
+        to={{
+          pathname: `/${url}`,
+          state: { id },
+        }}
       >
         <Title>{title}</Title>
-      </button>
-      <PriceContainer onClick={handleNavigate}>
+      </Link>
+      <PriceContainer
+        to={{
+          pathname: `/${url}`,
+
+          state: { id },
+        }}
+      >
         <span>
           <img src={coins} alt="coins" />
           <strong>€&nbsp;1.290,08</strong>

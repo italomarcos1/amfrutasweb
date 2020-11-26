@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { useLocation } from 'react-router-dom';
 import { Container, ChildrenCategories, ChildrenCategory } from './styles';
 
 import arrowGreen from '~/assets/icons/arrow_green.svg';
@@ -13,32 +13,32 @@ export default function MenuItem({
   subSelected,
   setSubChildrenSelected,
 }) {
-  const { id, name, all_children_categories } = category;
+  const { id, name, url, all_children_categories } = category;
 
+  const { pathname } = useLocation();
   return (
     <>
       <Container
-        onClick={() => {
-          if (selected !== id) setSelected(id);
-          else setSelected('none');
+        to={{
+          pathname: `/${url}`,
+          state: { id },
         }}
-        active={selected === id}
+        active={pathname === `/${url}`}
       >
         <strong>{name}</strong>
         {all_children_categories.length !== 0 && (
           <img src={arrowGreen} alt="Abrir menu" />
         )}
       </Container>
-      {all_children_categories.length !== 0 && selected === id && (
+      {all_children_categories.length !== 0 && pathname === `/${url}` && (
         <ChildrenCategories>
           {all_children_categories.map(cc => (
             <>
               <ChildrenCategory
-                active={childrenSelected === cc.id}
-                onClick={() => {
-                  if (childrenSelected !== cc.id) setChildrenSelected(cc.id);
-                  else if (cc.all_children_categories.length !== 0)
-                    setChildrenSelected('none');
+                active={pathname === `/${cc.url}`}
+                to={{
+                  pathname: `/${cc.url}`,
+                  state: { id: cc.id },
                 }}
               >
                 <strong>{cc.name}</strong>
@@ -51,9 +51,10 @@ export default function MenuItem({
                   <ChildrenCategories>
                     {cc.all_children_categories.map(subc => (
                       <ChildrenCategory
-                        active={subSelected === subc.id}
-                        onClick={() => {
-                          setSubChildrenSelected(subc.id);
+                        active={pathname === subc.url}
+                        to={{
+                          pathname: `/${url}`,
+                          state: { id: subc.id },
                         }}
                         style={{ paddingLeft: 18.5 }}
                       >

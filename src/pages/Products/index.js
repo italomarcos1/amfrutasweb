@@ -20,7 +20,7 @@ import Product from '~/components/Product';
 
 import LoginModal from '~/pages/LoginModal';
 
-import { backend } from '~/services/api';
+import backend from '~/services/api';
 
 export default function Products({ children }) {
   const [loginModal, setLoginModal] = useState(false);
@@ -37,7 +37,7 @@ export default function Products({ children }) {
   const loadCategories = useCallback(async () => {
     const [categoriesResponse, promotionsResponse] = await Promise.all([
       backend.get(
-        '/ecommerce/categories?recursively=1&order_field=slug&order_direction=asc'
+        '/ecommerce/categories?recursively=1&per_page=100&order_field=slug&order_direction=asc'
       ),
       backend.get(
         '/ecommerce/products?page=1&only_promotional=true&per_page=6'
@@ -57,13 +57,14 @@ export default function Products({ children }) {
     } = promotionsResponse;
 
     setCategories(data);
+
     setPromotions(promotionsResponseData);
   }, []);
   const { pathname } = useLocation();
 
   useEffect(() => {
     loadCategories();
-  }, []);
+  }, [loadCategories]);
 
   useEffect(() => {
     if (pathname === '/produtos') setSelectedCategory('none');

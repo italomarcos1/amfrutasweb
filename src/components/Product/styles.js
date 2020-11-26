@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const Container = styled.div`
   display: flex;
@@ -44,15 +45,13 @@ export const FavoriteButton = styled.button`
   background: none;
 `;
 
-export const ImageContainer = styled.button.attrs({
-  type: 'button',
-})`
+export const ImageContainer = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
   align-self: center;
   border-radius: 4px;
-  background-color: #ff4;
+  background-color: #fff;
 
   width: 164px;
   height: 164px;
@@ -63,9 +62,7 @@ export const ImageContainer = styled.button.attrs({
   }
 `;
 
-export const PriceContainer = styled.button.attrs({
-  type: 'button',
-})`
+export const PriceContainer = styled(Link)`
   display: flex;
   flex-direction: column;
   height: 64px;

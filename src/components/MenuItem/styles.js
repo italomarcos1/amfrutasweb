@@ -1,8 +1,7 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
-export const Container = styled.button.attrs({
-  type: 'button',
-})`
+export const Container = styled(Link)`
   width: 100%;
   height: 38px;
   display: flex;
@@ -35,7 +34,7 @@ export const ChildrenCategories = styled.ul`
   width: 100%;
 `;
 
-export const ChildrenCategory = styled.button`
+export const ChildrenCategory = styled(Link)`
   width: 100%;
   display: flex;
   align-items: center;

@@ -31,7 +31,7 @@ import CategoriesCarousel from '~/components/CategoriesCarousel';
 import DeliveryModal from '~/pages/DeliveryModal';
 import LoginModal from '~/pages/LoginModal';
 
-import { api, backend } from '~/services/api';
+import backend from '~/services/api';
 
 import envio from '~/assets/envio-gratuito.svg';
 import cashback from '~/assets/cashback.svg';
@@ -67,7 +67,7 @@ export default function Home() {
       blogResponse,
       promotionsResponse,
     ] = await Promise.all([
-      api.get('ecommerce/categories'),
+      backend.get('ecommerce/categories'),
       backend.get('/banner/blocks'),
       backend.get('/blog/contents/categories/5?per_page=4'),
       backend.get(

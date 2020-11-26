@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
 import {
   Container,
@@ -22,6 +23,8 @@ import {
   Description,
 } from './styles';
 
+import { addToCartRequest } from '~/store/modules/cart/actions';
+
 import SearchInput from '~/components/SearchInput';
 import { Button } from '~/components/LoginModal';
 import ImagesCarousel from '~/components/ImagesCarousel';
@@ -31,10 +34,11 @@ import heartOff from '~/assets/icons/heart-off.svg';
 import facebook from '~/assets/facebook.svg';
 import whatsapp from '~/assets/whatsapp.svg';
 
-import { backend } from '~/services/api';
+import backend from '~/services/api';
 
 export default function ViewProduct() {
-  const id = useSelector(state => state.user.product);
+  const dispatch = useDispatch();
+  const { state } = useLocation();
 
   const [product, setProduct] = useState(null);
   const [banner, setBanner] = useState(null);
@@ -42,11 +46,15 @@ export default function ViewProduct() {
   const [loading, setLoading] = useState(true);
   const [productImages, setProductImages] = useState([]);
 
+  const handleAddToCart = useCallback(() => {
+    dispatch(addToCartRequest(product, 1));
+  }, [product, dispatch]);
+
   const loadProduct = useCallback(async () => {
     setLoading(true);
     const {
       data: { data },
-    } = await backend.get(`ecommerce/products/${id}`);
+    } = await backend.get(`ecommerce/products/${state.id}`);
 
     setProduct(data);
     setBanner(data.banner);
@@ -54,11 +62,11 @@ export default function ViewProduct() {
     setProductImages(data.product_images);
 
     setLoading(false);
-  }, [id]);
+  }, [state]);
 
   useEffect(() => {
     loadProduct();
-  }, []);
+  }, [loadProduct]);
 
   // console.tron.log(product);
 
@@ -171,10 +179,10 @@ export default function ViewProduct() {
                 <Button
                   color="#1DC167"
                   shadowColor="#17A75B"
-                  onClick={() => {}}
+                  onClick={handleAddToCart}
                   style={{ width: 525, marginTop: 48 }}
                 >
-                  <b>Concluir a Encomenda</b>
+                  <b>Adicionar ao Cesto</b>
                 </Button>
               </ProductInfo>
             </Content>

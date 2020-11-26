@@ -1,56 +1,65 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { PaginationContainer, PaginationButton } from './styles';
+import { consts } from 'react-elastic-carousel';
+
+import { PaginationContainer, PaginationButton, ArrowButton } from './styles';
 
 import left from '~/assets/chevron-l.svg';
 import right from '~/assets/chevron-r.svg';
 
-export default function Pagination({ currentPage, setCurrentPage }) {
-  return (
-    <PaginationContainer>
-      <button type="button">
-        <img src={left} alt="Página Anterior" />
-      </button>
-      <div>
-        <PaginationButton
-          active={currentPage === 1}
-          onClick={() => setCurrentPage(1)}
-        >
-          1
-        </PaginationButton>
-        <PaginationButton
-          active={currentPage === 2}
-          onClick={() => setCurrentPage(2)}
-        >
-          2
-        </PaginationButton>
-        <PaginationButton
-          active={currentPage === 3}
-          onClick={() => setCurrentPage(3)}
-        >
-          3
-        </PaginationButton>
-        <PaginationButton
-          active={currentPage === 4}
-          onClick={() => setCurrentPage(4)}
-        >
-          4
-        </PaginationButton>
-        <PaginationButton
-          active={currentPage === 5}
-          onClick={() => setCurrentPage(5)}
-        >
-          5
-        </PaginationButton>
-      </div>
-      <button type="button">
-        <img src={right} alt="Próxima Página" />
-      </button>
-    </PaginationContainer>
-  );
+export default class Pagination extends Component {
+  state = {
+    totalItems: [],
+  };
+
+  componentDidMount() {
+    const { paginationArray } = this.props;
+
+    this.setState({ totalItems: paginationArray });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { paginationArray } = this.props;
+    if (prevState.totalItems !== paginationArray) {
+      this.setState({ totalItems: paginationArray });
+    }
+  }
+
+  myArrow({ type, onClick, isEdge }) {
+    const pointer = type === consts.PREV ? left : right;
+
+    return (
+      <ArrowButton onClick={onClick} disabled={isEdge}>
+        <img src={pointer} alt="" />
+      </ArrowButton>
+    );
+  }
+
+  render() {
+    const { totalItems } = this.state;
+    const { currentPage, setCurrentPage } = this.props;
+
+    return (
+      <PaginationContainer
+        itemsToShow={5}
+        ref={ref => (this.carousel = ref)}
+        pagination={false}
+        renderArrow={this.myArrow}
+      >
+        {totalItems.map(item => (
+          <PaginationButton
+            active={currentPage === item + 1}
+            onClick={() => setCurrentPage(item + 1)}
+          >
+            {item + 1}
+          </PaginationButton>
+        ))}
+      </PaginationContainer>
+    );
+  }
 }
 
 Pagination.propTypes = {
-  currentPage: PropTypes.bool.isRequired,
-  setCurrentPage: PropTypes.bool.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  setCurrentPage: PropTypes.func.isRequired,
 };

@@ -9,18 +9,30 @@ import Pagination from '~/components/Pagination';
 
 import LoginModal from '~/pages/LoginModal';
 
-import { backend } from '~/services/api';
+import backend from '~/services/api';
 
 export default function Contents() {
   const [loginModal, setLoginModal] = useState(false);
 
   const [contents, setContents] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
+  const [lastPage, setLastPage] = useState(0);
+  const [paginationArray, setPaginationArray] = useState([]);
+
+  const generatePaginationArray = useCallback(() => {
+    const items = [];
+
+    for (let i = 0; i < lastPage; i += 1) {
+      items.push(i);
+    }
+
+    setPaginationArray(items);
+  }, [lastPage]);
 
   const loadContents = useCallback(async () => {
     const {
       data: {
-        data: { data, current_page },
+        data: { data, current_page, last_page },
       },
     } = await backend.get('blog/contents?per_page=12');
 
@@ -32,12 +44,14 @@ export default function Contents() {
       }
     }
     setCurrentPage(current_page);
+    setLastPage(last_page);
     setContents(data);
   }, []);
 
   useEffect(() => {
     loadContents();
-  }, []);
+    generatePaginationArray();
+  }, [loadContents, generatePaginationArray]);
 
   return (
     <>
@@ -45,7 +59,9 @@ export default function Contents() {
       <Container>
         <CustomHeader
           currentPage={currentPage}
+          lastPage={lastPage}
           setCurrentPage={setCurrentPage}
+          paginationArray={paginationArray}
           style={{ marginLeft: 'auto', marginRight: 'auto', width: 1240 }}
         />
 
@@ -70,7 +86,9 @@ export default function Contents() {
         <FooterPagination>
           <Pagination
             currentPage={currentPage}
+            lastPage={lastPage}
             setCurrentPage={setCurrentPage}
+            paginationArray={paginationArray}
           />
         </FooterPagination>
       </Container>

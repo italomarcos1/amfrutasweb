@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-
+import { useLocation } from 'react-router-dom';
 import { Container, NullProduct } from './styles';
 
 import Product from '~/components/Product';
@@ -9,14 +9,16 @@ import FooterPagination from '~/components/FooterPagination';
 
 import backend from '~/services/api';
 
-export default function ListProducts() {
+export default function ListProductsPerCategory() {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(0);
-  const [prevPageUrl, setPrevPageUrl] = useState('');
   const [nextPageUrl, setNextPageUrl] = useState('');
   const [pageHeight, setPageHeight] = useState(1184);
+  const [loading, setLoading] = useState(true);
   const [paginationArray, setPaginationArray] = useState([]);
+
+  const { state } = useLocation();
 
   const generatePaginationArray = useCallback(() => {
     const items = [];
@@ -28,14 +30,21 @@ export default function ListProducts() {
     setPaginationArray(items);
   }, [lastPage]);
 
-  const loadProducts = useCallback(async () => {
+  const loadProductsByCategory = useCallback(async () => {
     const productsResponse = await backend.get(
-      `ecommerce/products?page=${currentPage}`
+      `ecommerce/products/categories/${state.id}/?page=${currentPage}`
     );
 
     const {
       data: {
-        data: { data, current_page, last_page, next_page_url, prev_page_url },
+        data: {
+          data,
+          per_page,
+          current_page,
+          last_page,
+          next_page_url,
+          prev_page_url,
+        },
       },
     } = productsResponse;
 
@@ -56,15 +65,17 @@ export default function ListProducts() {
     setCurrentPage(current_page);
     setLastPage(last_page);
     setNextPageUrl(next_page_url);
-    setPrevPageUrl(prev_page_url);
 
     // console.tron.log(data);
-  }, [currentPage]);
+  }, [state.id, currentPage]);
 
   useEffect(() => {
-    loadProducts(currentPage);
+    setLoading(true);
+    loadProductsByCategory();
     generatePaginationArray();
-  }, [loadProducts, generatePaginationArray, currentPage]);
+
+    setLoading(false);
+  }, [loadProductsByCategory, generatePaginationArray]);
 
   return (
     <>
@@ -74,15 +85,20 @@ export default function ListProducts() {
         setCurrentPage={setCurrentPage}
         paginationArray={paginationArray}
       />
-      <Container pageHeight={pageHeight}>
-        {products.map((p, index) =>
-          p === null ? (
-            <NullProduct />
-          ) : (
-            <Product key={p.id} index={index} product={p} />
-          )
-        )}
-      </Container>
+
+      {loading ? (
+        <h1>Carregando...</h1>
+      ) : (
+        <Container pageHeight={pageHeight}>
+          {products.map((p, index) =>
+            p === null ? (
+              <NullProduct />
+            ) : (
+              <Product key={p.id} index={index} product={p} />
+            )
+          )}
+        </Container>
+      )}
       <FooterPagination>
         <Pagination
           currentPage={currentPage}

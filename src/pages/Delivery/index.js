@@ -29,7 +29,7 @@ import {
 
 import { onlyValues } from '~/utils/onlyValues';
 
-import { api } from '~/services/api';
+import backend from '~/services/api';
 
 import { InputContainer, Button, SecureLogin } from '~/components/LoginModal';
 
@@ -286,7 +286,7 @@ export default function Delivery() {
     try {
       const {
         data: { address },
-      } = await api.get(`/postcodes/${cod}-${ext}`);
+      } = await backend.get(`/postcodes/${cod}-${ext}`);
 
       setLoading(false);
 

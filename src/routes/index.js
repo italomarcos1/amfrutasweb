@@ -16,6 +16,7 @@ import MyFavorites from '~/pages/Account/pages/MyFavorites';
 
 import Products from '~/pages/Products/pages/ListProducts';
 import Product from '~/pages/Products/pages/ViewProduct';
+import ProductsPerCategory from '~/pages/Products/pages/ListProductsPerCategory';
 
 import AccountRoute from './accountRoute';
 import ProductsRoute from './productsRoute';
@@ -36,7 +37,8 @@ export default function Routes() {
         <AccountRoute path="/endereco" component={MyAddress} isPrivate />
         <AccountRoute path="/favoritos" component={MyFavorites} isPrivate />
         <ProductsRoute path="/produtos" exact component={Products} />
-        <ProductsRoute path="/produto/:id" component={Product} />
+        <ProductsRoute path="/produto" component={Product} />
+        <ProductsRoute path="/produtos" component={ProductsPerCategory} />
       </Switch>
     </BrowserRouter>
   );

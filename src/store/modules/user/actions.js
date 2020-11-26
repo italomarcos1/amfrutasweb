@@ -41,3 +41,7 @@ export function resetTrigger() {
 export function setProduct(id) {
   return { type: '@user/SET_PRODUCT', payload: { id } };
 }
+
+export function setCategory(id) {
+  return { type: '@user/SET_CATEGORY', payload: { id } };
+}

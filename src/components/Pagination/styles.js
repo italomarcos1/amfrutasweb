@@ -1,29 +1,21 @@
 import styled from 'styled-components';
+import Carousel from 'react-elastic-carousel';
 
-export const PaginationContainer = styled.div`
+export const PaginationContainer = styled(Carousel)`
   display: flex;
-
   width: 218px;
   height: 30px;
   align-items: center;
   justify-content: space-between;
+`;
 
-  div {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 162px;
-    height: 30px;
-  }
-
-  > button {
-    background: none;
-    width: 16px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+export const ArrowButton = styled.div`
+  background: none;
+  width: 16px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const PaginationButton = styled.button.attrs({
