@@ -15,7 +15,7 @@ export default function Contents() {
   const [loginModal, setLoginModal] = useState(false);
 
   const [contents, setContents] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(0);
   const [paginationArray, setPaginationArray] = useState([]);
 
@@ -34,7 +34,7 @@ export default function Contents() {
       data: {
         data: { data, current_page, last_page },
       },
-    } = await backend.get('blog/contents?per_page=12');
+    } = await backend.get(`blog/contents?page=${currentPage}?per_page=12`);
 
     if (data.length % 4 !== 0) {
       const itemsToFill = Math.ceil(data.length / 4) * 4 - data.length;
@@ -46,7 +46,7 @@ export default function Contents() {
     setCurrentPage(current_page);
     setLastPage(last_page);
     setContents(data);
-  }, []);
+  }, [currentPage]);
 
   useEffect(() => {
     loadContents();
