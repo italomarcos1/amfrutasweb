@@ -83,6 +83,7 @@ export default function ListProducts() {
         paginationArray={paginationArray}
         setOrderDirection={setOrderDirection}
         setOrderField={setOrderField}
+        orderField={orderField}
       />
       <Container pageHeight={pageHeight}>
         {products.map((p, index) =>

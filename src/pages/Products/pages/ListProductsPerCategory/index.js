@@ -96,6 +96,7 @@ export default function ListProductsPerCategory() {
         paginationArray={paginationArray}
         setOrderDirection={setOrderDirection}
         setOrderField={setOrderField}
+        orderField={orderField}
       />
 
       {loading ? (

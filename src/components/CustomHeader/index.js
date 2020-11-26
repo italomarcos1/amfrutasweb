@@ -21,8 +21,9 @@ export default function CustomHeader({
   paginationArray,
   setOrderDirection,
   setOrderField,
+  orderField,
 }) {
-  const [selectedOption, setSelectedOption] = useState('Mais Recentes');
+  const [selectedOption, setSelectedOption] = useState(orderField);
   const [menuIsOpen, setMenuIsOpen] = useState(false);
 
   const handleSetOption = useCallback(
