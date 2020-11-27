@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
   Container,
@@ -35,7 +35,7 @@ import backend from '~/services/api';
 
 import envio from '~/assets/envio-gratuito.svg';
 import cashback from '~/assets/cashback.svg';
-import whatsapp from '~/assets/whatsapp.svg';
+import whatsapp from '~/assets/whatsapp_green.svg';
 import appStore from '~/assets/appStore.svg';
 import playStore from '~/assets/playStore.svg';
 
@@ -43,9 +43,11 @@ export default function Home() {
   const [deliveryModal, setDeliveryModal] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
 
+  const formRef = useRef();
+
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
-  const [birthDate, setBirthDate] = useState('');
+  const [birthday, setBirthDate] = useState('');
   const [birthDateError, setBirthDateError] = useState(false);
 
   const [invalidFields, setInvalidFields] = useState([
@@ -119,37 +121,59 @@ export default function Home() {
   }, []);
 
   const handleSubmit = useCallback(
-    formData => {
-      const formattedData = Object.values(formData);
-      invalidFields.fill(false);
-      setBirthDateError(false);
-      setEmailError(false);
+    async formData => {
+      try {
+        const formattedData = Object.values(formData);
+        setInvalidFields(invalidFields.fill(false));
+        setBirthDateError(false);
+        setEmailError(false);
 
-      const anyEmptyField = formattedData.some(field => nameIsValid(field));
+        const anyEmptyField = formattedData.some(field => nameIsValid(field));
 
-      if (anyEmptyField) {
-        setInvalidFields(formattedData.map(field => nameIsValid(field)));
-        return;
+        if (anyEmptyField) {
+          setInvalidFields(formattedData.map(field => nameIsValid(field)));
+          setBirthDateError(!dateIsValid(birthday));
+          setEmailError(!mailIsValid(email));
+
+          return;
+        }
+
+        if (!dateIsValid(birthday)) {
+          setBirthDateError(!dateIsValid(birthday));
+          return;
+        }
+        if (!mailIsValid(email)) {
+          setEmailError(!mailIsValid(email));
+          return;
+        }
+
+        const response = await backend.post('newsletter/contacts', {
+          name: formData.name,
+          last_name: formData.last_name,
+          email,
+          birthday,
+        });
+
+        invalidFields.fill(false);
+        setBirthDateError(false);
+        setEmailError(false);
+
+        formRef.current.reset();
+        setEmail('');
+        setBirthDate('');
+
+        console.log('done');
+      } catch (err) {
+        console.log('Erro na newsletter');
       }
-
-      if (!dateIsValid(birthDate)) {
-        setBirthDateError(!dateIsValid(birthDate));
-        return;
-      }
-      if (!mailIsValid(email)) {
-        setEmailError(!mailIsValid(email));
-        return;
-      }
-
-      console.log('done');
     },
-    [email, birthDate, invalidFields]
+    [email, birthday, invalidFields]
   );
 
   return (
     <>
       <Header login={() => setLoginModal(true)} />
-      <Container onSubmit={handleSubmit}>
+      <Container onSubmit={handleSubmit} ref={formRef}>
         <SlideShow data={bannersURL} />
         <OptionsContainer>
           <Option>
@@ -292,12 +316,7 @@ export default function Home() {
             <BlogPost>
               <img src={post.thumbs} alt="" />
               <strong>{post.title}</strong>
-              {/* <small>
-              Todos nós sabemos que os <br />
-              sumos detox são ótimos para a <br />
-              saúde e para o sistema imunitário
-              <br /> … infelizmente muita gente acha
-            </small> */}
+              <small>{post.description}</small>
             </BlogPost>
           ))}
         </Section>
@@ -321,10 +340,10 @@ export default function Home() {
             placeholder="Apelido"
           />
           <InputMask
-            name="birthDate"
+            name="birthday"
             error={invalidFields[2] || birthDateError}
             placeholder="Data de Nascimento"
-            value={birthDate}
+            value={birthday}
             onChange={({ target: { value } }) => setBirthDate(value)}
           />
           <div style={{ display: 'flex', marginLeft: 20 }}>

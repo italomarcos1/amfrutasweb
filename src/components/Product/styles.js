@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { darken } from 'polished';
 
 export const Container = styled.div`
   display: flex;
@@ -10,6 +11,12 @@ export const Container = styled.div`
   border-radius: 6px;
   text-align: left;
   border: 1px solid #f0f0f0;
+  transition: all 0.2s;
+
+  &:hover {
+    border-width: 2px;
+    border-color: ${darken(0.08, '#0cb68b')};
+  }
 
   justify-content: space-between;
   font-family: 'SFProCustom';
@@ -29,6 +36,7 @@ export const Title = styled.div`
   text-overflow: ellipsis;
   background: none;
   text-align: left;
+  text-transform: capitalize;
 
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -149,11 +157,15 @@ export const Options = styled.div`
     /* margin-right: 12px; */
 
     strong {
+      display: inline;
       font-size: 18px;
       color: #393939;
-      margin: 0 10px;
+      /* margin: 0 10px; */
       font-weight: normal;
       font-family: 'SFProCustom';
+      width: 40px;
+      max-width: 40px;
+      text-align: center;
     }
 
     button {
@@ -161,10 +173,17 @@ export const Options = styled.div`
       align-items: center;
       justify-content: center;
       flex: 1;
+      width: 31px;
+      max-width: 31px;
       padding: 10px;
       height: 45px;
       border-radius: 4px;
       background-color: #f2f2f2;
+      transition: all 0.2s;
+
+      &:hover {
+        background-color: ${darken(0.08, '#f2f2f2')};
+      }
     }
   }
 
@@ -179,5 +198,9 @@ export const Options = styled.div`
     /* height: 45px; */
     background-color: #4fb78d;
     border-radius: 4px;
+
+    &:hover {
+      background-color: ${darken(0.08, '#4fb78d')};
+    }
   }
 `;

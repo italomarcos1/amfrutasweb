@@ -58,11 +58,10 @@ export const SectionTitle = styled.div`
 
 export const Categories = styled(Carousel)`
   width: 1240px;
-  height: 146px;
+  height: 168px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-radius: 4px;
   margin: 30px auto 0;
   padding: 0;
 `;
@@ -71,8 +70,8 @@ export const Category = styled(Link)`
   display: flex;
   align-items: center;
   flex-direction: column;
-  justify-content: space-between;
-  height: 146px;
+  justify-content: flex-start;
+  height: 168px;
   width: 114px;
 
   img {

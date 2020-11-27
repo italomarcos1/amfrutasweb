@@ -3,7 +3,7 @@ import { call, put, all, takeLatest } from 'redux-saga/effects';
 import backend from '~/services/api';
 
 import { signInSuccess, signFailure } from '~/store/modules/auth/actions';
-import { addFavorites } from '~/store/modules/cart/actions';
+import { addFavorites, pushToCart } from '~/store/modules/cart/actions';
 
 export function* signIn({ payload }) {
   const { email, password } = payload;
@@ -43,6 +43,19 @@ export function* signIn({ payload }) {
 
       return;
     }
+
+    const responseData = yield call(backend.get, '/cart');
+
+    const {
+      data: {
+        data,
+        meta: { message: cartMessage },
+      },
+    } = responseData;
+
+    if (cartMessage === 'Não há produtos no cesto') {
+      yield put(pushToCart([]));
+    } else yield put(pushToCart([data.products]));
 
     yield put(signInSuccess(token, user));
   } catch (error) {

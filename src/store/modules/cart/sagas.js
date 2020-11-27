@@ -14,7 +14,7 @@ export function* addToCart({ payload }) {
   const { product: newProduct, amount } = payload;
 
   const products = yield select(state => state.cart.products);
-  const alreadyInCart = products.findIndex(({ product }) => {
+  const alreadyInCart = products.findIndex(product => {
     return product.id === newProduct.id;
   });
 
@@ -22,27 +22,40 @@ export function* addToCart({ payload }) {
     const { rowId } = products[alreadyInCart];
 
     yield call(backend.put, `cart/${rowId}/${amount}`);
-    console.log('already');
     yield put(
       updateAmount(newProduct.id, products[alreadyInCart].amount + amount)
     );
   } else {
-    const {
-      data: { data },
-    } = yield call(backend.post, 'cart', {
-      product_id: newProduct.id,
-      quantity: amount,
-    });
+    try {
+      const {
+        data: { data },
+      } = yield call(backend.post, 'cart', {
+        product_id: newProduct.id,
+        quantity: amount,
+      });
 
-    yield put(addToCartSuccess(data)); //eslint-disable-line
+      yield put(addToCartSuccess(data));
+    } catch (err) {
+      alert('Não adicionou');
+      // console.tron.log(err);
+    }
   }
 }
 export function* removeFromCart({ payload }) {
-  const { id } = payload;
+  try {
+    const { id } = payload;
+    const products = yield select(state => state.cart.products);
+    const findIndex = products.findIndex(product => {
+      return product.id === id;
+    });
+    const { rowId } = products[findIndex];
+    const { data: removeData } = yield call(backend.delete, `/cart/${rowId}`);
 
-  // yield call(backend.delete, `cart/${id}`);
-
-  yield put(removeFromCartSuccess(id));
+    yield put(removeFromCartSuccess(id));
+  } catch (err) {
+    // console.tron.log(err);
+    alert('Erro na remoção');
+  }
 }
 
 export function* addToFavorites({ payload }) {

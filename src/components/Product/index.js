@@ -32,6 +32,7 @@ export default function Product({ product, index }) {
 
   const favorites = useSelector(state => state.cart.favorites);
   const updating = useSelector(state => state.cart.updating);
+  const profile = useSelector(state => state.user.profile);
 
   const [amount, setAmount] = useState(0);
 
@@ -99,7 +100,9 @@ export default function Product({ product, index }) {
       >
         <span>
           <img src={coins} alt="coins" />
-          <strong>€&nbsp;1.290,08</strong>
+          <strong>
+            €&nbsp;{profile !== null ? profile.cback_credit : '0.00'}
+          </strong>
           DE CRÉDITO
         </span>
         {has_promotion ? (

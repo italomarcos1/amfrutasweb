@@ -23,15 +23,15 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
       case '@cart/REMOVE_FROM_CART_SUCCESS': {
         const { id } = payload;
 
-        const productIndex = draft.products.findIndex(
-          ({ product }) => product.id === id
-        );
+        const findIndex = draft.products.findIndex(product => {
+          return product.id === id;
+        });
 
-        if (productIndex > -1) {
+        if (findIndex > -1) {
           if (draft.products.length === 1) draft.products.splice(0, 1);
           else {
             draft.products = draft.products.filter(
-              ({ product }) => product.id !== id
+              product => product.id !== id
             );
           }
         }
@@ -41,6 +41,11 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
 
       case '@cart/PROCESS_ORDER': {
         draft.hasOrder = payload.value;
+        break;
+      }
+
+      case '@cart/PUSH_TO_CART': {
+        draft.products = payload.products;
         break;
       }
 

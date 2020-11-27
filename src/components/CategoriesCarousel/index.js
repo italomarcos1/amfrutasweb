@@ -37,6 +37,8 @@ export default class CategoriesCarousel extends Component {
           ref={ref => (this.carousel = ref)}
           showArrows={false}
           pagination={false}
+          enableAutoPlay
+          autoPlaySpeed={4000}
         >
           {categories.map(({ name, url, thumbs }) => (
             <Category to={`/${url}`}>
