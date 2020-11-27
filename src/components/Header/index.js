@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useScrollYPosition } from 'react-use-scroll-position';
 
 import { useSelector } from 'react-redux';
@@ -11,6 +11,7 @@ import {
   Menu,
   MenuContent,
   MenuItem,
+  MenuItemButton,
   Price,
   Badge,
   BadgeContainer,
@@ -26,16 +27,40 @@ import search from '~/assets/search.svg';
 import bag from '~/assets/bag.svg';
 import user from '~/assets/user-check.svg';
 
+import backend from '~/services/api';
+
 export default function PageHeader({ login, active }) {
   const [selectedPage, setSelectedPage] = useState(active);
 
   const signed = useSelector(state => state.auth.signed);
 
   const history = useHistory();
+  const { pathname } = useLocation();
 
   const scrollY = useScrollYPosition();
 
   const [headerFixed, setHeaderFixed] = useState(false);
+
+  const [menuItems, setMenuItems] = useState([
+    'Lojas e Contatos',
+    'Produtos',
+    'Promoções da Semana',
+    'Informações',
+    'Dicas e Receitas',
+  ]);
+
+  // retirar o dominio 'am sandbox' dos produtos
+
+  const loadMenu = useCallback(async () => {
+    const {
+      data: { data },
+    } = await backend.get('/menus/links/3');
+
+    data.splice(0, 1);
+    setMenuItems(data);
+  }, []);
+
+  useEffect(() => loadMenu(), []);
 
   useEffect(() => {
     if (scrollY >= 71) {
@@ -75,61 +100,23 @@ export default function PageHeader({ login, active }) {
       </Header>
       <Menu style={headerFixed ? { position: 'fixed', top: 0 } : {}}>
         <MenuContent>
-          <MenuItem
-            selected={selectedPage === 'Principal'}
-            onClick={() => {
-              setSelectedPage('Principal');
-              history.push('/');
-            }}
-          >
+          <MenuItem selected={pathname === '/'} to="/">
             <img src={home} alt="home" />
           </MenuItem>
-          <MenuItem
-            selected={selectedPage === 'Lojas'}
-            onClick={() => setSelectedPage('Lojas')}
-          >
-            Lojas e Contatos
-          </MenuItem>
-          <MenuItem
-            selected={selectedPage === 'Produtos'}
-            onClick={() => {
-              setSelectedPage('Produtos');
-              history.push('/produtos');
-            }}
-          >
-            Produtos
-          </MenuItem>
-          <MenuItem
-            selected={selectedPage === 'Promoções'}
-            onClick={() => {
-              setSelectedPage('Promoções');
-              history.push('/promocoes');
-            }}
-          >
-            Promoções da Semana
-          </MenuItem>
-          <MenuItem
-            selected={selectedPage === 'Informações'}
-            onClick={() => setSelectedPage('Informações')}
-          >
-            Informações
-          </MenuItem>
-          <MenuItem
-            selected={selectedPage === 'Dicas'}
-            onClick={() => {
-              setSelectedPage('Dicas');
-              history.push('/conteudos');
-            }}
-          >
-            Dicas e Receitas
-          </MenuItem>
-          <MenuItem
+
+          {menuItems.map(({ id, name, url }) => (
+            <MenuItem key={id} selected={pathname === `/${url}`} to={`${url}`}>
+              {name}
+            </MenuItem>
+          ))}
+
+          <MenuItemButton
             selected={selectedPage === 'Busca'}
             onClick={() => setSelectedPage('Busca')}
           >
             <img src={search} alt="search" />
-          </MenuItem>
-          <MenuItem
+          </MenuItemButton>
+          <MenuItemButton
             selected={selectedPage === 'Perfil'}
             onClick={() => {
               if (signed) history.push('/painel');
@@ -140,18 +127,18 @@ export default function PageHeader({ login, active }) {
             }}
           >
             <img src={user} alt="user" />
-          </MenuItem>
+          </MenuItemButton>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <BadgeContainer>
-              <MenuItem
+              <MenuItemButton
                 selected={selectedPage === 'Cesto'}
                 onClick={() => {
                   setSelectedPage('Cesto');
-                  history.push('/cesto');
+                  history.push('/produtos');
                 }}
               >
                 <img src={bag} alt="bag" />
-              </MenuItem>
+              </MenuItemButton>
               <Badge>02</Badge>
             </BadgeContainer>
             <Price>€ 45,00</Price>

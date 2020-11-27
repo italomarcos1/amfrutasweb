@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Container, ChildrenCategories, ChildrenCategory } from './styles';
 
@@ -13,9 +13,19 @@ export default function MenuItem({
   subSelected,
   setSubChildrenSelected,
 }) {
-  const { id, name, url, all_children_categories } = category;
+  const { id, name, slug, url, all_children_categories } = category;
 
   const { pathname } = useLocation();
+
+  const [active, setActive] = useState('');
+  const [subActive, setSubActive] = useState('');
+
+  useEffect(() => {
+    const formattedPathname = pathname.split('/');
+    setActive(formattedPathname[2]);
+    setSubActive(formattedPathname[3]);
+  }, [pathname, slug]);
+
   return (
     <>
       <Container
@@ -35,7 +45,7 @@ export default function MenuItem({
           {all_children_categories.map(cc => (
             <>
               <ChildrenCategory
-                active={pathname === `/${cc.url}`}
+                active={subActive === cc.slug}
                 to={{
                   pathname: `/${cc.url}`,
                   state: { id: cc.id },

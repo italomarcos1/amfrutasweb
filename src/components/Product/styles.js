@@ -14,8 +14,7 @@ export const Container = styled.div`
   transition: all 0.2s;
 
   &:hover {
-    border-width: 2px;
-    border-color: ${darken(0.08, '#0cb68b')};
+    border-color: #0cb68b;
   }
 
   justify-content: space-between;

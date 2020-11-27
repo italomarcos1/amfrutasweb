@@ -73,29 +73,37 @@ export default function CustomHeader({
   return (
     <Container style={style}>
       <SearchInput />
-      <FilterProductsContainer>
-        <FilterProducts onClick={() => setMenuIsOpen(!menuIsOpen)}>
-          <small>{selectedOption}</small>
-          <img src={arrow} alt="" />
-        </FilterProducts>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <FilterProductsContainer>
+          <FilterProducts onClick={() => setMenuIsOpen(!menuIsOpen)}>
+            <small>{selectedOption}</small>
+            <img src={arrow} alt="" />
+          </FilterProducts>
 
-        <FilterProductsList visible={menuIsOpen}>
-          {data.map(({ id, option }) => (
-            <FilterProductsOption
-              key={id}
-              onClick={() => handleSetOption(option)}
-            >
-              {option}
-            </FilterProductsOption>
-          ))}
-        </FilterProductsList>
-      </FilterProductsContainer>
-      <Pagination
-        currentPage={currentPage}
-        lastPage={lastPage}
-        setCurrentPage={setCurrentPage}
-        paginationArray={paginationArray}
-      />
+          <FilterProductsList visible={menuIsOpen}>
+            {data.map(({ id, option }) => (
+              <FilterProductsOption
+                key={id}
+                onClick={() => handleSetOption(option)}
+              >
+                {option}
+              </FilterProductsOption>
+            ))}
+          </FilterProductsList>
+        </FilterProductsContainer>
+        <Pagination
+          currentPage={currentPage}
+          lastPage={lastPage}
+          setCurrentPage={setCurrentPage}
+          paginationArray={paginationArray}
+          style={{ marginLeft: 20 }}
+        />
+      </div>
     </Container>
   );
 }

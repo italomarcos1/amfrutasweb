@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const Header = styled.div`
   width: 100%;
@@ -28,7 +29,7 @@ export const Menu = styled.div`
 `;
 
 export const MenuContent = styled.div`
-  width: 862px;
+  width: 1122px;
   height: 41px;
   margin: 0 auto;
   display: flex;
@@ -36,7 +37,26 @@ export const MenuContent = styled.div`
   justify-content: space-between;
 `;
 
-export const MenuItem = styled.button.attrs({
+export const MenuItem = styled(Link)`
+  font-family: ${({ selected }) => (selected ? 'SFProBold' : 'SFPro')};
+  font-size: 15px;
+  line-height: 20px;
+  letter-spacing: 0px;
+  color: #ffffff;
+  padding: 0 20px;
+  text-align: center;
+  height: 37px;
+  display: flex;
+  align-items: center;
+  background: none;
+
+  img {
+    width: 18px;
+    height: 18px;
+  }
+`;
+
+export const MenuItemButton = styled.button.attrs({
   type: 'button',
 })`
   font-family: ${({ selected }) => (selected ? 'SFProBold' : 'SFPro')};
@@ -44,7 +64,7 @@ export const MenuItem = styled.button.attrs({
   line-height: 20px;
   letter-spacing: 0px;
   color: #ffffff;
-  padding: 0 1px;
+  padding: 0 10px;
   text-align: center;
   height: 37px;
   display: flex;

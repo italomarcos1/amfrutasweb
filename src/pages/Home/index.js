@@ -11,6 +11,7 @@ import {
   StoreButtonContainer,
   Section,
   Location,
+  NullLocation,
   BlogPost,
   Promotions,
   PromotionsSubTitle,
@@ -62,12 +63,15 @@ export default function Home() {
   const [promotions, setPromotions] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [sellerPoints, setSellerPoints] = useState([null, null, null]);
+
   const loadData = useCallback(async () => {
     const [
       categoriesResponse,
       bannersResponse,
       blogResponse,
       promotionsResponse,
+      seller,
     ] = await Promise.all([
       backend.get('ecommerce/categories'),
       backend.get('/banner/blocks'),
@@ -75,6 +79,7 @@ export default function Home() {
       backend.get(
         '/ecommerce/products?page=1&only_promotional=true&per_page=6'
       ),
+      backend.get('/seller-points'),
     ]);
 
     const {
@@ -112,6 +117,12 @@ export default function Home() {
     } = promotionsResponse;
 
     setPromotions(promotionsResponseData);
+
+    const {
+      data: { data: sellerData },
+    } = seller;
+
+    setSellerPoints(sellerData);
   }, []);
 
   useEffect(() => {
@@ -246,65 +257,31 @@ export default function Home() {
         </SecurityContainer>
 
         <Section>
-          <Location>
-            <h1>A.M. Frutas Oeiras</h1>
-            <p>
-              Rua A Gazeta D&apos;Oeiras 10B 2780-171 <br />
-              Oeiras
-            </p>
-            <p>
-              91 045 77 68
-              <br />
-              91 045 77 68 <small>Whatsapp</small>
-            </p>
-            <p>
-              Seg-Sáb 09:30 - 20:00
-              <br />
-              Domingo Encerrado
-            </p>
-            <p>oeiras@amfrutas.pt</p>
-            <button type="button">Localização</button>
-          </Location>
-          <Location>
-            <h1>A.M. Frutas Parede</h1>
-            <p>
-              Rua Samuel Gonçalves Sanches
-              <br />
-              160-249 2765-280 Estoril
-            </p>
-            <p>
-              91 045 77 68
-              <br />
-              91 045 77 68 <small>Whatsapp</small>
-            </p>
-            <p>
-              Seg-Sáb 09:30 - 20:00
-              <br />
-              Domingo Encerrado
-            </p>
-            <p>parede@amfrutas.pt</p>
-            <button type="button">Localização</button>
-          </Location>
-          <Location>
-            <h1>A.M. Frutas Estoril</h1>
-            <p>
-              Rua Samuel Gonçalves Sanches
-              <br />
-              160-249 2765-280 Estoril
-            </p>
-            <p>
-              91 045 77 68
-              <br />
-              91 045 77 68 <small>Whatsapp</small>
-            </p>
-            <p>
-              Seg-Sáb 09:30 - 20:00
-              <br />
-              Domingo Encerrado
-            </p>
-            <p>estoril@amfrutas.pt</p>
-            <button type="button">Localização</button>
-          </Location>
+          {sellerPoints.map(seller =>
+            seller === null ? (
+              <NullLocation />
+            ) : (
+              <Location key={seller.id}>
+                <h1>{seller.name}</h1>
+                <p>{seller.address}</p>
+                <p>
+                  {seller.phone}
+                  <br />
+                  {seller.whatsapp}
+                  <small>&nbsp;Whatsapp</small>
+                </p>
+                <p>
+                  {seller.timetable_line1}
+                  <br />
+                  {seller.timetable_line2}
+                </p>
+                <p>{seller.email}</p>
+                <a href={seller.location} target="_blank" rel="noreferrer">
+                  <strong>Localização</strong>
+                </a>
+              </Location>
+            )
+          )}
         </Section>
         <CategoriesCarousel categories={categories} />
         <SectionTitle>

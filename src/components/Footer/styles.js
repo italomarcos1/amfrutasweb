@@ -44,8 +44,14 @@ export const Item = styled.div`
     letter-spacing: 0px;
     color: #000000;
 
-    p {
+    a {
+      color: #000000;
       font-family: 'SFPro';
+      transition: all 0.2s;
+
+      &:hover {
+        color: #0cb68b;
+      }
     }
   }
 `;

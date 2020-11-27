@@ -17,6 +17,7 @@ export const Container = styled.div`
     line-height: 16px;
     letter-spacing: 0px;
     color: #141319;
+    width: 95%;
     background: none;
 
     &::placeholder {

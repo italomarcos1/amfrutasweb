@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import {
   TopFooter,
@@ -14,7 +14,37 @@ import instagram from '~/assets/instagram.svg';
 import youtube from '~/assets/youtube.svg';
 import google from '~/assets/google.svg';
 
+import backend from '~/services/api';
+
 export default function Footer() {
+  const [firstColumn, setFirstColumn] = useState([null, null, null]);
+  const [secondColumn, setSecondColumn] = useState([null, null]);
+  const [thirdColumn, setThirdColumn] = useState([null, null]);
+  const [social, setSocial] = useState([]);
+
+  const loadMenu = useCallback(async () => {
+    const [socialMedia, links] = await Promise.all([
+      backend.get('/menus/links/1'),
+      backend.get('/menus/links/2'),
+    ]);
+
+    const {
+      data: { data },
+    } = links;
+
+    setFirstColumn([data[0], data[1], data[2]]);
+    setSecondColumn([data[3], data[4]]);
+    setThirdColumn([data[5], data[6]]);
+
+    const {
+      data: { data: socialData },
+    } = socialMedia;
+
+    setSocial(socialData);
+  }, []);
+
+  useEffect(() => loadMenu(), []);
+
   return (
     <>
       <TopFooter>
@@ -22,21 +52,41 @@ export default function Footer() {
         <ItemsContainer>
           <Item>
             <span>
-              <p>Central de Atendimento</p>
-              <p>Trocas e Devoluções</p>
-              <p>Condições de Pagamento</p>
+              {firstColumn.map(item =>
+                item === null ? (
+                  <></>
+                ) : (
+                  <a key={item.id} href={item.url} rel="noreferrer">
+                    {item.name}
+                  </a>
+                )
+              )}
             </span>
           </Item>
           <Item>
             <span>
-              <p>Termos e Condições</p>
-              <p>Cookies e Privacidade</p>
+              {secondColumn.map(item =>
+                item === null ? (
+                  <></>
+                ) : (
+                  <a key={item.id} href={item.url} rel="noreferrer">
+                    {item.name}
+                  </a>
+                )
+              )}
             </span>
           </Item>
           <Item>
             <span>
-              <p>Livro de Reclamações</p>
-              <p>Centro de arbitragem de conflitos</p>
+              {thirdColumn.map(item =>
+                item === null ? (
+                  <></>
+                ) : (
+                  <a key={item.id} href={item.url} rel="noreferrer">
+                    {item.name}
+                  </a>
+                )
+              )}
             </span>
           </Item>
         </ItemsContainer>
@@ -48,14 +98,14 @@ export default function Footer() {
           </small>
           <div>
             <a
-              href="https://www.facebook.com/amfrutas/"
+              href={social.length !== 0 ? social[1].url : 'www.facebook.com'}
               target="_blank"
               rel="noreferrer"
             >
               <img src={facebook} alt="Visit Facebook page" />
             </a>
             <a
-              href="https://www.instagram.com/amfrutas/"
+              href={social.length !== 0 ? social[2].url : 'www.instagram.com'}
               target="_blank"
               rel="noreferrer"
             >
@@ -66,7 +116,7 @@ export default function Footer() {
               />
             </a>
             <a
-              href="https://www.youtube.com/channel/UCYzO5SWwFOUX-6uheZv8eag"
+              href={social.length !== 0 ? social[3].url : 'www.youtube.com'}
               target="_blank"
               rel="noreferrer"
             >

@@ -37,7 +37,7 @@ export default class Pagination extends Component {
 
   render() {
     const { totalItems } = this.state;
-    const { currentPage, setCurrentPage } = this.props;
+    const { currentPage, setCurrentPage, style } = this.props;
 
     return (
       <PaginationContainer
@@ -45,6 +45,8 @@ export default class Pagination extends Component {
         ref={ref => (this.carousel = ref)}
         pagination={false}
         renderArrow={this.myArrow}
+        style={style}
+        totalItems={totalItems > 5 ? 5 : totalItems}
       >
         {totalItems.map(item => (
           <PaginationButton
@@ -62,4 +64,9 @@ export default class Pagination extends Component {
 Pagination.propTypes = {
   currentPage: PropTypes.number.isRequired,
   setCurrentPage: PropTypes.func.isRequired,
+  style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+};
+
+Pagination.defaultProps = {
+  style: {},
 };

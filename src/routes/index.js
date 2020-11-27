@@ -28,7 +28,7 @@ export default function Routes() {
     <BrowserRouter>
       <Switch>
         <Route path="/" exact component={Home} />
-        <Route path="/conteudos" exact component={Contents} isPrivate />
+        <Route path="/conteudos" component={Contents} isPrivate />
         <Route path="/cesto" component={Basket} isPrivate />
         <Route path="/entrega" component={Delivery} isPrivate />
         <Route path="/confirmacao" component={Confirmation} isPrivate />
@@ -40,10 +40,9 @@ export default function Routes() {
         <AccountRoute path="/favoritos" component={MyFavorites} isPrivate />
         <ProductsRoute path="/produtos" exact component={Products} />
         <ProductsRoute path="/produto" component={Product} />
+        <Route path="/produtos/promocoes" component={Promotions} />
         <ProductsRoute path="/produtos" component={ProductsPerCategory} />
-        <Route path="/conteudos" exact component={Contents} isPrivate />
         <Route path="/conteudo" component={Content} />
-        <Route path="/promocoes" component={Promotions} />
       </Switch>
     </BrowserRouter>
   );

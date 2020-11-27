@@ -46,10 +46,11 @@ export const ChildrenCategory = styled(Link)`
   padding: 0 9.5px;
 
   strong {
+    font-weight: normal;
     font-size: 13px;
     line-height: 15px;
     letter-spacing: 0px;
     color: ${({ active }) => (active ? '#F5B027' : '#3AB879')};
-    font-family: ${({ active }) => (active ? 'SFProBold' : 'SFPro')};
+    font-family: 'SFPro';
   }
 `;
