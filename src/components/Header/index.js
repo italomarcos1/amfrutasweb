@@ -134,7 +134,7 @@ export default function PageHeader({ login, active }) {
                 selected={selectedPage === 'Cesto'}
                 onClick={() => {
                   setSelectedPage('Cesto');
-                  history.push('/produtos');
+                  history.push('/cesto');
                 }}
               >
                 <img src={bag} alt="bag" />
