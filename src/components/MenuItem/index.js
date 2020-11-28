@@ -18,13 +18,27 @@ export default function MenuItem({
   const { pathname } = useLocation();
 
   const [active, setActive] = useState('');
-  const [subActive, setSubActive] = useState('');
+  const [categoryUrl, setCategoryUrl] = useState(() => {
+    const formattedUrl = url.split('/');
+
+    return formattedUrl[1];
+  });
+
+  useEffect(() => {
+    const formattedUrl = url.split('/');
+
+    setCategoryUrl(formattedUrl[1]);
+  }, [url]);
 
   useEffect(() => {
     const formattedPathname = pathname.split('/');
-    setActive(formattedPathname[2]);
-    setSubActive(formattedPathname[3]);
-  }, [pathname, slug]);
+
+    const equal = formattedPathname.some(p => {
+      return p === categoryUrl;
+    });
+
+    setActive(equal);
+  }, [pathname, categoryUrl]);
 
   return (
     <>
@@ -33,50 +47,53 @@ export default function MenuItem({
           pathname: `/${url}`,
           state: { id },
         }}
-        active={pathname === `/${url}`}
+        active={pathname === `/${url}` || active}
       >
         <strong>{name}</strong>
         {all_children_categories.length !== 0 && (
           <img src={arrowGreen} alt="Abrir menu" />
         )}
       </Container>
-      {all_children_categories.length !== 0 && pathname === `/${url}` && (
-        <ChildrenCategories>
-          {all_children_categories.map(cc => (
-            <>
-              <ChildrenCategory
-                active={subActive === cc.slug}
-                to={{
-                  pathname: `/${cc.url}`,
-                  state: { id: cc.id },
-                }}
-              >
-                <strong>{cc.name}</strong>
-                {cc.all_children_categories.length !== 0 && (
-                  <img src={arrowGreen} alt="Abrir menu" />
-                )}
-              </ChildrenCategory>
-              {cc.all_children_categories.length !== 0 &&
-                childrenSelected === cc.id && (
-                  <ChildrenCategories>
-                    {cc.all_children_categories.map(subc => (
-                      <ChildrenCategory
-                        active={pathname === subc.url}
-                        to={{
-                          pathname: `/${url}`,
-                          state: { id: subc.id },
-                        }}
-                        style={{ paddingLeft: 18.5 }}
-                      >
-                        <strong>{subc.name}</strong>
-                      </ChildrenCategory>
-                    ))}
-                  </ChildrenCategories>
-                )}
-            </>
-          ))}
-        </ChildrenCategories>
-      )}
+      {all_children_categories.length !== 0 &&
+        (pathname === `/${url}` || active) && (
+          <ChildrenCategories>
+            {all_children_categories.map(cc => (
+              <>
+                <ChildrenCategory
+                  active={pathname === `/${cc.url}`}
+                  to={{
+                    pathname: `/${cc.url}`,
+                    state: { id: cc.id },
+                  }}
+                >
+                  <strong>{cc.name}</strong>
+                  {cc.all_children_categories.length !== 0 && (
+                    <img src={arrowGreen} alt="Abrir menu" />
+                  )}
+                </ChildrenCategory>
+                {cc.all_children_categories.length !== 0 &&
+                  (childrenSelected === cc.id ||
+                    pathname === `/${url}` ||
+                    active) && (
+                    <ChildrenCategories>
+                      {cc.all_children_categories.map(subc => (
+                        <ChildrenCategory
+                          active={pathname === subc.url}
+                          to={{
+                            pathname: `/${url}`,
+                            state: { id: subc.id },
+                          }}
+                          style={{ paddingLeft: 18.5 }}
+                        >
+                          <strong>{subc.name}</strong>
+                        </ChildrenCategory>
+                      ))}
+                    </ChildrenCategories>
+                  )}
+              </>
+            ))}
+          </ChildrenCategories>
+        )}
     </>
   );
 }

@@ -109,13 +109,13 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
       }
 
       case '@cart/UPDATE_AMOUNT': {
-        const { id, amount } = payload;
+        const { id, qty } = payload;
 
         const productIndex = draft.products.findIndex(
           product => product.id === id
         );
 
-        if (productIndex >= 0) draft.products[productIndex].qty = amount;
+        if (productIndex >= 0) draft.products[productIndex].qty = qty;
 
         break;
       }

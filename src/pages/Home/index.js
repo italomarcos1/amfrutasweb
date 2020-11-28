@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import {
   Container,
@@ -28,6 +29,7 @@ import Input from '~/components/HomeInput';
 import InputMask from '~/components/HomeInputMask';
 import SlideShow from '~/components/SlideShow';
 import CategoriesCarousel from '~/components/CategoriesCarousel';
+import Toast from '~/components/Toast';
 
 import DeliveryModal from '~/pages/DeliveryModal';
 import LoginModal from '~/pages/LoginModal';
@@ -64,6 +66,24 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   const [sellerPoints, setSellerPoints] = useState([null, null, null]);
+
+  const signed = useSelector(state => state.auth.signed);
+  const profile = useSelector(state => state.user.profile);
+  const [toastVisible, setToastVisible] = useState(false);
+
+  useEffect(() => {
+    if (signed) {
+      setToastVisible(true);
+
+      const timer = setTimeout(() => {
+        setToastVisible(false);
+      }, 2800);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [signed]);
 
   const loadData = useCallback(async () => {
     const [
@@ -290,7 +310,13 @@ export default function Home() {
         </SectionTitle>
         <Section style={{ height: 332 }}>
           {blogData.map(post => (
-            <BlogPost>
+            <BlogPost
+              key={post.id}
+              to={{
+                pathname: `/${post.url}`,
+                state: { id: post.id },
+              }}
+            >
               <img src={post.thumbs} alt="" />
               <strong>{post.title}</strong>
               <small>{post.description}</small>
@@ -345,6 +371,12 @@ export default function Home() {
         <DeliveryModal closeModal={() => setDeliveryModal(false)} />
       )}
       {loginModal && <LoginModal closeModal={() => setLoginModal(false)} />}
+      {toastVisible && (
+        <Toast
+          status={`Bem-vindo ao AM Frutas, ${profile.name}.`}
+          color="#1DC167"
+        />
+      )}
     </>
   );
 }

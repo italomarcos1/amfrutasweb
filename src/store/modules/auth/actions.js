@@ -28,6 +28,12 @@ export function signFailure() {
   };
 }
 
+export function cleanLogin() {
+  return {
+    type: '@auth/CLEAN_LOGIN_ERROR',
+  };
+}
+
 export function signOut() {
   return {
     type: '@auth/SIGN_OUT',

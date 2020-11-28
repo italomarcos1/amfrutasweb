@@ -105,7 +105,7 @@ export default function PageHeader({ login, active }) {
           </MenuItem>
 
           {menuItems.map(({ id, name, url }) => (
-            <MenuItem key={id} selected={pathname === `/${url}`} to={`${url}`}>
+            <MenuItem key={id} selected={pathname === `${url}`} to={`${url}`}>
               {name}
             </MenuItem>
           ))}

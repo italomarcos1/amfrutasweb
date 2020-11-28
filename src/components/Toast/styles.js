@@ -1,20 +1,25 @@
 import styled, { keyframes } from 'styled-components';
+import { lighten, darken } from 'polished';
 
 export const Container = styled.div`
-  width: 100%;
-  height: 22.5%;
+  width: 20%;
+  height: 10%;
   position: fixed;
   background-color: transparent;
+  /* background-color: #6633cc; */
   z-index: 1100;
   bottom: 0px;
   display: flex;
+  margin: 0 auto;
+  left: 40%;
+  bottom: 22.5%;
   justify-content: center;
 `;
 
 const popIn = keyframes`
   from {
     opacity:0;
-    width:0px;
+    width: 0px;
     height: 11px;
 
     #click{
@@ -56,14 +61,15 @@ export const Toast = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #a8dd8e;
-  border: 2.5px solid #498a29;
-  color: #335f1d;
+  background-color: ${({ color }) => lighten('0.2', color)};
+  border: 2.5px solid ${({ color }) => darken('0.2', color)};
+  color: ${({ color }) => darken('0.15', color)};
   font-size: 16px;
   height: 57px;
   font-family: 'SFPro';
   border-radius: 6px;
   padding: 5px 30px;
+  text-align: center;
 
-  animation: ${({ visible }) => (visible ? popIn : popOut)} 0.3s linear normal;
+  animation: ${({ visible }) => (visible ? popIn : popOut)} 0.2s linear normal;
 `;

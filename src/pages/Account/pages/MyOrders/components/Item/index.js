@@ -1,12 +1,16 @@
-import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import PropTypes from 'prop-types';
 
-import { addToCartRequest } from '~/store/modules/cart/actions';
+import {
+  addToCartRequest,
+  removeFromFavoritesRequest,
+} from '~/store/modules/cart/actions';
 
 import delivery from '~/assets/myAccount/delivery_white.svg';
 import orders from '~/assets/myAccount/orders_white.svg';
+import close from '~/assets/icons/close.svg';
 
 import {
   Container,
@@ -16,25 +20,57 @@ import {
   Options,
   PriceAndAmount,
   Button,
+  DeleteItem,
 } from './styles';
 
 export default function Item({ item, index }) {
-  const { id, picture, title, newPrice, amount } = item;
+  const { id, thumbs, title, price, price_promotional, has_promotion } = item;
   const dispatch = useDispatch();
+
+  const products = useSelector(state => state.cart.products);
+
+  const [qty, setQty] = useState(1);
+
+  const productInCart = useCallback(() => {
+    const findIndex = products.findIndex(p => p.id === id);
+
+    if (findIndex >= 0) setQty(products[findIndex].qty);
+    else setQty(-1);
+  }, [id, products]);
+
+  useEffect(() => {
+    productInCart();
+  }, [productInCart, id, products]);
 
   const handleAddToCart = useCallback(() => {
     dispatch(addToCartRequest(item, 1));
   }, [item, dispatch]);
 
+  const handleFavorite = () => {
+    dispatch(removeFromFavoritesRequest(id));
+  };
+
   return (
     <Container key={id} style={index > 1 ? { marginTop: 20 } : {}}>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <ItemPicture src={picture} />
+        <ItemPicture src={thumbs} />
         <ProductInfo>
-          <Title>{title}</Title>
+          <div
+            style={{
+              display: 'flex',
+              width: '100%',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+            }}
+          >
+            <Title>{title}</Title>
+            <DeleteItem onClick={handleFavorite}>
+              <img src={close} alt="Delete Item" />
+            </DeleteItem>
+          </div>
           <PriceAndAmount>
-            <small>{amount} unidades</small>
-            <strong>€&nbsp;{newPrice}</strong>
+            {qty !== -1 ? <small>{qty} unidades</small> : <small>&nbsp;</small>}
+            <strong>€&nbsp;{has_promotion ? price_promotional : price}</strong>
           </PriceAndAmount>
         </ProductInfo>
       </div>
@@ -59,10 +95,11 @@ export default function Item({ item, index }) {
 Item.propTypes = {
   item: PropTypes.shape({
     id: PropTypes.number,
-    picture: PropTypes.string,
+    thumbs: PropTypes.string,
     title: PropTypes.string,
-    newPrice: PropTypes.string,
-    amount: PropTypes.number,
+    price: PropTypes.string,
+    price_promotional: PropTypes.string,
+    has_promotion: PropTypes.bool,
   }).isRequired,
   index: PropTypes.number.isRequired,
 };

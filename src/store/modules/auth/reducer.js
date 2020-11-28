@@ -4,6 +4,7 @@ const INITIAL_STATE = {
   token: null,
   signed: false,
   loading: false,
+  loginError: false,
 };
 
 export default (state = INITIAL_STATE, { type, payload }) => {
@@ -21,6 +22,8 @@ export default (state = INITIAL_STATE, { type, payload }) => {
         draft.token = payload.token;
         draft.signed = true;
         draft.loading = false;
+        draft.loginError = false;
+
         break;
       }
 
@@ -31,8 +34,15 @@ export default (state = INITIAL_STATE, { type, payload }) => {
 
       case '@auth/SIGN_FAILURE': {
         draft.loading = false;
+        draft.loginError = true;
         break;
       }
+
+      case '@auth/CLEAN_LOGIN_ERROR': {
+        draft.loginError = false;
+        break;
+      }
+
       case '@auth/SIGN_OUT': {
         draft.token = null;
         draft.signed = false;

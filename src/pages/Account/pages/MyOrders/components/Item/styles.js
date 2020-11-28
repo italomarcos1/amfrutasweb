@@ -24,6 +24,7 @@ export const Title = styled.h1`
   line-height: 22px;
   letter-spacing: 0px;
   color: #393939;
+  text-transform: capitalize;
 `;
 
 export const ProductInfo = styled.div`
@@ -111,5 +112,21 @@ export const Button = styled.button.attrs({ type: 'button' })`
     height: 17px;
     margin-right: 5px;
     margin-left: 0px;
+  }
+`;
+
+export const DeleteItem = styled.button`
+  background: #f84c4c;
+  border-radius: 4px;
+  opacity: 1;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 60%;
+    margin: 0 auto;
   }
 `;

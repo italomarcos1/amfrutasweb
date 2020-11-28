@@ -20,6 +20,10 @@ export const Container = styled(Link)`
     font-family: ${({ active }) => (active ? 'SFProBold' : 'SFPro')};
     letter-spacing: 0px;
     color: #141319;
+
+    &:hover {
+      color: ${({ active }) => (active ? '#141319' : '#3AB879')};
+    }
   }
 
   img {
@@ -52,5 +56,9 @@ export const ChildrenCategory = styled(Link)`
     letter-spacing: 0px;
     color: ${({ active }) => (active ? '#F5B027' : '#3AB879')};
     font-family: 'SFPro';
+
+    &:hover {
+      color: #f5b027;
+    }
   }
 `;

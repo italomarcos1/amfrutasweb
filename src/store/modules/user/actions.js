@@ -45,3 +45,7 @@ export function setProduct(id) {
 export function setCategory(id) {
   return { type: '@user/SET_CATEGORY', payload: { id } };
 }
+
+export function setUrlActive(url) {
+  return { type: '@user/SET_URL_ACTIVE', payload: { url } };
+}

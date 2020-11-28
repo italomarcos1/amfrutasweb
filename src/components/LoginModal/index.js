@@ -1,5 +1,15 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { darken } from 'polished';
+
+const rotate = keyframes` /** animação para rotacionar o icon. */
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+`;
 
 export const Button = styled.button`
   display: flex;
@@ -29,6 +39,10 @@ export const Button = styled.button`
 
   b {
     font-family: 'SFProBold';
+  }
+
+  svg {
+    animation: ${rotate} 2s linear infinite;
   }
 `;
 

@@ -62,7 +62,6 @@ export function* signIn({ payload }) {
     // console.tron.log(error);
     // console.log(error);
     // console.log('ai');
-    alert('Erro no login, confira seus dados.');
     yield put(signFailure());
   }
 }

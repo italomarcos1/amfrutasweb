@@ -1,16 +1,17 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const Menu = styled.div`
   width: 100%;
   height: 41px;
   background-color: #0cb68b;
-  top: 0px;
-  position: fixed;
+  position: relative;
+  transition: all 0.2s;
   z-index: 999;
 `;
 
 export const MenuContent = styled.div`
-  width: 862px;
+  width: 1122px;
   height: 41px;
   margin: 0 auto;
   display: flex;
@@ -18,7 +19,26 @@ export const MenuContent = styled.div`
   justify-content: space-between;
 `;
 
-export const MenuItem = styled.button.attrs({
+export const MenuItem = styled(Link)`
+  font-family: ${({ selected }) => (selected ? 'SFProBold' : 'SFPro')};
+  font-size: 15px;
+  line-height: 20px;
+  letter-spacing: 0px;
+  color: #ffffff;
+  padding: 0 20px;
+  text-align: center;
+  height: 37px;
+  display: flex;
+  align-items: center;
+  background: none;
+
+  img {
+    width: 18px;
+    height: 18px;
+  }
+`;
+
+export const MenuItemButton = styled.button.attrs({
   type: 'button',
 })`
   font-family: ${({ selected }) => (selected ? 'SFProBold' : 'SFPro')};
@@ -26,7 +46,7 @@ export const MenuItem = styled.button.attrs({
   line-height: 20px;
   letter-spacing: 0px;
   color: #ffffff;
-  padding: 0 1px;
+  padding: 0 10px;
   text-align: center;
   height: 37px;
   display: flex;
@@ -84,8 +104,7 @@ export const SubTitle = styled.div`
   line-height: 16px;
   letter-spacing: 0px;
   color: #000;
-  /* top: 112px; */
-  top: 41px;
-  position: fixed;
+  position: relative;
+  transition: all 0.2s;
   z-index: 999;
 `;

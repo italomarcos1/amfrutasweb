@@ -26,17 +26,14 @@ import {
 
 export default function Item({ item, index }) {
   const {
-    options: { product },
-    qty,
-  } = item;
-  const {
     id,
     thumbs,
     title,
     price,
     price_promotional,
     has_promotion,
-  } = product;
+    qty,
+  } = item;
 
   const dispatch = useDispatch();
 

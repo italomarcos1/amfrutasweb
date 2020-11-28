@@ -11,7 +11,7 @@ import {
 } from './styles';
 
 export default function Item({ item, index }) {
-  const { product, amount } = item;
+  const { product, qty } = item;
   const {
     id,
     thumbs,
@@ -28,7 +28,7 @@ export default function Item({ item, index }) {
         <ProductInfo>
           <Title>{title}</Title>
           <PriceAndAmount>
-            <small>{amount} unidades</small>
+            <small>{qty} unidades</small>
             <strong>€&nbsp;{has_promotion ? price_promotional : price}</strong>
           </PriceAndAmount>
         </ProductInfo>
@@ -43,7 +43,7 @@ Item.propTypes = {
     picture: PropTypes.string,
     title: PropTypes.string,
     newPrice: PropTypes.string,
-    amount: PropTypes.number,
+    qty: PropTypes.number,
   }).isRequired,
   index: PropTypes.number.isRequired,
 };

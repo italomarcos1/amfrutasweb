@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Form } from '@unform/web';
 import { darken } from 'polished';
+import { Link } from 'react-router-dom';
 
 export const Container = styled(Form)`
   display: flex;
@@ -214,7 +215,7 @@ export const NullLocation = styled.div`
   border-radius: 4px;
 `;
 
-export const BlogPost = styled.div`
+export const BlogPost = styled(Link)`
   display: flex;
   flex-direction: column;
   width: 270px;

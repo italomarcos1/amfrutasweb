@@ -34,7 +34,7 @@ export default function Product({ product, index }) {
   const updating = useSelector(state => state.cart.updating);
   const profile = useSelector(state => state.user.profile);
 
-  const [amount, setAmount] = useState(0);
+  const [qty, setQty] = useState(1);
 
   const {
     id,
@@ -47,9 +47,9 @@ export default function Product({ product, index }) {
   } = product;
 
   const handleAddToCart = useCallback(() => {
-    dispatch(addToCartRequest(product, amount));
-    setAmount(0);
-  }, [product, amount, dispatch]);
+    dispatch(addToCartRequest(product, qty));
+    setQty(0);
+  }, [product, qty, dispatch]);
 
   useEffect(() => {
     const fvt = favorites.findIndex(fav => fav.id === id);
@@ -119,24 +119,22 @@ export default function Product({ product, index }) {
         <div>
           <button
             type="button"
-            disabled={amount === 0}
-            onClick={() => setAmount(amount - 1)}
+            disabled={qty === 1}
+            onClick={() => setQty(qty - 1)}
             style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
           >
             <img src={minus} alt="icon" />
           </button>
-          <strong>
-            {amount === 0 ? 0 : amount < 10 ? `0${amount}` : amount}
-          </strong>
+          <strong>{qty === 0 ? 0 : qty < 10 ? `0${qty}` : qty}</strong>
           <button
             type="button"
-            onClick={() => setAmount(amount + 1)}
+            onClick={() => setQty(qty + 1)}
             style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
           >
             <img src={plus} alt="icon" />
           </button>
         </div>
-        <button type="button" onClick={handleAddToCart} disabled={amount === 0}>
+        <button type="button" onClick={handleAddToCart} disabled={qty === 0}>
           <img src={basket_active} alt="icon" />
         </button>
       </Options>

@@ -11,7 +11,7 @@ import {
 } from './actions';
 
 export function* addToCart({ payload }) {
-  const { product: newProduct, amount } = payload;
+  const { product: newProduct, qty } = payload;
 
   const products = yield select(state => state.cart.products);
   const alreadyInCart = products.findIndex(product => {
@@ -19,37 +19,15 @@ export function* addToCart({ payload }) {
   });
 
   if (alreadyInCart >= 0) {
-    const { rowId } = products[alreadyInCart];
-
-    yield call(backend.put, `cart/${rowId}/${amount}`);
-    yield put(
-      updateAmount(newProduct.id, products[alreadyInCart].amount + amount)
-    );
+    yield put(updateAmount(newProduct.id, products[alreadyInCart].qty + qty));
   } else {
-    try {
-      const {
-        data: { data },
-      } = yield call(backend.post, 'cart', {
-        product_id: newProduct.id,
-        quantity: amount,
-      });
-
-      yield put(addToCartSuccess(data));
-    } catch (err) {
-      alert('Não adicionou');
-      // console.tron.log(err);
-    }
+    yield put(addToCartSuccess({ ...newProduct, qty }));
+    // console.tron.log(err);
   }
 }
 export function* removeFromCart({ payload }) {
   try {
     const { id } = payload;
-    const products = yield select(state => state.cart.products);
-    const findIndex = products.findIndex(product => {
-      return product.id === id;
-    });
-    const { rowId } = products[findIndex];
-    const { data: removeData } = yield call(backend.delete, `/cart/${rowId}`);
 
     yield put(removeFromCartSuccess(id));
   } catch (err) {
@@ -61,18 +39,20 @@ export function* removeFromCart({ payload }) {
 export function* addToFavorites({ payload }) {
   const { product } = payload;
 
-  // const {
-  //   data: { data },
-  // } = yield call(backend.get, `ecommerce/products/${id}`);
-
-  // yield call(backend.post, `clients/wishlists/${id}`);
-  yield put(addToFavoritesSuccess(product));
+  try {
+    yield call(backend.post, `clients/wishlists/${product.id}`);
+    yield put(addToFavoritesSuccess(product));
+  } catch (err) {
+    // console.tron.log('err');
+    console.log('err');
+    alert('Erro ao adicionar favorito.');
+  }
 }
 
 export function* removeFromFavorites({ payload }) {
   const { id } = payload;
 
-  // yield call(backend.delete, `clients/wishlists/${id}`);
+  yield call(backend.delete, `clients/wishlists/${id}`);
   yield put(removeFromFavoritesSuccess(id));
 }
 

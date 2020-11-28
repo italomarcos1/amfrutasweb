@@ -1,7 +1,7 @@
-export function addToCartRequest(product, amount) {
+export function addToCartRequest(product, qty) {
   return {
     type: '@cart/ADD_TO_CART_REQUEST',
-    payload: { product, amount },
+    payload: { product, qty },
   };
 }
 
@@ -80,10 +80,10 @@ export function removeFromFavoritesSuccess(id) {
   };
 }
 
-export function updateAmount(id, amount) {
+export function updateAmount(id, qty) {
   return {
     type: '@cart/UPDATE_AMOUNT',
-    payload: { id, amount },
+    payload: { id, qty },
   };
 }
 

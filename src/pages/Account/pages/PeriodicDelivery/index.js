@@ -31,7 +31,7 @@ import minus from '~/assets/icons/minus.svg';
 import plus from '~/assets/icons/plus.svg';
 
 export default function PeriodicDelivery() {
-  const [amount, setAmount] = useState(4);
+  const [qty, setQty] = useState(4);
   const [selected, setSelected] = useState('start');
 
   return (
@@ -45,8 +45,8 @@ export default function PeriodicDelivery() {
           <Options>
             <button
               type="button"
-              disabled={amount === 0}
-              onClick={() => setAmount(amount - 1)}
+              disabled={qty === 0}
+              onClick={() => setQty(qty - 1)}
               style={{
                 borderTopRightRadius: 0,
                 borderBottomRightRadius: 0,
@@ -54,10 +54,10 @@ export default function PeriodicDelivery() {
             >
               <img src={minus} alt="icon" />
             </button>
-            <strong>{amount}</strong>
+            <strong>{qty}</strong>
             <button
               type="button"
-              onClick={() => setAmount(amount + 1)}
+              onClick={() => setQty(qty + 1)}
               style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
             >
               <img src={plus} alt="icon" />

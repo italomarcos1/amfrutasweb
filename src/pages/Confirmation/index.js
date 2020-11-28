@@ -44,7 +44,7 @@ import { orderFinished } from '~/store/modules/cart/actions';
 import { periodicProducts } from '~/data';
 
 export default function Confirmation() {
-  const [amount, setAmount] = useState(4);
+  const [qty, setQty] = useState(4);
   const [periodicDelivery, setPeriodicDelivery] = useState(true);
 
   const history = useHistory();
@@ -271,8 +271,8 @@ export default function Confirmation() {
               <Options>
                 <button
                   type="button"
-                  disabled={amount === 0}
-                  onClick={() => setAmount(amount - 1)}
+                  disabled={qty === 0}
+                  onClick={() => setQty(qty - 1)}
                   style={{
                     borderTopRightRadius: 0,
                     borderBottomRightRadius: 0,
@@ -280,10 +280,10 @@ export default function Confirmation() {
                 >
                   <img src={minus} alt="icon" />
                 </button>
-                <strong>{amount}</strong>
+                <strong>{qty}</strong>
                 <button
                   type="button"
-                  onClick={() => setAmount(amount + 1)}
+                  onClick={() => setQty(qty + 1)}
                   style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
                 >
                   <img src={plus} alt="icon" />
