@@ -91,7 +91,7 @@ export function processOrder(value) {
   return { type: '@cart/PROCESS_ORDER', payload: { value } };
 }
 
-export function finishOrder(order) {
+export function finishOrderRequest(order) {
   return { type: '@cart/FINISH_ORDER', payload: { order } };
 }
 

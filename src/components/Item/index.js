@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 // import { Container } from './styles';
@@ -37,6 +37,20 @@ export default function Item({ item, index }) {
 
   const dispatch = useDispatch();
 
+  const [finalPrice, setFinalPrice] = useState(price);
+  const [finalPromotionalPrice, setFinalPromotionalPrice] = useState(price);
+
+  useEffect(() => {
+    const newPrice = (Math.round(Number(price) * qty * 100) / 100).toFixed(2);
+    setFinalPrice(newPrice);
+  }, [qty, price]);
+  useEffect(() => {
+    const newPrice = (
+      Math.round(Number(price_promotional) * qty * 100) / 100
+    ).toFixed(2);
+    setFinalPromotionalPrice(newPrice);
+  }, [qty, price_promotional]);
+
   const handleRemoveFromCart = useCallback(() => {
     dispatch(removeFromCartRequest(id));
   }, [id, dispatch]);
@@ -57,11 +71,13 @@ export default function Item({ item, index }) {
           <Title>{title}</Title>
           <PriceAndAmount>
             {has_promotion ? (
-              <small>€&nbsp;{price}</small>
+              <small>€&nbsp;{finalPrice}</small>
             ) : (
               <small>&nbsp;</small>
             )}
-            <strong>€&nbsp;{has_promotion ? price_promotional : price}</strong>
+            <strong>
+              €&nbsp;{has_promotion ? finalPromotionalPrice : finalPrice}
+            </strong>
           </PriceAndAmount>
         </ProductInfo>
       </div>

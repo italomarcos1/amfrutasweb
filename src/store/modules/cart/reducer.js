@@ -1,9 +1,12 @@
 import produce from 'immer';
 
+import { calculatePrice } from '~/utils/calculatePrice';
+
 const INITIAL_STATE = {
   products: [],
   favorites: [],
   price: '',
+  saved: '',
   updating: false,
   hasOrder: false,
   orderFinished: false,
@@ -20,6 +23,13 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
 
         const totalPages = Math.ceil(draft.products.length / 8);
         draft.pages = totalPages;
+
+        const { formattedPrice, formattedSavedPrice } = calculatePrice(
+          draft.products
+        );
+
+        draft.price = formattedPrice;
+        draft.saved = formattedSavedPrice;
 
         break;
       }
@@ -39,6 +49,13 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
             );
           }
         }
+
+        const { formattedPrice, formattedSavedPrice } = calculatePrice(
+          draft.products
+        );
+
+        draft.price = formattedPrice;
+        draft.saved = formattedSavedPrice;
 
         break;
       }
@@ -120,6 +137,13 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
         );
 
         if (productIndex >= 0) draft.products[productIndex].qty = qty;
+
+        const { formattedPrice, formattedSavedPrice } = calculatePrice(
+          draft.products
+        );
+
+        draft.price = formattedPrice;
+        draft.saved = formattedSavedPrice;
 
         break;
       }

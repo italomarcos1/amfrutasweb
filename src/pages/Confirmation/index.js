@@ -44,6 +44,9 @@ import { orderFinished } from '~/store/modules/cart/actions';
 
 import { periodicProducts } from '~/data';
 
+import backend from '~/services/api';
+import { formatPrice } from '~/utils/calculatePrice';
+
 export default function Confirmation() {
   const [qty, setQty] = useState(4);
   const [periodicDelivery, setPeriodicDelivery] = useState(true);
@@ -54,25 +57,39 @@ export default function Confirmation() {
   const isOrderFinished = useSelector(state => state.cart.orderFinished);
   const hasOrder = useSelector(state => state.cart.hasOrder);
 
-  const { profile, shipping, cart } = useSelector(state => state.user.order);
+  const profile = useSelector(state => state.user.profile);
+
+  const finalProfile = useSelector(state => state.user.finalProfile);
+  const finalAddress = useSelector(state => state.addresses.finalAddress);
+  const order = useSelector(state => state.user.order);
+  const cart = useSelector(state => state.cart.products);
 
   const [paginatedProducts, setPaginatedProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const [orderInfo, setOrderInfo] = useState(null);
+
+  const loadData = useCallback(async () => {
+    const {
+      data: { data },
+    } = await backend.get(`clients/transactions/${order.id}`);
+
+    setOrderInfo(data);
+  }, [order]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
-
-    return () => {
-      dispatch(orderFinished());
-    };
-  }, []);
+    loadData();
+  }, [loadData]);
 
   const handlePagination = useCallback(() => {
+    if (!orderInfo) return;
+    const { products } = orderInfo;
     const pageIndex = 8 * (currentPage - 1);
-    const newPage = cart.slice(pageIndex, pageIndex + 8);
+    const newPage = products.slice(pageIndex, pageIndex + 8);
 
     setPaginatedProducts(newPage);
-  }, [currentPage, cart]);
+  }, [currentPage, orderInfo]);
 
   useEffect(() => {
     handlePagination();
@@ -86,8 +103,8 @@ export default function Confirmation() {
     return <Redirect to="/cesto" />;
   }
 
-  const { name, last_name, phone, email, birth, document } = profile;
-  const { street_name, nome_localidade, cod_postal, localidade } = shipping;
+  const { name, last_name, phone, email, birth, document } = finalProfile;
+  const { address, city, zipcode, state } = finalAddress;
 
   return (
     <>
@@ -142,21 +159,21 @@ export default function Confirmation() {
             <CustomInputContainer>
               <Info>
                 <strong>Morada</strong>
-                <small>{street_name}</small>
+                <small>{address}</small>
               </Info>
               <Info>
                 <strong>Cidade</strong>
-                <small>{nome_localidade}</small>
+                <small>{city}</small>
               </Info>
             </CustomInputContainer>
             <CustomInputContainer>
               <Info>
                 <strong>Código Postal</strong>
-                <small>{cod_postal}</small>
+                <small>{zipcode}</small>
               </Info>
               <Info>
                 <strong>Localidade</strong>
-                <small>{localidade}</small>
+                <small>{state}</small>
               </Info>
             </CustomInputContainer>
             <CustomInputContainer>
@@ -177,7 +194,9 @@ export default function Confirmation() {
             </SectionTitle>
             <CashbackCredit>
               <img src={cashback} alt="Cashback" />
-              <strong>€ 8,78</strong>
+              <strong>
+                €&nbsp;{!!profile ? profile.cback_credit : '0,00'}
+              </strong>
             </CashbackCredit>
           </InfoContainer>
         </Content>
@@ -198,27 +217,40 @@ export default function Confirmation() {
             <CheckoutDetails>
               <CheckoutItem>
                 <h1>Produtos</h1>
-                <h2>€ 179,14</h2>
+                <h2>€&nbsp;{!!orderInfo ? `${orderInfo.total}` : '0.00'}</h2>
               </CheckoutItem>
               <CheckoutItem>
                 <h1>Economizou</h1>
-                <h2>€ 22,09</h2>
+                <h2>
+                  €&nbsp;{!!orderInfo ? `${orderInfo.discount}.00` : '0.00'}
+                </h2>
               </CheckoutItem>
               <CheckoutItem>
                 <h1>Crédito Disponível</h1>
-                <h2 style={{ color: '#0CB68B' }}>€ 5,12</h2>
+                <h2 style={{ color: '#0CB68B' }}>
+                  €&nbsp;{!!profile ? `${profile.cback_credit}` : '0.00'}
+                </h2>
               </CheckoutItem>
               <CheckoutItem>
                 <h1>Desconto do CUPOM</h1>
-                <h2 style={{ color: '#0CB68B' }}>€ 10,00</h2>
+                <h2 style={{ color: '#0CB68B' }}>
+                  €&nbsp;{!!orderInfo ? `${orderInfo.discount}.00` : '0.00'}
+                </h2>
               </CheckoutItem>
               <CheckoutItem>
                 <h1>Porte</h1>
-                <h2 style={{ color: '#0CB68B' }}>Grátis</h2>
+                <h2 style={{ color: '#0CB68B' }}>
+                  €&nbsp;{!!orderInfo ? `${orderInfo.shipping}.00` : '0.00'}
+                </h2>
               </CheckoutItem>
               <CheckoutItem>
                 <h2>Total</h2>
-                <h2 style={{ fontSize: 25, color: '#0CB68B' }}>174,62</h2>
+                <h2 style={{ fontSize: 25, color: '#0CB68B' }}>
+                  €&nbsp;
+                  {!!orderInfo
+                    ? formatPrice(orderInfo.total - orderInfo.discount)
+                    : '0.00'}
+                </h2>
               </CheckoutItem>
               <ConfirmationText>
                 A confirmação da sua encomenda será feita <br />

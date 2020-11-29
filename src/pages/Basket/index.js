@@ -26,10 +26,12 @@ import LoginModal from '~/pages/LoginModal';
 
 import { processOrder } from '~/store/modules/cart/actions';
 
+import { formatPrice } from '~/utils/calculatePrice';
+
 import { Button, SecureLogin } from '~/components/LoginModal';
 
 export default function Basket() {
-  const { products, price } = useSelector(state => state.cart);
+  const { products, price, saved } = useSelector(state => state.cart);
   const signed = useSelector(state => state.auth.signed);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -113,7 +115,11 @@ export default function Basket() {
               </CheckoutItem>
               <CheckoutItem>
                 <h1>Economizou</h1>
-                <h2>{products.length !== 0 ? `€ 22,9` : '---'}</h2>
+                <h2>
+                  {products.length !== 0
+                    ? `€ ${formatPrice(saved - price)}`
+                    : '---'}
+                </h2>
               </CheckoutItem>
               <CheckoutItem style={{ height: 77 }}>
                 <h1>
@@ -134,7 +140,7 @@ export default function Basket() {
               <CheckoutItem>
                 <h2>Total</h2>
                 <h2 style={{ fontSize: 25, color: '#0CB68B' }}>
-                  {products.length !== 0 ? `€ 179,14` : '---'}
+                  {products.length !== 0 ? `€ ${price}` : '---'}
                 </h2>
               </CheckoutItem>
               <ConfirmationText>

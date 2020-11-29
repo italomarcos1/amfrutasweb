@@ -10,6 +10,18 @@ export function updateProfileFailure() {
   return { type: '@user/UPDATE_PROFILE_FAILURE' };
 }
 
+export function addFinalProfileRequest(profile) {
+  return { type: '@user/ADD_FINAL_PROFILE_REQUEST', payload: { profile } };
+}
+
+export function addFinalProfileSuccess(profile) {
+  return { type: '@user/ADD_FINAL_PROFILE_SUCCESS', payload: { profile } };
+}
+
+export function addFinalProfileFailure() {
+  return { type: '@user/ADD_FINAL_PROFILE_FAILURE' };
+}
+
 export function hideTabBar() {
   return { type: '@user/HIDE_TAB_BAR' };
 }

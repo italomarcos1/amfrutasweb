@@ -2,7 +2,12 @@ import { call, put, all, takeLatest, select } from 'redux-saga/effects';
 
 import backend from '~/services/api';
 
-import { updateProfileSuccess, updateProfileFailure } from './actions';
+import {
+  updateProfileSuccess,
+  updateProfileFailure,
+  addFinalProfileSuccess,
+  addFinalProfileFailure,
+} from './actions';
 
 export function* updateProfile({ payload }) {
   try {
@@ -14,9 +19,25 @@ export function* updateProfile({ payload }) {
 
     yield put(updateProfileSuccess(profileData));
   } catch (error) {
-    // Toast.show('Houve um erro na atualização do perfil, verifique seus dados.');
     yield put(updateProfileFailure());
   }
 }
 
-export default all([takeLatest('@user/UPDATE_PROFILE_REQUEST', updateProfile)]);
+export function* addFinalProfile({ payload }) {
+  try {
+    const { profile } = payload;
+
+    const {
+      data: { data },
+    } = yield call(backend.put, 'clients', profile);
+
+    yield put(addFinalProfileSuccess(data));
+  } catch (error) {
+    yield put(addFinalProfileFailure());
+  }
+}
+
+export default all([
+  takeLatest('@user/UPDATE_PROFILE_REQUEST', updateProfile),
+  takeLatest('@user/ADD_FINAL_PROFILE_REQUEST', addFinalProfile),
+]);

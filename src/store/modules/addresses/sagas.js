@@ -4,8 +4,10 @@ import backend from '~/services/api';
 
 import {
   addAddressSuccess,
+  addFinalAddressSuccess,
   addAddressFailure,
   updateShippingInfoSuccess,
+  updateFinalShippingInfoSuccess,
   updateAddressFailure,
   deleteAddressSuccess,
 } from './actions';
@@ -30,6 +32,26 @@ export function* addAddress({ payload }) {
     yield put(addAddressFailure());
   }
 }
+export function* addFinalAddress({ payload }) {
+  try {
+    const {
+      data: { address, profile },
+    } = payload;
+
+    const {
+      data: { data },
+    } = yield call(backend.post, 'clients/addresses', address);
+
+    if (address.default === 1) {
+      const updatedDefaultAddress = { ...profile, default_address: data };
+
+      yield put(updateProfileRequest(updatedDefaultAddress));
+    }
+    yield put(addFinalAddressSuccess(data));
+  } catch (error) {
+    yield put(addAddressFailure());
+  }
+}
 
 export function* updateAddress({ payload }) {
   try {
@@ -49,6 +71,37 @@ export function* updateAddress({ payload }) {
       yield put(updateProfileRequest(updatedDefaultAddress));
     }
     yield put(updateShippingInfoSuccess(responseData));
+  } catch (error) {
+    yield put(updateAddressFailure());
+  }
+}
+
+export function* updateFinalAddress({ payload }) {
+  try {
+    const {
+      data: { profile, address },
+    } = payload;
+
+    const addresses = yield select(state => state.addresses.addresses);
+
+    const findIndex = addresses.findIndex(a => a.address === address.address);
+
+    const addressId = addresses[findIndex].id;
+
+    const {
+      data: { data: responseData },
+    } = yield call(backend.put, `clients/addresses/${addressId}`, address);
+
+    if (address.default === 1) {
+      const updatedDefaultAddress = {
+        ...profile,
+        default_address: responseData,
+      };
+
+      yield put(updateProfileRequest(updatedDefaultAddress));
+    }
+
+    yield put(updateFinalShippingInfoSuccess(responseData));
   } catch (error) {
     yield put(updateAddressFailure());
   }
@@ -96,7 +149,12 @@ export function* removeAddress({ payload }) {
 
 export default all([
   takeLatest('@addresses/ADD_ADDRESS_REQUEST', addAddress),
+  takeLatest('@addresses/ADD_FINAL_ADDRESS_REQUEST', addFinalAddress),
   takeLatest('@addresses/UPDATE_SHIPPING_INFO_REQUEST', updateAddress),
+  takeLatest(
+    '@addresses/UPDATE_FINAL_SHIPPING_INFO_REQUEST',
+    updateFinalAddress
+  ),
   takeLatest('@addresses/SET_PRIMARY_ADDRESS', updateDefaultAddress),
   takeLatest('@addresses/DELETE_ADDRESS_REQUEST', removeAddress),
 ]);

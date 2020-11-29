@@ -28,6 +28,7 @@ import {
 } from './styles';
 
 import { onlyValues } from '~/utils/onlyValues';
+import { formatPrice } from '~/utils/calculatePrice';
 
 import backend from '~/services/api';
 
@@ -55,16 +56,13 @@ import ItemsList from '~/components/ItemsList';
 import CheckoutHeader from '~/components/CheckoutHeader';
 import Item from '~/components/CheckoutItem';
 
-import { updateProfileRequest } from '~/store/modules/user/actions';
+import { addFinalProfileRequest } from '~/store/modules/user/actions';
 import {
-  addAddressRequest,
-  setPrimaryAddress,
-  updateShippingInfoRequest,
+  addFinalAddressRequest,
+  updateFinalShippingInfoRequest,
 } from '~/store/modules/addresses/actions';
 
-import { finishOrder } from '~/store/modules/cart/actions';
-
-import { hours, returnNumberOfDays } from '~/utils/listMonths';
+import { finishOrderRequest } from '~/store/modules/cart/actions';
 
 import {
   nameIsValid,
@@ -75,6 +73,8 @@ import {
   mailIsValid,
   postcodeIsValid,
 } from '~/utils/validation';
+
+import fakeAddress from '~/utils/fakeAddress';
 
 export default function Delivery() {
   const [deliveryOption, setDeliveryOption] = useState('delivery');
@@ -97,42 +97,48 @@ export default function Delivery() {
 
   const cart = useSelector(state => state.cart.products);
   const hasOrder = useSelector(state => state.cart.hasOrder);
+  const price = useSelector(state => state.cart.price);
+  const saved = useSelector(state => state.cart.saved);
 
   const [paginatedProducts, setPaginatedProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
   const [newAddress, setNewAddress] = useState(false);
-  const [newAddressPrimary, setNewAddressPrimary] = useState(false);
 
   const profile = useSelector(state => state.user.profile);
+  const finalProfile = useSelector(state => state.user.finalProfile);
+  const finalAddress = useSelector(state => state.addresses.finalAddress);
   const addresses = useSelector(state => state.addresses.addresses);
-  const primaryAddress = useSelector(state => state.addresses.primaryAddress);
+  const [primaryAddress, setPrimaryAddress] = useState(profile.default_address);
 
   const [formattedAddresses, setFormattedAddresses] = useState(null);
-  const [selectedAddress, setSelectedAddress] = useState(() => {
-    if (!!primaryAddress) {
-      return primaryAddress;
-    }
-    setNewAddress(true);
-    return {};
-  });
 
-  const [postcode, setPostcode] = useState(() => {
+  const [newPrimaryAddress, setNewPrimaryAddress] = useState(false);
+
+  const [zipcode, setZipcode] = useState(() => {
     if (!!primaryAddress) {
-      return primaryAddress.cod_postal;
+      if (primaryAddress.length !== 0) {
+        return primaryAddress.zipcode;
+      }
     }
     return '';
   });
 
-  const [tempPostcode, setTempPostcode] = useState(() => {
+  const [tempZipcode, setTempZipcode] = useState(() => {
     if (!!primaryAddress) {
-      return primaryAddress.cod_postal;
+      if (primaryAddress.length !== 0) {
+        return primaryAddress.zipcode;
+      }
     }
     return '';
   });
 
   const [residence, setResidence] = useState(() => {
-    if (!!primaryAddress) return primaryAddress.street_name; //eslint-disable-line
+    if (!!primaryAddress) {
+      if (primaryAddress.length !== 0) {
+        return primaryAddress.address;
+      }
+    }
     return '';
   });
 
@@ -140,7 +146,7 @@ export default function Delivery() {
 
   const [email, setEmail] = useState(!!profile ? profile.email : '');
   const [emailError, setEmailError] = useState(false);
-  const [gender, setGender] = useState(!!profile ? profile.gender : '');
+  const [gender, setGender] = useState(!!profile ? profile.gender : 'male');
 
   const [invalidFields, setInvalidFields] = useState([
     false,
@@ -181,6 +187,8 @@ export default function Delivery() {
     label: 'Entrega em casa',
   });
 
+  const [deliveryInterval, setDeliveryInterval] = useState(-1);
+
   const [invalidDeliveryDay, setInvalidDeliveryDay] = useState(false);
   const [invalidDeliveryHour, setInvalidDeliveryHour] = useState(false);
 
@@ -218,10 +226,10 @@ export default function Delivery() {
   const formatAddresses = useCallback(() => {
     if (addresses.length === 0) return;
 
-    const formattingAddresses = addresses.map(({ id, street_name }) => ({
+    const formattingAddresses = addresses.map(({ id, address }) => ({
       id,
-      value: street_name,
-      label: street_name,
+      value: address,
+      label: address,
     }));
 
     setFormattedAddresses(formattingAddresses);
@@ -232,14 +240,14 @@ export default function Delivery() {
     formatAddresses();
   }, []);
 
-  const validateCoupon = useCallback(() => {
-    setCouponIsValid(!!coupon);
-  }, [coupon]);
-
   useEffect(() => {
     window.scrollTo(0, 0);
     loadData();
   }, []);
+
+  const validateCoupon = useCallback(() => {
+    setCouponIsValid(!!coupon);
+  }, [coupon]);
 
   const validateData = useCallback((formData, invalidateFields) => {
     const formattedData = Object.values(formData);
@@ -255,62 +263,62 @@ export default function Delivery() {
 
   const populateAddress = useCallback(() => {
     const findNewAddress = addresses.findIndex(
-      address => address.street_name === residence
+      address => address.address === residence
     );
 
     if (findNewAddress < 0) return;
-    // erro ta aqui
-    setSelectedAddress(addresses[findNewAddress]);
+    setZipcode(addresses[findNewAddress].zipcode);
+
     shippingInfoRef.current.setData(addresses[findNewAddress]);
   }, [addresses, residence]);
+
+  const populateDeliveryInterval = useCallback(() => {
+    const findIndex = deliveryHours.findIndex(d => d.label === deliveryHour);
+    if (findIndex < 0) {
+      return;
+    }
+
+    setDeliveryInterval(deliveryHours[findIndex].id);
+  }, [deliveryHour, deliveryHours]);
+
+  useEffect(() => {
+    if (deliveryHour === -1) return;
+    populateDeliveryInterval();
+  }, [deliveryHour, populateDeliveryInterval]);
 
   useEffect(() => {
     if (addresses.length === 0) return;
     populateAddress();
   }, [residence, addresses, populateAddress]);
 
-  const updatePrimaryAddress = useCallback(() => {
-    dispatch(setPrimaryAddress(selectedAddress.id));
-  }, [dispatch, selectedAddress]);
+  const modifyGender = useCallback(() => {
+    return gender === 'Masculino'
+      ? 'male'
+      : gender === 'Feminino'
+      ? 'female'
+      : 'other';
+  }, [gender]);
 
   const handleFinishOrder = useCallback(() => {
-    const allDataProfile = profileInfoRef.current.getData();
-    const allDataShipping = shippingInfoRef.current.getData();
+    if (!finalProfile || (deliveryOption === 'delivery' && !finalAddress)) {
+      alert('not yet boi');
+      return;
+    }
 
-    const { full_name } = allDataShipping;
-
-    const [newName, ...restOfName] = full_name.split(' ');
-
-    const newNickname = restOfName.join(' ');
-
-    const profileData = { ...allDataProfile, gender };
-    const shipping_address = {
-      ...allDataShipping,
-      id: newAddress ? `${Date.now()}` : selectedAddress.id,
-      name: newName,
-      last_name: newNickname,
-      full_name,
-      residence,
-      country,
-      cod_postal: postcode,
+    const formattedDeliveryDay = deliveryDay.split('/').join('-');
+    const formattedFinalAddress = {
+      name: `${finalAddress.destination_name} ${finalAddress.destination_last_name}`,
+      ...finalAddress,
     };
 
-    // new address cadastrar e pegar id
-
-    if (selectedAddress.id === primaryAddress.id) updatePrimaryAddress();
-
-    // criar id do pedido
-    // aplicar data, hora e  id do pedido
-    //
-    // shipping - null aqui1
-
     dispatch(
-      finishOrder({
-        profile: profileData,
+      finishOrderRequest({
         shipping_address:
-          deliveryOption === 'delivery' ? shipping_address : null,
-        cart,
-        status: 'new',
+          deliveryOption === 'delivery' ? formattedFinalAddress : fakeAddress,
+        shippingMethod: chosenShippingMethod.id,
+        deliveryDate: formattedDeliveryDay,
+        deliveryInterval,
+        products: cart,
       })
     );
     // os objetos usados para popular o form irão para cá, junto com os dados do carrinho
@@ -319,47 +327,56 @@ export default function Delivery() {
   }, [
     dispatch,
     history,
-    gender,
-    selectedAddress,
-    residence,
-    country,
-    postcode,
     cart,
-    newAddress,
-    primaryAddress,
-    updatePrimaryAddress,
     deliveryOption,
+    finalAddress,
+    finalProfile,
+    chosenShippingMethod,
+    deliveryDay,
+    deliveryInterval,
   ]);
 
   const lookupAddress = useCallback(async () => {
-    if (!postcodeIsValid(postcode) || tempPostcode === postcode) {
+    if (!postcodeIsValid(zipcode) || tempZipcode === zipcode) {
       return;
     }
     setHasLookup(true);
     setLoading(true);
     setResidence('');
 
-    setTempPostcode(postcode);
-    const [cod, ext] = postcode.split('-');
+    setTempZipcode(zipcode);
+    const [cod, ext] = zipcode.split('-');
 
     try {
       const {
         data: { address },
       } = await backend.get(`/postcodes/${cod}-${ext}`);
-
       setLoading(false);
 
-      setSelectedAddress({ ...address[0], cod_postal: postcode });
-      shippingInfoRef.current.setData({ ...address[0], cod_postal: postcode });
+      shippingInfoRef.current.setData({
+        ...address[0],
+        zipcode: address[0].zipcode,
+      });
     } catch (err) {
       setLoading(false);
       alert('Informe um código postal válido.');
     }
-  }, [postcode, tempPostcode]);
+  }, [zipcode, tempZipcode]);
 
   useEffect(() => {
+    if (deliveryOption === 'withdrawinstore' && validUserInfo) {
+      handleFinishOrder();
+      return;
+    }
     if (validUserInfo && validShippingInfo) handleFinishOrder();
-  }, [validUserInfo, validShippingInfo, handleFinishOrder]);
+  }, [
+    validUserInfo,
+    validShippingInfo,
+    handleFinishOrder,
+    finalAddress,
+    finalProfile,
+    deliveryOption,
+  ]);
 
   useEffect(() => {
     if (addresses.length === 0 || hasLookup) setNewAddress(true);
@@ -367,15 +384,12 @@ export default function Delivery() {
   }, [addresses, hasLookup]);
 
   useEffect(() => {
+    if (hasLookup === false) return;
     if (newAddress === false) {
       setHasLookup(false);
-      shippingInfoRef.current.setData(primaryAddress);
-      setSelectedAddress(primaryAddress);
-      setPostcode(primaryAddress.cod_postal);
-      setTempPostcode(primaryAddress.cod_postal);
-      setResidence(primaryAddress.street_name);
+      shippingInfoRef.current.setData({});
     }
-  }, [newAddress, primaryAddress, selectedAddress]);
+  }, [newAddress, hasLookup]);
 
   const handleSubmit = useCallback(
     formData => {
@@ -388,6 +402,7 @@ export default function Delivery() {
       setInvalidBirth(false);
       setInvalidDeliveryDay(false);
       setInvalidDeliveryHour(false);
+      setValidUserInfo(false);
 
       const anyEmptyField = validateData(formData, setInvalidFields);
 
@@ -416,10 +431,10 @@ export default function Delivery() {
 
       const profileData = {
         ...formData,
-        gender,
+        gender: modifyGender(),
       };
 
-      dispatch(updateProfileRequest(profileData));
+      dispatch(addFinalProfileRequest(profileData));
 
       setValidUserInfo(true);
     },
@@ -431,6 +446,7 @@ export default function Delivery() {
       deliveryDay,
       deliveryHour,
       deliveryOption,
+      modifyGender,
     ]
   );
 
@@ -441,57 +457,67 @@ export default function Delivery() {
       setInvalidResidence(false);
       setInvalidPostcode(false);
       setInvalidLocation(false);
+      setValidShippingInfo(false);
 
-      delete formData.cod_postal;
+      delete formData.zipcode;
       delete formData.residence;
 
       const anyEmptyField = validateData(formData, setLocationInvalidFields);
 
       if (anyEmptyField) {
         setInvalidResidence(nameIsValid(residence));
-        setInvalidPostcode(!postcodeIsValid(postcode));
+        setInvalidPostcode(!postcodeIsValid(zipcode));
         setInvalidLocation(nameIsValid(country));
         window.scrollTo(0, 0);
 
         return;
       }
 
-      if (!postcodeIsValid(postcode) || nameIsValid(residence)) {
-        setInvalidPostcode(!postcodeIsValid(postcode));
+      if (!postcodeIsValid(zipcode) || nameIsValid(residence)) {
+        setInvalidPostcode(!postcodeIsValid(zipcode));
         setInvalidResidence(nameIsValid(residence));
         window.scrollTo(0, 0);
 
         return;
       }
 
-      const [num_cod_postal, ext_cod_postal] = postcode.split('-');
       const allDataShipping = shippingInfoRef.current.getData();
+      const profileInfo = profileInfoRef.current.getData();
 
-      const { full_name } = allDataShipping;
+      const { destination_name } = allDataShipping;
 
-      const [newName, ...restOfName] = full_name.split(' ');
+      const [newName, ...restOfName] = destination_name.split(' ');
 
       const newNickname = restOfName.join(' ');
 
       const shippingData = {
         ...formData,
-        id: selectedAddress.id,
-        name: newName,
-        last_name: newNickname,
-        full_name,
-        residence,
+        destination_name: `${newName} ${newNickname}`,
+        address: residence,
         country,
-        cod_postal: postcode,
-        num_cod_postal,
-        ext_cod_postal,
+        zipcode,
       };
 
       if (newAddress) {
-        dispatch(addAddressRequest(shippingData));
-
-        // if (newAddressPrimary) dispatch(setPrimaryAddress(selectedAddress.id)); -- vai bugar por causa do id
+        dispatch(
+          addFinalAddressRequest({
+            address: { ...shippingData, default: newPrimaryAddress ? 1 : 0 },
+            profile: {
+              ...profileInfo,
+              gender: modifyGender(),
+            },
+          })
+        );
       } else {
-        dispatch(updateShippingInfoRequest(shippingData));
+        dispatch(
+          updateFinalShippingInfoRequest({
+            address: { ...shippingData, default: newPrimaryAddress ? 1 : 0 },
+            profile: {
+              ...profileInfo,
+              gender: modifyGender(),
+            },
+          })
+        );
       }
 
       setValidShippingInfo(true);
@@ -502,9 +528,10 @@ export default function Delivery() {
       country,
       validateData,
       locationInvalidFields,
-      postcode,
-      selectedAddress,
+      zipcode,
       newAddress,
+      newPrimaryAddress,
+      modifyGender,
     ]
   );
 
@@ -526,10 +553,10 @@ export default function Delivery() {
   const genderData = [
     {
       label: 'Masculino',
-      value: 'Masculino',
+      value: 'male',
     },
-    { label: 'Feminino', value: 'Feminino' },
-    { label: 'Outro', value: 'Outro' },
+    { label: 'Feminino', value: 'female' },
+    { label: 'Outro', value: 'other' },
   ];
 
   if (cart.length === 0 || !hasOrder) {
@@ -672,7 +699,7 @@ export default function Delivery() {
         <Content style={{ marginTop: 40 }}>
           <InfoContainer
             onSubmit={handleSubmit}
-            initialData={profile !== null ? profile : {}}
+            initialData={profile}
             ref={profileInfoRef}
           >
             <SectionTitle>
@@ -767,7 +794,13 @@ export default function Delivery() {
             <InfoContainer
               onSubmit={handleShippingInfo}
               style={{ width: 683 }}
-              initialData={selectedAddress}
+              initialData={
+                !!primaryAddress
+                  ? primaryAddress.length !== 0
+                    ? primaryAddress
+                    : {}
+                  : {}
+              }
               ref={shippingInfoRef}
               loading={loading}
             >
@@ -805,7 +838,7 @@ export default function Delivery() {
                   />
                 )}
                 <Input
-                  name="full_name"
+                  name="destination_name"
                   title="Nome completo do destinatário"
                   placeholder="Escreve o nome do destinatário"
                   customWidth={283}
@@ -814,18 +847,18 @@ export default function Delivery() {
               </InputContainer>
               <InputContainer style={{ width: 628 }}>
                 <InputMask
-                  name="cod_postal"
+                  name="zipcode"
                   mask="9999-999"
                   placeholder="0000-000"
                   title="Código Postal"
                   customWidth={90}
-                  value={postcode}
-                  onChange={({ target: { value } }) => setPostcode(value)}
+                  value={zipcode}
+                  onChange={({ target: { value } }) => setZipcode(value)}
                   error={invalidPostcode}
-                  // onBlur={lookupAddress}
+                  onBlur={lookupAddress}
                 />
                 <Input
-                  name="street_name"
+                  name="address"
                   title="Morada"
                   placeholder="Escreve a tua morada"
                   customWidth={215}
@@ -839,7 +872,7 @@ export default function Delivery() {
                   error={locationInvalidFields[2]}
                 />
                 <Input
-                  name="distrito"
+                  name="district"
                   title="Distrito"
                   placeholder="Escreve o teu distrito"
                   customWidth={173}
@@ -848,14 +881,14 @@ export default function Delivery() {
               </InputContainer>
               <InputContainer style={{ width: 628 }}>
                 <Input
-                  name="nome_localidade"
+                  name="city"
                   title="Cidade"
                   placeholder="Escreve a tua cidade"
                   customWidth={194}
                   error={locationInvalidFields[4]}
                 />
                 <Input
-                  name="localidade"
+                  name="state"
                   title="Localidade"
                   placeholder="Escolha a Localidade"
                   defaultValue="Lisboa"
@@ -885,10 +918,10 @@ export default function Delivery() {
                 </button>
                 {newAddress ? (
                   <div style={{ display: 'flex' }}>
-                    <StartStop selected={newAddressPrimary}>
+                    <StartStop selected={newPrimaryAddress}>
                       <button
                         type="button"
-                        onClick={() => setNewAddressPrimary(!newAddressPrimary)}
+                        onClick={() => setNewPrimaryAddress(!newPrimaryAddress)}
                       >
                         <img src={checked} alt="Item selecionado" />
                       </button>
@@ -901,13 +934,11 @@ export default function Delivery() {
                     )}
                   </div>
                 ) : (
-                  <StartStop
-                    selected={
-                      !!primaryAddress &&
-                      selectedAddress.id === primaryAddress.id
-                    }
-                  >
-                    <button type="button" onClick={updatePrimaryAddress}>
+                  <StartStop selected={newPrimaryAddress}>
+                    <button
+                      type="button"
+                      onClick={() => setNewPrimaryAddress(!newPrimaryAddress)}
+                    >
                       <img src={checked} alt="Item selecionado" />
                     </button>
                     <strong>Definir como endereço principal</strong>
@@ -958,11 +989,11 @@ export default function Delivery() {
           <CheckoutDetails>
             <CheckoutItem>
               <h1>Produtos</h1>
-              <h2>€ 179,14</h2>
+              <h2>€&nbsp;{price}</h2>
             </CheckoutItem>
             <CheckoutItem>
               <h1>Economizou</h1>
-              <h2>€ 22,09</h2>
+              <h2>€&nbsp;{formatPrice(saved - price)}</h2>
             </CheckoutItem>
             <CheckoutItem>
               <h1>Crédito Disponível</h1>
@@ -999,12 +1030,19 @@ export default function Delivery() {
             <CheckoutItem>
               <h1>Porte</h1>
               <h2 style={{ color: '#0CB68B' }}>
-                €&nbsp;`{chosenShippingMethod.cost},00`
+                €&nbsp;{chosenShippingMethod.cost},00
               </h2>
             </CheckoutItem>
             <CheckoutItem>
               <h2>Total</h2>
-              <h2 style={{ fontSize: 25, color: '#0CB68B' }}>174,62</h2>
+              <h2 style={{ fontSize: 25, color: '#0CB68B' }}>
+                €&nbsp;
+                {formatPrice(
+                  Number(price) +
+                    Number(chosenShippingMethod.cost) -
+                    Number(!!profile ? profile.cback_credit : '0,00')
+                )}
+              </h2>
             </CheckoutItem>
             <ConfirmationText>
               A confirmação da sua encomenda será feita <br />

@@ -2,9 +2,22 @@ export function updateShippingInfoRequest(data) {
   return { type: '@addresses/UPDATE_SHIPPING_INFO_REQUEST', payload: { data } };
 }
 
+export function updateFinalShippingInfoRequest(data) {
+  return {
+    type: '@addresses/UPDATE_FINAL_SHIPPING_INFO_REQUEST',
+    payload: { data },
+  };
+}
+
 export function updateShippingInfoSuccess(shipping) {
   return {
     type: '@addresses/UPDATE_SHIPPING_INFO_SUCCESS',
+    payload: { shipping },
+  };
+}
+export function updateFinalShippingInfoSuccess(shipping) {
+  return {
+    type: '@addresses/UPDATE_FINAL_SHIPPING_INFO_SUCCESS',
     payload: { shipping },
   };
 }
@@ -17,8 +30,19 @@ export function addAddressRequest(address) {
   return { type: '@addresses/ADD_ADDRESS_REQUEST', payload: { address } };
 }
 
+export function addFinalAddressRequest(data) {
+  return {
+    type: '@addresses/ADD_FINAL_ADDRESS_REQUEST',
+    payload: { data },
+  };
+}
+
 export function addAddressSuccess(address) {
   return { type: '@addresses/ADD_ADDRESS_SUCCESS', payload: { address } };
+}
+
+export function addFinalAddressSuccess(address) {
+  return { type: '@addresses/ADD_FINAL_ADDRESS_SUCCESS', payload: { address } };
 }
 
 export function addAddressFailure() {

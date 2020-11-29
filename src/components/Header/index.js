@@ -16,6 +16,7 @@ import {
   Badge,
   BadgeContainer,
   SubTitle,
+  GoToCartContainer,
 } from './styles';
 
 import Logo from '~/assets/amfrutas-top.svg';
@@ -34,6 +35,7 @@ export default function PageHeader({ login, active }) {
 
   const signed = useSelector(state => state.auth.signed);
   const products = useSelector(state => state.cart.products);
+  const price = useSelector(state => state.cart.price);
 
   const history = useHistory();
   const { pathname } = useLocation();
@@ -129,7 +131,12 @@ export default function PageHeader({ login, active }) {
           >
             <img src={user} alt="user" />
           </MenuItemButton>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+          <GoToCartContainer
+            onClick={() => {
+              setSelectedPage('Cesto');
+              history.push('/cesto');
+            }}
+          >
             <BadgeContainer>
               <MenuItemButton
                 selected={selectedPage === 'Cesto'}
@@ -144,8 +151,8 @@ export default function PageHeader({ login, active }) {
                 {products.length < 10 ? `0${products.length}` : products.length}
               </Badge>
             </BadgeContainer>
-            <Price>€ 45,00</Price>
-          </div>
+            <Price>€&nbsp;{price}</Price>
+          </GoToCartContainer>
         </MenuContent>
       </Menu>
       <SubTitle style={headerFixed ? { position: 'fixed', top: 41 } : {}}>

@@ -6,6 +6,7 @@ const INITIAL_STATE = {
   orders: [],
   product: null,
   category: null,
+  finalProfile: null,
   active: '',
 };
 
@@ -21,6 +22,11 @@ export default function user(state = INITIAL_STATE, { type, payload }) {
         draft.profile = payload.profile;
         break;
       }
+      case '@user/ADD_FINAL_PROFILE_SUCCESS': {
+        draft.profile = payload.profile;
+        draft.finalProfile = payload.profile;
+        break;
+      }
 
       case '@user/HIDE_TAB_BAR': {
         draft.tabBar = false;
@@ -33,15 +39,10 @@ export default function user(state = INITIAL_STATE, { type, payload }) {
       }
 
       case '@user/SET_ORDER': {
-        draft.order = payload.order;
-        break;
-      }
-
-      case '@cart/FINISH_ORDER': {
         const { order } = payload;
+        draft.order = order;
         draft.orders.push(order);
 
-        draft.order = order;
         break;
       }
 
@@ -85,6 +86,7 @@ export default function user(state = INITIAL_STATE, { type, payload }) {
         draft.profile = null;
         draft.orders = [];
         draft.product = null;
+        draft.finalProfile = null;
 
         break;
       }

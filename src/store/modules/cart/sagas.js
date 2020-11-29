@@ -10,6 +10,8 @@ import {
   removeFromFavoritesSuccess,
 } from './actions';
 
+import { setOrder } from '../user/actions';
+
 export function* addToCart({ payload }) {
   const { product: newProduct, qty } = payload;
 
@@ -20,14 +22,17 @@ export function* addToCart({ payload }) {
 
   if (alreadyInCart >= 0) {
     yield put(updateAmount(newProduct.id, products[alreadyInCart].qty + qty));
+    // aqui1
   } else {
     yield put(addToCartSuccess({ ...newProduct, qty }));
     // console.tron.log(err);
+    // aqui1
   }
 }
 export function* removeFromCart({ payload }) {
   try {
     const { id } = payload;
+    // aqui1
 
     yield put(removeFromCartSuccess(id));
   } catch (err) {
@@ -56,9 +61,28 @@ export function* removeFromFavorites({ payload }) {
   yield put(removeFromFavoritesSuccess(id));
 }
 
+export function* finishOrder({ payload }) {
+  try {
+    const { order } = payload;
+
+    const {
+      data: {
+        data: { transaction },
+      },
+    } = yield call(backend.post, '/checkout', order);
+
+    // formatar a data pra ter o 'traço' em vez de barra
+    // passar name com 'destination_name' + 'destination_last_name'
+    yield put(setOrder(transaction));
+  } catch (err) {
+    console.log('erro no push order');
+  }
+}
+
 export default all([
   takeLatest('@cart/ADD_TO_CART_REQUEST', addToCart),
   takeLatest('@cart/REMOVE_FROM_CART_REQUEST', removeFromCart),
   takeLatest('@cart/ADD_TO_FAVORITES_REQUEST', addToFavorites),
   takeLatest('@cart/REMOVE_FROM_FAVORITES_REQUEST', removeFromFavorites),
+  takeLatest('@cart/FINISH_ORDER', finishOrder),
 ]);
