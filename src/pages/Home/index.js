@@ -372,10 +372,7 @@ export default function Home() {
       )}
       {loginModal && <LoginModal closeModal={() => setLoginModal(false)} />}
       {toastVisible && (
-        <Toast
-          status={`Bem-vindo ao AM Frutas, ${profile.name}.`}
-          color="#1DC167"
-        />
+        <Toast status="Bem-vindo ao AM Frutas." color="#1DC167" />
       )}
     </>
   );

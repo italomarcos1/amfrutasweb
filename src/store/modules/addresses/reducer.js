@@ -8,14 +8,11 @@ const INITIAL_STATE = {
 export default function addresses(state = INITIAL_STATE, { type, payload }) {
   return produce(state, draft => {
     switch (type) {
-      // case '@auth/SIGN_IN_SUCCESS': {
-      //   draft.profile = payload.user;
-      //   break;
-      // --
-      // puxar da api e popular aqui
-      // --
-      // }
-      case '@addresses/ADD_ADDRESS': {
+      case '@addresses/POPULATE_ADDRESSES': {
+        draft.addresses = payload.addresses;
+        break;
+      }
+      case '@addresses/ADD_ADDRESS_SUCCESS': {
         const { address } = payload;
         draft.addresses.push(address);
         if (draft.addresses.length === 1) {
@@ -26,7 +23,7 @@ export default function addresses(state = INITIAL_STATE, { type, payload }) {
         break;
       }
 
-      case '@addresses/DELETE_ADDRESS': {
+      case '@addresses/DELETE_ADDRESS_SUCCESS': {
         const { id } = payload;
 
         const findAddress = draft.addresses.findIndex(

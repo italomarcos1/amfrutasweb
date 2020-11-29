@@ -11,7 +11,6 @@ import {
 } from './styles';
 
 export default function Item({ item, index }) {
-  const { product, qty } = item;
   const {
     id,
     thumbs,
@@ -19,7 +18,8 @@ export default function Item({ item, index }) {
     price,
     price_promotional,
     has_promotion,
-  } = product;
+    qty,
+  } = item;
 
   return (
     <Container key={id} style={index > 1 ? { marginTop: 40 } : {}}>

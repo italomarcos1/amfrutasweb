@@ -18,7 +18,7 @@ export const Content = styled.div`
   justify-content: space-between;
   margin: 94.5px auto 0;
 
-  ul {
+  /* ul {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -26,7 +26,7 @@ export const Content = styled.div`
     width: 840px;
     height: 455px;
     margin-top: 30px;
-  }
+  }*/
 `;
 
 export const Title = styled.h1`
@@ -124,6 +124,8 @@ export const DeliveryDateContainer = styled.div`
   height: 100px;
   background: #fff;
   border: 1px solid #e0e0e0;
+  border-color: ${({ error }) => (error ? '#f53030' : '#e0e0e0')};
+  border-width: ${({ error }) => (error ? 2 : 1)}px;
   border-radius: 6px;
   display: flex;
   align-items: center;

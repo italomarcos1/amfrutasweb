@@ -18,16 +18,15 @@ export const Content = styled.div`
   justify-content: space-between;
   margin: 94.5px auto 0;
 
-  ul {
+  /* ul {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     flex-wrap: wrap;
     width: 840px;
     height: 455px;
-
     margin-top: 30px;
-  }
+  } */
 `;
 
 export const Title = styled.h1`

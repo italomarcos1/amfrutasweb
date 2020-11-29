@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaSpinner } from 'react-icons/fa';
 
@@ -17,18 +17,19 @@ import InputMask from '~/components/InputMask';
 import Select from '~/components/Select';
 import Address from '~/components/Address';
 
-import backend from '~/services/api';
-import { addAddress } from '~/store/modules/addresses/actions';
+import { postcodes } from '~/services/api';
+import { addAddressRequest } from '~/store/modules/addresses/actions';
 import { nameIsValid, postcodeIsValid } from '~/utils/validation';
 
 export default function MyAccount() {
-  const [place, setPlace] = useState('');
-  const [country, setCountry] = useState('');
+  const [country, setCountry] = useState('Portugal');
 
-  const [postcode, setPostcode] = useState('');
-  const [tempPostcode, setTempPostcode] = useState('');
+  const [zipcode, setZipcode] = useState('');
+  const [tempZipcode, setTempZipcode] = useState('');
 
   const dispatch = useDispatch();
+
+  const formRef = useRef();
 
   const addresses = useSelector(state => state.addresses.addresses);
   const primaryAddress = useSelector(state => state.addresses.primaryAddress);
@@ -61,26 +62,45 @@ export default function MyAccount() {
   const data = [{ label: 'Portugal', value: 'Portugal' }];
 
   const lookupAddress = useCallback(async () => {
-    if (!postcodeIsValid(postcode) || tempPostcode === postcode) {
+    if (!postcodeIsValid(zipcode) || tempZipcode === zipcode) {
       return;
     }
     setLoading(true);
 
-    setTempPostcode(postcode);
-    const [cod, ext] = postcode.split('-');
+    setTempZipcode(zipcode);
+    const [cod, ext] = zipcode.split('-');
 
     try {
       const {
         data: { address },
-      } = await backend.get(`/postcodes/${cod}-${ext}`);
+      } = await postcodes.get(`/postcodes/${cod}-${ext}`);
 
-      setAddressInfo(address[0]);
+      const {
+        num_cod_postal,
+        ext_cod_postal,
+        street_name,
+        number,
+        nome_localidade,
+        distrito,
+      } = address[0];
+
+      const formattedInfo = {
+        zipcode: `${num_cod_postal}-${ext_cod_postal}`,
+        address: street_name,
+        number,
+        city: nome_localidade,
+        district: distrito,
+      };
+
+      setAddressInfo(formattedInfo);
+
+      formRef.current.setData(formattedInfo);
       setLoading(false);
     } catch (err) {
       setLoading(false);
       alert('Informe um código postal válido.');
     }
-  }, [postcode, tempPostcode]);
+  }, [zipcode, tempZipcode]);
 
   const addNewAddress = useCallback(
     formData => {
@@ -93,38 +113,36 @@ export default function MyAccount() {
         setInvalidFields(formattedData.map(field => nameIsValid(field)));
         return;
       }
+
       const {
-        id,
-        street_name,
-        num_cod_postal,
-        ext_cod_postal,
-        nome_localidade,
-        distrito,
-      } = addressInfo;
+        destination_name,
+        number,
+        address,
+        city,
+        district,
+        state,
+      } = formRef.current.getData();
 
-      const { name, number } = formData;
-
-      const [newName, ...restOfName] = name.split(' ');
+      const [newName, ...restOfName] = destination_name.split(' ');
 
       const newNickname = restOfName.join(' ');
 
       dispatch(
-        addAddress({
-          id,
-          name: newName,
-          last_name: newNickname,
-          full_name: name + newNickname,
-          street_name,
+        addAddressRequest({
+          destination_name: newName + newNickname,
+          address,
           number,
-          num_cod_postal,
-          ext_cod_postal,
-          cod_postal: `${num_cod_postal}-${ext_cod_postal}`,
-          distrito,
-          nome_localidade,
+          state,
+          country,
+          zipcode,
+          district,
+          city,
         })
       );
+
+      formRef.current.reset();
     },
-    [addressInfo, dispatch, invalidFields]
+    [dispatch, zipcode, invalidFields, country]
   );
 
   return (
@@ -140,6 +158,7 @@ export default function MyAccount() {
             onSubmit={addNewAddress}
             initialData={addressInfo}
             loading={loading}
+            ref={formRef}
           >
             <SectionTitle>
               <strong>Morada de entrega</strong>
@@ -147,7 +166,7 @@ export default function MyAccount() {
             </SectionTitle>
             <InputContainer>
               <Input
-                name="name"
+                name="destination_name"
                 title="Nome completo do destinatário"
                 placeholder="Escreve o teu nome"
                 customWidth={215}
@@ -156,18 +175,18 @@ export default function MyAccount() {
             </InputContainer>
             <InputContainer style={{ width: 628 }}>
               <InputMask
-                name="postcode"
+                name="zipcode"
                 title="Código Postal"
                 placeholder="0000-000"
                 mask="9999-999"
-                value={postcode}
-                onChange={({ target: { value } }) => setPostcode(value)}
+                value={zipcode}
+                onChange={({ target: { value } }) => setZipcode(value)}
                 customWidth={90}
                 error={invalidFields[1]}
                 onBlur={lookupAddress}
               />
               <Input
-                name="street_name"
+                name="address"
                 title="Morada"
                 placeholder="Morada"
                 customWidth={215}
@@ -185,7 +204,7 @@ export default function MyAccount() {
                 hasMarginLeft
               />
               <Input
-                name="distrito"
+                name="district"
                 title="Distrito"
                 placeholder="Escreve o teu distrito"
                 customWidth={173}
@@ -196,7 +215,7 @@ export default function MyAccount() {
             </InputContainer>
             <InputContainer style={{ width: 628 }}>
               <Input
-                name="nome_localidade"
+                name="city"
                 title="Cidade"
                 placeholder="Escreve a tua cidade"
                 customWidth={194}
@@ -204,7 +223,7 @@ export default function MyAccount() {
                 disabled={addressInfo === {}}
               />
               <Input
-                name="localidade"
+                name="state"
                 title="Localidade"
                 placeholder="Escolha a localidade"
                 error={invalidFields[6]}

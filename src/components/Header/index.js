@@ -33,6 +33,7 @@ export default function PageHeader({ login, active }) {
   const [selectedPage, setSelectedPage] = useState(active);
 
   const signed = useSelector(state => state.auth.signed);
+  const products = useSelector(state => state.cart.products);
 
   const history = useHistory();
   const { pathname } = useLocation();
@@ -139,7 +140,9 @@ export default function PageHeader({ login, active }) {
               >
                 <img src={bag} alt="bag" />
               </MenuItemButton>
-              <Badge>02</Badge>
+              <Badge>
+                {products.length < 10 ? `0${products.length}` : products.length}
+              </Badge>
             </BadgeContainer>
             <Price>€ 45,00</Price>
           </div>

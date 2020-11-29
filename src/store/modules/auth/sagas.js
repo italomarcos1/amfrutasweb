@@ -1,9 +1,10 @@
-import { call, put, all, takeLatest } from 'redux-saga/effects';
+import { call, put, all, select, takeLatest } from 'redux-saga/effects';
 
 import backend from '~/services/api';
 
 import { signInSuccess, signFailure } from '~/store/modules/auth/actions';
 import { addFavorites, pushToCart } from '~/store/modules/cart/actions';
+import { populateAddresses } from '~/store/modules/addresses/actions';
 
 export function* signIn({ payload }) {
   const { email, password } = payload;
@@ -44,6 +45,8 @@ export function* signIn({ payload }) {
       return;
     }
 
+    const notSignedCart = yield select(state => state.cart.products);
+
     const responseData = yield call(backend.get, '/cart');
 
     const {
@@ -54,8 +57,21 @@ export function* signIn({ payload }) {
     } = responseData;
 
     if (cartMessage === 'Não há produtos no cesto') {
-      yield put(pushToCart([]));
-    } else yield put(pushToCart([data.products]));
+      yield put(pushToCart([...notSignedCart]));
+    } else yield put(pushToCart([...data.products, ...notSignedCart]));
+
+    const addressesData = yield call(backend.get, '/clients/addresses');
+
+    const {
+      data: {
+        data: addresses,
+        meta: { message: addressesMessage },
+      },
+    } = addressesData;
+
+    if (addressesMessage === 'Você ainda não tem endereços cadastrados.') {
+      yield put(populateAddresses([]));
+    } else yield put(populateAddresses([...addresses]));
 
     yield put(signInSuccess(token, user));
   } catch (error) {

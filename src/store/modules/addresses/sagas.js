@@ -1,36 +1,102 @@
-import { call, put, all, takeLatest } from 'redux-saga/effects';
-// import Toast from 'react-native-tiny-toast';
+import { call, put, all, select, takeLatest } from 'redux-saga/effects';
 
-// import api from '~/services/api';
+import backend from '~/services/api';
 
 import {
+  addAddressSuccess,
+  addAddressFailure,
   updateShippingInfoSuccess,
-  updateShippingInfoFailure,
+  updateAddressFailure,
+  deleteAddressSuccess,
 } from './actions';
+import { updateProfileRequest } from '../user/actions';
 
-export function* updateShippingInfo({ payload }) {
+export function* addAddress({ payload }) {
   try {
-    // const { name, email, ...rest } = payload.data;
-    const { data } = payload;
+    const { address } = payload;
+    const profile = yield select(state => state.user.profile);
 
-    // const profile = {
-    //   name,
-    //   email,
-    //   ...(rest.oldPassword ? rest : {}),
-    // };
+    const {
+      data: { data },
+    } = yield call(backend.post, 'clients/addresses', address);
 
-    // const response = yield call(api.put, 'users', profile);
+    if (address.default === 1) {
+      const updatedDefaultAddress = { ...profile, default_address: data };
 
-    // Toast.show('Perfil atualizado com sucesso!');
-
-    // yield put(updateProfileSuccess(response.data));
-    yield put(updateShippingInfoSuccess(data));
+      yield put(updateProfileRequest(updatedDefaultAddress));
+    }
+    yield put(addAddressSuccess(data));
   } catch (error) {
-    // Toast.show('Houve um erro na atualização do perfil, verifique seus dados.');
-    yield put(updateShippingInfoFailure());
+    yield put(addAddressFailure());
+  }
+}
+
+export function* updateAddress({ payload }) {
+  try {
+    const { data } = payload;
+    const profile = yield select(state => state.user.profile);
+
+    const {
+      data: { data: responseData },
+    } = yield call(backend.put, `clients/addresses/${data.id}`, data);
+
+    if (data.default === 1) {
+      const updatedDefaultAddress = {
+        ...profile,
+        default_address: responseData,
+      };
+
+      yield put(updateProfileRequest(updatedDefaultAddress));
+    }
+    yield put(updateShippingInfoSuccess(responseData));
+  } catch (error) {
+    yield put(updateAddressFailure());
+  }
+}
+
+export function* updateDefaultAddress({ payload }) {
+  try {
+    const { id } = payload;
+    const profile = yield select(state => state.user.profile);
+
+    const {
+      data: { data: responseData },
+    } = yield call(backend.put, `clients/addresses/${id}`, { default: 1 });
+
+    const updatedDefaultAddress = {
+      ...profile,
+      default_address: responseData,
+    };
+
+    yield put(updateProfileRequest(updatedDefaultAddress));
+
+    yield put(updateShippingInfoSuccess(responseData));
+  } catch (error) {
+    yield put(updateAddressFailure());
+  }
+}
+
+export function* removeAddress({ payload }) {
+  try {
+    const { id } = payload;
+    const profile = yield select(state => state.user.profile);
+
+    yield call(backend.delete, `clients/addresses/${id}`);
+
+    if (profile.default_address.id === id) {
+      const updatedDefaultAddress = { ...profile, default_address: [] };
+
+      yield put(updateProfileRequest(updatedDefaultAddress));
+    }
+    yield put(deleteAddressSuccess(id));
+  } catch (error) {
+    yield put(addAddressFailure());
   }
 }
 
 export default all([
-  takeLatest('@addresses/UPDATE_SHIPPING_INFO_REQUEST', updateShippingInfo),
+  takeLatest('@addresses/ADD_ADDRESS_REQUEST', addAddress),
+  takeLatest('@addresses/UPDATE_SHIPPING_INFO_REQUEST', updateAddress),
+  takeLatest('@addresses/SET_PRIMARY_ADDRESS', updateDefaultAddress),
+  takeLatest('@addresses/DELETE_ADDRESS_REQUEST', removeAddress),
 ]);

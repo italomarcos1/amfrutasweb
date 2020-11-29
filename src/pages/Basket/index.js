@@ -10,7 +10,6 @@ import {
   Title,
   ConfirmationText,
   ShippingWarning,
-  EmptyCartContainer,
 } from './styles';
 
 import logo from '~/assets/amfrutas-white.svg';
@@ -20,6 +19,10 @@ import lock from '~/assets/lock.svg';
 import Footer from '~/components/Footer';
 import CheckoutHeader from '~/components/CheckoutHeader';
 import Item from '~/components/Item';
+import ItemsList from '~/components/ItemsList';
+import EmptyCartContainer from '~/components/EmptyCartContainer';
+import Toast from '~/components/Toast';
+import LoginModal from '~/pages/LoginModal';
 
 import { processOrder } from '~/store/modules/cart/actions';
 
@@ -27,41 +30,78 @@ import { Button, SecureLogin } from '~/components/LoginModal';
 
 export default function Basket() {
   const { products, price } = useSelector(state => state.cart);
+  const signed = useSelector(state => state.auth.signed);
   const dispatch = useDispatch();
   const history = useHistory();
+
+  const [paginatedProducts, setPaginatedProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loginModal, setLoginModal] = useState(false);
+
+  const [toastVisible, setToastVisible] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
     dispatch(processOrder(false));
   }, []);
 
+  const handlePagination = useCallback(() => {
+    const pageIndex = 8 * (currentPage - 1);
+    const newPage = products.slice(pageIndex, pageIndex + 8);
+
+    setPaginatedProducts(newPage);
+  }, [currentPage, products]);
+
+  useEffect(() => {
+    handlePagination();
+  }, [products, handlePagination]);
+
   useEffect(() => {
     dispatch(processOrder(false));
   }, [dispatch]);
 
   const handleProcessOrder = useCallback(() => {
+    if (!signed) {
+      setLoginModal(true);
+      setToastVisible(true);
+
+      setTimeout(() => {
+        setToastVisible(false);
+      }, 2800);
+
+      return;
+    }
+
     dispatch(processOrder(true));
     history.push('/entrega');
-  }, [dispatch, history]);
+  }, [dispatch, history, signed]);
 
   return (
     <>
       <CheckoutHeader active={1} />
+      {loginModal && <LoginModal closeModal={() => setLoginModal(false)} />}
+      {toastVisible && (
+        <Toast
+          status="Você deve fazer login ou se cadastrar antes de prosseguir."
+          color="#1DC167"
+        />
+      )}
       <Container>
         <Content>
           <div>
             <Title>Cesto de Compras</Title>
-            {products.length !== 0 ? (
-              <ul>
-                {products.map((item, index) => {
+            {!loginModal && products.length !== 0 ? (
+              <ItemsList
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                containerHeight={708}
+              >
+                {paginatedProducts.map((item, index) => {
                   return <Item key={item.id} item={item} index={index} />;
                 })}
-              </ul>
+              </ItemsList>
             ) : (
-              <EmptyCartContainer>
-                <img src={alert} alt="Alert" />
-                <strong>Seu cesto de compras está vazio.</strong>
-              </EmptyCartContainer>
+              <EmptyCartContainer message="Seu cesto de compras está vazio." />
             )}
           </div>
           <div>

@@ -10,6 +10,8 @@ import plus from '~/assets/icons/plus.svg';
 import heartOn from '~/assets/icons/heart-on.svg';
 import heartOff from '~/assets/icons/heart-off.svg';
 
+import Toast from '~/components/Toast';
+
 import {
   addToCartRequest,
   addToFavoritesRequest,
@@ -29,6 +31,7 @@ export default function Product({ product, index }) {
   const dispatch = useDispatch();
 
   const [favorite, setFavorite] = useState(false);
+  const [toastVisible, setToastVisible] = useState(false);
 
   const favorites = useSelector(state => state.cart.favorites);
   const updating = useSelector(state => state.cart.updating);
@@ -48,7 +51,13 @@ export default function Product({ product, index }) {
 
   const handleAddToCart = useCallback(() => {
     dispatch(addToCartRequest(product, qty));
-    setQty(0);
+    setToastVisible(true);
+
+    setTimeout(() => {
+      setToastVisible(false);
+    }, 2800);
+
+    setQty(1);
   }, [product, qty, dispatch]);
 
   useEffect(() => {
@@ -66,79 +75,85 @@ export default function Product({ product, index }) {
   };
 
   return (
-    <Container>
-      <FavoriteButton
-        type="button"
-        onClick={handleFavorite}
-        disabled={updating}
-      >
-        <img src={favorite ? heartOn : heartOff} alt="Favorite" />
-      </FavoriteButton>
-      <ImageContainer
-        to={{
-          pathname: `/${url}`,
-          state: { id },
-        }}
-      >
-        <img src={thumbs} alt="Product" />
-      </ImageContainer>
-      <Link
-        style={{ marginTop: 10, background: 'none' }}
-        to={{
-          pathname: `/${url}`,
-          state: { id },
-        }}
-      >
-        <Title>{title}</Title>
-      </Link>
-      <PriceContainer
-        to={{
-          pathname: `/${url}`,
+    <>
+      <Container>
+        <FavoriteButton
+          type="button"
+          onClick={handleFavorite}
+          disabled={updating}
+        >
+          <img src={favorite ? heartOn : heartOff} alt="Favorite" />
+        </FavoriteButton>
+        <ImageContainer
+          to={{
+            pathname: `/${url}`,
+            state: { id },
+          }}
+        >
+          <img src={thumbs} alt="Product" />
+        </ImageContainer>
+        <Link
+          style={{ marginTop: 10, background: 'none' }}
+          to={{
+            pathname: `/${url}`,
+            state: { id },
+          }}
+        >
+          <Title>{title}</Title>
+        </Link>
+        <PriceContainer
+          to={{
+            pathname: `/${url}`,
 
-          state: { id },
-        }}
-      >
-        <span>
-          <img src={coins} alt="coins" />
-          <strong>
-            €&nbsp;{profile !== null ? profile.cback_credit : '0.00'}
-          </strong>
-          DE CRÉDITO
-        </span>
-        {has_promotion ? (
-          <small>
-            antes
-            <p>€&nbsp;{price}</p>
-          </small>
-        ) : (
-          <small>&nbsp;</small>
-        )}
-        <strong>€&nbsp;{has_promotion ? price_promotional : price}</strong>
-      </PriceContainer>
-      <Options>
-        <div>
-          <button
-            type="button"
-            disabled={qty === 1}
-            onClick={() => setQty(qty - 1)}
-            style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
-          >
-            <img src={minus} alt="icon" />
+            state: { id },
+          }}
+        >
+          <span>
+            <img src={coins} alt="coins" />
+            <strong>€&nbsp;{!!profile ? profile.cback_credit : '0.00'}</strong>
+            DE CRÉDITO
+          </span>
+          {has_promotion ? (
+            <small>
+              antes
+              <p>€&nbsp;{price}</p>
+            </small>
+          ) : (
+            <small>&nbsp;</small>
+          )}
+          <strong>€&nbsp;{has_promotion ? price_promotional : price}</strong>
+        </PriceContainer>
+        <Options>
+          <div>
+            <button
+              type="button"
+              disabled={qty === 1}
+              onClick={() => setQty(qty - 1)}
+              style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+            >
+              <img src={minus} alt="icon" />
+            </button>
+            <strong>{qty === 0 ? 0 : qty < 10 ? `0${qty}` : qty}</strong>
+            <button
+              type="button"
+              onClick={() => setQty(qty + 1)}
+              style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+            >
+              <img src={plus} alt="icon" />
+            </button>
+          </div>
+          <button type="button" onClick={handleAddToCart} disabled={qty === 0}>
+            <img src={basket_active} alt="icon" />
           </button>
-          <strong>{qty === 0 ? 0 : qty < 10 ? `0${qty}` : qty}</strong>
-          <button
-            type="button"
-            onClick={() => setQty(qty + 1)}
-            style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
-          >
-            <img src={plus} alt="icon" />
-          </button>
-        </div>
-        <button type="button" onClick={handleAddToCart} disabled={qty === 0}>
-          <img src={basket_active} alt="icon" />
-        </button>
-      </Options>
-    </Container>
+        </Options>
+      </Container>
+      {toastVisible && (
+        <Toast
+          status={`O produto ${title} foi adicionado ao seu cesto de compras.`}
+          color="#1DC167"
+        />
+      )}
+    </>
   );
 }
 

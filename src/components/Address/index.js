@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Container, StartStop, Options, TitleContainer } from './styles';
 
@@ -9,19 +9,20 @@ import options from '~/assets/options.svg';
 
 import {
   setPrimaryAddress,
-  deleteAddress,
+  deleteAddressRequest,
 } from '~/store/modules/addresses/actions';
 
-export default function Address({ address, selected, setEdit }) {
+export default function Address({ address: addressInfo, selected, setEdit }) {
   const {
     id,
-    name,
-    street_name,
+    destination_name,
+    address,
     number,
-    num_cod_postal,
-    ext_cod_postal,
-    distrito,
-  } = address;
+    zipcode,
+    district,
+  } = addressInfo;
+
+  const profile = useSelector(state => state.user.profile);
 
   const dispatch = useDispatch();
 
@@ -32,7 +33,7 @@ export default function Address({ address, selected, setEdit }) {
   }, [id, dispatch]);
 
   const handleDeleteAddress = useCallback(() => {
-    dispatch(deleteAddress(id));
+    dispatch(deleteAddressRequest(id));
   }, [id, dispatch]);
 
   return (
@@ -45,13 +46,13 @@ export default function Address({ address, selected, setEdit }) {
           <img src={options} alt="" />
         </button>
       </TitleContainer>
-      <small>{name}</small>
-      <small>{street_name}</small>
+      <small>{destination_name}</small>
+      <small>{address}</small>
 
-      <small>{`${number} ${num_cod_postal}-${ext_cod_postal} ${distrito}`}</small>
+      <small>{`${number} ${zipcode} ${district}`}</small>
 
       <small>Portugal</small>
-      <small>92 760 94 40</small>
+      <small>{!!profile ? profile.phone : '---'}</small>
 
       <StartStop selected={selected === id} style={{ marginRight: 30 }}>
         <button type="button" onClick={handleSetPrimaryAddress}>

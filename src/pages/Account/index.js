@@ -53,7 +53,7 @@ export default function Account({ children }) {
         <Content>
           <Menu>
             <strong>
-              Olá,&nbsp;<b>{profile.name}</b>
+              Olá,&nbsp;<b>{!!profile ? profile.name : 'Cliente'}</b>
             </strong>
             <div
               style={{

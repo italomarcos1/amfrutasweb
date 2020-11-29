@@ -7,6 +7,7 @@ const INITIAL_STATE = {
   updating: false,
   hasOrder: false,
   orderFinished: false,
+  pages: 1,
 };
 
 export default function cart(state = INITIAL_STATE, { type, payload }) {
@@ -16,6 +17,9 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
         const { product } = payload;
 
         draft.products.push(product);
+
+        const totalPages = Math.ceil(draft.products.length / 8);
+        draft.pages = totalPages;
 
         break;
       }

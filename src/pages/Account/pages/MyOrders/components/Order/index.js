@@ -50,7 +50,7 @@ export default function Order({ order, isOpen, setOrder }) {
     deliveryDate,
     startHour,
     endHour,
-    rating,
+    // rating,
   } = order;
 
   const handleOpenOrder = useCallback(() => {
@@ -58,7 +58,7 @@ export default function Order({ order, isOpen, setOrder }) {
     else setOrder(id);
   }, [id, isOpen, setOrder]);
 
-  const [productRating, setProductRating] = useState(rating);
+  const [productRating, setProductRating] = useState(5);
 
   return (
     <Container
@@ -114,7 +114,7 @@ export default function Order({ order, isOpen, setOrder }) {
             <OrderInfo>
               <strong>Avaliação do serviço</strong>
               <strong>
-                <b>{rating}</b>
+                <b>{productRating}</b>
               </strong>
             </OrderInfo>
           </OrderInfoContainer>
@@ -232,7 +232,6 @@ Order.propTypes = {
     deliveryDate: PropTypes.string,
     startHour: PropTypes.string,
     endHour: PropTypes.string,
-    rating: PropTypes.number,
   }).isRequired,
   setOrder: PropTypes.func.isRequired,
   isOpen: PropTypes.number.isRequired,

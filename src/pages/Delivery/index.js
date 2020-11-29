@@ -50,13 +50,14 @@ import NoTitleSelect from '~/components/NoTitleSelect';
 import Input from '~/components/Input';
 import InputMask from '~/components/InputMask';
 import Select from '~/components/Select';
+import ItemsList from '~/components/ItemsList';
 
 import CheckoutHeader from '~/components/CheckoutHeader';
 import Item from '~/components/CheckoutItem';
 
 import { updateProfileRequest } from '~/store/modules/user/actions';
 import {
-  addAddress,
+  addAddressRequest,
   setPrimaryAddress,
   updateShippingInfoRequest,
 } from '~/store/modules/addresses/actions';
@@ -76,7 +77,7 @@ import {
 } from '~/utils/validation';
 
 export default function Delivery() {
-  const [deliveryOption, setDeliveryOption] = useState('shop');
+  const [deliveryOption, setDeliveryOption] = useState('delivery');
   const [deliveryDay, setDeliveryDay] = useState('');
   const [deliveryHour, setDeliveryHour] = useState('');
   const [country, setCountry] = useState('Portugal');
@@ -96,6 +97,9 @@ export default function Delivery() {
 
   const cart = useSelector(state => state.cart.products);
   const hasOrder = useSelector(state => state.cart.hasOrder);
+
+  const [paginatedProducts, setPaginatedProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [newAddress, setNewAddress] = useState(false);
   const [newAddressPrimary, setNewAddressPrimary] = useState(false);
@@ -134,37 +138,9 @@ export default function Delivery() {
 
   const [hasLookup, setHasLookup] = useState(false);
 
-  // os endereços são o objeto inteiro, com id e etc
-  // o residence é só o label, pois o select mexe apenas com o label. se não, teríamos que mudar o Select ou criar um novo
-
-  const formatAddresses = useCallback(() => {
-    if (addresses.length === 0) return;
-
-    const formattingAddresses = addresses.map(({ id, street_name }) => ({
-      id,
-      value: street_name,
-      label: street_name,
-    }));
-
-    setFormattedAddresses(formattingAddresses);
-  }, [addresses]);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    formatAddresses();
-  }, []);
-
-  const validateCoupon = useCallback(() => {
-    setCouponIsValid(!!coupon);
-  }, [coupon]);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  const [email, setEmail] = useState(profile !== null ? profile.email : '');
+  const [email, setEmail] = useState(!!profile ? profile.email : '');
   const [emailError, setEmailError] = useState(false);
-  const [gender, setGender] = useState(profile !== null ? profile.gender : '');
+  const [gender, setGender] = useState(!!profile ? profile.gender : '');
 
   const [invalidFields, setInvalidFields] = useState([
     false,
@@ -195,6 +171,75 @@ export default function Delivery() {
 
   const [validUserInfo, setValidUserInfo] = useState(false);
   const [validShippingInfo, setValidShippingInfo] = useState(false);
+
+  const [deliveryDays, setDeliveryDays] = useState([]);
+  const [deliveryHours, setDeliveryHours] = useState([]);
+  const [shippingMethods, setShippingMethods] = useState([]);
+  const [chosenShippingMethod, setChosenShippingMethod] = useState({
+    id: 'delivery',
+    cost: 4,
+    label: 'Entrega em casa',
+  });
+
+  const [invalidDeliveryDay, setInvalidDeliveryDay] = useState(false);
+  const [invalidDeliveryHour, setInvalidDeliveryHour] = useState(false);
+
+  // os endereços são o objeto inteiro, com id e etc
+  // o residence é só o label, pois o select mexe apenas com o label. se não, teríamos que mudar o Select ou criar um novo
+
+  const loadData = useCallback(async () => {
+    const [delivery, shipping] = await Promise.all([
+      backend.get('checkout/delivery-intervals'),
+      backend.get('checkout/shipping-methods'),
+    ]);
+
+    const {
+      data: { data: deliveryData },
+    } = delivery;
+
+    const {
+      data: { data: shippingData },
+    } = shipping;
+
+    const formattingDeliveryDays = deliveryData.map(d => ({
+      ...d,
+      value: d.label,
+    }));
+
+    setDeliveryDays(formattingDeliveryDays);
+    setShippingMethods(shippingData);
+  }, []);
+
+  useEffect(() => {
+    const findIndex = deliveryDays.findIndex(d => d.label === deliveryDay);
+    if (findIndex > -1) setDeliveryHours(deliveryDays[findIndex].intervals);
+  }, [deliveryDays, deliveryDay]);
+
+  const formatAddresses = useCallback(() => {
+    if (addresses.length === 0) return;
+
+    const formattingAddresses = addresses.map(({ id, street_name }) => ({
+      id,
+      value: street_name,
+      label: street_name,
+    }));
+
+    setFormattedAddresses(formattingAddresses);
+  }, [addresses]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    formatAddresses();
+  }, []);
+
+  const validateCoupon = useCallback(() => {
+    setCouponIsValid(!!coupon);
+  }, [coupon]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    loadData();
+  }, []);
 
   const validateData = useCallback((formData, invalidateFields) => {
     const formattedData = Object.values(formData);
@@ -239,7 +284,7 @@ export default function Delivery() {
     const newNickname = restOfName.join(' ');
 
     const profileData = { ...allDataProfile, gender };
-    const shippingData = {
+    const shipping_address = {
       ...allDataShipping,
       id: newAddress ? `${Date.now()}` : selectedAddress.id,
       name: newName,
@@ -250,10 +295,23 @@ export default function Delivery() {
       cod_postal: postcode,
     };
 
+    // new address cadastrar e pegar id
+
     if (selectedAddress.id === primaryAddress.id) updatePrimaryAddress();
 
+    // criar id do pedido
+    // aplicar data, hora e  id do pedido
+    //
+    // shipping - null aqui1
+
     dispatch(
-      finishOrder({ profile: profileData, shipping: shippingData, cart })
+      finishOrder({
+        profile: profileData,
+        shipping_address:
+          deliveryOption === 'delivery' ? shipping_address : null,
+        cart,
+        status: 'new',
+      })
     );
     // os objetos usados para popular o form irão para cá, junto com os dados do carrinho
 
@@ -270,6 +328,7 @@ export default function Delivery() {
     newAddress,
     primaryAddress,
     updatePrimaryAddress,
+    deliveryOption,
   ]);
 
   const lookupAddress = useCallback(async () => {
@@ -327,6 +386,8 @@ export default function Delivery() {
       setInvalidGender(false);
       setEmailError(false);
       setInvalidBirth(false);
+      setInvalidDeliveryDay(false);
+      setInvalidDeliveryHour(false);
 
       const anyEmptyField = validateData(formData, setInvalidFields);
 
@@ -342,6 +403,17 @@ export default function Delivery() {
         return;
       }
 
+      if (
+        deliveryOption === 'delivery' &&
+        (nameIsValid(deliveryDay) || nameIsValid(deliveryHour))
+      ) {
+        setInvalidDeliveryDay(nameIsValid(deliveryDay));
+        setInvalidDeliveryHour(nameIsValid(deliveryHour));
+
+        window.scrollTo(0, 0);
+        return;
+      }
+
       const profileData = {
         ...formData,
         gender,
@@ -351,7 +423,15 @@ export default function Delivery() {
 
       setValidUserInfo(true);
     },
-    [dispatch, validateData, gender, invalidFields]
+    [
+      dispatch,
+      validateData,
+      gender,
+      invalidFields,
+      deliveryDay,
+      deliveryHour,
+      deliveryOption,
+    ]
   );
 
   const handleShippingInfo = useCallback(
@@ -407,7 +487,7 @@ export default function Delivery() {
       };
 
       if (newAddress) {
-        dispatch(addAddress({ ...shippingData, id: `${Date.now()}` }));
+        dispatch(addAddressRequest(shippingData));
 
         // if (newAddressPrimary) dispatch(setPrimaryAddress(selectedAddress.id)); -- vai bugar por causa do id
       } else {
@@ -427,6 +507,21 @@ export default function Delivery() {
       newAddress,
     ]
   );
+
+  const handlePagination = useCallback(() => {
+    const pageIndex = 8 * (currentPage - 1);
+    const newPage = cart.slice(pageIndex, pageIndex + 8);
+
+    setPaginatedProducts(newPage);
+  }, [currentPage, cart]);
+
+  useEffect(() => {
+    handlePagination();
+  }, [cart, handlePagination]);
+
+  useEffect(() => {
+    // calcular subtotal
+  }, [cart]);
 
   const genderData = [
     {
@@ -449,25 +544,33 @@ export default function Delivery() {
           <DeliveryOptionsContainer>
             <div style={{ width: 416, display: 'flex' }}>
               <DeliveryButton
-                selected={deliveryOption === 'shop' || hoverButton === 'shop'}
-                onClick={() => setDeliveryOption('shop')}
+                selected={
+                  deliveryOption === 'delivery' || hoverButton === 'delivery'
+                }
+                onClick={() => {
+                  setDeliveryOption('delivery');
+                  if (shippingMethods.length !== 0)
+                    setChosenShippingMethod(shippingMethods[0]);
+                }}
                 style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
                 onMouseOver={() => {
-                  if (deliveryOption !== 'shop') setHoverButton('shop');
+                  if (deliveryOption !== 'delivery') setHoverButton('delivery');
                 }}
                 onMouseLeave={() => {
-                  if (deliveryOption !== 'shop') setHoverButton('none');
+                  if (deliveryOption !== 'delivery') setHoverButton('none');
                 }}
               >
                 <DeliveryButtonContainer>
                   <DeliveryButtonContent
                     selected={
-                      deliveryOption === 'shop' || hoverButton === 'shop'
+                      deliveryOption === 'delivery' ||
+                      hoverButton === 'delivery'
                     }
                   >
                     <img
                       src={
-                        deliveryOption === 'shop' || hoverButton === 'shop'
+                        deliveryOption === 'delivery' ||
+                        hoverButton === 'delivery'
                           ? truckWhite
                           : truckBlack
                       }
@@ -481,28 +584,35 @@ export default function Delivery() {
               </DeliveryButton>
               <DeliveryButton
                 selected={
-                  deliveryOption === 'customer' || hoverButton === 'customer'
+                  deliveryOption === 'withdrawinstore' ||
+                  hoverButton === 'withdrawinstore'
                 }
-                onClick={() => setDeliveryOption('customer')}
+                onClick={() => {
+                  setDeliveryOption('withdrawinstore');
+                  if (shippingMethods.length !== 0)
+                    setChosenShippingMethod(shippingMethods[1]);
+                }}
                 style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
                 onMouseOver={() => {
-                  if (deliveryOption !== 'customer') setHoverButton('customer');
+                  if (deliveryOption !== 'withdrawinstore')
+                    setHoverButton('withdrawinstore');
                 }}
                 onMouseLeave={() => {
-                  if (deliveryOption !== 'customer') setHoverButton('none');
+                  if (deliveryOption !== 'withdrawinstore')
+                    setHoverButton('none');
                 }}
               >
                 <DeliveryButtonContainer>
                   <DeliveryButtonContent
                     selected={
-                      deliveryOption === 'customer' ||
-                      hoverButton === 'customer'
+                      deliveryOption === 'withdrawinstore' ||
+                      hoverButton === 'withdrawinstore'
                     }
                   >
                     <img
                       src={
-                        deliveryOption === 'customer' ||
-                        hoverButton === 'customer'
+                        deliveryOption === 'withdrawinstore' ||
+                        hoverButton === 'withdrawinstore'
                           ? lojaWhite
                           : lojaBlack
                       }
@@ -516,14 +626,17 @@ export default function Delivery() {
                 </DeliveryButtonContainer>
               </DeliveryButton>
             </div>
-            {hoverButton === 'customer' || deliveryOption === 'customer' ? (
+            {hoverButton === 'withdrawinstore' ||
+            deliveryOption === 'withdrawinstore' ? (
               <TakeOnShop>
                 A retirada na loja deve ocorrer no endereço abaixo:
                 <br />
                 <b>Av. da República 1058 2775-271 Parede</b>
               </TakeOnShop>
             ) : (
-              <DeliveryDateContainer>
+              <DeliveryDateContainer
+                error={invalidDeliveryDay || invalidDeliveryHour}
+              >
                 <div>
                   <strong style={{ width: 269 }}>
                     Selecione o melhor dia e horário para entrega
@@ -533,13 +646,13 @@ export default function Delivery() {
                       setValue={setDeliveryDay}
                       customWidth={125}
                       placeholder="Dia"
-                      data={returnNumberOfDays(new Date())}
+                      data={deliveryDays}
                     />
                     <NoTitleSelect
                       setValue={setDeliveryHour}
                       customWidth={190}
                       placeholder="Hora"
-                      data={hours}
+                      data={deliveryHours}
                     />
                   </div>
                 </div>
@@ -709,7 +822,7 @@ export default function Delivery() {
                   value={postcode}
                   onChange={({ target: { value } }) => setPostcode(value)}
                   error={invalidPostcode}
-                  onBlur={lookupAddress}
+                  // onBlur={lookupAddress}
                 />
                 <Input
                   name="street_name"
@@ -825,11 +938,14 @@ export default function Delivery() {
 
         <Content style={{ marginTop: 20 }}>
           <div>
-            <ul>
-              {cart.map((item, index) => (
-                <Item key={item.product.id} item={item} index={index} />
+            <ItemsList
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            >
+              {paginatedProducts.map((item, index) => (
+                <Item key={item.id} item={item} index={index} />
               ))}
-            </ul>
+            </ItemsList>
             <TextArea
               title="Se não encontrou o que procura, digite abaixo que iremos verificar para si."
               name="notes"
@@ -850,7 +966,9 @@ export default function Delivery() {
             </CheckoutItem>
             <CheckoutItem>
               <h1>Crédito Disponível</h1>
-              <h2 style={{ color: '#0CB68B' }}>€ 5,12</h2>
+              <h2 style={{ color: '#0CB68B' }}>
+                €&nbsp;{!!profile ? profile.cback_credit : '0,00'}
+              </h2>
             </CheckoutItem>
             <CheckoutItem style={{ height: 77 }}>
               <div style={{ display: 'flex' }}>
@@ -876,11 +994,13 @@ export default function Delivery() {
             </CheckoutItem>
             <CheckoutItem>
               <h1>Desconto do Cupom</h1>
-              <h2 style={{ color: '#0CB68B' }}>€ 10,00</h2>
+              <h2 style={{ color: '#0CB68B' }}>€&nbsp;0,00</h2>
             </CheckoutItem>
             <CheckoutItem>
               <h1>Porte</h1>
-              <h2 style={{ color: '#0CB68B' }}>Grátis</h2>
+              <h2 style={{ color: '#0CB68B' }}>
+                €&nbsp;`{chosenShippingMethod.cost},00`
+              </h2>
             </CheckoutItem>
             <CheckoutItem>
               <h2>Total</h2>
@@ -896,7 +1016,8 @@ export default function Delivery() {
               shadowColor="#17A75B"
               onClick={() => {
                 accountButtonRef.current.click();
-                shippingButtonRef.current.click();
+                if (deliveryOption === 'delivery')
+                  shippingButtonRef.current.click(); // aqui1
               }}
               style={{ width: 309 }}
               disabled={loading}

@@ -83,7 +83,7 @@ export default function user(state = INITIAL_STATE, { type, payload }) {
 
       case '@auth/SIGN_OUT': {
         draft.profile = null;
-        draft.orders = null;
+        draft.orders = [];
         draft.product = null;
 
         break;

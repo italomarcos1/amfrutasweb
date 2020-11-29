@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { Container } from './styles';
 
 import CheckoutItem from '../MyOrders/components/Item';
+import EmptyCartContainer from '~/components/EmptyCartContainer';
 
 // import { products } from '~/data';
 
@@ -20,7 +21,7 @@ export default function MyFavorites() {
             ))}
           </ul>
         ) : (
-          <h1>Você não favoritou nenhum produto ainda.</h1>
+          <EmptyCartContainer message="Você não favoritou nenhum produto ainda." />
         )}
       </Container>
       <div style={{ width: 840, height: 320 }} />

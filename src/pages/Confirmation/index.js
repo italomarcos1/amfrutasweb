@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -38,6 +38,7 @@ import { Button } from '~/components/LoginModal';
 import CheckoutHeader from '~/components/CheckoutHeader';
 import Item from '~/components/CheckoutItem';
 import PeriodicDeliveryListItem from '~/components/PeriodicDeliveryListItem';
+import ItemsList from '~/components/ItemsList';
 
 import { orderFinished } from '~/store/modules/cart/actions';
 
@@ -55,6 +56,9 @@ export default function Confirmation() {
 
   const { profile, shipping, cart } = useSelector(state => state.user.order);
 
+  const [paginatedProducts, setPaginatedProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -62,6 +66,17 @@ export default function Confirmation() {
       dispatch(orderFinished());
     };
   }, []);
+
+  const handlePagination = useCallback(() => {
+    const pageIndex = 8 * (currentPage - 1);
+    const newPage = cart.slice(pageIndex, pageIndex + 8);
+
+    setPaginatedProducts(newPage);
+  }, [currentPage, cart]);
+
+  useEffect(() => {
+    handlePagination();
+  }, [cart, handlePagination]);
 
   if (!hasOrder) {
     return <Redirect to="/entrega" />;
@@ -169,11 +184,14 @@ export default function Confirmation() {
         <Content style={{ marginTop: 40 }}>
           <div>
             <Title>Produtos</Title>
-            <ul>
-              {cart.map((item, index) => (
+            <ItemsList
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            >
+              {paginatedProducts.map((item, index) => (
                 <Item key={item.id} item={item} index={index} />
               ))}
-            </ul>
+            </ItemsList>
           </div>
           <div>
             <Title>Resumo</Title>

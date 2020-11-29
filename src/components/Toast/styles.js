@@ -12,14 +12,14 @@ export const Container = styled.div`
   display: flex;
   margin: 0 auto;
   left: 40%;
-  bottom: 22.5%;
+  bottom: 20%;
   justify-content: center;
 `;
 
 const popIn = keyframes`
   from {
     opacity:0;
-    width: 0px;
+    width: 57px;
     height: 11px;
 
     #click{
@@ -71,5 +71,5 @@ export const Toast = styled.div`
   padding: 5px 30px;
   text-align: center;
 
-  animation: ${({ visible }) => (visible ? popIn : popOut)} 0.2s linear normal;
+  animation: ${({ visible }) => (visible ? popIn : popOut)} 0.25s linear normal;
 `;

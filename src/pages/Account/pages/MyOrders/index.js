@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { Container } from './styles';
 
 import Order from './components/Order';
+import EmptyCartContainer from '~/components/EmptyCartContainer';
 
 export default function MyOrders() {
-  const orders = [
+  const ordersDev = [
     {
       id: 1,
       status: 'new',
@@ -64,16 +66,23 @@ export default function MyOrders() {
   ];
 
   const [selectedOrder, setSelectedOrder] = useState(0);
+
+  const orders = useSelector(state => state.user.orders);
+
   return (
     <>
       <Container>
-        {orders.map(order => (
-          <Order
-            order={order}
-            isOpen={selectedOrder}
-            setOrder={setSelectedOrder}
-          />
-        ))}
+        {orders.length !== 0 ? (
+          orders.map(order => (
+            <Order
+              order={order}
+              isOpen={selectedOrder}
+              setOrder={setSelectedOrder}
+            />
+          ))
+        ) : (
+          <EmptyCartContainer message="Você não efetuou nenhuma compra ainda" />
+        )}
       </Container>
       <div style={{ width: 840, height: 220 }} />
     </>
