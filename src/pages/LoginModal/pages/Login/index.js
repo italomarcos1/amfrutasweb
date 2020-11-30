@@ -110,7 +110,7 @@ export default function Login({ closeModal, setPage }) {
         </ForgotPassword>
       </Form>
       <Button color="#1DC167" shadowColor="#17A75B" onClick={handleSubmit}>
-        {loading ? <FaSpinner color="#fff" size={16} /> : 'Iniciar sessão'}
+        {loading ? <FaSpinner color="#fff" size={20} /> : 'Iniciar sessão'}
       </Button>
       <GoBack onClick={() => setPage('main')}>Ou voltar</GoBack>
       <SecureLogin style={{ marginTop: 60 }}>

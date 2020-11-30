@@ -99,6 +99,8 @@ export default function Delivery() {
   const hasOrder = useSelector(state => state.cart.hasOrder);
   const price = useSelector(state => state.cart.price);
   const saved = useSelector(state => state.cart.saved);
+  const processingOrder = useSelector(state => state.cart.processingOrder);
+  const orderFinished = useSelector(state => state.cart.orderFinished);
 
   const [paginatedProducts, setPaginatedProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -301,7 +303,6 @@ export default function Delivery() {
 
   const handleFinishOrder = useCallback(() => {
     if (!finalProfile || (deliveryOption === 'delivery' && !finalAddress)) {
-      alert('not yet boi');
       return;
     }
 
@@ -322,11 +323,8 @@ export default function Delivery() {
       })
     );
     // os objetos usados para popular o form irão para cá, junto com os dados do carrinho
-
-    history.push('/confirmacao');
   }, [
     dispatch,
-    history,
     cart,
     deliveryOption,
     finalAddress,
@@ -545,6 +543,10 @@ export default function Delivery() {
   useEffect(() => {
     handlePagination();
   }, [cart, handlePagination]);
+
+  useEffect(() => {
+    if (orderFinished) history.push('/confirmacao');
+  }, [orderFinished, history]);
 
   useEffect(() => {
     // calcular subtotal
@@ -791,6 +793,11 @@ export default function Delivery() {
                 <FaSpinner color="#666" size={42} />
               </LoadingContainer>
             )}
+            {deliveryOption === 'withdrawinstore' && (
+              <LoadingContainer>
+                {/* <FaSpinner color="#666" size={42} /> */}
+              </LoadingContainer>
+            )}
             <InfoContainer
               onSubmit={handleShippingInfo}
               style={{ width: 683 }}
@@ -822,6 +829,7 @@ export default function Delivery() {
                     value={residence}
                     onChange={({ target: { value } }) => setResidence(value)}
                     error={invalidResidence}
+                    disabled={deliveryOption === 'withdrawinstore'}
                   />
                 ) : (
                   <Select
@@ -835,6 +843,7 @@ export default function Delivery() {
                     customWidth={325}
                     data={formattedAddresses}
                     error={invalidResidence}
+                    disabled={deliveryOption === 'withdrawinstore'}
                   />
                 )}
                 <Input
@@ -843,6 +852,7 @@ export default function Delivery() {
                   placeholder="Escreve o nome do destinatário"
                   customWidth={283}
                   error={locationInvalidFields[0]}
+                  disabled={deliveryOption === 'withdrawinstore'}
                 />
               </InputContainer>
               <InputContainer style={{ width: 628 }}>
@@ -856,6 +866,7 @@ export default function Delivery() {
                   onChange={({ target: { value } }) => setZipcode(value)}
                   error={invalidPostcode}
                   onBlur={lookupAddress}
+                  disabled={deliveryOption === 'withdrawinstore'}
                 />
                 <Input
                   name="address"
@@ -863,6 +874,7 @@ export default function Delivery() {
                   placeholder="Escreve a tua morada"
                   customWidth={215}
                   error={locationInvalidFields[1]}
+                  disabled={deliveryOption === 'withdrawinstore'}
                 />
                 <Input
                   name="number"
@@ -870,6 +882,7 @@ export default function Delivery() {
                   placeholder="Escreve o teu número"
                   customWidth={90}
                   error={locationInvalidFields[2]}
+                  disabled={deliveryOption === 'withdrawinstore'}
                 />
                 <Input
                   name="district"
@@ -877,6 +890,7 @@ export default function Delivery() {
                   placeholder="Escreve o teu distrito"
                   customWidth={173}
                   error={locationInvalidFields[3]}
+                  disabled={deliveryOption === 'withdrawinstore'}
                 />
               </InputContainer>
               <InputContainer style={{ width: 628 }}>
@@ -886,6 +900,7 @@ export default function Delivery() {
                   placeholder="Escreve a tua cidade"
                   customWidth={194}
                   error={locationInvalidFields[4]}
+                  disabled={deliveryOption === 'withdrawinstore'}
                 />
                 <Input
                   name="state"
@@ -894,6 +909,7 @@ export default function Delivery() {
                   defaultValue="Lisboa"
                   customWidth={221}
                   error={locationInvalidFields[5]}
+                  disabled={deliveryOption === 'withdrawinstore'}
                 />
                 <Select
                   title="Localidade"
@@ -902,6 +918,7 @@ export default function Delivery() {
                   defaultValue={{ value: 'Portugal', label: 'Portugal' }}
                   customWidth={173}
                   error={invalidLocation}
+                  disabled={deliveryOption === 'withdrawinstore'}
                 />
               </InputContainer>
               <div
@@ -1060,7 +1077,11 @@ export default function Delivery() {
               style={{ width: 309 }}
               disabled={loading}
             >
-              <b>Concluir a Encomenda</b>
+              {processingOrder ? (
+                <FaSpinner color="#fff" size={20} />
+              ) : (
+                <b>Concluir a Encomenda</b>
+              )}
             </Button>
             <SecureLogin style={{ marginTop: 23.5 }}>
               Acesso <img src={lock} alt="Lock" /> Seguro

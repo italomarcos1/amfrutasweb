@@ -2,32 +2,34 @@
   type: 'persist/REHYDRATE',
   payload: {
     auth: {
-      token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvc2FuZGJveC5hbWZydXRhcy5wdFwvYmFja2VuZFwvYXV0aFwvbG9naW4iLCJpYXQiOjE2MDY2NTMzNjksIm5iZiI6MTYwNjY1MzM2OSwianRpIjoidnpKNWxGWWJEeWoxRDQ2WCIsInN1YiI6MjE1MiwicHJ2IjoiNDZlZGQxMDkyOTRmYzBkOGMwMTkyZjNjM2YxODVjNDhiMDM2ZjNhNyJ9.Pb5yHnBD4arK_CKLtSbkKO5_sirp4L3BuOntLyyyVvk',
+      token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvc2FuZGJveC5hbWZydXRhcy5wdFwvYmFja2VuZFwvYXV0aFwvbG9naW4iLCJpYXQiOjE2MDY2NzQ2MjEsIm5iZiI6MTYwNjY3NDYyMSwianRpIjoiOElWSFRUaWdxcnF6YktQOCIsInN1YiI6MjE3NCwicHJ2IjoiNDZlZGQxMDkyOTRmYzBkOGMwMTkyZjNjM2YxODVjNDhiMDM2ZjNhNyJ9.00-doeFHdmOTHAiiKQXhWuR2FrxD3zWcXQJ0pRrF50w',
       signed: false,
       loading: false,
       loginError: false
     },
     user: {
+      profile: null,
       order: null,
       orders: [],
       product: null,
       category: null,
+      finalProfile: null,
       active: '',
-      profile: null
     },
     cart: {
-     products: [],
-     favorites: [],
-     price: '',
-     saved: '',
-     updating: false,
-     hasOrder: false,
-     orderFinished: false,
-     pages: 1,
+      products: [],
+      favorites: [],
+      price: '',
+      saved: ''
+      updating: false,
+      hasOrder: false,
+      orderFinished: false,
+      processingOrder: false,
+      pages: 1,
     },
     addresses: {
-       addresses: [],
-       finalAddress: null,
+      addresses: [],
+      finalAddress: null,
     },
     _persist: {
       version: -1,

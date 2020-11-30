@@ -7,6 +7,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  opacity: ${({ disabled }) => (disabled ? 0.3 : 1)};
 
   input {
     width: 100%;

@@ -65,11 +65,12 @@ const DropdownIndicator = ({ selectProps, ...rest }) => {
 };
 
 const SelectContainer = ({ children, selectProps, ...props }) => {
-  const { title, customColor, fontSize } = selectProps;
+  const { title, customColor, fontSize, disabled } = selectProps;
   return (
     <components.SelectContainer {...props}>
       <Title
         style={customColor ? { color: customColor, fontSize } : { fontSize }}
+        disabled={disabled}
       >
         {title}
       </Title>
@@ -88,6 +89,7 @@ export default function BankingSelect({
   customWidth,
   customColor,
   hasMarginLeft,
+  disabled,
 }) {
   return (
     <Select
@@ -99,6 +101,7 @@ export default function BankingSelect({
         IndicatorSeparator,
         DropdownIndicator,
       }}
+      isDisabled={disabled}
       onChange={({ label }) => setValue(label)}
       options={data || colourOptions}
       customWidth={customWidth}
@@ -143,6 +146,7 @@ export default function BankingSelect({
           height: 53,
           width: customWidth,
           fontSize: 12,
+          opacity: disabled ? 0.3 : 1,
           marginLeft: hasMarginLeft ? 15.5 : 0,
         }),
         dropdownIndicator: (base, { isFocused }) => ({
@@ -218,6 +222,7 @@ BankingSelect.propTypes = {
   fontSize: PropTypes.number,
   hasMarginLeft: PropTypes.bool,
   data: PropTypes.oneOfType([PropTypes.array]),
+  disabled: PropTypes.bool,
 };
 
 BankingSelect.defaultProps = {
@@ -227,4 +232,5 @@ BankingSelect.defaultProps = {
   fontSize: 12,
   customColor: '',
   hasMarginLeft: false,
+  disabled: false,
 };

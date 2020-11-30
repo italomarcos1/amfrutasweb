@@ -16,6 +16,7 @@ export default function CustomInput({
   fontSize,
   customWidth,
   hasMarginLeft,
+  disabled,
   ...rest
 }) {
   const inputRef = useRef(null);
@@ -145,6 +146,7 @@ export default function CustomInput({
       onFocus={() => setActive(true)}
       onBlur={() => setActive(false)}
       error={error}
+      disabled={disabled}
     >
       <Title style={{ fontSize }} error={error}>
         {title}
@@ -179,14 +181,15 @@ CustomInput.propTypes = {
   hasMarginLeft: PropTypes.bool,
   type: PropTypes.string,
   full: PropTypes.bool,
+  disabled: PropTypes.bool,
   error: PropTypes.bool.isRequired,
-
   style: PropTypes.oneOfType([PropTypes.object]),
   inputStyle: PropTypes.oneOfType([PropTypes.object]),
 };
 
 CustomInput.defaultProps = {
   full: false,
+  disabled: false,
   fontSize: 12,
   hasMarginLeft: false,
   customWidth: 221,

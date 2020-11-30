@@ -10,6 +10,7 @@ export const Title = styled.strong`
   color: #424242;
   margin-bottom: 5px;
   height: 16px;
+  opacity: ${({ disabled }) => (disabled ? 0.3 : 1)};
 `;
 
 export const Indicator = styled.span`

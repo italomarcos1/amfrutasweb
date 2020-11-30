@@ -18,6 +18,7 @@ export default function CustomInput({
   inputStyle,
   titleStyle,
   hasMarginLeft,
+  disabled,
   ...rest
 }) {
   const [active, setActive] = useState(false);
@@ -41,6 +42,7 @@ export default function CustomInput({
           ? { ...style, width: customWidth, marginLeft: 20 }
           : { ...style, width: customWidth }
       }
+      disabled={disabled}
     >
       <Title style={{ ...titleStyle, fontSize }} error={error}>
         {title}
@@ -72,6 +74,7 @@ CustomInput.propTypes = {
   fontSize: PropTypes.number,
   full: PropTypes.bool,
   error: PropTypes.bool,
+  disabled: PropTypes.bool,
   hasMarginLeft: PropTypes.bool,
   customWidth: PropTypes.number,
   resetValue: PropTypes.func,
@@ -84,6 +87,7 @@ CustomInput.propTypes = {
 CustomInput.defaultProps = {
   full: false,
   error: false,
+  disabled: false,
   placeholder: 'Text here...',
   hasMarginLeft: false,
   fontSize: 12,

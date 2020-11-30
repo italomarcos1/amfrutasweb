@@ -51,7 +51,7 @@ const rotate = keyframes` /** animação para rotacionar o icon. */
 export const LoadingContainer = styled.div`
   position: absolute;
   width: 683px;
-  height: 431px;
+  height: 399px;
   background-color: rgba(255, 255, 255, 0.8);
   border: 1px solid #e0e0e0;
   border-radius: 6px;

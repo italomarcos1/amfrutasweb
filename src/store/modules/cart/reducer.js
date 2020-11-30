@@ -10,6 +10,7 @@ const INITIAL_STATE = {
   updating: false,
   hasOrder: false,
   orderFinished: false,
+  processingOrder: false,
   pages: 1,
 };
 
@@ -71,7 +72,14 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
       }
 
       case '@cart/FINISH_ORDER': {
+        draft.processingOrder = true;
+
+        break;
+      }
+
+      case '@cart/SET_ORDER': {
         draft.orderFinished = true;
+        draft.processingOrder = false;
 
         break;
       }
