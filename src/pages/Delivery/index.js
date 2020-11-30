@@ -809,7 +809,10 @@ export default function Delivery() {
               initialData={
                 !!primaryAddress
                   ? primaryAddress.length !== 0
-                    ? primaryAddress
+                    ? {
+                        ...primaryAddress,
+                        destination_name: `${primaryAddress.destination_name} ${primaryAddress.destination_last_name}`,
+                      }
                     : {}
                   : {}
               }

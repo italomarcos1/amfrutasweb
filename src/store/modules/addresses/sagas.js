@@ -93,6 +93,8 @@ export function* updateFinalAddress({ payload }) {
     } = yield call(backend.put, `clients/addresses/${addressId}`, address);
 
     if (address.default === 1) {
+      console.tron.log('vasco');
+      console.tron.log(responseData);
       const updatedDefaultAddress = {
         ...profile,
         default_address: responseData,

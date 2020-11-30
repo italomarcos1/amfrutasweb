@@ -71,13 +71,11 @@ export default function Item({ item, index }) {
           <Title>{title}</Title>
           <PriceAndAmount>
             {has_promotion ? (
-              <small>€&nbsp;{finalPrice}</small>
+              <small>€&nbsp;{price}</small>
             ) : (
               <small>&nbsp;</small>
             )}
-            <strong>
-              €&nbsp;{has_promotion ? finalPromotionalPrice : finalPrice}
-            </strong>
+            <strong>€&nbsp;{has_promotion ? price_promotional : price}</strong>
           </PriceAndAmount>
         </ProductInfo>
       </div>
@@ -105,7 +103,7 @@ export default function Item({ item, index }) {
           </button>
         </div>
         <Price style={{ alignSelf: 'center' }}>
-          €&nbsp;{has_promotion ? price_promotional : price}
+          €&nbsp;{has_promotion ? finalPromotionalPrice : finalPrice}
         </Price>
       </Options>
     </Container>

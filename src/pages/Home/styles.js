@@ -55,7 +55,7 @@ export const StoreButtonContainer = styled.div`
   margin-top: 19px;
 `;
 
-export const StoreButton = styled.button`
+export const StoreButton = styled.a`
   width: 164px;
   height: 50px;
   border-radius: 5px;

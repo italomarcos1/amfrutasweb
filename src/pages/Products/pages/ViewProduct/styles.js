@@ -85,9 +85,9 @@ export const Title = styled.h1`
 
 export const PriceAndInfoContainer = styled.div`
   width: 525px;
-  height: 147px;
+  height: 339px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   margin-top: 20px;
   /* background-color: #00a0f0; */
@@ -221,6 +221,7 @@ export const ShareThisProduct = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
+  margin-top: 17px;
 
   strong {
     letter-spacing: 0px;
@@ -239,6 +240,7 @@ export const ShareButton = styled.button.attrs({ type: 'button' })`
   text-align: center;
   width: 110px;
   height: 28px;
+  margin-top: 9px;
 
   background-color: ${({ color }) => color};
 
@@ -273,4 +275,108 @@ export const Description = styled.div`
   border-radius: 4px;
   margin-top: 20px;
   padding: 35px 28px 50px 24px;
+`;
+
+export const AmountAndPriceContainer = styled.div`
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 165px;
+  height: 76px;
+  margin-top: 34px;
+  padding: 0;
+
+  small {
+    letter-spacing: 0px;
+    color: #9e9e9e;
+    font-family: 'SFPro';
+    font-size: 14px;
+    line-height: 16px;
+    height: 16px;
+    text-align: left;
+  }
+
+  strong {
+    letter-spacing: 0px;
+    color: #3ab879;
+    font-family: 'SFProBold';
+    font-size: 36px;
+    line-height: 43px;
+    text-align: left;
+    height: 60px;
+
+    b {
+      font-size: 30px;
+      font-family: 'SFProBold';
+    }
+  }
+`;
+
+export const AmountAndTotalContainer = styled.div`
+  display: flex;
+  width: 165px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+`;
+
+export const TotalContainer = styled.div`
+  display: flex;
+  height: 45px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-left: 21px;
+`;
+
+export const ShippingContainer = styled.div`
+  display: flex;
+  height: 34px;
+  margin-top: 21px;
+  width: 180px;
+`;
+
+export const Amount = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 103px;
+  height: 45px;
+  /* margin-right: 12px; */
+
+  strong {
+    display: inline;
+    font-size: 18px;
+    color: #393939;
+    /* margin: 0 10px; */
+    font-weight: normal;
+    font-family: 'SFProCustom';
+    width: 35px;
+    max-width: 35px;
+    text-align: center;
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    width: 34px;
+    max-width: 34px;
+    padding: 10px;
+    height: 45px;
+    border-radius: 4px;
+    background-color: #f2f2f2;
+    transition: all 0.2s;
+
+    img {
+      width: 13px;
+      height: 13px;
+    }
+
+    &:hover {
+      background-color: ${darken(0.08, '#f2f2f2')};
+    }
+  }
 `;

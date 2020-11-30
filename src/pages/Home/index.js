@@ -267,10 +267,18 @@ export default function Home() {
             <b>Notificação na Entrega</b>
           </span>
           <StoreButtonContainer>
-            <StoreButton>
+            <StoreButton
+              href="https://apps.apple.com/pt/app/am-frutas/id1522622759"
+              rel="noreferrer"
+              target="_blank"
+            >
               <img src={appStore} alt="" />
             </StoreButton>
-            <StoreButton>
+            <StoreButton
+              href="https://play.google.com/store/apps/details?id=com.amfrutas&amp;hl=en_US&amp;gl=US"
+              rel="noreferrer"
+              target="_blank"
+            >
               <img src={playStore} alt="" />
             </StoreButton>
           </StoreButtonContainer>
