@@ -118,6 +118,7 @@ export const GoToCartContainer = styled.button.attrs({
   align-items: center;
   background-color: #0cb68b;
   transition: all 0.2s;
+  padding-right: 4px;
 
   &:hover {
     background-color: ${darken('0.05', '#0cb68b')};

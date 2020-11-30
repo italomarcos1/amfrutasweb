@@ -61,3 +61,7 @@ export function setCategory(id) {
 export function setUrlActive(url) {
   return { type: '@user/SET_URL_ACTIVE', payload: { url } };
 }
+
+export function knightFall() {
+  return { type: '@KNIGHTFALL' };
+}

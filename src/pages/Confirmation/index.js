@@ -40,7 +40,7 @@ import Item from '~/components/CheckoutItem';
 import PeriodicDeliveryListItem from '~/components/PeriodicDeliveryListItem';
 import ItemsList from '~/components/ItemsList';
 
-import { orderFinished } from '~/store/modules/cart/actions';
+import { knightFall } from '~/store/modules/user/actions';
 
 import { periodicProducts } from '~/data';
 
@@ -70,6 +70,7 @@ export default function Confirmation() {
   const [orderInfo, setOrderInfo] = useState(null);
 
   const loadData = useCallback(async () => {
+    if (!order) return;
     const {
       data: { data },
     } = await backend.get(`clients/transactions/${order.id}`);
@@ -81,6 +82,16 @@ export default function Confirmation() {
     window.scrollTo(0, 0);
     loadData();
   }, [loadData]);
+
+  useEffect(() => {
+    // action que reseta
+    // finalProfile
+    // finalAddress
+    // , , , , ,
+    return () => {
+      dispatch(knightFall());
+    };
+  }, []);
 
   const handlePagination = useCallback(() => {
     if (!orderInfo) return;

@@ -307,10 +307,15 @@ export default function Delivery() {
     }
 
     const formattedDeliveryDay = deliveryDay.split('/').join('-');
-    const formattedFinalAddress = {
-      name: `${finalAddress.destination_name} ${finalAddress.destination_last_name}`,
-      ...finalAddress,
-    };
+
+    let formattedFinalAddress;
+
+    if (deliveryOption === 'delivery') {
+      formattedFinalAddress = {
+        name: `${finalAddress.destination_name} ${finalAddress.destination_last_name}`,
+        ...finalAddress,
+      };
+    }
 
     dispatch(
       finishOrderRequest({

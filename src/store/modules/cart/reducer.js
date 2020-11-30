@@ -5,8 +5,8 @@ import { calculatePrice } from '~/utils/calculatePrice';
 const INITIAL_STATE = {
   products: [],
   favorites: [],
-  price: '',
-  saved: '',
+  price: '0.00',
+  saved: '0.00',
   updating: false,
   hasOrder: false,
   orderFinished: false,
@@ -77,7 +77,7 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
         break;
       }
 
-      case '@cart/SET_ORDER': {
+      case '@user/SET_ORDER': {
         draft.orderFinished = true;
         draft.processingOrder = false;
 
@@ -155,10 +155,29 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
 
         break;
       }
+
       case '@auth/SIGN_OUT': {
         draft.favorites = [];
         draft.products = [];
         draft.updating = false;
+        draft.price = '0.00';
+        draft.saved = '0.00';
+        draft.hasOrder = false;
+        draft.orderFinished = false;
+        draft.processingOrder = false;
+        draft.pages = 1;
+        break;
+      }
+
+      case '@KNIGHTFALL': {
+        draft.products = [];
+        draft.updating = false;
+        draft.price = '0.00';
+        draft.saved = '0.00';
+        draft.hasOrder = false;
+        draft.orderFinished = false;
+        draft.processingOrder = false;
+        draft.pages = 1;
         break;
       }
 

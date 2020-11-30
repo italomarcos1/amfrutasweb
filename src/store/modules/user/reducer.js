@@ -85,11 +85,21 @@ export default function user(state = INITIAL_STATE, { type, payload }) {
       case '@auth/SIGN_OUT': {
         draft.profile = null;
         draft.orders = [];
+        draft.order = null;
         draft.product = null;
+        draft.category = null;
+        draft.active = '';
         draft.finalProfile = null;
 
         break;
       }
+
+      case '@KNIGHTFALL': {
+        draft.order = null;
+        draft.finalProfile = null;
+        break;
+      }
+
       default:
     }
   });

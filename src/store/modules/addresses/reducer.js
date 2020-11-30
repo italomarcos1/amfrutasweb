@@ -88,6 +88,12 @@ export default function addresses(state = INITIAL_STATE, { type, payload }) {
 
         break;
       }
+
+      case '@KNIGHTFALL': {
+        draft.finalAddress = null;
+        break;
+      }
+
       default:
     }
   });

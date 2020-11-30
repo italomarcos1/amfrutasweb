@@ -14,22 +14,22 @@
       product: null,
       category: null,
       finalProfile: null,
-      active: '',
+      active: ''
     },
     cart: {
       products: [],
       favorites: [],
-      price: '',
-      saved: ''
+      price: '0.00',
+      saved: '0.00',
       updating: false,
       hasOrder: false,
       orderFinished: false,
       processingOrder: false,
-      pages: 1,
+      pages: 1
     },
     addresses: {
       addresses: [],
-      finalAddress: null,
+      finalAddress: null
     },
     _persist: {
       version: -1,
