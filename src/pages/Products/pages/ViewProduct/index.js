@@ -86,6 +86,7 @@ export default function ViewProduct() {
   }, [state]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     loadProduct();
   }, [loadProduct]);
 
