@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-
+import PropTypes from 'prop-types';
 import {
   Container,
   FilterProducts,
@@ -24,7 +24,6 @@ export default function CustomHeader({
   isInfo,
   inputValue,
   setInputValue,
-  search,
 }) {
   const [selectedOption, setSelectedOption] = useState('Mais Recentes');
   const [menuIsOpen, setMenuIsOpen] = useState(false);
@@ -145,3 +144,23 @@ export default function CustomHeader({
     </Container>
   );
 }
+
+CustomHeader.propTypes = {
+  style: PropTypes.oneOfType([PropTypes.object]),
+  currentPage: PropTypes.number.isRequired,
+  lastPage: PropTypes.number.isRequired,
+  setCurrentPage: PropTypes.func.isRequired,
+  paginationArray: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setOrderDirection: PropTypes.func.isRequired,
+  setOrderField: PropTypes.func.isRequired,
+  isInfo: PropTypes.bool,
+  inputValue: PropTypes.string,
+  setInputValue: PropTypes.func,
+};
+
+CustomHeader.defaultProps = {
+  style: {},
+  isInfo: false,
+  inputValue: '',
+  setInputValue: () => {},
+};

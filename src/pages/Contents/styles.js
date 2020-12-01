@@ -88,7 +88,7 @@ const rotate = keyframes` /** animação para rotacionar o icon. */
 `;
 
 export const LoadingContainer = styled.div`
-  width: 840px;
+  width: 1240px;
   height: 454px;
 
   display: flex;

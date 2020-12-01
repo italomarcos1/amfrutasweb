@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { FaSpinner } from 'react-icons/fa';
 
 import {
@@ -20,8 +19,6 @@ import LoginModal from '~/pages/LoginModal';
 
 import backend from '~/services/api';
 
-import { updatePages } from '~/store/modules/cart/actions';
-
 export default function Contents() {
   const [loginModal, setLoginModal] = useState(false);
 
@@ -38,8 +35,6 @@ export default function Contents() {
 
   const { state } = useLocation();
 
-  const dispatch = useDispatch();
-
   const generatePaginationArray = useCallback(() => {
     const items = [];
 
@@ -47,12 +42,12 @@ export default function Contents() {
       items.push(i);
     }
 
-    dispatch(updatePages(lastPage));
     setPaginationArray(items);
-  }, [dispatch, lastPage]);
+  }, [lastPage]);
 
   const loadContents = useCallback(async () => {
     if (searchInput !== '') return;
+    console.tron.log('nera');
 
     const arrayId = state.id.split('/');
     const getId = arrayId[arrayId.length - 1];
@@ -121,8 +116,6 @@ export default function Contents() {
         }
       }
 
-      dispatch(updatePages(last_page));
-
       setCurrentPage(current_page);
 
       setLastPage(last_page);
@@ -132,7 +125,7 @@ export default function Contents() {
       setLoading(false);
       alert('Erro');
     }
-  }, [currentPage, dispatch, orderField, orderDirection, searchInput]);
+  }, [currentPage, orderField, orderDirection, searchInput]);
 
   useEffect(() => {
     loadContents();
@@ -167,12 +160,12 @@ export default function Contents() {
           {loading ? (
             <LoadingContainer>
               <FaSpinner color="#666" size={42} />
-              <strong>Carregando os produtos, aguarde...</strong>
+              <strong>Carregando os conteúdos do blog, aguarde...</strong>
             </LoadingContainer>
           ) : noContentsFound ? (
             <LoadingContainer>
               <strong>
-                Não encontramos nenhum conteúdo com o nome informado. <br />{' '}
+                Não encontramos nenhuma conteúdo com esse nome no blog. <br />{' '}
                 Tente novamente.
               </strong>
             </LoadingContainer>

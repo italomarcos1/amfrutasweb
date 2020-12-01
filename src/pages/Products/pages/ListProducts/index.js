@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 import { FaSpinner } from 'react-icons/fa';
 
@@ -12,12 +11,10 @@ import FooterPagination from '~/components/FooterPagination';
 
 import backend from '~/services/api';
 
-import { updatePages } from '~/store/modules/cart/actions';
-
 export default function ListProducts() {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [lastPage, setLastPage] = useState(0);
+  const [lastPage, setLastPage] = useState(1);
   const [prevPageUrl, setPrevPageUrl] = useState('');
   const [nextPageUrl, setNextPageUrl] = useState('');
   const [pageHeight, setPageHeight] = useState(1184);
@@ -27,8 +24,6 @@ export default function ListProducts() {
   const [searchInput, setSearchInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [noProductsFound, setNoProductsFound] = useState(false);
-
-  const dispatch = useDispatch();
 
   const generatePaginationArray = useCallback(() => {
     const items = [];
@@ -64,14 +59,13 @@ export default function ListProducts() {
       data.length > 10 ? 1184 : Math.ceil(data.length / 5) * 404;
 
     setPageHeight(hasLastRow);
-    dispatch(updatePages(last_page));
 
     setProducts(data);
     setCurrentPage(current_page);
     setLastPage(last_page);
     setNextPageUrl(next_page_url);
     setPrevPageUrl(prev_page_url);
-  }, [currentPage, dispatch, orderDirection, orderField, searchInput]);
+  }, [currentPage, orderDirection, orderField, searchInput]);
 
   const searchProduct = useCallback(async () => {
     try {
@@ -109,7 +103,6 @@ export default function ListProducts() {
       const hasLastRow =
         data.length > 10 ? 1184 : Math.ceil(data.length / 5) * 404;
 
-      dispatch(updatePages(last_page));
       setPageHeight(hasLastRow);
 
       setProducts(data);
@@ -123,7 +116,7 @@ export default function ListProducts() {
       setLoading(false);
       alert('Erro');
     }
-  }, [currentPage, orderField, orderDirection, dispatch, searchInput]);
+  }, [currentPage, orderField, orderDirection, searchInput]);
 
   useEffect(() => {
     loadProducts(currentPage);
