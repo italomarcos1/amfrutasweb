@@ -72,6 +72,8 @@ export default function ListProductsPerCategory() {
   }, [state.id, currentPage, orderDirection, orderField]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     setLoading(true);
     loadProductsByCategory();
     generatePaginationArray();

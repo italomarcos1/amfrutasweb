@@ -71,10 +71,10 @@ export const SearchBar = styled.div`
 `;
 
 export const Title = styled.h1`
-  color: #141319;
+  color: #0cb68b;
   font-family: 'SFProBold';
-  font-size: 20px;
-  line-height: 24px;
+  font-size: 30px;
+  line-height: 45px;
   padding: 0;
   padding-right: 5px;
   height: 54px;
@@ -147,6 +147,49 @@ export const ShareButton = styled.button.attrs({ type: 'button' })`
 export const Description = styled.div`
   width: 100%;
   background-color: #fff;
+  color: #666;
+  font-size: 16px;
+  line-height: 20px;
+  font-family: 'SFPro';
+  display: flex;
+  flex-direction: column;
+
   border-radius: 4px;
   margin-top: 29px;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  strong {
+    display: block;
+    color: #333;
+    font-size: 22px;
+    font-family: 'SFProBold';
+    margin-bottom: 10px;
+    margin-top: 20px;
+  }
+
+  li {
+    margin-bottom: 10px;
+  }
+
+  p {
+    display: inline-block;
+    color: #333;
+    margin-top: 10px;
+  }
+
+  hr {
+    margin-top: 10px;
+  }
+
+  img,
+  iframe {
+    align-self: center;
+    width: 100%;
+    max-width: 1046px;
+    margin: 0 auto;
+  }
 `;
