@@ -1,8 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { FaSpinner } from 'react-icons/fa';
 
-import { Container, Section, BlogPost, FooterPagination } from './styles';
+import {
+  Container,
+  Section,
+  BlogPost,
+  FooterPagination,
+  LoadingContainer,
+} from './styles';
 
 import Header from '~/components/Header';
 import Footer from '~/components/Footer';
@@ -24,6 +31,10 @@ export default function Contents() {
   const [paginationArray, setPaginationArray] = useState([]);
   const [orderDirection, setOrderDirection] = useState('desc');
   const [orderField, setOrderField] = useState('updated_at');
+  const [searchInput, setSearchInput] = useState('');
+
+  const [loading, setLoading] = useState(false);
+  const [noContentsFound, setNoContentsFound] = useState(false);
 
   const { state } = useLocation();
 
@@ -41,6 +52,8 @@ export default function Contents() {
   }, [dispatch, lastPage]);
 
   const loadContents = useCallback(async () => {
+    if (searchInput !== '') return;
+
     const arrayId = state.id.split('/');
     const getId = arrayId[arrayId.length - 1];
 
@@ -68,12 +81,68 @@ export default function Contents() {
     setCurrentPage(current_page);
     setLastPage(last_page);
     setContents(data);
-  }, [currentPage, state, orderField, orderDirection]);
+  }, [currentPage, state, orderField, orderDirection, searchInput]);
+
+  const searchContent = useCallback(async () => {
+    try {
+      if (searchInput === '') return;
+      setLoading(true);
+      const contentsResponse = await backend.get(
+        `blog/contents/search/${searchInput}?page=${currentPage}&order_field=${orderField}&order_direction=${orderDirection}`
+      );
+      const {
+        data: {
+          meta: { message },
+        },
+      } = contentsResponse;
+
+      if (message === 'Nenhum registro encontrado') {
+        setNoContentsFound(true);
+        return;
+      }
+
+      const {
+        data: {
+          data: { data, current_page, last_page, next_page_url, prev_page_url },
+        },
+      } = contentsResponse;
+
+      if (data.length % 4 !== 0) {
+        const itemsToFill = Math.ceil(data.length / 4) * 4 - data.length;
+
+        for (let i = 0; i < itemsToFill; i++) {
+          data.push(null);
+        }
+
+        if (data.length / 12 < 0.75) {
+          for (let i = 0; i < 12 - data.length; i++) {
+            data.push(null);
+          }
+        }
+      }
+
+      dispatch(updatePages(last_page));
+
+      setCurrentPage(current_page);
+
+      setLastPage(last_page);
+      setContents(data);
+      setLoading(false);
+    } catch {
+      setLoading(false);
+      alert('Erro');
+    }
+  }, [currentPage, dispatch, orderField, orderDirection, searchInput]);
 
   useEffect(() => {
     loadContents();
     generatePaginationArray();
   }, [loadContents, generatePaginationArray, currentPage]);
+
+  useEffect(() => {
+    setNoContentsFound(false);
+    searchContent();
+  }, [searchInput, searchContent]);
 
   return (
     <>
@@ -88,25 +157,42 @@ export default function Contents() {
           setOrderField={setOrderField}
           orderField={orderField}
           isInfo
+          inputValue={searchInput}
+          setInputValue={setSearchInput}
+          search={searchContent}
           style={{ marginLeft: 'auto', marginRight: 'auto', width: 1240 }}
         />
 
         <Section>
-          {contents.map(content =>
-            content === null ? (
-              <BlogPost isNull />
-            ) : (
-              <BlogPost
-                key={content.id}
-                to={{
-                  pathname: `/${content.url}`,
-                  state: { id: content.id },
-                }}
-              >
-                <img src={content.thumbs} alt="" />
-                <strong>{content.title}</strong>
-                <small>{content.description}</small>
-              </BlogPost>
+          {loading ? (
+            <LoadingContainer>
+              <FaSpinner color="#666" size={42} />
+              <strong>Carregando os produtos, aguarde...</strong>
+            </LoadingContainer>
+          ) : noContentsFound ? (
+            <LoadingContainer>
+              <strong>
+                Não encontramos nenhum conteúdo com o nome informado. <br />{' '}
+                Tente novamente.
+              </strong>
+            </LoadingContainer>
+          ) : (
+            contents.map(content =>
+              content === null ? (
+                <BlogPost isNull />
+              ) : (
+                <BlogPost
+                  key={content.id}
+                  to={{
+                    pathname: `/${content.url}`,
+                    state: { id: content.id },
+                  }}
+                >
+                  <img src={content.thumbs} alt="" />
+                  <strong>{content.title}</strong>
+                  <small>{content.description}</small>
+                </BlogPost>
+              )
             )
           )}
         </Section>

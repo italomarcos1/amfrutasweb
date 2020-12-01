@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
 
 export const Container = styled.div`
@@ -75,4 +75,42 @@ export const FooterPagination = styled.div`
   height: 48px;
   background: #fff;
   border-radius: 4px;
+`;
+
+const rotate = keyframes` /** animação para rotacionar o icon. */
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+export const LoadingContainer = styled.div`
+  width: 840px;
+  height: 454px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  margin-top: 27px;
+
+  strong {
+    display: inline-block;
+    font-family: 'SFPro';
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 36px;
+    letter-spacing: 0px;
+    color: #666;
+    margin-top: 27px;
+  }
+
+  svg {
+    animation: ${rotate} 2s linear infinite;
+  }
 `;

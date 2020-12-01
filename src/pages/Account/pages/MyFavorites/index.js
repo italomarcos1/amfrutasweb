@@ -40,7 +40,7 @@ export default function MyFavorites() {
           <ItemsList
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
-            containerWidth="100%"
+            containerWidth={821}
             style={{ backgroundColor: '#00000000' }}
           >
             {paginatedProducts.map((item, index) => (
@@ -51,7 +51,7 @@ export default function MyFavorites() {
           <EmptyCartContainer message="Você não favoritou nenhum produto ainda." />
         )}
       </Container>
-      <div style={{ width: 840, height: 320 }} />
+      <div style={{ width: 840, height: 220 }} />
     </>
   );
 }

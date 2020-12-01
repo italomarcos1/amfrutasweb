@@ -122,7 +122,10 @@ export default function PageHeader({ login, active }) {
 
           <MenuItemButton
             selected={selectedPage === 'Busca'}
-            onClick={() => setSelectedPage('Busca')}
+            onClick={() => {
+              setSelectedPage('Busca');
+              history.push('/produtos');
+            }}
           >
             <img src={search} alt="search" />
           </MenuItemButton>

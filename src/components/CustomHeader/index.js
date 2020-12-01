@@ -22,6 +22,9 @@ export default function CustomHeader({
   setOrderDirection,
   setOrderField,
   isInfo,
+  inputValue,
+  setInputValue,
+  search,
 }) {
   const [selectedOption, setSelectedOption] = useState('Mais Recentes');
   const [menuIsOpen, setMenuIsOpen] = useState(false);
@@ -104,7 +107,10 @@ export default function CustomHeader({
 
   return (
     <Container style={style}>
-      <SearchInput />
+      <SearchInput
+        value={inputValue}
+        onChange={({ target: { value } }) => setInputValue(value)}
+      />
       <div
         style={{
           display: 'flex',

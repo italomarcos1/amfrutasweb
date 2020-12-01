@@ -10,9 +10,9 @@ import {
 } from './styles';
 import logo from '~/assets/amfrutas-bottom.svg';
 
-import facebook from '~/assets/facebook.svg';
-import instagram from '~/assets/instagram.svg';
-import youtube from '~/assets/youtube.svg';
+import fbLogo from '~/assets/facebook.svg';
+import igLogo from '~/assets/instagram.svg';
+import ytLogo from '~/assets/youtube.svg';
 import google from '~/assets/google.svg';
 
 import backend from '~/services/api';
@@ -21,14 +21,15 @@ export default function Footer() {
   const [firstColumn, setFirstColumn] = useState([null, null, null]);
   const [secondColumn, setSecondColumn] = useState([null, null]);
   const [thirdColumn, setThirdColumn] = useState([null, null]);
-  const [social, setSocial] = useState([]);
+  const [social, setSocial] = useState(null);
+
+  const keys = ['facebook', 'instagram', 'twitter', 'youtube', 'social_nif'];
 
   const loadMenu = useCallback(async () => {
-    // const [socialMedia, links] = await Promise.all([
-    //   backend.get('/menus/links/1'),
-    //   backend.get('/menus/links/2'),
-    // ]);
-    const links = await backend.get('/menus/links/2');
+    const [socialMedia, links] = await Promise.all([
+      backend.get('configurations', { keys }),
+      backend.get('/menus/links/2'),
+    ]);
 
     const {
       data: { data },
@@ -38,11 +39,19 @@ export default function Footer() {
     setSecondColumn([data[3], data[4]]);
     setThirdColumn([data[5], data[6]]);
 
-    // const {
-    //   data: { data: socialData },
-    // } = socialMedia;
+    const {
+      data: { data: socialData },
+    } = socialMedia;
 
-    // setSocial(socialData);
+    console.tron.log(socialData);
+    const { facebook, instagram, youtube, social_nif } = socialData;
+
+    setSocial({
+      facebook,
+      instagram,
+      youtube,
+      social_nif,
+    });
   }, []);
 
   useEffect(() => loadMenu(), []);
@@ -60,7 +69,7 @@ export default function Footer() {
                 ) : (
                   <Link
                     key={item.id}
-                    to={{ pathname: `${item.url}`, state: { id: item.id } }}
+                    to={{ pathname: `${item.url}`, state: { id: item.url } }}
                     rel="noreferrer"
                   >
                     {item.name}
@@ -77,7 +86,7 @@ export default function Footer() {
                 ) : (
                   <Link
                     key={item.id}
-                    to={{ pathname: `${item.url}`, state: { id: item.id } }}
+                    to={{ pathname: `${item.url}`, state: { id: item.url } }}
                     rel="noreferrer"
                   >
                     {item.name}
@@ -108,41 +117,47 @@ export default function Footer() {
       </TopFooter>
       <BottomFooter>
         <BottomFooterContent>
-          <small>
-            AM Frutas, LDA <b>NIF</b> 503628360
-          </small>
+          <small>{!!social ? social.social_nif : ''}</small>
           <div>
             <a
-              href={social.length !== 0 ? social[1].url : 'www.facebook.com'}
+              href={
+                !!social ? `https://www.facebook.com/${social.facebook}` : ''
+              }
               target="_blank"
               rel="noreferrer"
             >
-              <img src={facebook} alt="Visit Facebook page" />
+              <img src={fbLogo} alt="Visit Facebook page" />
             </a>
             <a
-              href={social.length !== 0 ? social[2].url : 'www.instagram.com'}
+              href={!!social ? `https://instagram.com/${social.instagram}` : ''}
               target="_blank"
               rel="noreferrer"
             >
               <img
-                src={instagram}
+                src={igLogo}
                 alt="Visit Instagram page"
                 style={{ marginLeft: 46, marginRight: 46 }}
               />
             </a>
             <a
-              href={social.length !== 0 ? social[3].url : 'www.youtube.com'}
+              href={
+                !!social ? `https://youtube.com/channel/${social.youtube}` : ''
+              }
               target="_blank"
               rel="noreferrer"
             >
-              <img src={youtube} alt="Visit YouTube channel" />
+              <img src={ytLogo} alt="Visit YouTube channel" />
             </a>
           </div>
-          <div
+          <a
             style={{
+              color: '#fff',
               display: 'flex',
               alignItems: 'center',
             }}
+            href={`https://transparencyreport.google.com/safe-browsing/search?url=${window.location.hostname}`}
+            rel="noreferrer"
+            target="_blank"
           >
             <small>
               Segurança <b>100%</b>
@@ -152,7 +167,7 @@ export default function Footer() {
               alt="Google's logo"
               style={{ width: 111, height: 35, marginLeft: 10 }}
             />
-          </div>
+          </a>
         </BottomFooterContent>
       </BottomFooter>
     </>

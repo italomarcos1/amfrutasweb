@@ -86,6 +86,20 @@ export const Info = styled.div`
     font-family: 'SFPro';
     letter-spacing: 0px;
     color: #424242;
+
+    padding: 0;
+    padding-right: 5px;
+    height: 16px;
+    width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background: none;
+    text-align: left;
+    /* background-color: #00f; */
+
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
   }
 `;
 

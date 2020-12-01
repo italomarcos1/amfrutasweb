@@ -22,7 +22,21 @@ export const Title = styled.h1`
   line-height: 22px;
   letter-spacing: 0px;
   color: #393939;
+  padding: 0;
+  padding-right: 5px;
   text-transform: capitalize;
+  height: 42px;
+  width: 245px;
+  letter-spacing: 0px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: none;
+  text-align: left;
+  /* background-color: #00f; */
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `;
 
 export const ProductInfo = styled.div`
