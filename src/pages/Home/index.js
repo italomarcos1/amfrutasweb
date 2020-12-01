@@ -207,21 +207,25 @@ export default function Home() {
       <Container onSubmit={handleSubmit} ref={formRef}>
         <SlideShow data={bannersURL} />
         <OptionsContainer>
-          <Option>
+          <Option href="#" rel="noreferrer">
             <img src={envio} alt="Envio Gratuito" />
             <div>
               <strong>Envio Gratuito</strong>
               <small>Para compras acima de € 50,00</small>
             </div>
           </Option>
-          <Option>
+          <Option href="#" rel="noreferrer">
             <img src={cashback} alt="Cashback" />
             <div>
               <strong>Cashback</strong>
               <small>Receba euros nas compras</small>
             </div>
           </Option>
-          <Option>
+          <Option
+            href="https://api.whatsapp.com/send?phone=351910457768"
+            rel="noreferrer"
+            target="_blank"
+          >
             <img src={whatsapp} alt="WhatsApp" />
             <div>
               <strong>Atendimento</strong>

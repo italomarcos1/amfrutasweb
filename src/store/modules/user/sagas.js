@@ -12,9 +12,6 @@ import {
 export function* updateProfile({ payload }) {
   try {
     const { data } = payload;
-    // console.tron.log('flamengo');
-
-    // console.tron.log(data);
 
     const {
       data: { data: profileData },

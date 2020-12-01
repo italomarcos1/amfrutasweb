@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import {
   TopFooter,
@@ -56,9 +57,13 @@ export default function Footer() {
                 item === null ? (
                   <></>
                 ) : (
-                  <a key={item.id} href={item.url} rel="noreferrer">
+                  <Link
+                    key={item.id}
+                    to={{ pathname: `${item.url}`, state: { id: item.id } }}
+                    rel="noreferrer"
+                  >
                     {item.name}
-                  </a>
+                  </Link>
                 )
               )}
             </span>
@@ -69,9 +74,13 @@ export default function Footer() {
                 item === null ? (
                   <></>
                 ) : (
-                  <a key={item.id} href={item.url} rel="noreferrer">
+                  <Link
+                    key={item.id}
+                    to={{ pathname: `${item.url}`, state: { id: item.id } }}
+                    rel="noreferrer"
+                  >
                     {item.name}
-                  </a>
+                  </Link>
                 )
               )}
             </span>
@@ -82,9 +91,13 @@ export default function Footer() {
                 item === null ? (
                   <></>
                 ) : (
-                  <a key={item.id} href={item.url} rel="noreferrer">
+                  <Link
+                    key={item.id}
+                    to={{ pathname: `${item.url}`, state: { id: item.id } }}
+                    rel="noreferrer"
+                  >
                     {item.name}
-                  </a>
+                  </Link>
                 )
               )}
             </span>

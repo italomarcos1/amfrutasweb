@@ -40,8 +40,13 @@ export default class CategoriesCarousel extends Component {
           enableAutoPlay
           autoPlaySpeed={4000}
         >
-          {categories.map(({ name, url, thumbs }) => (
-            <Category to={`/${url}`}>
+          {categories.map(({ id, name, url, thumbs }) => (
+            <Category
+              to={{
+                pathname: `/${url}`,
+                state: { id },
+              }}
+            >
               <img src={thumbs} alt="" />
               <small>{name}</small>
             </Category>

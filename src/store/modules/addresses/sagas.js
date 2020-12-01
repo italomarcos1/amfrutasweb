@@ -11,7 +11,8 @@ import {
   updateAddressFailure,
   deleteAddressSuccess,
 } from './actions';
-import { updateProfileRequest } from '../user/actions';
+
+import { updateProfileSuccess } from '../user/actions';
 
 export function* addAddress({ payload }) {
   try {
@@ -25,7 +26,7 @@ export function* addAddress({ payload }) {
     if (address.default === 1) {
       const updatedDefaultAddress = { ...profile, default_address: data };
 
-      yield put(updateProfileRequest(updatedDefaultAddress));
+      yield put(updateProfileSuccess(updatedDefaultAddress));
     }
     yield put(addAddressSuccess(data));
   } catch (error) {
@@ -45,7 +46,7 @@ export function* addFinalAddress({ payload }) {
     if (address.default === 1) {
       const updatedDefaultAddress = { ...profile, default_address: data };
 
-      yield put(updateProfileRequest(updatedDefaultAddress));
+      yield put(updateProfileSuccess(updatedDefaultAddress));
     }
     yield put(addFinalAddressSuccess(data));
   } catch (error) {
@@ -68,7 +69,7 @@ export function* updateAddress({ payload }) {
         default_address: responseData,
       };
 
-      yield put(updateProfileRequest(updatedDefaultAddress));
+      yield put(updateProfileSuccess(updatedDefaultAddress));
     }
     yield put(updateShippingInfoSuccess(responseData));
   } catch (error) {
@@ -93,14 +94,12 @@ export function* updateFinalAddress({ payload }) {
     } = yield call(backend.put, `clients/addresses/${addressId}`, address);
 
     if (address.default === 1) {
-      console.tron.log('vasco');
-      console.tron.log(responseData);
       const updatedDefaultAddress = {
         ...profile,
         default_address: responseData,
       };
 
-      yield put(updateProfileRequest(updatedDefaultAddress));
+      yield put(updateProfileSuccess(updatedDefaultAddress));
     }
 
     yield put(updateFinalShippingInfoSuccess(responseData));
@@ -123,7 +122,7 @@ export function* updateDefaultAddress({ payload }) {
       default_address: responseData,
     };
 
-    yield put(updateProfileRequest(updatedDefaultAddress));
+    yield put(updateProfileSuccess(updatedDefaultAddress));
 
     yield put(updateShippingInfoSuccess(responseData));
   } catch (error) {
@@ -141,7 +140,7 @@ export function* removeAddress({ payload }) {
     if (profile.default_address.id === id) {
       const updatedDefaultAddress = { ...profile, default_address: [] };
 
-      yield put(updateProfileRequest(updatedDefaultAddress));
+      yield put(updateProfileSuccess(updatedDefaultAddress));
     }
     yield put(deleteAddressSuccess(id));
   } catch (error) {

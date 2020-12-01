@@ -292,8 +292,8 @@ export const AmountAndPriceContainer = styled.div`
     color: #9e9e9e;
     font-family: 'SFPro';
     font-size: 14px;
-    line-height: 16px;
-    height: 16px;
+    line-height: 14px;
+    height: 14px;
     text-align: left;
   }
 
@@ -302,12 +302,12 @@ export const AmountAndPriceContainer = styled.div`
     color: #3ab879;
     font-family: 'SFProBold';
     font-size: 36px;
-    line-height: 43px;
+    line-height: 36px;
     text-align: left;
-    height: 60px;
+    height: 36px;
 
     b {
-      font-size: 30px;
+      font-size: 22px;
       font-family: 'SFProBold';
     }
   }
@@ -325,7 +325,7 @@ export const TotalContainer = styled.div`
   display: flex;
   height: 45px;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: flex-start;
   margin-left: 21px;
 `;
@@ -348,6 +348,9 @@ export const Amount = styled.div`
   strong {
     display: inline;
     font-size: 18px;
+    line-height: 45px;
+    /* padding: 10px auto; */
+    height: 45px;
     color: #393939;
     /* margin: 0 10px; */
     font-weight: normal;

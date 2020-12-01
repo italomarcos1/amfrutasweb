@@ -127,6 +127,32 @@ export const InfoContainer = styled.div`
   padding: 21px 26px 37px;
 `;
 
+export const WithdrawContainer = styled.div`
+  width: 400px;
+  height: 304px;
+  background: #0cb68b;
+  border: 1px solid #0cb68b;
+  border-radius: 6px;
+
+  padding: 21px 26px 37px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  strong {
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 25px;
+    font-family: 'SFPro';
+    letter-spacing: 0px;
+    color: #fff;
+
+    b {
+      font-family: 'SFProBold';
+    }
+  }
+`;
+
 export const PeriodicDeliveryContainer = styled.div`
   width: 1240px;
   height: 596px;

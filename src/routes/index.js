@@ -1,5 +1,5 @@
-import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useLocation, Redirect, Switch, Route } from 'react-router-dom';
 
 import Home from '~/pages/Home';
 import Contents from '~/pages/Contents';
@@ -24,6 +24,14 @@ import AccountRoute from './accountRoute';
 import ProductsRoute from './productsRoute';
 
 export default function Routes() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    if (pathname === '/inicio' || pathname === '') {
+      return <Redirect to="/" />;
+    }
+  }, [pathname]);
+
   return (
     <>
       <Switch>

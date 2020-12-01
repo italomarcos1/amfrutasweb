@@ -26,7 +26,7 @@ import whatsapp from '~/assets/whatsapp.svg';
 
 import backend from '~/services/api';
 
-export default function ViewProduct() {
+export default function ViewContent() {
   const { state } = useLocation();
 
   const [loginModal, setLoginModal] = useState(false);
@@ -38,9 +38,19 @@ export default function ViewProduct() {
 
   const loadContent = useCallback(async () => {
     setLoading(true);
+    let { id } = state;
+
+    if (!Number(id)) {
+      const formatUrl = id.split('/').splice(2).join('/');
+      id = formatUrl;
+    }
+
     const {
       data: { data },
-    } = await backend.get(`blog/contents/${state.id}`);
+    } = await backend.get(`blog/contents/${id}`);
+
+    setProduct(data);
+    setBanner(data.banner);
 
     const {
       data: {
@@ -85,7 +95,7 @@ export default function ViewProduct() {
             <>
               <InfoContainer>
                 <Content>
-                  {/* <img src={banner} alt="" /> */}
+                  <img src={banner} alt="" />
                   <TitleContainer>
                     <Title>{product.title}</Title>
                     <ShareThisProduct>

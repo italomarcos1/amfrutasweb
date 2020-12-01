@@ -61,7 +61,7 @@ export const StoreButton = styled.a`
   border-radius: 5px;
 `;
 
-export const Option = styled.div`
+export const Option = styled.a`
   width: 380px;
   height: 106px;
   background-color: #fff;

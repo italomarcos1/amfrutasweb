@@ -36,7 +36,7 @@ export default function ListProducts() {
 
   const loadProducts = useCallback(async () => {
     const productsResponse = await backend.get(
-      `ecommerce/products?page=${currentPage}&order_field=${orderField}&order_direction=${orderDirection}`
+      `ecommerce/products?page=${currentPage}&order_field=${orderField}&order_direction=${orderDirection}&only_promotional=true`
     );
 
     const {
@@ -112,6 +112,7 @@ export default function ListProducts() {
           />
         </FooterPagination>
       </Container>
+      {loginModal && <LoginModal closeModal={() => setLoginModal(false)} />}
     </>
   );
 }

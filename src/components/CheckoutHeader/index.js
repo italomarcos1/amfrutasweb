@@ -1,6 +1,6 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 
@@ -18,11 +18,27 @@ import {
   Logo,
 } from './styles';
 
+import { knightFall } from '~/store/modules/user/actions';
+
 import logo from '~/assets/amfrutas-white.svg';
 
 export default function CheckoutHeader({ active }) {
   const cart = useSelector(state => state.cart.products);
   const history = useHistory();
+  const dispatch = useDispatch();
+
+  const [
+    shouldNotAccessConfirmation,
+    setShouldNotAccessConfirmation,
+  ] = useState(false);
+
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    if (pathname === '/cesto' || pathname === '/entrega') {
+      setShouldNotAccessConfirmation(true);
+    }
+  }, [pathname]);
 
   return (
     <Header>
@@ -53,7 +69,7 @@ export default function CheckoutHeader({ active }) {
               </OptionBorder>
             </OptionContainer>
             <OptionContainer
-              disabled={cart.length === 0}
+              disabled={shouldNotAccessConfirmation}
               onClick={() => history.push('/confirmacao')}
             >
               <OptionTitle>Confirmação</OptionTitle>
@@ -64,7 +80,14 @@ export default function CheckoutHeader({ active }) {
             <Line />
           </SubHeader>
           {active === 3 ? (
-            <MyOrdersButton to="/encomendas">Minhas Encomendas</MyOrdersButton>
+            <MyOrdersButton
+              onClick={() => {
+                dispatch(knightFall());
+                history.push('/encomendas');
+              }}
+            >
+              Minhas Encomendas
+            </MyOrdersButton>
           ) : (
             <BackButton to={active === 2 ? 'cesto' : '/'}>Voltar</BackButton>
           )}

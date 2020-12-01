@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import { Container, Section, BlogPost, FooterPagination } from './styles';
 
@@ -19,6 +20,8 @@ export default function Contents() {
   const [lastPage, setLastPage] = useState(0);
   const [paginationArray, setPaginationArray] = useState([]);
 
+  const { state } = useLocation();
+
   const generatePaginationArray = useCallback(() => {
     const items = [];
 
@@ -35,6 +38,7 @@ export default function Contents() {
         data: { data, current_page, last_page },
       },
     } = await backend.get(`blog/contents?page=${currentPage}&per_page=12`);
+    alert(state.id);
 
     if (data.length % 4 !== 0) {
       const itemsToFill = Math.ceil(data.length / 4) * 4 - data.length;
@@ -46,7 +50,7 @@ export default function Contents() {
     setCurrentPage(current_page);
     setLastPage(last_page);
     setContents(data);
-  }, [currentPage]);
+  }, [currentPage, state]);
 
   useEffect(() => {
     loadContents();

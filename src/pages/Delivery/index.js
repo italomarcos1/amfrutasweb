@@ -269,9 +269,14 @@ export default function Delivery() {
     );
 
     if (findNewAddress < 0) return;
-    setZipcode(addresses[findNewAddress].zipcode);
 
-    shippingInfoRef.current.setData(addresses[findNewAddress]);
+    const selectedAddress = addresses[findNewAddress];
+    setZipcode(selectedAddress.zipcode);
+
+    shippingInfoRef.current.setData({
+      ...selectedAddress,
+      destination_name: `${selectedAddress.destination_name} ${selectedAddress.destination_last_name}`,
+    });
   }, [addresses, residence]);
 
   const populateDeliveryInterval = useCallback(() => {
@@ -484,6 +489,17 @@ export default function Delivery() {
         return;
       }
 
+      if (
+        deliveryOption === 'delivery' &&
+        (nameIsValid(deliveryDay) || nameIsValid(deliveryHour))
+      ) {
+        setInvalidDeliveryDay(nameIsValid(deliveryDay));
+        setInvalidDeliveryHour(nameIsValid(deliveryHour));
+
+        window.scrollTo(0, 0);
+        return;
+      }
+
       const allDataShipping = shippingInfoRef.current.getData();
       const profileInfo = profileInfoRef.current.getData();
 
@@ -535,6 +551,9 @@ export default function Delivery() {
       newAddress,
       newPrimaryAddress,
       modifyGender,
+      deliveryDay,
+      deliveryHour,
+      deliveryOption,
     ]
   );
 
@@ -1023,7 +1042,12 @@ export default function Delivery() {
             <CheckoutItem>
               <h1>Crédito Disponível</h1>
               <h2 style={{ color: '#0CB68B' }}>
-                €&nbsp;{!!profile ? profile.cback_credit : '0,00'}
+                €&nbsp;
+                {!!profile
+                  ? !!profile.cback_credit
+                    ? profile.cback_credit
+                    : '0.00'
+                  : '0.00'}
               </h2>
             </CheckoutItem>
             <CheckoutItem style={{ height: 77 }}>
@@ -1065,7 +1089,13 @@ export default function Delivery() {
                 {formatPrice(
                   Number(price) +
                     Number(chosenShippingMethod.cost) -
-                    Number(!!profile ? profile.cback_credit : '0,00')
+                    Number(
+                      !!profile
+                        ? !!profile.cback_credit
+                          ? profile.cback_credit
+                          : '0.00'
+                        : '0.00'
+                    )
                 )}
               </h2>
             </CheckoutItem>

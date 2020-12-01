@@ -44,6 +44,9 @@ import facebook from '~/assets/facebook.svg';
 import whatsapp from '~/assets/whatsapp.svg';
 import minus from '~/assets/icons/minus.svg';
 import plus from '~/assets/icons/plus.svg';
+import barcode from '~/assets/icons/barcode.svg';
+
+import { formatPrice } from '~/utils/calculatePrice';
 
 import backend from '~/services/api';
 
@@ -59,26 +62,25 @@ export default function ViewProduct() {
   const [qty, setQty] = useState(1);
   const [shippingCost, setShippingCost] = useState(4);
 
+  const favorites = useSelector(reducer => reducer.cart.favorites);
   const updating = useSelector(reducer => reducer.cart.updating);
 
   const handleAddToCart = useCallback(() => {
     dispatch(addToCartRequest(product, qty));
+    setQty(1);
   }, [product, dispatch, qty]);
 
   const loadProduct = useCallback(async () => {
     setLoading(true);
+
     const {
       data: { data },
     } = await backend.get(`ecommerce/products/${state.id}`);
-    const {
-      data: { data: responseCost },
-    } = await backend.get('checkout/shipping-cost');
 
     setProduct(data);
     setBanner(data.banner);
 
     setProductImages(data.product_images);
-    setShippingCost(responseCost);
 
     setLoading(false);
   }, [state]);
@@ -87,11 +89,17 @@ export default function ViewProduct() {
     loadProduct();
   }, [loadProduct]);
 
-  const handleFavorite = id => {
+  useEffect(() => {
+    if (!product) return;
+    const fvt = favorites.findIndex(fav => fav.id === product.id);
+    setFavorite(fvt >= 0);
+  }, [favorites, product]);
+
+  const handleFavorite = () => {
     dispatch(
       !favorite
         ? addToFavoritesRequest(product)
-        : removeFromFavoritesRequest(id)
+        : removeFromFavoritesRequest(product.id)
     );
     setFavorite(!favorite);
   };
@@ -175,23 +183,21 @@ export default function ViewProduct() {
                         </Amount>
                         <TotalContainer>
                           <small>Total</small>
-                          <strong style={{ marginLeft: 20 }}>
+                          <strong>
                             <b>€</b>
                             &nbsp;
                             {product.has_promotion
-                              ? product.price_promotional
-                              : product.price}
+                              ? formatPrice(qty * product.price_promotional)
+                              : formatPrice(qty * product.price)}
                           </strong>
                         </TotalContainer>
                       </AmountAndTotalContainer>
                       {product.has_promotion ? (
                         <small style={{ color: '#FF2121', marginTop: 5 }}>
                           Economize €&nbsp;
-                          {(
-                            Math.round(
-                              (product.price - product.price_promotional) * 100
-                            ) / 100
-                          ).toFixed(2)}
+                          {formatPrice(
+                            qty * (product.price - product.price_promotional)
+                          )}
                         </small>
                       ) : (
                         <small>&nbsp;</small>
@@ -224,20 +230,19 @@ export default function ViewProduct() {
                   </ShippingButtonContainer>
                   <ShippingButtonContainer
                     style={{
-                      backgroundColor: '#090',
                       height: 240,
                     }}
                   >
                     <FlexStartContainer>
                       <FlexStartContainer>
-                        <img src={heartOn} alt="Favorite" />
+                        <img src={barcode} alt="Barcode" />
                         <FlexStartText>Código: 837922</FlexStartText>
                       </FlexStartContainer>
                     </FlexStartContainer>
                     <FlexStartContainer>
                       <FavoriteButton
                         type="button"
-                        onClick={() => handleFavorite(product.id)}
+                        onClick={handleFavorite}
                         disabled={updating}
                       >
                         <img

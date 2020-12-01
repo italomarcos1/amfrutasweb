@@ -33,7 +33,8 @@ export const Content = styled.div`
   > img {
     border-radius: 6px;
     max-width: 1005px;
-    max-height: 408px;
+    background-size: cover;
+    /* max-height: 408px; */
     /* background-color: #f00; */
   }
 

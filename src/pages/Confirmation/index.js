@@ -21,6 +21,7 @@ import {
   PeriodicDeliveryUnwantedProducts,
   PeriodicDeliveryWannaReceive,
   Options,
+  WithdrawContainer,
 } from './styles';
 
 import check from '~/assets/check_white.svg';
@@ -45,7 +46,7 @@ import { knightFall } from '~/store/modules/user/actions';
 import { periodicProducts } from '~/data';
 
 import backend from '~/services/api';
-import { formatPrice } from '~/utils/calculatePrice';
+import { calculatePrice, formatPrice } from '~/utils/calculatePrice';
 
 export default function Confirmation() {
   const [qty, setQty] = useState(4);
@@ -68,12 +69,17 @@ export default function Confirmation() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [orderInfo, setOrderInfo] = useState(null);
+  const [saved, setSaved] = useState(null);
 
   const loadData = useCallback(async () => {
     if (!order) return;
     const {
       data: { data },
     } = await backend.get(`clients/transactions/${order.id}`);
+
+    const { products } = data;
+    const { formattedSavedPrice, formattedPrice } = calculatePrice(products);
+    setSaved(formatPrice(formattedSavedPrice - formattedPrice));
 
     setOrderInfo(data);
   }, [order]);
@@ -84,14 +90,16 @@ export default function Confirmation() {
   }, [loadData]);
 
   useEffect(() => {
-    // action que reseta
-    // finalProfile
-    // finalAddress
-    // , , , , ,
     return () => {
       dispatch(knightFall());
     };
   }, []);
+
+  useEffect(() => {
+    return () => {
+      dispatch(knightFall());
+    };
+  }, [dispatch]);
 
   const handlePagination = useCallback(() => {
     if (!orderInfo) return;
@@ -115,7 +123,6 @@ export default function Confirmation() {
   }
 
   const { name, last_name, phone, email, birth, document } = finalProfile;
-  const { address, city, zipcode, state } = finalAddress;
 
   return (
     <>
@@ -162,42 +169,52 @@ export default function Confirmation() {
               </Info>
             </CustomInputContainer>
           </InfoContainer>
-          <InfoContainer>
-            <SectionTitle>
-              <strong>Dados da entrega</strong>
-              <small>Morada</small>
-            </SectionTitle>
-            <CustomInputContainer>
-              <Info>
-                <strong>Morada</strong>
-                <small>{address}</small>
-              </Info>
-              <Info>
-                <strong>Cidade</strong>
-                <small>{city}</small>
-              </Info>
-            </CustomInputContainer>
-            <CustomInputContainer>
-              <Info>
-                <strong>Código Postal</strong>
-                <small>{zipcode}</small>
-              </Info>
-              <Info>
-                <strong>Localidade</strong>
-                <small>{state}</small>
-              </Info>
-            </CustomInputContainer>
-            <CustomInputContainer>
-              <Info>
-                <strong>NIF</strong>
-                <small>{document}</small>
-              </Info>
-              <Info>
-                <strong>País</strong>
-                <small>Portugal</small>
-              </Info>
-            </CustomInputContainer>
-          </InfoContainer>
+          {!!finalAddress ? (
+            <InfoContainer>
+              <SectionTitle>
+                <strong>Dados da entrega</strong>
+                <small>Morada</small>
+              </SectionTitle>
+              <CustomInputContainer>
+                <Info>
+                  <strong>Morada</strong>
+                  <small>{finalAddress.address}</small>
+                </Info>
+                <Info>
+                  <strong>Cidade</strong>
+                  <small>{finalAddress.city}</small>
+                </Info>
+              </CustomInputContainer>
+              <CustomInputContainer>
+                <Info>
+                  <strong>Código Postal</strong>
+                  <small>{finalAddress.zipcode}</small>
+                </Info>
+                <Info>
+                  <strong>Localidade</strong>
+                  <small>{finalAddress.state}</small>
+                </Info>
+              </CustomInputContainer>
+              <CustomInputContainer>
+                <Info>
+                  <strong>NIF</strong>
+                  <small>{document}</small>
+                </Info>
+                <Info>
+                  <strong>País</strong>
+                  <small>Portugal</small>
+                </Info>
+              </CustomInputContainer>
+            </InfoContainer>
+          ) : (
+            <WithdrawContainer>
+              <strong>
+                A retirada na loja deve ocorrer no endereço abaixo:
+                <br />
+                <b>Av. da República 1058 2775-271 Parede</b>
+              </strong>
+            </WithdrawContainer>
+          )}
           <InfoContainer style={{ width: 360 }}>
             <SectionTitle>
               <strong>Crédito Cashback</strong>
@@ -206,7 +223,12 @@ export default function Confirmation() {
             <CashbackCredit>
               <img src={cashback} alt="Cashback" />
               <strong>
-                €&nbsp;{!!profile ? profile.cback_credit : '0,00'}
+                €&nbsp;
+                {!!profile
+                  ? !!profile.cback_credit
+                    ? profile.cback_credit
+                    : '0.00'
+                  : '0.00'}
               </strong>
             </CashbackCredit>
           </InfoContainer>
@@ -232,14 +254,17 @@ export default function Confirmation() {
               </CheckoutItem>
               <CheckoutItem>
                 <h1>Economizou</h1>
-                <h2>
-                  €&nbsp;{!!orderInfo ? `${orderInfo.discount}.00` : '0.00'}
-                </h2>
+                <h2>€&nbsp;{!!orderInfo ? saved : '0.00'}</h2>
               </CheckoutItem>
               <CheckoutItem>
                 <h1>Crédito Disponível</h1>
                 <h2 style={{ color: '#0CB68B' }}>
-                  €&nbsp;{!!profile ? `${profile.cback_credit}` : '0.00'}
+                  €&nbsp;
+                  {!!profile
+                    ? !!profile.cback_credit
+                      ? profile.cback_credit
+                      : '0.00'
+                    : '0.00'}
                 </h2>
               </CheckoutItem>
               <CheckoutItem>
@@ -259,7 +284,11 @@ export default function Confirmation() {
                 <h2 style={{ fontSize: 25, color: '#0CB68B' }}>
                   €&nbsp;
                   {!!orderInfo
-                    ? formatPrice(orderInfo.total - orderInfo.discount)
+                    ? formatPrice(
+                        orderInfo.total -
+                          orderInfo.discount +
+                          orderInfo.shipping
+                      )
                     : '0.00'}
                 </h2>
               </CheckoutItem>
@@ -379,7 +408,10 @@ export default function Confirmation() {
             marginLeft: 'auto',
             marginRight: 'auto',
           }}
-          onClick={() => history.push('/encomendas')}
+          onClick={() => {
+            dispatch(knightFall());
+            history.push('/encomendas');
+          }}
         >
           Minhas&nbsp;<b>Encomendas</b>
         </Button>

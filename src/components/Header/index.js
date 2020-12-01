@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useScrollYPosition } from 'react-use-scroll-position';
 
 import { useSelector } from 'react-redux';
@@ -43,6 +43,7 @@ export default function PageHeader({ login, active }) {
   const scrollY = useScrollYPosition();
 
   const [headerFixed, setHeaderFixed] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [menuItems, setMenuItems] = useState([
     'Lojas e Contatos',
@@ -61,6 +62,7 @@ export default function PageHeader({ login, active }) {
 
     data.splice(0, 1);
     setMenuItems(data);
+    setLoading(false);
   }, []);
 
   useEffect(() => loadMenu(), []);
@@ -84,14 +86,9 @@ export default function PageHeader({ login, active }) {
               marginTop: 10,
             }}
           />
-          <img
-            src={Logo}
-            alt="Logo"
-            style={{
-              marginLeft: 20,
-              marginRight: 20,
-            }}
-          />
+          <Link to="/" style={{ marginLeft: 20, marginRight: 20 }}>
+            <img src={Logo} alt="Logo" />
+          </Link>
           <img
             src={fruits2}
             alt="Fruits"
@@ -107,11 +104,21 @@ export default function PageHeader({ login, active }) {
             <img src={home} alt="home" />
           </MenuItem>
 
-          {menuItems.map(({ id, name, url }) => (
-            <MenuItem key={id} selected={pathname === `${url}`} to={`${url}`}>
-              {name}
-            </MenuItem>
-          ))}
+          {!loading &&
+            menuItems.map(({ id, name, url }) => (
+              <MenuItem
+                key={id}
+                selected={pathname === `${url}`}
+                to={{
+                  pathname: `${url}`,
+                  state: {
+                    id: url,
+                  },
+                }}
+              >
+                {name}
+              </MenuItem>
+            ))}
 
           <MenuItemButton
             selected={selectedPage === 'Busca'}

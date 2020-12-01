@@ -20,8 +20,10 @@ export default function user(state = INITIAL_STATE, { type, payload }) {
 
       case '@user/UPDATE_PROFILE_SUCCESS': {
         draft.profile = payload.profile;
+
         break;
       }
+
       case '@user/ADD_FINAL_PROFILE_SUCCESS': {
         draft.profile = payload.profile;
         draft.finalProfile = payload.profile;

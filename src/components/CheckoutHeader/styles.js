@@ -56,7 +56,9 @@ export const BackButton = styled(Link)`
   margin-left: 60px;
 `;
 
-export const MyOrdersButton = styled(Link)`
+export const MyOrdersButton = styled.button.attrs({
+  type: 'button',
+})`
   width: 154px;
   height: 45px;
   background: #088061;
