@@ -43,7 +43,6 @@ export default function Footer() {
       data: { data: socialData },
     } = socialMedia;
 
-    console.tron.log(socialData);
     const { facebook, instagram, youtube, social_nif } = socialData;
 
     setSocial({
