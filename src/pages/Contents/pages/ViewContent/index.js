@@ -15,6 +15,7 @@ import {
 } from './styles';
 
 import Header from '~/components/Header';
+import Footer from '~/components/Footer';
 
 import SearchInput from '~/components/SearchInput';
 import Product from '~/components/Product';
@@ -136,6 +137,8 @@ export default function ViewContent() {
           )}
         </Container>
       </div>
+
+      <Footer />
 
       {loginModal && <LoginModal closeModal={() => setLoginModal(false)} />}
     </>

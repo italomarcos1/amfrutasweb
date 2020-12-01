@@ -6,7 +6,7 @@ export const Container = styled.div`
   flex-direction: column;
   background-color: #ececec;
   width: 100%;
-  padding: 21px 30px 87px;
+  padding: 21px 30px 30px;
 `;
 
 export const InfoContainer = styled.div`
@@ -149,7 +149,7 @@ export const Description = styled.div`
   background-color: #fff;
   color: #666;
   font-size: 16px;
-  line-height: 20px;
+  line-height: 30px;
   font-family: 'SFPro';
   display: flex;
   flex-direction: column;
@@ -187,9 +187,15 @@ export const Description = styled.div`
 
   img,
   iframe {
+    /* min-width: 100%; */
+    /* max-width: 1046px; */
+    width: 100% !important;
+    height: auto !important;
     align-self: center;
-    width: 100%;
-    max-width: 1046px;
     margin: 0 auto;
+  }
+
+  a {
+    color: #f48312;
   }
 `;
