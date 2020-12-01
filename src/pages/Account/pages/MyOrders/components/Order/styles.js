@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { Form } from '@unform/web';
 
 export const Container = styled(Form)`
@@ -10,16 +10,42 @@ export const Container = styled(Form)`
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   padding: 15px 20px 12.5px 20px;
+`;
 
-  ul {
-    display: ${({ open }) => (open ? 'flex' : 'none')};
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    width: 760px;
-    height: 540px;
+const rotate = keyframes` /** animação para rotacionar o icon. */
+  from {
+    transform: rotate(0deg);
+  }
 
-    margin-top: 38px;
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+export const LoadingContainer = styled.div`
+  width: 100%;
+  height: 454px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 27px;
+
+  strong {
+    display: inline-block;
+    font-family: 'SFPro';
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 36px;
+    letter-spacing: 0px;
+    color: #666;
+    margin-top: 27px;
+  }
+
+  svg {
+    animation: ${rotate} 2s linear infinite;
   }
 `;
 

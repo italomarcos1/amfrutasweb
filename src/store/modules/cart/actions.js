@@ -19,6 +19,13 @@ export function pushToCart(products) {
   };
 }
 
+export function updatePages(pages) {
+  return {
+    type: '@cart/SET_PAGES',
+    payload: { pages },
+  };
+}
+
 export function removeFromCartRequest(id) {
   return {
     type: '@cart/REMOVE_FROM_CART_REQUEST',

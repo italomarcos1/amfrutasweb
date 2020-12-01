@@ -7,7 +7,7 @@ export const Container = styled.div`
   justify-content: space-between;
   margin-top: 30px;
   padding: 0;
-  width: 840px;
+  /* width: ${({ containerWidth }) => containerWidth}; */
 `;
 
 export const List = styled.ul`
@@ -15,6 +15,5 @@ export const List = styled.ul`
   align-items: flex-start;
   justify-content: space-between;
   flex-wrap: wrap;
-  width: 840px;
   height: ${({ containerHeight }) => containerHeight};
 `;

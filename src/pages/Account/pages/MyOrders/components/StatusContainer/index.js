@@ -22,98 +22,98 @@ import completoOn from '~/assets/orders/completo-on.svg';
 import validadeOff from '~/assets/orders/validade-off.svg';
 import validadeOn from '~/assets/orders/validado-on.svg';
 
-// new
-// approved
-// onCourse
-// completed
-// cancelled
+// Novo
+// Validado
+// Em curso
+// Completo
+// Cancelado
 
 export default function StatusContainer({ status }) {
   return (
     <Container status={status}>
       <BadgeContainer>
-        <Badge active style={status === 'cancelled' ? { paddingLeft: 5 } : {}}>
-          <img src={status === 'cancelled' ? cancelado : novo} alt="" />
+        <Badge active style={status === 'Cancelado' ? { paddingLeft: 5 } : {}}>
+          <img src={status === 'Cancelado' ? cancelado : novo} alt="" />
         </Badge>
         <Separator
           active={
-            status === 'approved' ||
-            status === 'onCourse' ||
-            status === 'completed'
+            status === 'Validado' ||
+            status === 'Em curso' ||
+            status === 'Completo'
           }
         />
         <Badge
           active={
-            status === 'approved' ||
-            status === 'onCourse' ||
-            status === 'completed'
+            status === 'Validado' ||
+            status === 'Em curso' ||
+            status === 'Completo'
           }
         >
           <img
             src={
-              status === 'approved' ||
-              status === 'onCourse' ||
-              status === 'completed'
+              status === 'Validado' ||
+              status === 'Em curso' ||
+              status === 'Completo'
                 ? validadeOn
                 : validadeOff
             }
             alt=""
           />
         </Badge>
-        <Separator active={status === 'onCourse' || status === 'completed'} />
-        <Badge active={status === 'completed'}>
+        <Separator active={status === 'Em curso' || status === 'Completo'} />
+        <Badge active={status === 'Completo'}>
           <img
             src={
-              status === 'onCourse' || status === 'completed'
+              status === 'Em curso' || status === 'Completo'
                 ? truckOn
                 : truckOff
             }
             alt=""
           />
         </Badge>
-        <Separator active={status === 'completed'} />
+        <Separator active={status === 'Completo'} />
         <Badge>
-          <img src={status === 'completed' ? completoOn : completoOff} alt="" />
+          <img src={status === 'Completo' ? completoOn : completoOff} alt="" />
         </Badge>
       </BadgeContainer>
       <BadgeTitleContainer>
         <BadgeTitle
           active={
-            status === 'new' ||
-            status === 'approved' ||
-            status === 'onCourse' ||
-            status === 'completed' ||
-            status === 'cancelled'
+            status === 'Novo' ||
+            status === 'Validado' ||
+            status === 'Em curso' ||
+            status === 'Completo' ||
+            status === 'Cancelado'
           }
-          wasCancelled={status === 'cancelled'}
+          wasCancelled={status === 'Cancelado'}
           width={26}
           style={
-            status === 'cancelled' ? { marginLeft: -5 } : { marginLeft: 0 }
+            status === 'Cancelado' ? { marginLeft: -5 } : { marginLeft: 0 }
           }
         >
-          {status === 'cancelled' ? 'Cancelado' : 'Novo'}
+          {status === 'Cancelado' ? 'Cancelado' : 'Novo'}
         </BadgeTitle>
         <BadgeTitle
           active={
-            status === 'approved' ||
-            status === 'onCourse' ||
-            status === 'completed'
+            status === 'Validado' ||
+            status === 'Em curso' ||
+            status === 'Completo'
           }
           style={
-            status === 'cancelled' ? { marginLeft: 114 } : { marginLeft: 107 }
+            status === 'Cancelado' ? { marginLeft: 114 } : { marginLeft: 107 }
           }
         >
           Validado
         </BadgeTitle>
         <BadgeTitle
-          active={status === 'onCourse' || status === 'completed'}
+          active={status === 'Em curso' || status === 'Completo'}
           width={106}
           style={{ marginLeft: 95 }}
         >
           Em curso
         </BadgeTitle>
         <BadgeTitle
-          active={status === 'completed'}
+          active={status === 'Completo'}
           width={48}
           style={{ marginLeft: 33 }}
         >

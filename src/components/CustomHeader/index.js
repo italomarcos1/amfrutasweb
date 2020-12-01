@@ -21,6 +21,7 @@ export default function CustomHeader({
   paginationArray,
   setOrderDirection,
   setOrderField,
+  isInfo,
 }) {
   const [selectedOption, setSelectedOption] = useState('Mais Recentes');
   const [menuIsOpen, setMenuIsOpen] = useState(false);
@@ -29,46 +30,77 @@ export default function CustomHeader({
     option => {
       setSelectedOption(option);
       setMenuIsOpen(false);
+      if (!isInfo) {
+        switch (option) {
+          case 'Mais Recentes': {
+            setOrderField('updated_at');
+            setOrderDirection('desc');
+            break;
+          }
+          case 'Mais Vendidos': {
+            setOrderField('updated_at');
+            setOrderDirection('desc');
+            break;
+          }
+          case 'Maior Preço': {
+            setOrderField('price');
+            setOrderDirection('desc');
+            break;
+          }
+          case 'Menor Preço': {
+            setOrderField('price');
+            setOrderDirection('asc');
+            break;
+          }
+          case 'Ordem Alfabética': {
+            setOrderField('title');
+            setOrderDirection('asc');
+            break;
+          }
+          default:
+        }
+      } else {
+        switch (option) {
+          case 'Mais Antigas': {
+            setOrderField('published_at');
+            setOrderDirection('asc');
+            break;
+          }
+          case 'Mais Recentes': {
+            setOrderField('updated_at');
+            setOrderDirection('desc');
+            break;
+          }
 
-      switch (option) {
-        case 'Mais Recentes': {
-          setOrderField('updated_at');
-          setOrderDirection('desc');
-          break;
+          case 'Ordem Alfabética': {
+            setOrderField('title');
+            setOrderDirection('asc');
+            break;
+          }
+          default:
         }
-        case 'Mais Vendidos': {
-          setOrderField('updated_at');
-          setOrderDirection('desc');
-          break;
-        }
-        case 'Maior Preço': {
-          setOrderField('price');
-          setOrderDirection('desc');
-          break;
-        }
-        case 'Menor Preço': {
-          setOrderField('price');
-          setOrderDirection('asc');
-          break;
-        }
-        case 'Ordem Alfabética': {
-          setOrderField('title');
-          setOrderDirection('asc');
-          break;
-        }
-        default:
       }
     },
-    [setOrderField, setOrderDirection]
+    [setOrderField, isInfo, setOrderDirection]
   );
 
-  const data = [
-    { id: 1, option: 'Mais Recentes' },
-    { id: 2, option: 'Mais Vendidos' },
-    { id: 3, option: 'Maior Preço' },
-    { id: 4, option: 'Menor Preço' },
-    { id: 5, option: 'Ordem Alfabética' },
-  ];
+  const data = () => {
+    if (!isInfo) {
+      return [
+        { id: 1, option: 'Mais Recentes' },
+        { id: 2, option: 'Mais Vendidos' },
+        { id: 3, option: 'Maior Preço' },
+        { id: 4, option: 'Menor Preço' },
+        { id: 5, option: 'Ordem Alfabética' },
+      ];
+    }
+
+    return [
+      { id: 1, option: 'Mais Antigas' },
+      { id: 2, option: 'Mais Recentes' },
+      { id: 3, option: 'Ordem Alfabética' },
+    ];
+  };
 
   return (
     <Container style={style}>
@@ -86,7 +118,7 @@ export default function CustomHeader({
           </FilterProducts>
 
           <FilterProductsList visible={menuIsOpen}>
-            {data.map(({ id, option }) => (
+            {data().map(({ id, option }) => (
               <FilterProductsOption
                 key={id}
                 onClick={() => handleSetOption(option)}

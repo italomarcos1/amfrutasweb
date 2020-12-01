@@ -24,13 +24,13 @@ import AccountRoute from './accountRoute';
 import ProductsRoute from './productsRoute';
 
 export default function Routes() {
-  const { pathname } = useLocation();
+  // const { pathname } = useLocation();
 
-  useEffect(() => {
-    if (pathname === '/inicio' || pathname === '') {
-      return <Redirect to="/" />;
-    }
-  }, [pathname]);
+  // useEffect(() => {
+  //   if (pathname === '/inicio' || pathname === '') {
+  //     return <Redirect to="/" />;
+  //   }
+  // }, [pathname]);
 
   return (
     <>

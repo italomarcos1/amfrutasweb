@@ -24,10 +24,11 @@ export default function Footer() {
   const [social, setSocial] = useState([]);
 
   const loadMenu = useCallback(async () => {
-    const [socialMedia, links] = await Promise.all([
-      backend.get('/menus/links/1'),
-      backend.get('/menus/links/2'),
-    ]);
+    // const [socialMedia, links] = await Promise.all([
+    //   backend.get('/menus/links/1'),
+    //   backend.get('/menus/links/2'),
+    // ]);
+    const links = await backend.get('/menus/links/2');
 
     const {
       data: { data },
@@ -37,11 +38,11 @@ export default function Footer() {
     setSecondColumn([data[3], data[4]]);
     setThirdColumn([data[5], data[6]]);
 
-    const {
-      data: { data: socialData },
-    } = socialMedia;
+    // const {
+    //   data: { data: socialData },
+    // } = socialMedia;
 
-    setSocial(socialData);
+    // setSocial(socialData);
   }, []);
 
   useEffect(() => loadMenu(), []);
@@ -91,13 +92,14 @@ export default function Footer() {
                 item === null ? (
                   <></>
                 ) : (
-                  <Link
+                  <a
                     key={item.id}
-                    to={{ pathname: `${item.url}`, state: { id: item.id } }}
+                    href={item.url}
                     rel="noreferrer"
+                    target="_blank"
                   >
                     {item.name}
-                  </Link>
+                  </a>
                 )
               )}
             </span>

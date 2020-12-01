@@ -10,13 +10,15 @@ import { Container, List } from './styles';
 export default function ItemsList({
   children,
   containerHeight,
+  containerWidth,
   currentPage,
   setCurrentPage,
+  style,
 }) {
   const lastPage = useSelector(state => state.cart.pages);
 
   const [paginationArray, setPaginationArray] = useState([]);
-
+  console.tron.log(lastPage);
   const generatePaginationArray = useCallback(() => {
     const items = [];
 
@@ -32,9 +34,16 @@ export default function ItemsList({
   }, [lastPage, generatePaginationArray]);
 
   return (
-    <Container style={{ height: containerHeight + 76 }}>
-      <List height={containerHeight}>{children}</List>
-      <FooterPagination style={{ width: 840, backgroundColor: '#fcfcfc' }}>
+    <Container
+      // width={containerWidth}
+      style={{ ...style, height: containerHeight + 76, width: containerWidth }}
+    >
+      <List height={containerHeight} style={{ width: '100%' }}>
+        {children}
+      </List>
+      <FooterPagination
+        style={{ width: containerWidth, backgroundColor: '#fcfcfc' }}
+      >
         <Pagination
           currentPage={currentPage}
           lastPage={lastPage}
@@ -49,10 +58,12 @@ export default function ItemsList({
 ItemsList.propTypes = {
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
   containerHeight: PropTypes.number,
+  containerWidth: PropTypes.number,
   currentPage: PropTypes.number.isRequired,
   setCurrentPage: PropTypes.func.isRequired,
 };
 
 ItemsList.defaultProps = {
   containerHeight: 455,
+  containerWidth: 840,
 };

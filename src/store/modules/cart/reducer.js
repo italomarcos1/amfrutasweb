@@ -92,6 +92,11 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
         break;
       }
 
+      case '@cart/SET_PAGES': {
+        draft.pages = payload.pages;
+        break;
+      }
+
       case '@cart/CLEAN_CART': {
         draft.products.splice(0, draft.products.length);
         break;

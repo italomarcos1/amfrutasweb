@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import { Container, Section, BlogPost, FooterPagination } from './styles';
 
@@ -12,6 +13,8 @@ import LoginModal from '~/pages/LoginModal';
 
 import backend from '~/services/api';
 
+import { updatePages } from '~/store/modules/cart/actions';
+
 export default function Contents() {
   const [loginModal, setLoginModal] = useState(false);
 
@@ -19,8 +22,12 @@ export default function Contents() {
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(0);
   const [paginationArray, setPaginationArray] = useState([]);
+  const [orderDirection, setOrderDirection] = useState('desc');
+  const [orderField, setOrderField] = useState('updated_at');
 
   const { state } = useLocation();
+
+  const dispatch = useDispatch();
 
   const generatePaginationArray = useCallback(() => {
     const items = [];
@@ -29,16 +36,21 @@ export default function Contents() {
       items.push(i);
     }
 
+    dispatch(updatePages(lastPage));
     setPaginationArray(items);
-  }, [lastPage]);
+  }, [dispatch, lastPage]);
 
   const loadContents = useCallback(async () => {
+    const arrayId = state.id.split('/');
+    const getId = arrayId[arrayId.length - 1];
+
     const {
       data: {
         data: { data, current_page, last_page },
       },
-    } = await backend.get(`blog/contents?page=${currentPage}&per_page=12`);
-    alert(state.id);
+    } = await backend.get(
+      `blog/contents/categories/${getId}?page=${currentPage}&per_page=12&&order_field=${orderField}&order_direction=${orderDirection}`
+    );
 
     if (data.length % 4 !== 0) {
       const itemsToFill = Math.ceil(data.length / 4) * 4 - data.length;
@@ -50,7 +62,7 @@ export default function Contents() {
     setCurrentPage(current_page);
     setLastPage(last_page);
     setContents(data);
-  }, [currentPage, state]);
+  }, [currentPage, state, orderField, orderDirection]);
 
   useEffect(() => {
     loadContents();
@@ -66,6 +78,10 @@ export default function Contents() {
           lastPage={lastPage}
           setCurrentPage={setCurrentPage}
           paginationArray={paginationArray}
+          setOrderDirection={setOrderDirection}
+          setOrderField={setOrderField}
+          orderField={orderField}
+          isInfo
           style={{ marginLeft: 'auto', marginRight: 'auto', width: 1240 }}
         />
 
