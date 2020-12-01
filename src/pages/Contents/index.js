@@ -47,7 +47,6 @@ export default function Contents() {
 
   const loadContents = useCallback(async () => {
     if (searchInput !== '') return;
-    console.tron.log('nera');
 
     const arrayId = state.id.split('/');
     const getId = arrayId[arrayId.length - 1];

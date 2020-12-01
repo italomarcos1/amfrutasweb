@@ -14,7 +14,7 @@ import backend from '~/services/api';
 export default function ListProducts() {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [lastPage, setLastPage] = useState(1);
+  const [lastPage, setLastPage] = useState(0);
   const [prevPageUrl, setPrevPageUrl] = useState('');
   const [nextPageUrl, setNextPageUrl] = useState('');
   const [pageHeight, setPageHeight] = useState(1184);
