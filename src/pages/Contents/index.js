@@ -58,6 +58,12 @@ export default function Contents() {
       for (let i = 0; i < itemsToFill; i++) {
         data.push(null);
       }
+
+      if (data.length / 12 < 0.75) {
+        for (let i = 0; i < 12 - data.length; i++) {
+          data.push(null);
+        }
+      }
     }
     setCurrentPage(current_page);
     setLastPage(last_page);

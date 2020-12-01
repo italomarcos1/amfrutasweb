@@ -18,7 +18,6 @@ export default function ItemsList({
   const lastPage = useSelector(state => state.cart.pages);
 
   const [paginationArray, setPaginationArray] = useState([]);
-  console.tron.log(lastPage);
   const generatePaginationArray = useCallback(() => {
     const items = [];
 
