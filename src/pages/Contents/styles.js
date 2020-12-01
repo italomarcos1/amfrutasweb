@@ -33,8 +33,12 @@ export const BlogPost = styled(Link)`
   justify-content: flex-start;
 
   img {
-    width: 270px;
-    height: 159px;
+    background-position: cover;
+    width: 293px;
+    height: 172.5px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    object-fit: cover;
   }
 
   strong {
