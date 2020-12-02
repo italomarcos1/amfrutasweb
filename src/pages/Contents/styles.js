@@ -17,7 +17,7 @@ export const Section = styled.ul`
   align-items: flex-start;
   justify-content: space-between;
   border-radius: 4px;
-  margin: 51px auto 0;
+  margin: 21px auto 51px;
 `;
 
 export const BlogPost = styled(Link)`

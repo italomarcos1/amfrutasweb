@@ -9,7 +9,6 @@ export const Container = styled.div`
   width: 995px;
   height: 542px;
   height: ${({ pageHeight }) => pageHeight}px;
-  margin-top: 18px;
   background-color: #fff;
   border-radius: 4px;
   padding: 20px;

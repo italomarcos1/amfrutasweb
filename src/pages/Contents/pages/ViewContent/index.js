@@ -85,10 +85,6 @@ export default function ViewContent() {
           backgroundColor: '#ececec',
         }}
       >
-        <SearchBar>
-          <SearchInput />
-        </SearchBar>
-
         <Container>
           {loading ? (
             <h1>Carregando...</h1>

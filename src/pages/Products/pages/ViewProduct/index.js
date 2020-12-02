@@ -110,13 +110,10 @@ export default function ViewProduct() {
       style={{
         display: 'flex',
         flexDirection: 'column',
+        paddingTop: 0,
         justifyContent: 'flex-start',
       }}
     >
-      <SearchBar>
-        <SearchInput />
-      </SearchBar>
-
       {loading ? (
         <h1>Carregando...</h1>
       ) : (

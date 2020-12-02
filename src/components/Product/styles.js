@@ -50,6 +50,11 @@ export const FavoriteButton = styled.button`
   width: 31px;
   margin: 10px 0px 0px 5px;
   background: none;
+
+  img {
+    max-width: 31px;
+    max-height: 31px;
+  }
 `;
 
 export const ImageContainer = styled(Link)`
