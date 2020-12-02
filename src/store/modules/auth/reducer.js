@@ -5,6 +5,7 @@ const INITIAL_STATE = {
   signed: false,
   loading: false,
   loginError: false,
+  noFavorite: false,
 };
 
 export default (state = INITIAL_STATE, { type, payload }) => {
@@ -23,12 +24,23 @@ export default (state = INITIAL_STATE, { type, payload }) => {
         draft.signed = true;
         draft.loading = false;
         draft.loginError = false;
+        draft.noFavorite = false;
 
         break;
       }
 
       case '@auth/SIGN_IN_ALPHA': {
         draft.signed = true;
+        break;
+      }
+
+      case '@auth/NO_FAVORITE': {
+        draft.noFavorite = true;
+        break;
+      }
+
+      case '@auth/CLOSE_MODAL': {
+        draft.noFavorite = false;
         break;
       }
 

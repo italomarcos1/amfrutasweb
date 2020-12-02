@@ -22,6 +22,14 @@ export function signUpRequest(name, email, password) {
   };
 }
 
+export function notSignedAddedToFavorites() {
+  return { type: '@auth/NO_FAVORITE' };
+}
+
+export function closeModalState() {
+  return { type: '@auth/CLOSE_MODAL' };
+}
+
 export function signFailure() {
   return {
     type: '@auth/SIGN_FAILURE',

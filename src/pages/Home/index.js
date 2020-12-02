@@ -69,6 +69,7 @@ export default function Home() {
 
   const signed = useSelector(state => state.auth.signed);
   const profile = useSelector(state => state.user.profile);
+  const noFavorite = useSelector(state => state.auth.noFavorite);
   const [toastVisible, setToastVisible] = useState(false);
 
   useEffect(() => {
@@ -178,7 +179,7 @@ export default function Home() {
           return;
         }
 
-        const response = await backend.post('newsletter/contacts', {
+        await backend.post('newsletter/contacts', {
           name: formData.name,
           last_name: formData.last_name,
           email,
@@ -382,7 +383,9 @@ export default function Home() {
       {deliveryModal && (
         <DeliveryModal closeModal={() => setDeliveryModal(false)} />
       )}
-      {loginModal && <LoginModal closeModal={() => setLoginModal(false)} />}
+      {(loginModal || noFavorite) && (
+        <LoginModal closeModal={() => setLoginModal(false)} />
+      )}
       {toastVisible && (
         <Toast status="Bem-vindo ao AM Frutas." color="#1DC167" />
       )}

@@ -5,7 +5,8 @@
       token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvc2FuZGJveC5hbWZydXRhcy5wdFwvYmFja2VuZFwvYXV0aFwvbG9naW4iLCJpYXQiOjE2MDY2NzQ2MjEsIm5iZiI6MTYwNjY3NDYyMSwianRpIjoiOElWSFRUaWdxcnF6YktQOCIsInN1YiI6MjE3NCwicHJ2IjoiNDZlZGQxMDkyOTRmYzBkOGMwMTkyZjNjM2YxODVjNDhiMDM2ZjNhNyJ9.00-doeFHdmOTHAiiKQXhWuR2FrxD3zWcXQJ0pRrF50w',
       signed: false,
       loading: false,
-      loginError: false
+      loginError: false,
+      noFavorite: false
     },
     user: {
       profile: null,

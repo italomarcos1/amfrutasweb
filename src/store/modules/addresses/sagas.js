@@ -28,7 +28,12 @@ export function* addAddress({ payload }) {
 
       yield put(updateProfileSuccess(updatedDefaultAddress));
     }
-    yield put(addAddressSuccess(data));
+    yield put(
+      addAddressSuccess({
+        ...data,
+        destination_last_name: address.destination_last_name,
+      })
+    );
   } catch (error) {
     yield put(addAddressFailure());
   }
@@ -135,12 +140,15 @@ export function* removeAddress({ payload }) {
     const { id } = payload;
     const profile = yield select(state => state.user.profile);
 
+    const { default_address } = profile;
     yield call(backend.delete, `clients/addresses/${id}`);
 
-    if (profile.default_address.id === id) {
-      const updatedDefaultAddress = { ...profile, default_address: [] };
+    if (default_address.length !== 0) {
+      if (default_address.id === id) {
+        const updatedDefaultAddress = { ...profile, default_address: [] };
 
-      yield put(updateProfileSuccess(updatedDefaultAddress));
+        yield put(updateProfileSuccess(updatedDefaultAddress));
+      }
     }
     yield put(deleteAddressSuccess(id));
   } catch (error) {

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-
+import { useSelector } from 'react-redux';
 import { ProductsContainer, NullProduct, Container, Content } from './styles';
 
 import Product from '~/components/Product';
@@ -23,6 +23,7 @@ export default function ListProducts() {
   const [orderDirection, setOrderDirection] = useState('desc');
   const [orderField, setOrderField] = useState('updated_at');
   const [loginModal, setLoginModal] = useState(false);
+  const noFavorite = useSelector(state => state.auth.noFavorite);
 
   const generatePaginationArray = useCallback(() => {
     const items = [];
@@ -112,7 +113,9 @@ export default function ListProducts() {
           />
         </FooterPagination>
       </Container>
-      {loginModal && <LoginModal closeModal={() => setLoginModal(false)} />}
+      {(loginModal || noFavorite) && (
+        <LoginModal closeModal={() => setLoginModal(false)} />
+      )}
     </>
   );
 }

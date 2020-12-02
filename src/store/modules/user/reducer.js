@@ -30,16 +30,6 @@ export default function user(state = INITIAL_STATE, { type, payload }) {
         break;
       }
 
-      case '@user/HIDE_TAB_BAR': {
-        draft.tabBar = false;
-        break;
-      }
-
-      case '@user/SHOW_TAB_BAR': {
-        draft.tabBar = true;
-        break;
-      }
-
       case '@user/SET_ORDER': {
         const { order } = payload;
         draft.order = order;

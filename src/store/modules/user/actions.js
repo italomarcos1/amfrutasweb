@@ -22,14 +22,6 @@ export function addFinalProfileFailure() {
   return { type: '@user/ADD_FINAL_PROFILE_FAILURE' };
 }
 
-export function hideTabBar() {
-  return { type: '@user/HIDE_TAB_BAR' };
-}
-
-export function showTabBar() {
-  return { type: '@user/SHOW_TAB_BAR' };
-}
-
 export function setInfo(info) {
   return { type: '@user/SET_INFO', payload: { info } };
 }

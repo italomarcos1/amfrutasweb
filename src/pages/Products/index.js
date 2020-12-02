@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import {
   Container,
@@ -33,6 +34,8 @@ export default function Products({ children }) {
   const [subChildrenSelected, setSubChildrenSelected] = useState('none');
   const [categories, setCategories] = useState([]);
   const [promotions, setPromotions] = useState([]);
+
+  const noFavorite = useSelector(state => state.auth.noFavorite);
 
   const loadCategories = useCallback(async () => {
     const [categoriesResponse, promotionsResponse] = await Promise.all([
@@ -115,7 +118,9 @@ export default function Products({ children }) {
 
       <Footer />
 
-      {loginModal && <LoginModal closeModal={() => setLoginModal(false)} />}
+      {(loginModal || noFavorite) && (
+        <LoginModal closeModal={() => setLoginModal(false)} />
+      )}
     </>
   );
 }

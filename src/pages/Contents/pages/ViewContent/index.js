@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { FacebookShareButton, WhatsappShareButton } from 'react-share';
 
 import {
@@ -38,6 +39,8 @@ export default function ViewContent() {
   const [banner, setBanner] = useState(null);
   const [loading, setLoading] = useState(true);
   const [promotionsData, setPromotionsData] = useState([]);
+
+  const noFavorite = useSelector(reducer => reducer.auth.noFavorite);
 
   const loadContent = useCallback(async () => {
     setLoading(true);
@@ -148,7 +151,9 @@ export default function ViewContent() {
 
       <Footer />
 
-      {loginModal && <LoginModal closeModal={() => setLoginModal(false)} />}
+      {(loginModal || noFavorite) && (
+        <LoginModal closeModal={() => setLoginModal(false)} />
+      )}
     </>
   );
 }

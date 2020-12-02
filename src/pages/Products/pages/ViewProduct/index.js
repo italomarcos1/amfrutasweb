@@ -48,6 +48,7 @@ import plus from '~/assets/icons/plus.svg';
 import barcode from '~/assets/icons/barcode.svg';
 
 import { formatPrice } from '~/utils/calculatePrice';
+import { notSignedAddedToFavorites } from '~/store/modules/auth/actions';
 
 import backend from '~/services/api';
 
@@ -62,9 +63,11 @@ export default function ViewProduct() {
   const [productImages, setProductImages] = useState([]);
   const [qty, setQty] = useState(1);
   const [shippingCost, setShippingCost] = useState(4);
+  const [pressed, setPressed] = useState(false);
 
   const favorites = useSelector(reducer => reducer.cart.favorites);
   const updating = useSelector(reducer => reducer.cart.updating);
+  const signed = useSelector(reducer => reducer.auth.signed);
 
   const handleAddToCart = useCallback(() => {
     dispatch(addToCartRequest(product, qty));
@@ -97,14 +100,21 @@ export default function ViewProduct() {
     setFavorite(fvt >= 0);
   }, [favorites, product]);
 
-  const handleFavorite = () => {
-    dispatch(
-      !favorite
-        ? addToFavoritesRequest(product)
-        : removeFromFavoritesRequest(product.id)
-    );
-    setFavorite(!favorite);
-  };
+  const handleFavorite = useCallback(() => {
+    if (!signed) {
+      dispatch(notSignedAddedToFavorites());
+      return;
+    }
+    if (pressed) {
+      dispatch(
+        !favorite
+          ? addToFavoritesRequest(product)
+          : removeFromFavoritesRequest(product.id)
+      );
+      setFavorite(!favorite);
+      setPressed(false);
+    }
+  }, [pressed, signed, dispatch, favorite, product]);
 
   return (
     <div
@@ -241,7 +251,10 @@ export default function ViewProduct() {
                     <FlexStartContainer>
                       <FavoriteButton
                         type="button"
-                        onClick={handleFavorite}
+                        onClick={() => {
+                          setPressed(true);
+                          handleFavorite();
+                        }}
                         disabled={updating}
                       >
                         <img

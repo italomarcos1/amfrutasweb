@@ -18,6 +18,8 @@ import {
   removeFromFavoritesRequest,
 } from '~/store/modules/cart/actions';
 
+import { notSignedAddedToFavorites } from '~/store/modules/auth/actions';
+
 import {
   Container,
   ImageContainer,
@@ -32,10 +34,12 @@ export default function Product({ product, index }) {
 
   const [favorite, setFavorite] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
+  const [pressed, setPressed] = useState(false);
 
   const favorites = useSelector(state => state.cart.favorites);
   const updating = useSelector(state => state.cart.updating);
   const profile = useSelector(state => state.user.profile);
+  const signed = useSelector(state => state.auth.signed);
 
   const [qty, setQty] = useState(1);
 
@@ -65,21 +69,31 @@ export default function Product({ product, index }) {
     setFavorite(fvt >= 0);
   }, [favorites, id]);
 
-  const handleFavorite = () => {
-    dispatch(
-      !favorite
-        ? addToFavoritesRequest(product)
-        : removeFromFavoritesRequest(id)
-    );
-    setFavorite(!favorite);
-  };
+  const handleFavorite = useCallback(() => {
+    if (!signed) {
+      dispatch(notSignedAddedToFavorites());
+      return;
+    }
+    if (pressed) {
+      dispatch(
+        !favorite
+          ? addToFavoritesRequest(product)
+          : removeFromFavoritesRequest(id)
+      );
+      setFavorite(!favorite);
+      setPressed(false);
+    }
+  }, [pressed, signed, dispatch, favorite, id, product]);
 
   return (
     <>
       <Container>
         <FavoriteButton
           type="button"
-          onClick={handleFavorite}
+          onClick={() => {
+            setPressed(true);
+            handleFavorite();
+          }}
           disabled={updating}
         >
           <img src={favorite ? heartOn : heartOff} alt="Favorite" />

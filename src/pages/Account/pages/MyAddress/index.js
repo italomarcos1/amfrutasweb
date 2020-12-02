@@ -18,7 +18,10 @@ import Select from '~/components/Select';
 import Address from '~/components/Address';
 
 import backend from '~/services/api';
-import { addAddressRequest } from '~/store/modules/addresses/actions';
+import {
+  addAddressRequest,
+  updateShippingInfoRequest,
+} from '~/store/modules/addresses/actions';
 import { nameIsValid, postcodeIsValid } from '~/utils/validation';
 
 export default function MyAccount() {
@@ -42,6 +45,7 @@ export default function MyAccount() {
   const [loading, setLoading] = useState(false);
 
   const [addressInfo, setAddressInfo] = useState({});
+  const [addressEdit, setAddressEdit] = useState(null);
 
   const [invalidFields, setInvalidFields] = useState([
     false,
@@ -127,9 +131,29 @@ export default function MyAccount() {
 
       const newNickname = restOfName.join(' ');
 
+      if (!!addressEdit) {
+        dispatch(
+          updateShippingInfoRequest({
+            id: addressEdit.id,
+            destination_name: newName,
+            destination_last_name: newNickname,
+            address,
+            number,
+            state,
+            country,
+            zipcode,
+            district,
+            city,
+          })
+        );
+        setAddressEdit(null);
+        return;
+      }
+
       dispatch(
         addAddressRequest({
-          destination_name: newName + newNickname,
+          destination_name: newName,
+          destination_last_name: newNickname,
           address,
           number,
           state,
@@ -141,9 +165,15 @@ export default function MyAccount() {
       );
 
       formRef.current.reset();
+      setZipcode('');
+      setTempZipcode('');
     },
-    [dispatch, zipcode, invalidFields, country]
+    [dispatch, zipcode, invalidFields, country, addressEdit]
   );
+
+  useEffect(() => {
+    if (!!addressEdit) formRef.current.setData(addressEdit);
+  }, [addressEdit]);
 
   return (
     <>
@@ -248,7 +278,7 @@ export default function MyAccount() {
               style={{ width: 221, marginTop: 40 }}
               type="submit"
             >
-              <b>Adicionar</b>
+              <b>{!!addressEdit ? 'Editar' : 'Adicionar'}</b>
             </Button>
           </InfoContainer>
         </Content>
@@ -260,7 +290,7 @@ export default function MyAccount() {
                 address={address}
                 selected={selected}
                 setSelected={setSelected}
-                setEdit={setAddressInfo}
+                setEdit={setAddressEdit}
               />
             ))
           ) : (

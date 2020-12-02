@@ -12,10 +12,16 @@ import {
   deleteAddressRequest,
 } from '~/store/modules/addresses/actions';
 
-export default function Address({ address: addressInfo, selected, setEdit }) {
+export default function Address({
+  address: addressInfo,
+  selected,
+  setSelected,
+  setEdit,
+}) {
   const {
     id,
     destination_name,
+    destination_last_name,
     address,
     number,
     zipcode,
@@ -46,7 +52,9 @@ export default function Address({ address: addressInfo, selected, setEdit }) {
           <img src={options} alt="" />
         </button>
       </TitleContainer>
-      <small>{destination_name}</small>
+      <small>
+        {destination_name} {destination_last_name}
+      </small>
       <small>{address}</small>
 
       <small>{`${number} ${zipcode} ${district}`}</small>
@@ -55,7 +63,13 @@ export default function Address({ address: addressInfo, selected, setEdit }) {
       <small>{!!profile ? profile.phone : '---'}</small>
 
       <StartStop selected={selected === id} style={{ marginRight: 30 }}>
-        <button type="button" onClick={handleSetPrimaryAddress}>
+        <button
+          type="button"
+          onClick={() => {
+            handleSetPrimaryAddress();
+            setSelected(id);
+          }}
+        >
           <img src={checked} alt="Item selecionado" />
         </button>
         <strong>Endereço Principal</strong>
@@ -65,7 +79,7 @@ export default function Address({ address: addressInfo, selected, setEdit }) {
           type="button"
           className="edit"
           onClick={() => {
-            setEdit(address);
+            setEdit(addressInfo);
             setVisible(false);
           }}
         >

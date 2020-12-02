@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {
@@ -11,6 +12,8 @@ import {
   CloseButton,
 } from './styles';
 
+import { closeModalState } from '~/store/modules/auth/actions';
+
 import close from '~/assets/close.svg';
 import logo from '~/assets/amfrutas-white.svg';
 
@@ -22,6 +25,13 @@ import Register from './pages/Register';
 export default function LoginModal({ closeModal }) {
   const [active, setActive] = useState('login');
   const [page, setPage] = useState('main');
+
+  const dispatch = useDispatch();
+
+  const handleCloseModal = useCallback(() => {
+    closeModal();
+    dispatch(closeModalState());
+  }, [dispatch, closeModal]);
 
   return (
     <Background>
@@ -64,7 +74,7 @@ export default function LoginModal({ closeModal }) {
             >
               Criar conta
             </HeaderButton>
-            <CloseButton onClick={closeModal}>
+            <CloseButton onClick={handleCloseModal}>
               <img src={close} alt="Close panel" />
             </CloseButton>
           </Header>

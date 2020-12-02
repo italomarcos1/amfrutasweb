@@ -50,7 +50,6 @@ export function* addToFavorites({ payload }) {
   } catch (err) {
     // console.tron.log('err');
     console.log('err');
-    alert('Erro ao adicionar favorito.');
   }
 }
 
