@@ -1,17 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { FacebookShareButton, WhatsappShareButton } from 'react-share';
 
 import {
   Container,
   InfoContainer,
-  SearchBar,
   Content,
   Title,
   TitleContainer,
   ShareThisProduct,
-  ShareButton,
   Description,
   ProductsList,
+  buttonStyle,
+  buttonTitleStyle,
+  imgButtonStyle,
 } from './styles';
 
 import Header from '~/components/Header';
@@ -28,7 +30,7 @@ import whatsapp from '~/assets/whatsapp.svg';
 import backend from '~/services/api';
 
 export default function ViewContent() {
-  const { state } = useLocation();
+  const { state, pathname } = useLocation();
 
   const [loginModal, setLoginModal] = useState(false);
 
@@ -104,14 +106,24 @@ export default function ViewContent() {
                           justifyContent: 'space-between',
                         }}
                       >
-                        <ShareButton color="#3AB879" onClick={() => {}}>
-                          <img src={whatsapp} alt="" />
-                          <small>WhatsApp</small>
-                        </ShareButton>
-                        <ShareButton color="#4F98C6" onClick={() => {}}>
-                          <img src={facebook} alt="" />
-                          <small>Facebook</small>
-                        </ShareButton>
+                        <WhatsappShareButton
+                          url={`${window.location.hostname}${pathname}`}
+                          style={{ ...buttonStyle, backgroundColor: '#3ab879' }}
+                          title="Veja esse conteúdo no AMFrutas"
+                        >
+                          <img src={whatsapp} alt="" style={imgButtonStyle} />
+                          <small style={buttonTitleStyle}>WhatsApp</small>
+                        </WhatsappShareButton>
+                        <FacebookShareButton
+                          url="http://www.amfrutas.pt"
+                          quote="AMFrutas - A sua frutaria online | 3 lojas na linha de Cascais para sua comodidade"
+                          hashtag="#AMFrutas"
+                          resetButtonStyle
+                          style={buttonStyle}
+                        >
+                          <img src={facebook} alt="" style={imgButtonStyle} />
+                          <small style={buttonTitleStyle}>Facebook</small>
+                        </FacebookShareButton>
                       </div>
                     </ShareThisProduct>
                   </TitleContainer>

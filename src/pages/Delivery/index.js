@@ -348,7 +348,8 @@ export default function Delivery() {
     if (!postcodeIsValid(zipcode) || tempZipcode === zipcode) {
       return;
     }
-    setHasLookup(true);
+    setNewAddress(true);
+
     setLoading(true);
     setResidence('');
 
@@ -357,13 +358,13 @@ export default function Delivery() {
 
     try {
       const {
-        data: { address },
+        data: { data },
       } = await backend.get(`/postcodes/${cod}-${ext}`);
       setLoading(false);
 
       shippingInfoRef.current.setData({
-        ...address[0],
-        zipcode: address[0].zipcode,
+        ...data,
+        zipcode: `${data.num_cod_postal}-${data.ext_cod_postal}`,
       });
     } catch (err) {
       setLoading(false);

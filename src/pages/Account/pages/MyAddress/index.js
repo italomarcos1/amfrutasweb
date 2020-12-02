@@ -17,7 +17,7 @@ import InputMask from '~/components/InputMask';
 import Select from '~/components/Select';
 import Address from '~/components/Address';
 
-import { postcodes } from '~/services/api';
+import backend from '~/services/api';
 import { addAddressRequest } from '~/store/modules/addresses/actions';
 import { nameIsValid, postcodeIsValid } from '~/utils/validation';
 
@@ -59,7 +59,7 @@ export default function MyAccount() {
     } else setSelected('');
   }, [primaryAddress]);
 
-  const data = [{ label: 'Portugal', value: 'Portugal' }];
+  const countryData = [{ label: 'Portugal', value: 'Portugal' }];
 
   const lookupAddress = useCallback(async () => {
     if (!postcodeIsValid(zipcode) || tempZipcode === zipcode) {
@@ -72,24 +72,24 @@ export default function MyAccount() {
 
     try {
       const {
-        data: { address },
-      } = await postcodes.get(`/postcodes/${cod}-${ext}`);
+        data: { data },
+      } = await backend.get(`/postcodes/${cod}-${ext}`);
 
       const {
         num_cod_postal,
         ext_cod_postal,
-        street_name,
+        address,
         number,
-        nome_localidade,
-        distrito,
-      } = address[0];
+        city,
+        district,
+      } = data;
 
       const formattedInfo = {
         zipcode: `${num_cod_postal}-${ext_cod_postal}`,
-        address: street_name,
+        address,
         number,
-        city: nome_localidade,
-        district: distrito,
+        city,
+        district,
       };
 
       setAddressInfo(formattedInfo);
@@ -236,7 +236,7 @@ export default function MyAccount() {
                 setValue={setCountry}
                 customWidth={173}
                 defaultValue={{ label: 'Portugal', value: 'Portugal' }}
-                data={data}
+                data={countryData}
                 hasMarginLeft
               />
             </InputContainer>

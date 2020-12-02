@@ -9303,6 +9303,11 @@ react-app-rewired@^2.1.6:
   dependencies:
     semver "^5.6.0"
 
+react-apple-login@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-apple-login/-/react-apple-login-1.1.2.tgz#e484648af76c52db247036aed2c42d195e723122"
+  integrity sha512-EJfy5zkLf45aLeyUEyOvk9h4K5wj706RcqFBEMGzkO+9WXM9gMbjT95yGsQu+3+uoH+ak3sIncEyfov2WGEbGA==
+
 react-dev-utils@^11.0.0:
   version "11.0.0"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-11.0.0.tgz#9fdb1b173f4ffc1f23fcf98465d93b16a860b73e"

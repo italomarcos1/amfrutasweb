@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { FacebookShareButton, WhatsappShareButton } from 'react-share';
 
 import {
   Container,
-  SearchBar,
   Content,
   Details,
   ProductInfo,
@@ -19,13 +19,15 @@ import {
   FlexStartContainer,
   FlexStartText,
   ShareThisProduct,
-  ShareButton,
   Description,
   Amount,
   AmountAndPriceContainer,
   AmountAndTotalContainer,
   TotalContainer,
   ShippingContainer,
+  buttonStyle,
+  buttonTitleStyle,
+  imgButtonStyle,
 } from './styles';
 
 import {
@@ -34,7 +36,6 @@ import {
   removeFromFavoritesRequest,
 } from '~/store/modules/cart/actions';
 
-import SearchInput from '~/components/SearchInput';
 import { Button } from '~/components/LoginModal';
 import ImagesCarousel from '~/components/ImagesCarousel';
 
@@ -52,7 +53,7 @@ import backend from '~/services/api';
 
 export default function ViewProduct() {
   const dispatch = useDispatch();
-  const { state } = useLocation();
+  const { state, pathname } = useLocation();
 
   const [product, setProduct] = useState(null);
   const [banner, setBanner] = useState(null);
@@ -270,14 +271,24 @@ export default function ViewProduct() {
                       justifyContent: 'space-between',
                     }}
                   >
-                    <ShareButton color="#3AB879" onClick={() => {}}>
-                      <img src={whatsapp} alt="" />
-                      <small>WhatsApp</small>
-                    </ShareButton>
-                    <ShareButton color="#4F98C6" onClick={() => {}}>
-                      <img src={facebook} alt="" />
-                      <small>Facebook</small>
-                    </ShareButton>
+                    <WhatsappShareButton
+                      url={`${window.location.hostname}${pathname}`}
+                      style={{ ...buttonStyle, backgroundColor: '#3ab879' }}
+                      title="Veja esse conteúdo no AMFrutas"
+                    >
+                      <img src={whatsapp} alt="" style={imgButtonStyle} />
+                      <small style={buttonTitleStyle}>WhatsApp</small>
+                    </WhatsappShareButton>
+                    <FacebookShareButton
+                      url="http://www.amfrutas.pt"
+                      quote="AMFrutas - A sua frutaria online | 3 lojas na linha de Cascais para sua comodidade"
+                      hashtag="#AMFrutas"
+                      resetButtonStyle
+                      style={buttonStyle}
+                    >
+                      <img src={facebook} alt="" style={imgButtonStyle} />
+                      <small style={buttonTitleStyle}>Facebook</small>
+                    </FacebookShareButton>
                   </div>
                 </ShareThisProduct>
               </ProductInfo>

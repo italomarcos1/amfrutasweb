@@ -1,6 +1,34 @@
 import styled from 'styled-components';
 import { darken } from 'polished';
 
+export const buttonStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  textAlign: 'center',
+  width: 110,
+  height: 28,
+  backgroundColor: '#4f98c6',
+  borderRadius: 4,
+};
+
+export const buttonTitleStyle = {
+  fontFamily: 'SFPro',
+  fontSize: 12,
+  marginTop: 0,
+  padding: 0,
+  border: 0,
+  letterSpacing: 0,
+  color: '#fff',
+};
+
+export const imgButtonStyle = {
+  width: 17,
+  height: 17,
+  marginRight: 5,
+  marginLeft: 0,
+};
+
 export const Container = styled.div`
   display: flex;
   align-items: flex-start;
@@ -39,17 +67,6 @@ export const Details = styled.div`
   margin-top: 22px;
   justify-content: space-between;
   align-items: flex-end;
-`;
-
-export const SearchBar = styled.div`
-  width: 995px;
-  height: 48px;
-  background-color: #fff;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding-left: 10px;
 `;
 
 export const ProductInfo = styled.div`
@@ -228,43 +245,6 @@ export const ShareThisProduct = styled.div`
     font-family: 'SFProBold';
     font-size: 12px;
     line-height: 20px;
-  }
-`;
-
-export const ShareButton = styled.button.attrs({ type: 'button' })`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  text-align: center;
-  width: 110px;
-  height: 28px;
-  margin-top: 9px;
-
-  background-color: ${({ color }) => color};
-
-  border-radius: 4px;
-
-  &:hover {
-    background-color: ${({ color }) => darken(0.05, color)};
-    transition: all 0.2s;
-  }
-
-  small {
-    font-family: 'SFPro';
-    font-size: 12px;
-    margin-top: 0;
-    padding: 0;
-    border: 0;
-    letter-spacing: 0px;
-    color: #fff;
-  }
-
-  img {
-    width: 17px;
-    height: 17px;
-    margin-right: 5px;
-    margin-left: 0px;
   }
 `;
 

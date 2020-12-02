@@ -11,6 +11,7 @@ export const Background = styled.div`
   background-color: rgba(0, 0, 0, 0.6);
   top: 0;
   left: 0;
+  z-index: 1099;
 `;
 
 export const Container = styled(Form)`
