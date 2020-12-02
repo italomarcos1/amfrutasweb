@@ -164,12 +164,20 @@ export const Description = styled.div`
     margin-top: 10px;
   }
 
-  img,
-  iframe {
+  img {
     /* min-width: 100%; */
     /* max-width: 1046px; */
     width: 100% !important;
     height: auto !important;
+    align-self: center;
+    margin: 0 auto;
+  }
+
+  iframe {
+    /* min-width: 100%; */
+    /* max-width: 1046px; */
+    width: 100% !important;
+    height: 540px;
     align-self: center;
     margin: 0 auto;
   }
