@@ -92,6 +92,8 @@ export default function Basket() {
     history.push('/entrega');
   }, [dispatch, history, signed]);
 
+  console.log(saved);
+
   return (
     <>
       <CheckoutHeader active={1} />
@@ -131,7 +133,9 @@ export default function Basket() {
                 <h1>Economizou</h1>
                 <h2>
                   {products.length !== 0
-                    ? `€ ${formatPrice(saved - price)}`
+                    ? `€ ${
+                        saved === '0.00' ? '0.00' : formatPrice(saved - price)
+                      }`
                     : '---'}
                 </h2>
               </CheckoutItem>
@@ -150,7 +154,7 @@ export default function Basket() {
               <CheckoutItem>
                 <h1>Porte</h1>
                 <h2 style={{ color: '#0CB68B' }}>
-                  {shippingCost === 0 ? 'Grátis' : shippingCost}
+                  {shippingCost === 0 ? 'Grátis' : `€ ${shippingCost}.00`}
                 </h2>
               </CheckoutItem>
               <CheckoutItem>

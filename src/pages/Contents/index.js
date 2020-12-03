@@ -12,7 +12,7 @@ import {
 
 import Header from '~/components/Header';
 import Footer from '~/components/Footer';
-import CustomHeader from '~/components/CustomHeader';
+import CustomHeader from '~/components/CustomHeaderContent';
 import Pagination from '~/components/Pagination';
 
 import LoginModal from '~/pages/LoginModal';
@@ -148,7 +148,6 @@ export default function Contents() {
           setOrderDirection={setOrderDirection}
           setOrderField={setOrderField}
           orderField={orderField}
-          isInfo
           inputValue={searchInput}
           setInputValue={setSearchInput}
           search={searchContent}

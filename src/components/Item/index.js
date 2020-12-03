@@ -87,7 +87,7 @@ export default function Item({ item, index }) {
         <div>
           <button
             type="button"
-            disabled={qty === 0}
+            disabled={qty === 1}
             onClick={() => handleUpdateAmount(qty - 1)}
             style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
           >

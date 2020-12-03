@@ -16,9 +16,8 @@ export function calculatePrice(products) {
   }, 0);
 
   const totalSaved = products.reduce((totalSum, product) => {
-    const selectedPrice = product.has_promotion
-      ? product.price
-      : product.price_promotional;
+    const selectedPrice = product.price;
+
     return totalSum + selectedPrice * product.qty;
   }, 0);
 

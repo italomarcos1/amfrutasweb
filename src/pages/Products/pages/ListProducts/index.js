@@ -19,8 +19,7 @@ export default function ListProducts() {
   const [nextPageUrl, setNextPageUrl] = useState('');
   const [pageHeight, setPageHeight] = useState(1184);
   const [paginationArray, setPaginationArray] = useState([]);
-  const [orderDirection, setOrderDirection] = useState('desc');
-  const [orderField, setOrderField] = useState('updated_at');
+  const [field, setField] = useState('title');
   const [searchInput, setSearchInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [noProductsFound, setNoProductsFound] = useState(false);
@@ -36,9 +35,12 @@ export default function ListProducts() {
   }, [lastPage]);
 
   const loadProducts = useCallback(async () => {
+    console.log('flamengo');
+
     if (searchInput !== '') return;
+    console.log('eruption');
     const productsResponse = await backend.get(
-      `ecommerce/products?page=${currentPage}&order_field=${orderField}&order_direction=${orderDirection}`
+      `ecommerce/products?page=${currentPage}&special_order=${field}`
     );
 
     const {
@@ -54,7 +56,7 @@ export default function ListProducts() {
         data.push(null);
       }
     }
-
+    console.log(data);
     const hasLastRow =
       data.length > 10 ? 1184 : Math.ceil(data.length / 5) * 404;
 
@@ -65,14 +67,14 @@ export default function ListProducts() {
     setLastPage(last_page);
     setNextPageUrl(next_page_url);
     setPrevPageUrl(prev_page_url);
-  }, [currentPage, orderDirection, orderField, searchInput]);
+  }, [currentPage, field, searchInput]);
 
   const searchProduct = useCallback(async () => {
     try {
       if (searchInput === '') return;
       setLoading(true);
       const productsResponse = await backend.get(
-        `ecommerce/products/search/${searchInput}?page=${currentPage}&order_field=${orderField}&order_direction=${orderDirection}`
+        `ecommerce/products/search/${searchInput}?page=${currentPage}&special_order=${field}`
       );
 
       const {
@@ -116,18 +118,12 @@ export default function ListProducts() {
       setLoading(false);
       alert('Erro');
     }
-  }, [currentPage, orderField, orderDirection, searchInput]);
+  }, [currentPage, field, searchInput]);
 
   useEffect(() => {
     loadProducts(currentPage);
     generatePaginationArray();
-  }, [
-    loadProducts,
-    generatePaginationArray,
-    currentPage,
-    orderDirection,
-    orderField,
-  ]);
+  }, [loadProducts, generatePaginationArray, currentPage, field]);
 
   useEffect(() => {
     setNoProductsFound(false);
@@ -141,12 +137,9 @@ export default function ListProducts() {
         lastPage={lastPage}
         setCurrentPage={setCurrentPage}
         paginationArray={paginationArray}
-        setOrderDirection={setOrderDirection}
-        setOrderField={setOrderField}
-        orderField={orderField}
+        setField={setField}
         inputValue={searchInput}
         setInputValue={setSearchInput}
-        search={searchProduct}
       />
       <Container pageHeight={pageHeight}>
         {loading ? (

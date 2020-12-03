@@ -1051,7 +1051,9 @@ export default function Delivery() {
             </CheckoutItem>
             <CheckoutItem>
               <h1>Economizou</h1>
-              <h2>€&nbsp;{formatPrice(saved - price)}</h2>
+              <h2>
+                `€ ${saved === '0.00' ? '0.00' : formatPrice(saved - price)}`
+              </h2>
             </CheckoutItem>
             <CheckoutItem>
               <h1>Crédito Disponível</h1>

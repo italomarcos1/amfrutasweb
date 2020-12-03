@@ -135,63 +135,57 @@ export default function Home() {
     setSellerPoints(sellerData);
   }, []);
 
-  const loadRecommendProducts = useCallback(async () => {
+  const loadRecommendedProducts = useCallback(async () => {
+    const [recommendedIndex, mostSoldIndex] = await Promise.all([
+      backend.get(
+        '/ecommerce/products?page=1&per_page=6&special_order=most_viewed'
+      ),
+      backend.get(
+        '/ecommerce/products?page=1&per_page=6&special_order=most_selled'
+      ),
+    ]);
+
     const {
       data: {
-        data: { last_page },
+        data: { last_page: lastPageRecommended },
       },
-    } = await backend.get(
-      '/ecommerce/products?page=1&per_page=6&special_order=most_viewed'
-    );
+    } = recommendedIndex;
 
-    let index;
+    const {
+      data: {
+        data: { last_page: lastPageMostSold },
+      },
+    } = mostSoldIndex;
+
+    let index = 0;
+    let index2 = 0;
 
     do {
       index = Math.floor(Math.random() * 10);
-    } while (index > last_page);
-
-    const {
-      data: {
-        data: { data },
-      },
-    } = await backend.get(
-      `/ecommerce/products?page=${index}&per_page=6&special_order=most_viewed`
-    );
-
-    setRecommendedProducts(data);
-  }, []);
-
-  const loadMostSold = useCallback(async () => {
-    const {
-      data: {
-        data: { last_page },
-      },
-    } = await backend.get(
-      '/ecommerce/products?page=1&per_page=6&special_order=most_selled'
-    );
-
-    let index;
-
+    } while (index > lastPageRecommended);
     do {
-      index = Math.floor(Math.random() * 10);
-    } while (index > last_page);
+      index2 = Math.floor(Math.random() * 10);
+    } while (index2 > lastPageMostSold);
 
-    const {
-      data: {
-        data: { data },
-      },
-    } = await backend.get(
-      `/ecommerce/products?page=${index}&per_page=6&special_order=most_selled`
-    );
+    const [recommendedData, mostSoldData] = await Promise.all([
+      backend.get(
+        `/ecommerce/products?page=${index}&per_page=6&special_order=most_viewed`
+      ),
+      backend.get(
+        backend.get(
+          `/ecommerce/products?page=${index2}&per_page=6&special_order=most_selled`
+        )
+      ),
+    ]);
 
-    setMostSold(data);
+    setRecommendedProducts(recommendedData);
+    setMostSold(mostSoldData);
   }, []);
 
   useEffect(() => {
     setLoading(true);
     loadData();
-    loadRecommendProducts();
-    loadMostSold();
+    loadRecommendedProducts();
     setLoading(false);
   }, []);
 

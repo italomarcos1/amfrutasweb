@@ -19,7 +19,8 @@ export default function CustomHeader({
   lastPage,
   setCurrentPage,
   paginationArray,
-  setField,
+  setOrderDirection,
+  setOrderField,
   inputValue,
   setInputValue,
 }) {
@@ -30,39 +31,34 @@ export default function CustomHeader({
     option => {
       setSelectedOption(option);
       setMenuIsOpen(false);
+
       switch (option) {
+        case 'Mais Antigas': {
+          setOrderField('published_at');
+          setOrderDirection('asc');
+          break;
+        }
         case 'Mais Recentes': {
-          setField('latest');
+          setOrderField('published_at');
+          setOrderDirection('desc');
           break;
         }
-        case 'Mais Vendidos': {
-          setField('most_selled');
-          break;
-        }
-        case 'Maior Preço': {
-          setField('price_desc');
-          break;
-        }
-        case 'Menor Preço': {
-          setField('price_asc');
-          break;
-        }
+
         case 'Ordem Alfabética': {
-          setField('title');
+          setOrderField('title');
+          setOrderDirection('asc');
           break;
         }
         default:
       }
     },
-    [setField]
+    [setOrderField, setOrderDirection]
   );
 
   const data = [
-    { id: 1, option: 'Mais Recentes' },
-    { id: 2, option: 'Mais Vendidos' },
-    { id: 3, option: 'Maior Preço' },
-    { id: 4, option: 'Menor Preço' },
-    { id: 5, option: 'Ordem Alfabética' },
+    { id: 1, option: 'Mais Antigas' },
+    { id: 2, option: 'Mais Recentes' },
+    { id: 3, option: 'Ordem Alfabética' },
   ];
 
   return (
@@ -112,7 +108,8 @@ CustomHeader.propTypes = {
   lastPage: PropTypes.number.isRequired,
   setCurrentPage: PropTypes.func.isRequired,
   paginationArray: PropTypes.oneOfType([PropTypes.array]).isRequired,
-  setField: PropTypes.func.isRequired,
+  setOrderDirection: PropTypes.func.isRequired,
+  setOrderField: PropTypes.func.isRequired,
   inputValue: PropTypes.string,
   setInputValue: PropTypes.func,
 };

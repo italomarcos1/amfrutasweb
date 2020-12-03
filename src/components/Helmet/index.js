@@ -11,6 +11,7 @@ export default function CustomHelmet() {
 
   const [metaData, setMetaData] = useState([]);
   const [scriptData, setScriptData] = useState('');
+  const [title, setTitle] = useState('AM Frutas');
 
   const loadData = useCallback(async () => {
     const keys = ['scripts'];
@@ -33,8 +34,9 @@ export default function CustomHelmet() {
       setScriptData(scriptResponse.scripts);
 
       const formattedData = Object.entries(data);
-      // console.tron.log([...formattedData]);
+      console.log([...formattedData]);
       setMetaData(formattedData);
+      setTitle(`AM Frutas | ${formattedData[1][1]}`);
     } catch {
       console.log('erro no request de script');
     }
@@ -44,6 +46,7 @@ export default function CustomHelmet() {
 
   return (
     <Helmet>
+      <title>{title}</title>
       {scriptData}
       {metaData.length !== 0 ? (
         metaData.map(meta => <meta name={meta[0]} content={meta[1]} />)
