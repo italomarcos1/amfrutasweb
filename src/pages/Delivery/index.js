@@ -1052,7 +1052,7 @@ export default function Delivery() {
             <CheckoutItem>
               <h1>Economizou</h1>
               <h2>
-                `€ ${saved === '0.00' ? '0.00' : formatPrice(saved - price)}`
+                €&nbsp;{saved === '0.00' ? '0.00' : formatPrice(saved - price)}
               </h2>
             </CheckoutItem>
             <CheckoutItem>
@@ -1096,7 +1096,7 @@ export default function Delivery() {
               <h1>Porte</h1>
               <h2 style={{ color: '#0CB68B' }}>
                 {deliveryOption === 'delivery'
-                  ? `€&nbsp;${shippingCost}.00`
+                  ? `€ ${shippingCost}.00`
                   : 'Grátis'}
               </h2>
             </CheckoutItem>
