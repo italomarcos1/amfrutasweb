@@ -62,7 +62,8 @@ export default function Home() {
   const [bannersURL, setBannersURL] = useState([]);
   const [categories, setCategories] = useState([]);
   const [blogData, setBlogData] = useState([]);
-  const [promotions, setPromotions] = useState([]);
+  const [recommendedProducts, setRecommendedProducts] = useState([]);
+  const [mostSold, setMostSold] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [sellerPoints, setSellerPoints] = useState([null, null, null]);
@@ -91,15 +92,11 @@ export default function Home() {
       categoriesResponse,
       bannersResponse,
       blogResponse,
-      promotionsResponse,
       seller,
     ] = await Promise.all([
       backend.get('ecommerce/categories'),
       backend.get('/banner/blocks'),
       backend.get('/blog/contents/categories/5?per_page=4'),
-      backend.get(
-        '/ecommerce/products?page=1&only_promotional=true&per_page=6'
-      ),
       backend.get('/seller-points'),
     ]);
 
@@ -132,23 +129,69 @@ export default function Home() {
     setBlogData(blogResponseData);
 
     const {
-      data: {
-        data: { data: promotionsResponseData },
-      },
-    } = promotionsResponse;
-
-    setPromotions(promotionsResponseData);
-
-    const {
       data: { data: sellerData },
     } = seller;
 
     setSellerPoints(sellerData);
   }, []);
 
+  const loadRecommendProducts = useCallback(async () => {
+    const {
+      data: {
+        data: { last_page },
+      },
+    } = await backend.get(
+      '/ecommerce/products?page=1&per_page=6&special_order=most_viewed'
+    );
+
+    let index;
+
+    do {
+      index = Math.floor(Math.random() * 10);
+    } while (index > last_page);
+
+    const {
+      data: {
+        data: { data },
+      },
+    } = await backend.get(
+      `/ecommerce/products?page=${index}&per_page=6&special_order=most_viewed`
+    );
+
+    setRecommendedProducts(data);
+  }, []);
+
+  const loadMostSold = useCallback(async () => {
+    const {
+      data: {
+        data: { last_page },
+      },
+    } = await backend.get(
+      '/ecommerce/products?page=1&per_page=6&special_order=most_selled'
+    );
+
+    let index;
+
+    do {
+      index = Math.floor(Math.random() * 10);
+    } while (index > last_page);
+
+    const {
+      data: {
+        data: { data },
+      },
+    } = await backend.get(
+      `/ecommerce/products?page=${index}&per_page=6&special_order=most_selled`
+    );
+
+    setMostSold(data);
+  }, []);
+
   useEffect(() => {
     setLoading(true);
     loadData();
+    loadRecommendProducts();
+    loadMostSold();
     setLoading(false);
   }, []);
 
@@ -242,7 +285,7 @@ export default function Home() {
           {loading ? (
             <h1>Carregando...</h1>
           ) : (
-            promotions.map((p, index) => (
+            recommendedProducts.map((p, index) => (
               <Product key={p.id} index={index} product={p} />
             ))
           )}
@@ -261,7 +304,7 @@ export default function Home() {
           {loading ? (
             <h1>Carregando...</h1>
           ) : (
-            promotions.map((p, index) => (
+            mostSold.map((p, index) => (
               <Product key={p.id} index={index} product={p} />
             ))
           )}
