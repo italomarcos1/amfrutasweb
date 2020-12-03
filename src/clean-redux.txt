@@ -6,7 +6,8 @@
       signed: false,
       loading: false,
       loginError: false,
-      noFavorite: false
+      noFavorite: false,
+      firstLogin: false,
     },
     user: {
       profile: null,

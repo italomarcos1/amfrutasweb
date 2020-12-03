@@ -37,7 +37,7 @@ export default function ListProductsPerCategory() {
 
   const loadProductsByCategory = useCallback(async () => {
     if (searchInput !== '') return;
-    console.log('nao');
+
     const productsResponse = await backend.get(
       `ecommerce/products/categories/${state.id}?page=${currentPage}&special_order=${field}`
     );
@@ -134,7 +134,6 @@ export default function ListProductsPerCategory() {
     setLoading(true);
     loadProductsByCategory();
     generatePaginationArray();
-    setNoProductsFound(false);
 
     setLoading(false);
   }, [
@@ -149,11 +148,7 @@ export default function ListProductsPerCategory() {
   useEffect(() => {
     setNoProductsFound(false);
     searchProduct();
-  }, [searchProduct]);
-
-  useEffect(() => {
-    setSearchInput('');
-  }, [pathname]);
+  }, [searchInput, searchProduct]);
 
   return (
     <>
