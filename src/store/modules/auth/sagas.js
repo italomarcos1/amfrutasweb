@@ -82,6 +82,55 @@ export function* signIn({ payload }) {
   }
 }
 
+export function* signUp({ payload }) {
+  const {
+    data: { email, password },
+  } = payload;
+
+  const { data: userData } = payload;
+
+  // console.tron.log(userData);
+
+  try {
+    const response = yield call(backend.post, 'auth/login', {
+      email,
+      password,
+    });
+    const { token, user } = response.data.data;
+
+    const { name, last_name } = user;
+
+    backend.defaults.headers.Authorization = `Bearer ${token}`;
+
+    if (name === '' && last_name === '') {
+      const {
+        data: { data },
+      } = yield call(backend.put, 'clients', {
+        name: 'Cliente',
+        last_name: 'AMFrutas',
+        ...userData,
+      });
+
+      const updatedUser = { ...data, default_address: [] };
+
+      yield put(signInSuccess(token, updatedUser));
+
+      return;
+    }
+
+    const notSignedCart = yield select(state => state.cart.products);
+
+    yield put(pushToCart([...notSignedCart]));
+
+    yield put(signInSuccess(token, user));
+  } catch (error) {
+    // console.tron.log(error);
+    // console.log(error);
+    // console.log('ai');
+    yield put(signFailure());
+  }
+}
+
 export function setToken({ payload }) {
   if (!payload) return;
 
