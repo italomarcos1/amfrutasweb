@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
 import { FaSpinner } from 'react-icons/fa';
 
 import {
@@ -32,6 +34,14 @@ export default function Contents() {
 
   const [loading, setLoading] = useState(false);
   const [noContentsFound, setNoContentsFound] = useState(false);
+
+  const firstLogin = useSelector(state => state.auth.firstLogin);
+
+  const history = useHistory();
+
+  useEffect(() => {
+    if (firstLogin) history.push('/painel');
+  }, [history, firstLogin]);
 
   const { state } = useLocation();
 

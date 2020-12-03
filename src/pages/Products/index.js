@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import {
@@ -36,6 +36,13 @@ export default function Products({ children }) {
   const [promotions, setPromotions] = useState([]);
 
   const noFavorite = useSelector(state => state.auth.noFavorite);
+  const firstLogin = useSelector(state => state.auth.firstLogin);
+
+  const history = useHistory();
+
+  useEffect(() => {
+    if (firstLogin) history.push('/painel');
+  }, [history, firstLogin]);
 
   const loadCategories = useCallback(async () => {
     const [categoriesResponse, promotionsResponse] = await Promise.all([

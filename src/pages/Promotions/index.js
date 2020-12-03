@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { ProductsContainer, NullProduct, Container, Content } from './styles';
 
 import Product from '~/components/Product';
@@ -12,7 +13,7 @@ import LoginModal from '~/pages/LoginModal';
 
 import backend from '~/services/api';
 
-export default function ListProducts() {
+export default function Promotions() {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(0);
@@ -24,6 +25,13 @@ export default function ListProducts() {
   const [orderField, setOrderField] = useState('updated_at');
   const [loginModal, setLoginModal] = useState(false);
   const noFavorite = useSelector(state => state.auth.noFavorite);
+  const firstLogin = useSelector(state => state.auth.firstLogin);
+
+  const history = useHistory();
+
+  useEffect(() => {
+    if (firstLogin) history.push('/painel');
+  }, [history, firstLogin]);
 
   const generatePaginationArray = useCallback(() => {
     const items = [];

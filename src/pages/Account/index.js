@@ -26,7 +26,7 @@ import controlPanelOff from '~/assets/myAccount/painel-controlo-off.svg';
 import myFavorites from '~/assets/myAccount/meus-favoritos-on.svg';
 import myFavoritesOff from '~/assets/myAccount/meus-favoritos-off.svg';
 
-import { signOut } from '~/store/modules/auth/actions';
+import { signOut, cancelFirstLogin } from '~/store/modules/auth/actions';
 
 export default function Account({ children }) {
   const history = useHistory();
@@ -38,8 +38,9 @@ export default function Account({ children }) {
   const profile = useSelector(state => state.user.profile);
 
   useEffect(() => {
+    dispatch(cancelFirstLogin());
     setActive(pathname);
-  }, [pathname]);
+  }, [pathname, dispatch]);
 
   const handleSignOut = useCallback(() => {
     dispatch(signOut());

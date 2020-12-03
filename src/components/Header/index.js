@@ -44,6 +44,9 @@ export default function PageHeader({ login, active }) {
 
   const [headerFixed, setHeaderFixed] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [headerAlertMessage, setHeaderAlertMessage] = useState(
+    'Bem-vindo ao AM Frutas'
+  );
 
   const [menuItems, setMenuItems] = useState([
     'Lojas e Contatos',
@@ -56,9 +59,23 @@ export default function PageHeader({ login, active }) {
   // retirar o dominio 'am sandbox' dos produtos
 
   const loadMenu = useCallback(async () => {
+    const keys = ['alert_message'];
+
+    const [links, alertMessage] = await Promise.all([
+      backend.get('/menus/links/3'),
+      backend.get('configurations', { keys }),
+    ]);
+
     const {
       data: { data },
-    } = await backend.get('/menus/links/3');
+    } = links;
+
+    const {
+      data: { data: alert },
+    } = alertMessage;
+
+    console.log(alert.alert_message);
+    setHeaderAlertMessage(alert.alert_message);
 
     data.splice(0, 1);
     setMenuItems(data);
@@ -166,10 +183,7 @@ export default function PageHeader({ login, active }) {
         </MenuContent>
       </Menu>
       <SubTitle style={headerFixed ? { position: 'fixed', top: 41 } : {}}>
-        GARANTIMOS A MÁXIMA QUALIDADE DE TODOS OS PRODUTOS | COVID-19 -
-        REALIZAMOS TESTES PERIODICAMENTE E SEGUIMOS
-        <br /> AS NORMAS DE PREVENÇÃO DA D.G.S | SE NÃO FICAR SATISFEITO
-        DEVOLVEMOS O SEU DINHEIRO
+        {headerAlertMessage}
       </SubTitle>
     </>
   );

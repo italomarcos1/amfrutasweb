@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { FacebookShareButton, WhatsappShareButton } from 'react-share';
 
@@ -41,6 +41,14 @@ export default function ViewContent() {
   const [promotionsData, setPromotionsData] = useState([]);
 
   const noFavorite = useSelector(reducer => reducer.auth.noFavorite);
+
+  const firstLogin = useSelector(reducer => reducer.auth.firstLogin);
+
+  const history = useHistory();
+
+  useEffect(() => {
+    if (firstLogin) history.push('/painel');
+  }, [history, firstLogin]);
 
   const loadContent = useCallback(async () => {
     setLoading(true);

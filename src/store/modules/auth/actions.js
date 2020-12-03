@@ -21,6 +21,11 @@ export function signUpRequest(name, email, password) {
     payload: { name, email, password },
   };
 }
+export function cancelFirstLogin() {
+  return {
+    type: '@auth/CANCEL_FIRST_LOGIN',
+  };
+}
 
 export function notSignedAddedToFavorites() {
   return { type: '@auth/NO_FAVORITE' };

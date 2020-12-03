@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import {
   Container,
@@ -72,6 +73,14 @@ export default function Home() {
   const profile = useSelector(state => state.user.profile);
   const noFavorite = useSelector(state => state.auth.noFavorite);
   const [toastVisible, setToastVisible] = useState(false);
+
+  const firstLogin = useSelector(state => state.auth.firstLogin);
+
+  const history = useHistory();
+
+  useEffect(() => {
+    if (firstLogin) history.push('/painel');
+  }, [history, firstLogin]);
 
   useEffect(() => {
     if (signed) {
@@ -167,16 +176,27 @@ export default function Home() {
       index2 = Math.floor(Math.random() * 10);
     } while (index2 > lastPageMostSold);
 
-    const [recommendedData, mostSoldData] = await Promise.all([
+    const [recommendedResponse, mostSoldResponse] = await Promise.all([
       backend.get(
         `/ecommerce/products?page=${index}&per_page=6&special_order=most_viewed`
       ),
+
       backend.get(
-        backend.get(
-          `/ecommerce/products?page=${index2}&per_page=6&special_order=most_selled`
-        )
+        `/ecommerce/products?page=${index2}&per_page=6&special_order=most_selled`
       ),
     ]);
+
+    const {
+      data: {
+        data: { data: recommendedData },
+      },
+    } = recommendedResponse;
+
+    const {
+      data: {
+        data: { data: mostSoldData },
+      },
+    } = mostSoldResponse;
 
     setRecommendedProducts(recommendedData);
     setMostSold(mostSoldData);

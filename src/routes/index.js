@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { useLocation, Redirect, Switch, Route } from 'react-router-dom';
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
 
 import Home from '~/pages/Home';
 import Contents from '~/pages/Contents';

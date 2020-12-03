@@ -35,10 +35,8 @@ export default function ListProducts() {
   }, [lastPage]);
 
   const loadProducts = useCallback(async () => {
-    console.log('flamengo');
-
     if (searchInput !== '') return;
-    console.log('eruption');
+
     const productsResponse = await backend.get(
       `ecommerce/products?page=${currentPage}&special_order=${field}`
     );
@@ -56,7 +54,7 @@ export default function ListProducts() {
         data.push(null);
       }
     }
-    console.log(data);
+
     const hasLastRow =
       data.length > 10 ? 1184 : Math.ceil(data.length / 5) * 404;
 
@@ -84,6 +82,7 @@ export default function ListProducts() {
       } = productsResponse;
 
       if (message === 'Nenhum registro encontrado') {
+        setLoading(false);
         setNoProductsFound(true);
         return;
       }
@@ -121,8 +120,12 @@ export default function ListProducts() {
   }, [currentPage, field, searchInput]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+    setLoading(true);
+
     loadProducts(currentPage);
     generatePaginationArray();
+    setLoading(false);
   }, [loadProducts, generatePaginationArray, currentPage, field]);
 
   useEffect(() => {
