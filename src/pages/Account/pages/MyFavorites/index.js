@@ -41,6 +41,7 @@ export default function MyFavorites() {
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             containerWidth={821}
+            containerHeight={625}
             style={{ backgroundColor: '#00000000' }}
           >
             {paginatedProducts.map((item, index) => (

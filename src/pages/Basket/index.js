@@ -30,6 +30,8 @@ import { formatPrice } from '~/utils/calculatePrice';
 
 import { Button, SecureLogin } from '~/components/LoginModal';
 
+import backend from '~/services/api';
+
 export default function Basket() {
   const { products, price, saved } = useSelector(state => state.cart);
   const signed = useSelector(state => state.auth.signed);
@@ -42,10 +44,22 @@ export default function Basket() {
 
   const [toastVisible, setToastVisible] = useState(false);
 
+  const [shippingCost, setShippingCost] = useState(0);
+
+  const loadShippingCost = useCallback(async () => {
+    const {
+      data: { data },
+    } = await backend.get(`checkout/shipping-cost?subtotal=${price}`);
+
+    setShippingCost(data);
+  }, [price]);
+
+  useEffect(() => loadShippingCost(), [price]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     dispatch(processOrder(false));
-  }, []);
+  }, [dispatch]);
 
   const handlePagination = useCallback(() => {
     const pageIndex = 8 * (currentPage - 1);
@@ -135,7 +149,9 @@ export default function Basket() {
               </CheckoutItem>
               <CheckoutItem>
                 <h1>Porte</h1>
-                <h2 style={{ color: '#0CB68B' }}>Grátis</h2>
+                <h2 style={{ color: '#0CB68B' }}>
+                  {shippingCost === 0 ? 'Grátis' : shippingCost}
+                </h2>
               </CheckoutItem>
               <CheckoutItem>
                 <h2>Total</h2>

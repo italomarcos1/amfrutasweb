@@ -126,15 +126,6 @@ export default function Delivery() {
     return '';
   });
 
-  const [tempZipcode, setTempZipcode] = useState(() => {
-    if (!!primaryAddress) {
-      if (primaryAddress.length !== 0) {
-        return primaryAddress.zipcode;
-      }
-    }
-    return '';
-  });
-
   const [residence, setResidence] = useState(() => {
     if (!!primaryAddress) {
       if (primaryAddress.length !== 0) {
@@ -190,12 +181,23 @@ export default function Delivery() {
   });
 
   const [deliveryInterval, setDeliveryInterval] = useState(-1);
+  const [shippingCost, setShippingCost] = useState(0);
 
   const [invalidDeliveryDay, setInvalidDeliveryDay] = useState(false);
   const [invalidDeliveryHour, setInvalidDeliveryHour] = useState(false);
 
   // os endereços são o objeto inteiro, com id e etc
   // o residence é só o label, pois o select mexe apenas com o label. se não, teríamos que mudar o Select ou criar um novo
+
+  const loadShippingCost = useCallback(async () => {
+    const {
+      data: { data },
+    } = await backend.get(`checkout/shipping-cost?subtotal=${price}`);
+
+    setShippingCost(data);
+  }, [price]);
+
+  useEffect(() => loadShippingCost(), [price]);
 
   const loadData = useCallback(async () => {
     const [delivery, shipping] = await Promise.all([
@@ -264,6 +266,7 @@ export default function Delivery() {
   }, []);
 
   const populateAddress = useCallback(() => {
+    if (newAddress) return;
     const findNewAddress = addresses.findIndex(
       address => address.address === residence
     );
@@ -277,7 +280,7 @@ export default function Delivery() {
       ...selectedAddress,
       destination_name: `${selectedAddress.destination_name} ${selectedAddress.destination_last_name}`,
     });
-  }, [addresses, residence]);
+  }, [addresses, residence, newAddress]);
 
   const populateDeliveryInterval = useCallback(() => {
     const findIndex = deliveryHours.findIndex(d => d.label === deliveryHour);
@@ -345,15 +348,13 @@ export default function Delivery() {
   ]);
 
   const lookupAddress = useCallback(async () => {
-    if (!postcodeIsValid(zipcode) || tempZipcode === zipcode) {
+    if (!postcodeIsValid(zipcode)) {
       return;
     }
     setNewAddress(true);
 
     setLoading(true);
-    setResidence('');
 
-    setTempZipcode(zipcode);
     const [cod, ext] = zipcode.split('-');
 
     try {
@@ -370,7 +371,7 @@ export default function Delivery() {
       setLoading(false);
       alert('Informe um código postal válido.');
     }
-  }, [zipcode, tempZipcode]);
+  }, [zipcode]);
 
   useEffect(() => {
     if (deliveryOption === 'withdrawinstore' && validUserInfo) {
@@ -843,7 +844,7 @@ export default function Delivery() {
                 <strong>Morada de entrega</strong>
                 <small>
                   {newAddress
-                    ? 'Cadastre um novo endereço.'
+                    ? 'Registe um novo endereço.'
                     : 'Confira e atualize caso necessário.'}
                 </small>
               </SectionTitle>
@@ -974,20 +975,32 @@ export default function Delivery() {
                     </StartStop>
                     {addresses.length !== 0 && (
                       <UseAddress onClick={() => setNewAddress(false)}>
-                        <small>Usar um endereço já cadastrado</small>
+                        <small>Usar um endereço já registado</small>
                       </UseAddress>
                     )}
                   </div>
                 ) : (
-                  <StartStop selected={newPrimaryAddress}>
-                    <button
-                      type="button"
-                      onClick={() => setNewPrimaryAddress(!newPrimaryAddress)}
+                  <div style={{ display: 'flex' }}>
+                    <StartStop selected={newPrimaryAddress}>
+                      <button
+                        type="button"
+                        onClick={() => setNewPrimaryAddress(!newPrimaryAddress)}
+                      >
+                        <img src={checked} alt="Item selecionado" />
+                      </button>
+                      <strong>Definir como endereço principal</strong>
+                    </StartStop>
+                    <UseAddress
+                      onClick={() => {
+                        setNewAddress(true);
+                        shippingInfoRef.current.reset();
+                        setResidence('');
+                        setZipcode('');
+                      }}
                     >
-                      <img src={checked} alt="Item selecionado" />
-                    </button>
-                    <strong>Definir como endereço principal</strong>
-                  </StartStop>
+                      <small>Registar um novo endereço</small>
+                    </UseAddress>
+                  </div>
                 )}
               </div>
             </InfoContainer>
@@ -1080,7 +1093,9 @@ export default function Delivery() {
             <CheckoutItem>
               <h1>Porte</h1>
               <h2 style={{ color: '#0CB68B' }}>
-                €&nbsp;{chosenShippingMethod.cost},00
+                {deliveryOption === 'delivery'
+                  ? `€&nbsp;${shippingCost}.00`
+                  : 'Grátis'}
               </h2>
             </CheckoutItem>
             <CheckoutItem>
@@ -1089,7 +1104,7 @@ export default function Delivery() {
                 €&nbsp;
                 {formatPrice(
                   Number(price) +
-                    Number(chosenShippingMethod.cost) -
+                    Number(shippingCost) -
                     Number(
                       !!profile
                         ? !!profile.cback_credit

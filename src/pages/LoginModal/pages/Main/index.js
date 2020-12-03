@@ -80,8 +80,8 @@ export default function Main({ setPage }) {
       />
 
       <AppleLogin
-        clientId="com.tgoo.amfrutas"
-        redirectURI="https://amfrutas.pt/"
+        clientId="com.tgoo.service.amfrutas"
+        redirectURI="https://sandbox.amfrutas.pt"
         scope="email"
         responseType="id_token"
         usePopup
