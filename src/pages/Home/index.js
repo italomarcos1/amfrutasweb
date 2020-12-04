@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
+import uuid from 'react-uuid';
 
 import {
   Container,
@@ -44,6 +46,8 @@ import appStore from '~/assets/appStore.svg';
 import playStore from '~/assets/playStore.svg';
 
 export default function Home() {
+  const [, setCookie] = useCookies(['cart']);
+
   const [deliveryModal, setDeliveryModal] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
 
@@ -71,6 +75,7 @@ export default function Home() {
 
   const signed = useSelector(state => state.auth.signed);
   const profile = useSelector(state => state.user.profile);
+  const cart = useSelector(state => state.cart.products);
   const noFavorite = useSelector(state => state.auth.noFavorite);
   const [toastVisible, setToastVisible] = useState(false);
 
@@ -207,6 +212,7 @@ export default function Home() {
     loadData();
     loadRecommendedProducts();
     setLoading(false);
+    setCookie('teste', 'crack', { path: '/' });
   }, []);
 
   const handleSubmit = useCallback(

@@ -28,7 +28,6 @@ export default function MyAccount() {
   const [country, setCountry] = useState('Portugal');
 
   const [zipcode, setZipcode] = useState('');
-  const [tempZipcode, setTempZipcode] = useState('');
 
   const dispatch = useDispatch();
 
@@ -66,12 +65,11 @@ export default function MyAccount() {
   const countryData = [{ label: 'Portugal', value: 'Portugal' }];
 
   const lookupAddress = useCallback(async () => {
-    if (!postcodeIsValid(zipcode) || tempZipcode === zipcode) {
+    if (!postcodeIsValid(zipcode)) {
       return;
     }
     setLoading(true);
 
-    setTempZipcode(zipcode);
     const [cod, ext] = zipcode.split('-');
 
     try {
@@ -104,7 +102,7 @@ export default function MyAccount() {
       setLoading(false);
       alert('Informe um código postal válido.');
     }
-  }, [zipcode, tempZipcode]);
+  }, [zipcode]);
 
   const addNewAddress = useCallback(
     formData => {
@@ -166,7 +164,6 @@ export default function MyAccount() {
 
       formRef.current.reset();
       setZipcode('');
-      setTempZipcode('');
     },
     [dispatch, zipcode, invalidFields, country, addressEdit]
   );

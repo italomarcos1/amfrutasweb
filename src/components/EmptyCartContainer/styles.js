@@ -10,7 +10,7 @@ export default styled.div`
   align-items: center;
   justify-content: center;
 
-  margin-top: 27px;
+  margin-top: 30px;
 
   img {
     width: 168px;

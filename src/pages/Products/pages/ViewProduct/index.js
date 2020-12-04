@@ -57,12 +57,16 @@ export default function ViewProduct() {
   const { state, pathname } = useLocation();
 
   const [product, setProduct] = useState(null);
+  const [quote, setQuote] = useState('');
+  const [message, setMessage] = useState('');
   const [banner, setBanner] = useState(null);
   const [favorite, setFavorite] = useState(false);
   const [loading, setLoading] = useState(true);
   const [productImages, setProductImages] = useState([]);
   const [qty, setQty] = useState(1);
   const [shippingCost, setShippingCost] = useState(4);
+  const [minValueFreeShipping, setMinValueFreeShipping] = useState(0);
+
   const [pressed, setPressed] = useState(false);
 
   const favorites = useSelector(reducer => reducer.cart.favorites);
@@ -74,20 +78,67 @@ export default function ViewProduct() {
     setQty(1);
   }, [product, dispatch, qty]);
 
+  const loadQuote = useCallback(async () => {
+    const {
+      data: {
+        data: { page_title },
+      },
+    } = await backend.get(`/seos/${pathname}`);
+    setQuote(page_title);
+    setMessage(`Veja esse conteúdo no AMFrutas: ${page_title}`);
+  }, [pathname]);
+
   const loadProduct = useCallback(async () => {
+    const keys = ['min_value_free_shipping'];
     setLoading(true);
+    let search = '';
+
+    if (!state) {
+      const formattingPathname = pathname.split('/').splice(2).join('/');
+
+      search = formattingPathname;
+    } else {
+      search = state.id;
+    }
+
+    const [productData, shipping] = await Promise.all([
+      backend.get(`ecommerce/products/${search}`),
+      backend.get('/configurations', { keys }),
+    ]);
 
     const {
       data: { data },
-    } = await backend.get(`ecommerce/products/${state.id}`);
+    } = productData;
+    const {
+      data: { data: shippingData },
+    } = shipping;
 
     setProduct(data);
     setBanner(data.banner);
+    setMinValueFreeShipping(shippingData.min_value_free_shipping);
 
     setProductImages(data.product_images);
 
     setLoading(false);
-  }, [state]);
+  }, [state, pathname]);
+
+  const loadShippingCost = useCallback(async () => {
+    const price = product.has_promotion
+      ? formatPrice(qty * product.price_promotional)
+      : formatPrice(qty * product.price);
+
+    const {
+      data: { data },
+    } = await backend.get(`checkout/shipping-cost?subtotal=${price}`);
+
+    setShippingCost(data);
+  }, [qty, product]);
+
+  useEffect(() => {
+    loadQuote();
+  }, [loadQuote, pathname]);
+
+  useEffect(() => loadShippingCost(), [loadShippingCost, qty]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -234,7 +285,8 @@ export default function ViewProduct() {
                       </ShippingButton>
                     </ShippingContainer>
                     <FreeShipping>
-                      Envio gratuito para compras acima de <b>€ 50.00</b>
+                      Envio gratuito para compras acima de
+                      <b>€&nbsp;{minValueFreeShipping}.00</b>
                     </FreeShipping>
                   </ShippingButtonContainer>
                   <ShippingButtonContainer
@@ -284,18 +336,22 @@ export default function ViewProduct() {
                       justifyContent: 'space-between',
                     }}
                   >
-                    <WhatsappShareButton
-                      url={`${window.location.hostname}${pathname}`}
+                    <a
+                      href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+                        `${message} https://${window.location.hostname}${pathname}`
+                      )}`}
                       style={{ ...buttonStyle, backgroundColor: '#3ab879' }}
                       title="Veja esse conteúdo no AMFrutas"
+                      target="_blank"
+                      rel="noreferrer"
                     >
                       <img src={whatsapp} alt="" style={imgButtonStyle} />
                       <small style={buttonTitleStyle}>WhatsApp</small>
-                    </WhatsappShareButton>
+                    </a>
                     <FacebookShareButton
-                      url="http://www.amfrutas.pt"
-                      quote="AMFrutas - A sua frutaria online | 3 lojas na linha de Cascais para sua comodidade"
-                      hashtag="#AMFrutas"
+                      url={`https://${window.location.hostname}${pathname}`}
+                      quote={`AMFrutas | ${quote}`}
+                      hashtag="#VemProAMFrutas"
                       resetButtonStyle
                       style={buttonStyle}
                     >

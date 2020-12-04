@@ -26,6 +26,30 @@ export const Content = styled.div`
   }*/
 `;
 
+export const MinValueContainer = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 60px;
+  margin-top: 30px;
+`;
+
+export const MinValue = styled.div`
+  display: flex;
+  width: 400px;
+  align-items: center;
+  justify-content: center;
+  height: 58px;
+  padding: 5px 10px;
+  background-color: #f84c4c;
+  font-family: 'SFPro';
+  font-size: 14px;
+  line-height: 21px;
+  color: #fff;
+  border-radius: 4px;
+`;
+
 export const Title = styled.h1`
   font-family: 'SFPro';
   font-size: 25px;

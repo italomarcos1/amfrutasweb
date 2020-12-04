@@ -21,6 +21,7 @@ import {
   CouponInput,
   SendButton,
   CouponIsValid,
+  LoadingCoupon,
   TakeOnShop,
   StartStop,
   LoadingContainer,
@@ -55,6 +56,7 @@ import ItemsList from '~/components/ItemsList';
 
 import CheckoutHeader from '~/components/CheckoutHeader';
 import Item from '~/components/CheckoutItem';
+import Toast from '~/components/Toast';
 
 import { addFinalProfileRequest } from '~/store/modules/user/actions';
 import {
@@ -85,6 +87,8 @@ export default function Delivery() {
   const [couponIsValid, setCouponIsValid] = useState('');
   const [hoverCouponValid, setHoverCouponValid] = useState('');
   const [hoverButton, setHoverButton] = useState('none');
+  const [loadingCoupon, setLoadingCoupon] = useState(false);
+  const [invalidCoupon, setInvalidCoupon] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -180,6 +184,8 @@ export default function Delivery() {
     label: 'Entrega em casa',
   });
 
+  const [withdrawMessage, setWithdrawMessage] = useState('');
+
   const [deliveryInterval, setDeliveryInterval] = useState(-1);
   const [shippingCost, setShippingCost] = useState(0);
 
@@ -189,6 +195,37 @@ export default function Delivery() {
   // os endereços são o objeto inteiro, com id e etc
   // o residence é só o label, pois o select mexe apenas com o label. se não, teríamos que mudar o Select ou criar um novo
 
+  const [toastVisible, setToastVisible] = useState(false);
+
+  useEffect(() => {
+    if (invalidCoupon) {
+      setToastVisible(true);
+
+      const timer = setTimeout(() => {
+        setToastVisible(false);
+      }, 2800);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [invalidCoupon]);
+
+  const validateCoupon = useCallback(async () => {
+    try {
+      setLoadingCoupon(true);
+      await backend.get(`vouchers/${coupon}`);
+
+      setCouponIsValid(true);
+
+      setLoadingCoupon(false);
+    } catch {
+      setLoadingCoupon(false);
+      setCouponIsValid(false);
+      setInvalidCoupon(true);
+    }
+  }, [coupon]);
+
   const loadShippingCost = useCallback(async () => {
     const {
       data: { data },
@@ -197,12 +234,15 @@ export default function Delivery() {
     setShippingCost(data);
   }, [price]);
 
-  useEffect(() => loadShippingCost(), [price]);
+  useEffect(() => loadShippingCost(), [loadShippingCost, price]);
 
   const loadData = useCallback(async () => {
-    const [delivery, shipping] = await Promise.all([
+    const keys = ['withdrawinstore_message'];
+
+    const [delivery, shipping, withdraw] = await Promise.all([
       backend.get('checkout/delivery-intervals'),
       backend.get('checkout/shipping-methods'),
+      backend.get('/configurations', { keys }),
     ]);
 
     const {
@@ -213,6 +253,10 @@ export default function Delivery() {
       data: { data: shippingData },
     } = shipping;
 
+    const {
+      data: { data: withdrawData },
+    } = withdraw;
+
     const formattingDeliveryDays = deliveryData.map(d => ({
       ...d,
       value: d.label,
@@ -220,6 +264,7 @@ export default function Delivery() {
 
     setDeliveryDays(formattingDeliveryDays);
     setShippingMethods(shippingData);
+    setWithdrawMessage(withdrawData.withdrawinstore_message);
   }, []);
 
   useEffect(() => {
@@ -248,10 +293,6 @@ export default function Delivery() {
     window.scrollTo(0, 0);
     loadData();
   }, []);
-
-  const validateCoupon = useCallback(() => {
-    setCouponIsValid(!!coupon);
-  }, [coupon]);
 
   const validateData = useCallback((formData, invalidateFields) => {
     const formattedData = Object.values(formData);
@@ -320,7 +361,8 @@ export default function Delivery() {
 
     if (deliveryOption === 'delivery') {
       formattedFinalAddress = {
-        name: `${finalAddress.destination_name} ${finalAddress.destination_last_name}`,
+        destination_name: finalAddress.destination_name,
+        destination_last_name: finalAddress.destination_last_name,
         ...finalAddress,
       };
     }
@@ -513,7 +555,8 @@ export default function Delivery() {
 
       const shippingData = {
         ...formData,
-        destination_name: `${newName} ${newNickname}`,
+        destination_name: newName,
+        destination_last_name: newNickname,
         address: residence,
         country,
         zipcode,
@@ -683,11 +726,7 @@ export default function Delivery() {
             </div>
             {hoverButton === 'withdrawinstore' ||
             deliveryOption === 'withdrawinstore' ? (
-              <TakeOnShop>
-                A retirada na loja deve ocorrer no endereço abaixo:
-                <br />
-                <b>Av. da República 1058 2775-271 Parede</b>
-              </TakeOnShop>
+              <TakeOnShop>{withdrawMessage}</TakeOnShop>
             ) : (
               <DeliveryDateContainer
                 error={invalidDeliveryDay || invalidDeliveryHour}
@@ -1068,7 +1107,11 @@ export default function Delivery() {
             </CheckoutItem>
             <CheckoutItem style={{ height: 77 }}>
               <div style={{ display: 'flex' }}>
-                {couponIsValid ? (
+                {loadingCoupon ? (
+                  <LoadingCoupon onClick={() => setCouponIsValid(false)}>
+                    <FaSpinner color="#fff" size={20} />
+                  </LoadingCoupon>
+                ) : couponIsValid ? (
                   <CouponIsValid
                     onMouseOver={() => setHoverCouponValid(true)}
                     onMouseLeave={() => setHoverCouponValid(false)}
@@ -1131,7 +1174,7 @@ export default function Delivery() {
                   shippingButtonRef.current.click(); // aqui1
               }}
               style={{ width: 309 }}
-              disabled={loading}
+              disabled={loading || processingOrder}
             >
               {processingOrder ? (
                 <FaSpinner color="#fff" size={20} />
@@ -1146,6 +1189,12 @@ export default function Delivery() {
         </Content>
       </Container>
       <Footer />
+      {toastVisible && (
+        <Toast
+          status="Cupom inválido ou sua encomenda não cumpre todas as regras exigidas."
+          color="#f56060"
+        />
+      )}
     </>
   );
 }

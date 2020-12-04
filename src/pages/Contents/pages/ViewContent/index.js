@@ -20,7 +20,6 @@ import {
 import Header from '~/components/Header';
 import Footer from '~/components/Footer';
 
-import SearchInput from '~/components/SearchInput';
 import Product from '~/components/Product';
 
 import LoginModal from '~/pages/LoginModal';
@@ -36,6 +35,8 @@ export default function ViewContent() {
   const [loginModal, setLoginModal] = useState(false);
 
   const [product, setProduct] = useState(null);
+  const [quote, setQuote] = useState('');
+  const [message, setMessage] = useState('');
   const [banner, setBanner] = useState(null);
   const [loading, setLoading] = useState(true);
   const [promotionsData, setPromotionsData] = useState([]);
@@ -50,18 +51,38 @@ export default function ViewContent() {
     if (firstLogin) history.push('/painel');
   }, [history, firstLogin]);
 
+  const loadQuote = useCallback(async () => {
+    const {
+      data: {
+        data: { page_title },
+      },
+    } = await backend.get(`/seos/${pathname}`);
+    setQuote(page_title);
+    setMessage(`Veja esse conteúdo no AMFrutas: ${page_title}`);
+  }, [pathname]);
+
   const loadContent = useCallback(async () => {
     setLoading(true);
-    let { id } = state;
+    let search = '';
 
-    if (!Number(id)) {
-      const formatUrl = id.split('/').splice(2).join('/');
-      id = formatUrl;
+    if (!state) {
+      const formattingPathname = pathname.split('/').splice(1).join('/');
+
+      search = formattingPathname;
+    } else {
+      const { id } = state;
+
+      if (!Number(id)) {
+        const formatUrl = id.split('/').splice(2).join('/');
+        search = formatUrl;
+      } else {
+        search = id;
+      }
     }
 
     const {
       data: { data },
-    } = await backend.get(`blog/contents/${id}`);
+    } = await backend.get(`blog/contents/${search}`);
 
     setProduct(data);
     setBanner(data.banner);
@@ -79,7 +100,11 @@ export default function ViewContent() {
     setPromotionsData(promotions);
 
     setLoading(false);
-  }, [state]);
+  }, [state, pathname]);
+
+  useEffect(() => {
+    loadQuote();
+  }, [loadQuote, pathname]);
 
   useEffect(() => {
     loadContent();
@@ -117,18 +142,22 @@ export default function ViewContent() {
                           justifyContent: 'space-between',
                         }}
                       >
-                        <WhatsappShareButton
-                          url={`${window.location.hostname}${pathname}`}
+                        <a
+                          href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+                            `${message} https://${window.location.hostname}${pathname}`
+                          )}`}
                           style={{ ...buttonStyle, backgroundColor: '#3ab879' }}
-                          title="Veja esse conteúdo no AMFrutas"
+                          title="Veja esse conteúdo no AMFrutas: "
+                          target="_blank"
+                          rel="noreferrer"
                         >
                           <img src={whatsapp} alt="" style={imgButtonStyle} />
                           <small style={buttonTitleStyle}>WhatsApp</small>
-                        </WhatsappShareButton>
+                        </a>
                         <FacebookShareButton
-                          url="http://www.amfrutas.pt"
-                          quote="AMFrutas - A sua frutaria online | 3 lojas na linha de Cascais para sua comodidade"
-                          hashtag="#AMFrutas"
+                          url={`https://${window.location.hostname}${pathname}`}
+                          quote={`AMFrutas | ${quote}`}
+                          hashtag="#VemProAMFrutas"
                           resetButtonStyle
                           style={buttonStyle}
                         >

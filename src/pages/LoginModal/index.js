@@ -85,7 +85,10 @@ export default function LoginModal({ closeModal }) {
           ) : page === 'forgot' ? (
             <ForgotPassword setPage={value => setPage(value)} />
           ) : (
-            <Register setPage={value => setPage(value)} />
+            <Register
+              closeModal={closeModal}
+              setPage={value => setPage(value)}
+            />
           )}
         </LoginDetails>
       </Container>

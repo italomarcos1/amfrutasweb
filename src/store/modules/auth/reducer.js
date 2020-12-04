@@ -5,6 +5,7 @@ const INITIAL_STATE = {
   signed: false,
   loading: false,
   loginError: false,
+  registerError: false,
   noFavorite: false,
   firstLogin: false,
 };
@@ -57,8 +58,19 @@ export default (state = INITIAL_STATE, { type, payload }) => {
         break;
       }
 
+      case '@auth/SIGN_UP_FAILURE': {
+        draft.loading = false;
+        draft.registerError = true;
+        break;
+      }
+
       case '@auth/CLEAN_LOGIN_ERROR': {
         draft.loginError = false;
+        break;
+      }
+
+      case '@auth/CLEAN_REGISTER_ERROR': {
+        draft.registerError = false;
         break;
       }
 

@@ -79,7 +79,10 @@ export default function Address({
           type="button"
           className="edit"
           onClick={() => {
-            setEdit(addressInfo);
+            setEdit({
+              ...addressInfo,
+              destination_name: `${addressInfo.destination_name} ${addressInfo.destination_last_name}`,
+            });
             setVisible(false);
           }}
         >

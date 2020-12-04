@@ -2,7 +2,11 @@ import { call, put, all, select, takeLatest } from 'redux-saga/effects';
 
 import backend from '~/services/api';
 
-import { signInSuccess, signFailure } from '~/store/modules/auth/actions';
+import {
+  signInSuccess,
+  signFailure,
+  signUpFailure,
+} from '~/store/modules/auth/actions';
 import { addFavorites, pushToCart } from '~/store/modules/cart/actions';
 import { populateAddresses } from '~/store/modules/addresses/actions';
 
@@ -83,51 +87,47 @@ export function* signIn({ payload }) {
 }
 
 export function* signUp({ payload }) {
-  const {
-    data: { email, password },
-  } = payload;
-
   const { data: userData } = payload;
 
-  // console.tron.log(userData);
+  const {
+    name,
+    lastName: last_name,
+    email,
+    password,
+    birthday: birth,
+  } = userData;
 
   try {
     const response = yield call(backend.post, 'auth/login', {
+      name,
+      last_name,
       email,
       password,
     });
-    const { token, user } = response.data.data;
-
-    const { name, last_name } = user;
+    const { token } = response.data.data;
 
     backend.defaults.headers.Authorization = `Bearer ${token}`;
 
-    if (name === '' && last_name === '') {
-      const {
-        data: { data },
-      } = yield call(backend.put, 'clients', {
-        name: 'Cliente',
-        last_name: 'AMFrutas',
-        ...userData,
-      });
+    const {
+      data: { data },
+    } = yield call(backend.put, 'clients', {
+      birth,
+      ...userData,
+    });
 
-      const updatedUser = { ...data, default_address: [] };
-
-      yield put(signInSuccess(token, updatedUser));
-
-      return;
-    }
+    const updatedUser = { ...data, default_address: [] };
 
     const notSignedCart = yield select(state => state.cart.products);
 
     yield put(pushToCart([...notSignedCart]));
 
-    yield put(signInSuccess(token, user));
+    yield put(signInSuccess(token, updatedUser));
   } catch (error) {
     // console.tron.log(error);
     // console.log(error);
     // console.log('ai');
-    yield put(signFailure());
+    // o endereço cadastrado já existe
+    yield put(signUpFailure());
   }
 }
 
@@ -148,5 +148,6 @@ export function* signOut() {
 export default all([
   takeLatest('persist/REHYDRATE', setToken),
   takeLatest('@auth/SIGN_IN_REQUEST', signIn),
+  takeLatest('@auth/SIGN_UP_REQUEST', signUp),
   takeLatest('@auth/SIGN_OUT', signOut),
 ]);

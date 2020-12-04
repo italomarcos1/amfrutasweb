@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FaSpinner } from 'react-icons/fa';
 
 import {
@@ -53,6 +53,8 @@ export default function Order({ order, isOpen, setOrder }) {
   const { id, total, date, scheduledShipping, statuses } = order;
 
   const dispatch = useDispatch();
+
+  const profile = useSelector(state => state.user.profile);
 
   const [transaction, setTransaction] = useState(null);
   const [shippingAddress, setShippingAddress] = useState(null);
@@ -180,7 +182,7 @@ export default function Order({ order, isOpen, setOrder }) {
             <OrderInfo>
               <strong>Valor do pedido</strong>
               <strong>
-                <b>€ {total}</b>
+                <b>€&nbsp;{formatPrice(total)}</b>
               </strong>
             </OrderInfo>
             <OrderInfo>
@@ -226,7 +228,10 @@ export default function Order({ order, isOpen, setOrder }) {
                       <small>
                         <b>Endereço de envio</b>
                       </small>
-                      <small>Michel Oliveira</small>
+                      <small>
+                        {shippingAddress.destination_name}&nbsp;
+                        {shippingAddress.destination_last_name}
+                      </small>
                       <small>{shippingAddress.address}</small>
                       <small>
                         {shippingAddress.number} {shippingAddress.zipcode}
@@ -234,8 +239,10 @@ export default function Order({ order, isOpen, setOrder }) {
                       <small>
                         {shippingAddress.district}, {shippingAddress.city}
                       </small>
-                      <small>Portugal</small>
-                      <small>92 760 94 40</small>
+                      <small>{shippingAddress.country}</small>
+                      <small>
+                        {!!profile.phone ? profile.phone : '00 000 00 00'}
+                      </small>
                     </ShippingInfo>
                   )}
                   <ShippingInfo
@@ -264,10 +271,25 @@ export default function Order({ order, isOpen, setOrder }) {
                     <small style={{ color: '#0CB68B' }}>
                       €&nbsp;{savedPrice}
                     </small>
-                    <small style={{ color: '#F64847' }}>€&nbsp;5,12</small>
-                    <small style={{ color: '#F64847' }}>€&nbsp;10,00</small>
-                    <small>Grátis</small>
-                    <small style={{ fontFamily: 'SFProBold' }}>164,02</small>
+                    <small style={{ color: '#F64847' }}>
+                      €&nbsp;
+                      {transaction.cback_used === 0
+                        ? '0.00'
+                        : transaction.cback_used}
+                    </small>
+                    <small style={{ color: '#F64847' }}>
+                      €&nbsp;
+                      {transaction.discount === 0
+                        ? '0.00'
+                        : transaction.discount}
+                    </small>
+                    <small>
+                      €&nbsp;
+                      {transaction.shipping}.00
+                    </small>
+                    <small style={{ fontFamily: 'SFProBold' }}>
+                      €&nbsp;{transaction.total}
+                    </small>
                   </ShippingInfo>
                 </div>
               </>

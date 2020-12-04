@@ -15,10 +15,10 @@ export function signInSuccess(token, user) {
   };
 }
 
-export function signUpRequest(name, email, password) {
+export function signUpRequest(data) {
   return {
     type: '@auth/SIGN_UP_REQUEST',
-    payload: { name, email, password },
+    payload: { data },
   };
 }
 export function cancelFirstLogin() {
@@ -41,9 +41,21 @@ export function signFailure() {
   };
 }
 
+export function signUpFailure() {
+  return {
+    type: '@auth/SIGN_UP_FAILURE',
+  };
+}
+
 export function cleanLogin() {
   return {
     type: '@auth/CLEAN_LOGIN_ERROR',
+  };
+}
+
+export function cleanRegister() {
+  return {
+    type: '@auth/CLEAN_REGISTER_ERROR',
   };
 }
 

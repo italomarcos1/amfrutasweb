@@ -55,7 +55,7 @@ export default function CheckoutHeader({ active }) {
               </OptionBorder>
             </OptionContainer>
             <OptionContainer
-              disabled={active === 1}
+              disabled={active === 1 || active === 3}
               onClick={() => history.push('/entrega')}
             >
               <OptionTitle>Entrega</OptionTitle>

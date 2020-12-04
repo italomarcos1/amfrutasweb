@@ -282,6 +282,23 @@ export const SendButton = styled.button.attrs({
   }
 `;
 
+export const LoadingCoupon = styled.button.attrs({
+  type: 'button',
+})`
+  width: 308px;
+  height: 50px;
+  background: #0cb68b;
+  border-radius: 2px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    animation: ${rotate} 2s linear infinite;
+  }
+`;
+
 export const CouponIsValid = styled.button.attrs({
   type: 'button',
 })`

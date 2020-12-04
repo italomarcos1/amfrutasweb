@@ -8,6 +8,9 @@ export default {
   city: '1',
   state: '1',
   district: '1',
+  destination_name: 'fake',
+  destination_last_name: 'fake',
+  country: 'fake',
   complement: null,
   client_id: null,
 };

@@ -55,10 +55,6 @@ export default function Login({ closeModal, setPage }) {
     if (signed) closeModal();
   }, [closeModal, signed]);
 
-  useEffect(() => {
-    if (signed) closeModal();
-  }, [closeModal, signed]);
-
   const handleSubmit = useCallback(() => {
     setEmailError(false);
     setPasswordError(false);
@@ -98,11 +94,11 @@ export default function Login({ closeModal, setPage }) {
           name="password"
           title="Palavra-passe"
           placeholder="Escolhe a tua palavra-passe"
+          type="password"
           customWidth={462}
           value={password}
           onChange={({ target: { value } }) => setPassword(value)}
           style={{ marginTop: 20 }}
-          type="password"
           error={passwordError}
         />
         <ForgotPassword onClick={() => setPage('forgot')}>
