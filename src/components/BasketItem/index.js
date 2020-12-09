@@ -29,7 +29,10 @@ export default function Item({ item, index }) {
     id,
     qty,
     price,
-    product: { thumbs, title, price_promotional, has_promotion },
+    thumbs,
+    title,
+    price_promotional,
+    has_promotion,
   } = item;
 
   const dispatch = useDispatch();

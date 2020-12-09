@@ -371,7 +371,7 @@ export default function Delivery() {
       finishOrderRequest({
         shipping_address:
           deliveryOption === 'delivery' ? formattedFinalAddress : fakeAddress,
-        shippingMethod: chosenShippingMethod.id,
+        shippingMethod: deliveryOption,
         deliveryDate: formattedDeliveryDay,
         deliveryInterval,
         products: cart,
@@ -384,7 +384,6 @@ export default function Delivery() {
     deliveryOption,
     finalAddress,
     finalProfile,
-    chosenShippingMethod,
     deliveryDay,
     deliveryInterval,
   ]);

@@ -87,9 +87,16 @@ export function removeFromFavoritesSuccess(id) {
   };
 }
 
-export function updateAmount(id, qty) {
+export function updateAmountRequest(id, qty) {
   return {
-    type: '@cart/UPDATE_AMOUNT',
+    type: '@cart/UPDATE_AMOUNT_REQUEST',
+    payload: { id, qty },
+  };
+}
+
+export function updateAmountSuccess(id, qty) {
+  return {
+    type: '@cart/UPDATE_AMOUNT_SUCCESS',
     payload: { id, qty },
   };
 }

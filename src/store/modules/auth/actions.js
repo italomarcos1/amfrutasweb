@@ -64,3 +64,7 @@ export function signOut() {
     type: '@auth/SIGN_OUT',
   };
 }
+
+export function generateUuid() {
+  return { type: '@GENERATE_UUID' };
+}

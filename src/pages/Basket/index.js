@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useCookies } from 'react-cookie';
 
 import {
   Container,
@@ -21,6 +20,7 @@ import lock from '~/assets/lock.svg';
 
 import Footer from '~/components/Footer';
 import CheckoutHeader from '~/components/CheckoutHeader';
+import BasketItem from '~/components/BasketItem';
 import Item from '~/components/Item';
 import ItemsList from '~/components/ItemsList';
 import EmptyCartContainer from '~/components/EmptyCartContainer';
@@ -36,8 +36,6 @@ import { Button, SecureLogin } from '~/components/LoginModal';
 import backend from '~/services/api';
 
 export default function Basket() {
-  const [cookies, ,] = useCookies(['cart']);
-
   const { products, price, saved } = useSelector(state => state.cart);
   const signed = useSelector(state => state.auth.signed);
   const dispatch = useDispatch();
@@ -125,7 +123,7 @@ export default function Basket() {
   }, [dispatch, history, signed]);
 
   useEffect(() => {
-    setShouldntProceed(price < minValueWithdrawStore);
+    setShouldntProceed(+price < +minValueWithdrawStore);
   }, [price, minValueWithdrawStore]);
 
   return (
@@ -166,7 +164,9 @@ export default function Basket() {
                 containerHeight={708}
               >
                 {paginatedProducts.map((item, index) => {
-                  return <Item key={item.id} item={item} index={index} />;
+                  if (signed)
+                    return <Item key={item.id} item={item} index={index} />;
+                  return <BasketItem key={item.id} item={item} index={index} />;
                 })}
               </ItemsList>
             ) : (

@@ -123,6 +123,7 @@ export default function ViewProduct() {
   }, [state, pathname]);
 
   const loadShippingCost = useCallback(async () => {
+    if (!product) return;
     const price = product.has_promotion
       ? formatPrice(qty * product.price_promotional)
       : formatPrice(qty * product.price);
@@ -285,8 +286,8 @@ export default function ViewProduct() {
                       </ShippingButton>
                     </ShippingContainer>
                     <FreeShipping>
-                      Envio gratuito para compras acima de
-                      <b>€&nbsp;{minValueFreeShipping}.00</b>
+                      Envio gratuito para compras acima de&nbsp;
+                      <b>€&nbsp;{minValueFreeShipping}</b>
                     </FreeShipping>
                   </ShippingButtonContainer>
                   <ShippingButtonContainer

@@ -1,4 +1,5 @@
 import produce from 'immer';
+import uuid from 'react-uuid';
 
 const INITIAL_STATE = {
   token: null,
@@ -8,6 +9,7 @@ const INITIAL_STATE = {
   registerError: false,
   noFavorite: false,
   firstLogin: false,
+  uuid: null,
 };
 
 export default (state = INITIAL_STATE, { type, payload }) => {
@@ -34,6 +36,11 @@ export default (state = INITIAL_STATE, { type, payload }) => {
 
       case '@auth/SIGN_IN_ALPHA': {
         draft.signed = true;
+        break;
+      }
+
+      case '@GENERATE_UUID': {
+        draft.uuid = uuid();
         break;
       }
 

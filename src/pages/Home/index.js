@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
-import uuid from 'react-uuid';
 
 import {
   Container,
@@ -45,13 +43,15 @@ import whatsapp from '~/assets/whatsapp_green.svg';
 import appStore from '~/assets/appStore.svg';
 import playStore from '~/assets/playStore.svg';
 
-export default function Home() {
-  const [, setCookie] = useCookies(['cart']);
+import { generateUuid } from '~/store/modules/auth/actions';
 
+export default function Home() {
   const [deliveryModal, setDeliveryModal] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
 
   const formRef = useRef();
+
+  const dispatch = useDispatch();
 
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
@@ -77,6 +77,8 @@ export default function Home() {
   const profile = useSelector(state => state.user.profile);
   const cart = useSelector(state => state.cart.products);
   const noFavorite = useSelector(state => state.auth.noFavorite);
+  const uuid = useSelector(state => state.auth.uuid);
+
   const [toastVisible, setToastVisible] = useState(false);
 
   const firstLogin = useSelector(state => state.auth.firstLogin);
@@ -212,8 +214,11 @@ export default function Home() {
     loadData();
     loadRecommendedProducts();
     setLoading(false);
-    setCookie('teste', 'crack', { path: '/' });
   }, []);
+
+  useEffect(() => {
+    if (!uuid) dispatch(generateUuid());
+  }, [dispatch, uuid]);
 
   const handleSubmit = useCallback(
     async formData => {

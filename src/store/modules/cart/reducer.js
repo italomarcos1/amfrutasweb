@@ -68,6 +68,13 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
 
       case '@cart/PUSH_TO_CART': {
         draft.products = payload.products;
+
+        const { formattedPrice, formattedSavedPrice } = calculatePrice(
+          draft.products
+        );
+
+        draft.price = formattedPrice;
+        draft.saved = formattedSavedPrice;
         break;
       }
 
@@ -142,7 +149,7 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
         break;
       }
 
-      case '@cart/UPDATE_AMOUNT': {
+      case '@cart/UPDATE_AMOUNT_SUCCESS': {
         const { id, qty } = payload;
 
         const productIndex = draft.products.findIndex(

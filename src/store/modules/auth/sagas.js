@@ -1,4 +1,5 @@
 import { call, put, all, select, takeLatest } from 'redux-saga/effects';
+import uuid from 'react-uuid';
 
 import backend from '~/services/api';
 
@@ -12,15 +13,21 @@ import { populateAddresses } from '~/store/modules/addresses/actions';
 
 export function* signIn({ payload }) {
   const { email, password } = payload;
+  const sessionUuid = yield select(s => s.auth.uuid);
 
   try {
     const response = yield call(backend.post, 'auth/login', {
+      uuid: sessionUuid,
       email,
       password,
     });
-    const { token, user } = response.data.data;
+    const { token, user, cart } = response.data.data;
 
-    const { name, last_name } = user;
+    const { name, last_name, uuid: userUuid } = user;
+
+    let newUuid;
+    if (!userUuid) newUuid = sessionUuid;
+    else newUuid = userUuid;
 
     backend.defaults.headers.Authorization = `Bearer ${token}`;
 
@@ -40,29 +47,38 @@ export function* signIn({ payload }) {
       } = yield call(backend.put, 'clients', {
         name: 'Cliente',
         last_name: 'AMFrutas',
+        uuid: newUuid,
       });
 
-      const updatedUser = { ...data, default_address: [] };
+      const updatedUser = {
+        ...data,
+        uuid: newUuid,
+        default_address: [],
+      };
 
       yield put(signInSuccess(token, updatedUser));
 
       return;
     }
 
-    const notSignedCart = yield select(state => state.cart.products);
+    yield call(backend.put, 'clients', {
+      uuid: newUuid,
+    });
 
-    const responseData = yield call(backend.get, '/cart');
+    if (!!cart) {
+      const cartWithoutOptions = cart.products.map(c => {
+        return {
+          rowId: c.rowId,
+          id: c.id,
+          qty: c.qty,
+          name: c.name,
+          price: c.price,
+          product: c.options.product,
+        };
+      });
 
-    const {
-      data: {
-        data,
-        meta: { message: cartMessage },
-      },
-    } = responseData;
-
-    if (cartMessage === 'Não há produtos no cesto') {
-      yield put(pushToCart([...notSignedCart]));
-    } else yield put(pushToCart([...data.products, ...notSignedCart]));
+      yield put(pushToCart(cartWithoutOptions));
+    }
 
     const addressesData = yield call(backend.get, '/clients/addresses');
 
@@ -77,7 +93,9 @@ export function* signIn({ payload }) {
       yield put(populateAddresses([]));
     } else yield put(populateAddresses([...addresses]));
 
-    yield put(signInSuccess(token, user));
+    const userWithUuid = { ...user, uuid: newUuid };
+
+    yield put(signInSuccess(token, userWithUuid));
   } catch (error) {
     // console.tron.log(error);
     // console.log(error);
@@ -108,18 +126,21 @@ export function* signUp({ payload }) {
 
     backend.defaults.headers.Authorization = `Bearer ${token}`;
 
+    const userUuid = uuid();
+
     const {
       data: { data },
     } = yield call(backend.put, 'clients', {
       birth,
+      uuid: userUuid,
       ...userData,
     });
 
-    const updatedUser = { ...data, default_address: [] };
+    const updatedUser = { ...data, default_address: [], uuid: userUuid };
 
-    const notSignedCart = yield select(state => state.cart.products);
+    // const notSignedCart = yield select(state => state.cart.products);
 
-    yield put(pushToCart([...notSignedCart]));
+    // yield put(pushToCart([...notSignedCart]));
 
     yield put(signInSuccess(token, updatedUser));
   } catch (error) {

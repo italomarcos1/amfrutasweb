@@ -8,6 +8,7 @@
       loginError: false,
       noFavorite: false,
       firstLogin: false,
+      uuid: null,
     },
     user: {
       profile: null,
@@ -16,7 +17,7 @@
       product: null,
       category: null,
       finalProfile: null,
-      active: ''
+      active: '',
     },
     cart: {
       products: [],

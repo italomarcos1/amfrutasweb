@@ -37,7 +37,7 @@ import Footer from '~/components/Footer';
 import { Button } from '~/components/LoginModal';
 
 import CheckoutHeader from '~/components/CheckoutHeader';
-import Item from '~/components/CheckoutItem';
+import Item from '~/components/ConfirmationItem';
 import PeriodicDeliveryListItem from '~/components/PeriodicDeliveryListItem';
 import ItemsList from '~/components/ItemsList';
 
@@ -94,12 +94,6 @@ export default function Confirmation() {
       dispatch(knightFall());
     };
   }, []);
-
-  useEffect(() => {
-    return () => {
-      dispatch(knightFall());
-    };
-  }, [dispatch]);
 
   const handlePagination = useCallback(() => {
     if (!orderInfo) return;
@@ -240,9 +234,13 @@ export default function Confirmation() {
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
             >
-              {paginatedProducts.map((item, index) => (
-                <Item key={item.id} item={item} index={index} />
-              ))}
+              {paginatedProducts.length !== 0 ? (
+                paginatedProducts.map((item, index) => (
+                  <Item key={item.id} item={item} index={index} />
+                ))
+              ) : (
+                <h1>Carregando...</h1>
+              )}
             </ItemsList>
           </div>
           <div>
