@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 
 import PropTypes from 'prop-types';
 
@@ -26,6 +27,7 @@ export default function CheckoutHeader({ active }) {
   const cart = useSelector(state => state.cart.products);
   const history = useHistory();
   const dispatch = useDispatch();
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
 
   const [
     shouldNotAccessConfirmation,

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useMediaQuery } from 'react-responsive';
 
 import {
   Container,
@@ -20,6 +21,7 @@ import lock from '~/assets/lock.svg';
 
 import Footer from '~/components/Footer';
 import CheckoutHeader from '~/components/CheckoutHeader';
+import CheckoutHeaderMobile from '~/components/CheckoutHeaderMobile';
 import BasketItem from '~/components/BasketItem';
 import Item from '~/components/Item';
 import ItemsList from '~/components/ItemsList';
@@ -40,6 +42,7 @@ export default function Basket() {
   const signed = useSelector(state => state.auth.signed);
   const dispatch = useDispatch();
   const history = useHistory();
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
 
   const [paginatedProducts, setPaginatedProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -128,7 +131,11 @@ export default function Basket() {
 
   return (
     <>
-      <CheckoutHeader active={1} />
+      {isDesktop ? (
+        <CheckoutHeader active={1} />
+      ) : (
+        <CheckoutHeaderMobile active={1} />
+      )}
       {loginModal && <LoginModal closeModal={() => setLoginModal(false)} />}
       {toastVisible && (
         <Toast
@@ -137,11 +144,11 @@ export default function Basket() {
         />
       )}
       <Container>
-        <Content>
+        <Content isDesktop={isDesktop}>
           <div>
             <Title>Cesto de Compras</Title>
             {shouldntProceed && (
-              <MinValueContainer>
+              <MinValueContainer isDesktop={isDesktop}>
                 <MinValue>
                   De momento o valor mínimo para encomendas é de €&nbsp;
                   {minValueWithdrawStore}
