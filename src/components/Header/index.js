@@ -99,23 +99,27 @@ export default function PageHeader({ login, active }) {
     <>
       <Header>
         <HeaderContent isDesktop={isDesktop}>
-          <img
-            src={fruits1}
-            alt="Fruits"
-            style={{
-              marginTop: 10,
-            }}
-          />
+          {isDesktop && (
+            <img
+              src={fruits1}
+              alt="Fruits"
+              style={{
+                marginTop: 10,
+              }}
+            />
+          )}
           <Link to="/" style={{ marginLeft: 20, marginRight: 20 }}>
             <img src={Logo} alt="Logo" />
           </Link>
-          <img
-            src={fruits2}
-            alt="Fruits"
-            style={{
-              marginTop: 10,
-            }}
-          />
+          {isDesktop && (
+            <img
+              src={fruits2}
+              alt="Fruits"
+              style={{
+                marginTop: 10,
+              }}
+            />
+          )}
         </HeaderContent>
       </Header>
       <Menu style={headerFixed ? { position: 'fixed', top: 0 } : {}}>
