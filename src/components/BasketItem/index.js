@@ -62,7 +62,7 @@ export default function Item({ item, index }) {
     [id, dispatch]
   );
 
-  // console.log(item);
+  console.log(item);
   return (
     <Container key={id} style={index > 1 ? { marginTop: 40 } : {}}>
       <div style={{ display: 'flex', flexDirection: 'row' }}>

@@ -170,11 +170,9 @@ export default function Basket() {
                 setCurrentPage={setCurrentPage}
                 containerHeight={708}
               >
-                {paginatedProducts.map((item, index) => {
-                  if (signed)
-                    return <Item key={item.id} item={item} index={index} />;
-                  return <BasketItem key={item.id} item={item} index={index} />;
-                })}
+                {paginatedProducts.map((item, index) => (
+                  <Item key={item.id} item={item} index={index} />
+                ))}
               </ItemsList>
             ) : (
               <EmptyCartContainer message="Seu cesto de compras está vazio." />
