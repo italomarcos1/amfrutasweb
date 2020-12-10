@@ -1,4 +1,4 @@
-import { call, put, all, takeLatest, select } from 'redux-saga/effects';
+import { call, put, all, takeLatest } from 'redux-saga/effects';
 
 import backend from '~/services/api';
 

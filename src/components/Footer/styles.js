@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const TopFooter = styled.div`
   width: 100%;
-  height: 212px;
+  height: ${({ isDesktop }) => (isDesktop ? 212 : 414)}px;
   background-color: #f8f9fb;
   padding: 25px 0;
   display: flex;
@@ -17,8 +17,10 @@ export const TopFooter = styled.div`
 
 export const ItemsContainer = styled.div`
   display: flex;
-  width: 741px;
-  height: 81px;
+  flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
+  width: ${({ isDesktop }) => (isDesktop ? '741px' : '100%')};
+  height: ${({ isDesktop }) => (isDesktop ? 81 : 283)}px;
+  align-items: flex-start;
   margin: 28px auto 0;
 `;
 
@@ -28,8 +30,11 @@ export const Item = styled.div`
 
   border-left: 8px solid #0cb68b;
 
+  margin-left: ${({ isDesktop }) => (isDesktop ? 0 : 60)}px;
+
   & + div {
-    margin-left: 80px;
+    margin-left: ${({ isDesktop }) => (isDesktop ? 80 : 60)}px;
+    margin-top: ${({ isDesktop }) => (isDesktop ? 0 : 20)}px;
   }
 
   span {
@@ -58,10 +63,11 @@ export const Item = styled.div`
 
 export const BottomFooter = styled.div`
   width: 100%;
-  height: 65px;
+  height: ${({ isDesktop }) => (isDesktop ? 65 : 200)}px;
   background-color: #0cb68b;
-  padding: 0 212px 0 237px;
-
+  display: flex;
+  flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
+  padding: ${({ isDesktop }) => (isDesktop ? '0 212px 0 237px' : '20px 0')};
   text-align: center;
   letter-spacing: 0px;
   color: #fff;
@@ -73,8 +79,10 @@ export const BottomFooter = styled.div`
 `;
 
 export const BottomFooterContent = styled.div`
-  width: 850px;
-  height: 65px;
+  width: ${({ isDesktop }) => (isDesktop ? '850px' : '100%')};
+  height: ${({ isDesktop }) => (isDesktop ? 65 : 200)}px;
+  flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
+
   display: flex;
   align-items: center;
   justify-content: space-between;

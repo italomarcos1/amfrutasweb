@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 
 import {
   Container,
@@ -18,6 +19,7 @@ import {
   Promotions,
   PromotionsSubTitle,
   SendButton,
+  SectionForm,
 } from './styles';
 
 import { nameIsValid, mailIsValid, dateIsValid } from '~/utils/validation';
@@ -46,6 +48,8 @@ import playStore from '~/assets/playStore.svg';
 import { generateUuid } from '~/store/modules/auth/actions';
 
 export default function Home() {
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
+
   const [deliveryModal, setDeliveryModal] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
 
@@ -274,16 +278,16 @@ export default function Home() {
     <>
       <Header login={() => setLoginModal(true)} />
       <Container onSubmit={handleSubmit} ref={formRef}>
-        <SlideShow data={bannersURL} />
-        <OptionsContainer>
-          <Option href="#" rel="noreferrer">
+        {isDesktop && <SlideShow data={bannersURL} />}{' '}
+        <OptionsContainer isDesktop={isDesktop}>
+          <Option href="#" rel="noreferrer" isDesktop={isDesktop}>
             <img src={envio} alt="Envio Gratuito" />
             <div>
               <strong>Envio Gratuito</strong>
               <small>Para compras acima de € 50,00</small>
             </div>
           </Option>
-          <Option href="#" rel="noreferrer">
+          <Option href="#" rel="noreferrer" isDesktop={isDesktop}>
             <img src={cashback} alt="Cashback" />
             <div>
               <strong>Cashback</strong>
@@ -293,6 +297,7 @@ export default function Home() {
           <Option
             href="https://api.whatsapp.com/send?phone=351910457768"
             rel="noreferrer"
+            isDesktop={isDesktop}
             target="_blank"
           >
             <img src={whatsapp} alt="WhatsApp" />
@@ -302,7 +307,7 @@ export default function Home() {
             </div>
           </Option>
         </OptionsContainer>
-        <SectionTitle>
+        <SectionTitle isDesktop={isDesktop}>
           <strong>Produtos recomendados para ti</strong>
           <small>Uma seleção especial com a qualidade garantida</small>
         </SectionTitle>
@@ -315,13 +320,17 @@ export default function Home() {
             ))
           )}
         </ProductsContainer>
-        <SecurityContainer>
+        <SecurityContainer isDesktop={isDesktop}>
           <span>
             Segurança:&nbsp;
-            <b>Pague somente na entrega!</b>
+            <b>
+              Pague
+              {isDesktop ? ' ' : <br />}
+              somente na entrega!
+            </b>
           </span>
         </SecurityContainer>
-        <SectionTitle>
+        <SectionTitle isDesktop={isDesktop}>
           <strong>Mais vendidos</strong>
           <small>Conheça os produtos mais vendidos todos os dias</small>
         </SectionTitle>
@@ -334,12 +343,17 @@ export default function Home() {
             ))
           )}
         </ProductsContainer>
-        <SecurityContainer style={{ height: 166 }}>
+        <SecurityContainer
+          style={isDesktop ? { height: 166 } : { height: 246 }}
+          isDesktop={isDesktop}
+        >
           <span>
-            Encomende com o App AM Frutas:&nbsp;
+            Encomende com
+            {isDesktop ? ' ' : <br />}o App AM Frutas:
+            {isDesktop ? ' ' : <br />}
             <b>Notificação na Entrega</b>
           </span>
-          <StoreButtonContainer>
+          <StoreButtonContainer isDesktop={isDesktop}>
             <StoreButton
               href="https://apps.apple.com/pt/app/am-frutas/id1522622759"
               rel="noreferrer"
@@ -356,13 +370,12 @@ export default function Home() {
             </StoreButton>
           </StoreButtonContainer>
         </SecurityContainer>
-
-        <Section>
+        <Section isDesktop={isDesktop}>
           {sellerPoints.map(seller =>
             seller === null ? (
-              <NullLocation />
+              <NullLocation isDesktop={isDesktop} />
             ) : (
-              <Location key={seller.id}>
+              <Location key={seller.id} isDesktop={isDesktop}>
                 <h1>{seller.name}</h1>
                 <p>{seller.address}</p>
                 <p>
@@ -385,11 +398,14 @@ export default function Home() {
           )}
         </Section>
         <CategoriesCarousel categories={categories} />
-        <SectionTitle>
+        <SectionTitle isDesktop={isDesktop}>
           <strong>Blog</strong>
           <small>Dicas de receitas com frutas e verduras</small>
         </SectionTitle>
-        <Section style={{ height: 332 }}>
+        <Section
+          style={isDesktop ? { height: 332 } : { height: 1505 }}
+          isDesktop={isDesktop}
+        >
           {blogData.map(post => (
             <BlogPost
               key={post.id}
@@ -406,22 +422,30 @@ export default function Home() {
         </Section>
         <Promotions>Receba promoções exclusivas</Promotions>
         <PromotionsSubTitle>
-          Deixe o seu e-mail e receba promoções e descontos <br />
+          Deixe o seu e-mail e receba promoções e{isDesktop ? ' ' : <br />}
+          descontos {isDesktop && <br />}
           exclusivos.
         </PromotionsSubTitle>
-        <Section
-          style={{
-            height: 50,
-            marginTop: 42,
-            width: 915,
-            justifyContent: 'flex-start',
-          }}
-        >
-          <Input name="name" error={invalidFields[0]} placeholder="Nome" />
+        <SectionForm isDesktop={isDesktop}>
+          <Input
+            name="name"
+            error={invalidFields[0]}
+            placeholder="Nome"
+            inputStyle={
+              isDesktop
+                ? { width: 221, marginLeft: 0 }
+                : { width: '100%', marginLeft: 0 }
+            }
+          />
           <Input
             name="last_name"
             error={invalidFields[1]}
             placeholder="Apelido"
+            inputStyle={
+              isDesktop
+                ? { width: 221 }
+                : { marginTop: 20, width: '100%', marginLeft: 0 }
+            }
           />
           <InputMask
             name="birthday"
@@ -429,23 +453,61 @@ export default function Home() {
             placeholder="Data de Nascimento"
             value={birthday}
             onChange={({ target: { value } }) => setBirthDate(value)}
+            inputStyle={isDesktop ? { width: 221 } : { width: '100%' }}
+            style={
+              isDesktop
+                ? { marginLeft: 20 }
+                : { marginTop: 20, width: '100%', marginLeft: 0 }
+            }
           />
-          <div style={{ display: 'flex', marginLeft: 20 }}>
+          <div
+            style={
+              isDesktop
+                ? { display: 'flex', marginLeft: 20 }
+                : {
+                    display: 'flex',
+                    width: '100%',
+                    flexDirection: 'column',
+                    marginTop: 20,
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    height: 130,
+                    padding: 0,
+                  }
+            }
+          >
             <Input
               name="email"
               placeholder="Email"
-              style={{
-                width: 274,
-                borderTopRightRadius: 0,
-                borderBottomRightRadius: 0,
-              }}
+              inputStyle={
+                isDesktop
+                  ? {
+                      width: 221,
+                      borderTopRightRadius: 0,
+                      borderBottomRightRadius: 0,
+                    }
+                  : { width: '100%', margin: 0 }
+              }
               value={email}
               onChange={({ target: { value } }) => onlyValues(value, setEmail)}
               error={invalidFields[3] || emailError}
             />
-            <SendButton type="submit">Enviar</SendButton>
+            <SendButton
+              type="submit"
+              isDesktop={isDesktop}
+              style={
+                isDesktop
+                  ? {}
+                  : {
+                      width: '100%',
+                      marginLeft: 0,
+                    }
+              }
+            >
+              <strong>Enviar</strong>
+            </SendButton>
           </div>
-        </Section>
+        </SectionForm>
       </Container>
       <Footer />
       {deliveryModal && (

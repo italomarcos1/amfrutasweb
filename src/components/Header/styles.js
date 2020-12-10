@@ -14,7 +14,7 @@ export const HeaderContent = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 862px;
+  width: ${({ isDesktop }) => (isDesktop ? '862px' : '100%')};
   height: 71px;
   margin: 0 auto;
   /* position: relative; */
@@ -30,7 +30,8 @@ export const Menu = styled.div`
 `;
 
 export const MenuContent = styled.div`
-  width: 1122px;
+  width: ${({ isDesktop }) => (isDesktop ? '1122px' : '100%')};
+  padding: ${({ isDesktop }) => (isDesktop ? 0 : '0 10px')};
   height: 41px;
   margin: 0 auto;
   display: flex;
@@ -112,7 +113,8 @@ export const BadgeContainer = styled.span`
 
 export const SubTitle = styled.div`
   width: 100%;
-  height: 40px;
+  height: ${({ isDesktop }) => (isDesktop ? 40 : 108)}px;
+  padding: 0 16px;
   background-color: #ededed;
   text-align: center;
   display: flex;

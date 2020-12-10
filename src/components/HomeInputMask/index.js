@@ -138,6 +138,7 @@ export default function CustomInput({
       onFocus={() => setActive(true)}
       onBlur={() => setActive(false)}
       error={error}
+      style={style}
     >
       <ReactInputMask
         name={name}

@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useScrollYPosition } from 'react-use-scroll-position';
+import { useMediaQuery } from 'react-responsive';
 
 import { useSelector } from 'react-redux';
 
@@ -24,6 +25,7 @@ import fruits1 from '~/assets/fruits-1@2x.png';
 import fruits2 from '~/assets/fruits-2@2x.png';
 
 import home from '~/assets/home.svg';
+import menu from '~/assets/menu.svg';
 import search from '~/assets/search.svg';
 import bag from '~/assets/bag.svg';
 import user from '~/assets/user-check.svg';
@@ -31,6 +33,7 @@ import user from '~/assets/user-check.svg';
 import backend from '~/services/api';
 
 export default function PageHeader({ login, active }) {
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
   const [selectedPage, setSelectedPage] = useState(active);
 
   const signed = useSelector(state => state.auth.signed);
@@ -95,7 +98,7 @@ export default function PageHeader({ login, active }) {
   return (
     <>
       <Header>
-        <HeaderContent>
+        <HeaderContent isDesktop={isDesktop}>
           <img
             src={fruits1}
             alt="Fruits"
@@ -116,12 +119,24 @@ export default function PageHeader({ login, active }) {
         </HeaderContent>
       </Header>
       <Menu style={headerFixed ? { position: 'fixed', top: 0 } : {}}>
-        <MenuContent>
+        <MenuContent isDesktop={isDesktop}>
+          {!isDesktop && (
+            <MenuItemButton
+              selected={selectedPage === 'Menu'}
+              onClick={() => {
+                setSelectedPage('Menu');
+                // history.push('/produtos');
+              }}
+            >
+              <img src={menu} alt="search" />
+            </MenuItemButton>
+          )}
           <MenuItem selected={pathname === '/'} to="/">
             <img src={home} alt="home" />
           </MenuItem>
 
           {!loading &&
+            isDesktop &&
             menuItems.map(({ id, name, url }) => (
               <MenuItem
                 key={id}
@@ -182,7 +197,10 @@ export default function PageHeader({ login, active }) {
           </GoToCartContainer>
         </MenuContent>
       </Menu>
-      <SubTitle style={headerFixed ? { position: 'fixed', top: 41 } : {}}>
+      <SubTitle
+        isDesktop={isDesktop}
+        style={headerFixed ? { position: 'fixed', top: 41 } : {}}
+      >
         {headerAlertMessage}
       </SubTitle>
     </>

@@ -13,9 +13,10 @@ export const Container = styled(Form)`
 
 export const OptionsContainer = styled.div`
   display: flex;
-  width: 1240px;
+  flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
+  width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
   justify-content: space-between;
-  height: 106px;
+  height: ${({ isDesktop }) => (isDesktop ? 106 : 388)}px;
   margin: 21px auto 0;
 `;
 
@@ -32,7 +33,7 @@ export const SecurityContainer = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  width: 1240px;
+  width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
   height: 89px;
   background-color: #f2f2f2;
   margin: 30px auto 0;
@@ -42,17 +43,20 @@ export const SecurityContainer = styled.div`
   color: #2b2b2b;
   opacity: 1;
 
-  font-size: 30px;
-  line-height: 39px;
+  font-size: ${({ isDesktop }) => (isDesktop ? '30px' : '22px')};
+  line-height: ${({ isDesktop }) => (isDesktop ? '39px' : '26px')};
+
   font-family: 'SFPro';
 `;
 
 export const StoreButtonContainer = styled.div`
   display: flex;
-  width: 343px;
-  height: 50px;
+  width: ${({ isDesktop }) => (isDesktop ? '343px' : '100%')};
+  flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
+  height: ${({ isDesktop }) => (isDesktop ? 50 : 110)}px;
   justify-content: space-between;
-  margin-top: 19px;
+  align-items: center;
+  margin-top: ${({ isDesktop }) => (isDesktop ? 20 : 40)}px;
 `;
 
 export const StoreButton = styled.a`
@@ -62,7 +66,7 @@ export const StoreButton = styled.a`
 `;
 
 export const Option = styled.a`
-  width: 380px;
+  width: ${({ isDesktop }) => (isDesktop ? '380px' : '100%')};
   height: 106px;
   background-color: #fff;
   border: 1px solid #e0e0e0;
@@ -70,7 +74,7 @@ export const Option = styled.a`
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  padding: 24px 36px;
+  padding: ${({ isDesktop }) => (isDesktop ? '24px 36px' : '12px 18px')};
   align-items: center;
 
   img {
@@ -107,13 +111,14 @@ export const Option = styled.a`
 export const SectionTitle = styled.div`
   display: block;
   text-align: left;
-  width: 1240px;
+  width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
+
   margin: 35px auto 0;
 
   strong {
     font-weight: normal;
-    font-size: 22px;
-    line-height: 29px;
+    font-size: ${({ isDesktop }) => (isDesktop ? '22px' : '20px')};
+    line-height: ${({ isDesktop }) => (isDesktop ? '29px' : '22px')};
     font-family: 'SFProBold';
     letter-spacing: 0px;
     color: #000;
@@ -121,7 +126,8 @@ export const SectionTitle = styled.div`
 
   small {
     display: block;
-    margin-top: 2.5px;
+    margin-top: ${({ isDesktop }) => (isDesktop ? '2.5px' : '7.5px')};
+
     font-size: 15px;
     line-height: 20px;
     font-family: 'SFPro';
@@ -131,21 +137,34 @@ export const SectionTitle = styled.div`
 `;
 
 export const Section = styled.div`
-  width: 1240px;
-  height: 398px;
+  width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
+  height: ${({ isDesktop }) => (isDesktop ? 398 : 1264)}px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
   border-radius: 4px;
   margin: 30px auto 0;
 `;
 
+export const SectionForm = styled.div`
+  width: ${({ isDesktop }) => (isDesktop ? '915px' : '100%')};
+  height: ${({ isDesktop }) => (isDesktop ? 50 : 400)}px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
+  border-radius: 4px;
+  margin: 42px auto 0;
+`;
+
 export const Location = styled.div`
-  width: 400px;
+  width: ${({ isDesktop }) => (isDesktop ? '400px' : '100%')};
   height: 398px;
   background-color: #20b78c;
   border-radius: 4px;
-  padding: 25.5px 62px 25.5px;
+  padding: ${({ isDesktop }) => (isDesktop ? '25.5px 62px' : '25.5px 31px')};
+
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -181,7 +200,8 @@ export const Location = styled.div`
   }
 
   a {
-    width: 241.24px;
+    width: ${({ isDesktop }) => (isDesktop ? '241.24px' : '100%')};
+
     height: 38px;
     margin-top: 20px;
 
@@ -209,7 +229,7 @@ export const Location = styled.div`
 `;
 
 export const NullLocation = styled.div`
-  width: 400px;
+  width: ${({ isDesktop }) => (isDesktop ? '400px' : '100%')};
   height: 398px;
   background-color: #20b78c;
   border-radius: 4px;
@@ -293,16 +313,21 @@ export const SendButton = styled.button`
   border-radius: 2px;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
-  font-family: 'SFPro';
-  font-size: 15px;
-  line-height: 18px;
-  letter-spacing: 0px;
-  color: #fff;
+
   display: flex;
   align-items: center;
   justify-content: center;
 
   &:hover {
     background-color: ${darken('0.15', '#0cb68b')};
+  }
+  strong {
+    font-weight: normal;
+    font-family: 'SFPro';
+    font-size: ${({ isDesktop }) => (isDesktop ? 15 : 18)}px;
+    line-height: 18px;
+    height: 18px;
+    letter-spacing: 0px;
+    color: #fff;
   }
 `;

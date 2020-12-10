@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 
 import {
   TopFooter,
@@ -18,6 +19,8 @@ import google from '~/assets/google.svg';
 import backend from '~/services/api';
 
 export default function Footer() {
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
+
   const [firstColumn, setFirstColumn] = useState([null, null, null]);
   const [secondColumn, setSecondColumn] = useState([null, null]);
   const [thirdColumn, setThirdColumn] = useState([null, null]);
@@ -57,10 +60,10 @@ export default function Footer() {
 
   return (
     <>
-      <TopFooter>
+      <TopFooter isDesktop={isDesktop}>
         <img src={logo} alt="" style={{ width: 233, height: 52 }} />
-        <ItemsContainer>
-          <Item>
+        <ItemsContainer isDesktop={isDesktop}>
+          <Item isDesktop={isDesktop}>
             <span>
               {firstColumn.map(item =>
                 item === null ? (
@@ -77,7 +80,7 @@ export default function Footer() {
               )}
             </span>
           </Item>
-          <Item>
+          <Item isDesktop={isDesktop}>
             <span>
               {secondColumn.map(item =>
                 item === null ? (
@@ -94,7 +97,7 @@ export default function Footer() {
               )}
             </span>
           </Item>
-          <Item>
+          <Item isDesktop={isDesktop}>
             <span>
               {thirdColumn.map(item =>
                 item === null ? (
@@ -114,8 +117,8 @@ export default function Footer() {
           </Item>
         </ItemsContainer>
       </TopFooter>
-      <BottomFooter>
-        <BottomFooterContent>
+      <BottomFooter isDesktop={isDesktop}>
+        <BottomFooterContent isDesktop={isDesktop}>
           <small>{!!social ? social.social_nif : ''}</small>
           <div>
             <a

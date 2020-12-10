@@ -96,7 +96,6 @@ export function* updateAmount({ payload }) {
   try {
     const profile = yield select(state => state.user.profile);
     const signed = yield select(state => state.auth.signed);
-    const token = yield select(state => state.auth.token);
     const notSignedUuid = yield select(state => state.auth.uuid);
     const products = yield select(state => state.cart.products);
     const { id, qty } = payload;
@@ -105,7 +104,7 @@ export function* updateAmount({ payload }) {
       return p.id === id;
     });
 
-    const { rowId, qty: currentQty } = products[findIndex];
+    const { rowId } = products[findIndex];
 
     let newUuid;
     newUuid = profile !== null ? profile.uuid : null;
