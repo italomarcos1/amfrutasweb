@@ -6,7 +6,7 @@ export const SectionTitleMenu = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 1240px;
+  width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
   margin: 35px auto 0;
   height: 55px;
 `;
@@ -22,18 +22,22 @@ export const MenuButtons = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 42px;
-    height: 42px;
+    width: ${({ isDesktop }) => (isDesktop ? 42 : 29.4)}px;
+    height: ${({ isDesktop }) => (isDesktop ? 42 : 29.4)}px;
     border-radius: 50%;
     border: 3px solid #393939;
     background: none;
+
+    & + button {
+      margin-left: 10px;
+    }
   }
 `;
 
 export const SectionTitle = styled.div`
   display: block;
   text-align: left;
-  width: 1240px;
+  width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
   margin: 35px auto 0;
 
   strong {
@@ -57,7 +61,7 @@ export const SectionTitle = styled.div`
 `;
 
 export const Categories = styled(Carousel)`
-  width: 1240px;
+  width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
   height: 168px;
   display: flex;
   align-items: center;
@@ -72,11 +76,13 @@ export const Category = styled(Link)`
   flex-direction: column;
   justify-content: flex-start;
   height: 168px;
-  width: 114px;
+
+  width: ${({ isDesktop }) => (isDesktop ? 114 : 80)}px;
 
   img {
-    height: 114px;
-    width: 114px;
+    width: ${({ isDesktop }) => (isDesktop ? 114 : 80)}px;
+    height: ${({ isDesktop }) => (isDesktop ? 114 : 80)}px;
+
     border-radius: 50%;
   }
 

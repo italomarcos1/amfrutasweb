@@ -311,7 +311,14 @@ export default function Home() {
           <strong>Produtos recomendados para ti</strong>
           <small>Uma seleção especial com a qualidade garantida</small>
         </SectionTitle>
-        <ProductsContainer>
+        <ProductsContainer
+          itemsToShow={isDesktop ? 6 : 1}
+          showArrows={false}
+          pagination={false}
+          autoPlay={isDesktop ? 0 : 1500}
+          enableAutoPlay={!isDesktop}
+          isDesktop={isDesktop}
+        >
           {loading ? (
             <h1>Carregando...</h1>
           ) : (
@@ -334,7 +341,14 @@ export default function Home() {
           <strong>Mais vendidos</strong>
           <small>Conheça os produtos mais vendidos todos os dias</small>
         </SectionTitle>
-        <ProductsContainer>
+        <ProductsContainer
+          itemsToShow={isDesktop ? 6 : 1}
+          showArrows={false}
+          pagination={false}
+          autoPlay={isDesktop ? 0 : 1500}
+          enableAutoPlay={!isDesktop}
+          isDesktop={isDesktop}
+        >
           {loading ? (
             <h1>Carregando...</h1>
           ) : (
@@ -397,7 +411,7 @@ export default function Home() {
             )
           )}
         </Section>
-        <CategoriesCarousel categories={categories} />
+        <CategoriesCarousel categories={categories} isDesktop={isDesktop} />
         <SectionTitle isDesktop={isDesktop}>
           <strong>Blog</strong>
           <small>Dicas de receitas com frutas e verduras</small>

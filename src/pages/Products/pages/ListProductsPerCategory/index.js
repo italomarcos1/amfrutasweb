@@ -44,14 +44,7 @@ export default function ListProductsPerCategory() {
 
     const {
       data: {
-        data: {
-          data,
-          per_page,
-          current_page,
-          last_page,
-          next_page_url,
-          prev_page_url,
-        },
+        data: { data, current_page, last_page, next_page_url, prev_page_url },
       },
     } = productsResponse;
 
@@ -81,7 +74,7 @@ export default function ListProductsPerCategory() {
       if (searchInput === '') return;
       setLoading(true);
       const productsResponse = await backend.get(
-        `ecommerce/products/search/${searchInput}?category_id=${state.id}&page=${currentPage}&special_order=${field}`
+        `ecommerce/products/search/${searchInput}?page=${currentPage}&special_order=${field}`
       );
 
       const {
@@ -126,7 +119,7 @@ export default function ListProductsPerCategory() {
       setLoading(false);
       alert('Erro');
     }
-  }, [currentPage, field, state, searchInput]);
+  }, [currentPage, field, searchInput]);
 
   useEffect(() => {
     window.scrollTo(0, 0);

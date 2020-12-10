@@ -64,7 +64,6 @@ export default function ListProducts() {
     setCurrentPage(current_page);
     setLastPage(last_page);
     setNextPageUrl(next_page_url);
-    setPrevPageUrl(prev_page_url);
   }, [currentPage, field, searchInput]);
 
   const searchProduct = useCallback(async () => {
