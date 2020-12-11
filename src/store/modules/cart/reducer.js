@@ -84,6 +84,12 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
         break;
       }
 
+      case '@cart/FINISH_ORDER_FAILURE': {
+        draft.processingOrder = false;
+
+        break;
+      }
+
       case '@user/SET_ORDER': {
         draft.orderFinished = true;
         draft.processingOrder = false;

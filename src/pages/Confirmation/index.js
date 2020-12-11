@@ -274,7 +274,11 @@ export default function Confirmation() {
               <CheckoutItem>
                 <h1>Porte</h1>
                 <h2 style={{ color: '#0CB68B' }}>
-                  €&nbsp;{!!orderInfo ? `${orderInfo.shipping}.00` : '0.00'}
+                  {!!orderInfo
+                    ? orderInfo.shipping !== 0
+                      ? `€ ${orderInfo.shipping}.00`
+                      : 'Grátis'
+                    : '---'}
                 </h2>
               </CheckoutItem>
               <CheckoutItem>

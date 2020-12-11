@@ -93,7 +93,12 @@ export function* signIn({ payload }) {
       yield put(populateAddresses([]));
     } else yield put(populateAddresses([...addresses]));
 
-    const userWithUuid = { ...user, uuid: newUuid };
+    let userWithUuid = { ...user, uuid: newUuid };
+
+    if (typeof user.default_address !== 'undefined') {
+      // the variable is defined
+      userWithUuid = { ...userWithUuid, default_address: [] };
+    }
 
     yield put(signInSuccess(token, userWithUuid));
   } catch (error) {
@@ -106,6 +111,7 @@ export function* signIn({ payload }) {
 
 export function* signUp({ payload }) {
   const { data: userData } = payload;
+  const sessionUuid = yield select(s => s.auth.uuid);
 
   const {
     name,
@@ -117,26 +123,23 @@ export function* signUp({ payload }) {
 
   try {
     const response = yield call(backend.post, 'auth/login', {
+      uuid: sessionUuid,
       name,
       last_name,
       email,
       password,
     });
-    const { token } = response.data.data;
+    const { token, user } = response.data.data;
 
     backend.defaults.headers.Authorization = `Bearer ${token}`;
-
-    const userUuid = uuid();
 
     const {
       data: { data },
     } = yield call(backend.put, 'clients', {
       birth,
-      uuid: userUuid,
-      ...userData,
     });
 
-    const updatedUser = { ...data, default_address: [], uuid: userUuid };
+    const updatedUser = { ...user, default_address: [] };
 
     // const notSignedCart = yield select(state => state.cart.products);
 

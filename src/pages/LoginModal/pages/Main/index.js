@@ -1,57 +1,116 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import AppleLogin from 'react-apple-login';
 
+import backend from '~/services/api';
+
 import { Button, SecureLogin, Title } from '~/components/LoginModal';
+import Toast from '~/components/Toast';
+
+import {
+  signInSuccess,
+  signFailure,
+  loginLoading,
+} from '~/store/modules/auth/actions';
+import { addFavorites, pushToCart } from '~/store/modules/cart/actions';
+import { populateAddresses } from '~/store/modules/addresses/actions';
 
 import lock from '~/assets/lock.svg';
 
 export default function Main({ setPage }) {
-  const handleLogin = useCallback(response => {}, []);
+  const dispatch = useDispatch();
+  const uuid = useSelector(state => state.auth.uuid);
+
+  const [toastVisible, setToastVisible] = useState(false);
+  const [loginError, setLoginError] = useState(false);
+
+  useEffect(() => {
+    if (loginError) {
+      setToastVisible(true);
+
+      const timer = setTimeout(() => {
+        setToastVisible(false);
+        setLoginError(false);
+      }, 2800);
+
+      return () => {
+        setToastVisible(false);
+        setLoginError(false);
+        clearTimeout(timer);
+      };
+    }
+  }, [loginError]);
+
+  const handleFbLogin = useCallback(
+    async response => {
+      try {
+        dispatch(loginLoading());
+
+        const { userID, accessToken } = response;
+
+        const fbResponse = await backend.post('/auth/facebook', {
+          token: accessToken,
+          userID,
+          uuid,
+        });
+
+        const { token, user, cart } = fbResponse.data.data;
+
+        backend.defaults.headers.Authorization = `Bearer ${token}`;
+
+        const {
+          data: {
+            meta: { message },
+            data: favData,
+          },
+        } = await backend.get('clients/wishlists');
+
+        if (message === 'Não há produtos favoritados.')
+          dispatch(addFavorites([]));
+        else dispatch(addFavorites(favData));
+
+        if (!!cart) {
+          const cartWithoutOptions = cart.products.map(c => {
+            return {
+              rowId: c.rowId,
+              id: c.id,
+              qty: c.qty,
+              name: c.name,
+              price: c.price,
+              product: c.options.product,
+            };
+          });
+
+          dispatch(pushToCart(cartWithoutOptions));
+        }
+
+        const addressesData = await backend.get('/clients/addresses');
+
+        const {
+          data: {
+            data: addresses,
+            meta: { message: addressesMessage },
+          },
+        } = addressesData;
+
+        if (addressesMessage === 'Você ainda não tem endereços cadastrados.') {
+          dispatch(populateAddresses([]));
+        } else dispatch(populateAddresses([...addresses]));
+
+        dispatch(signInSuccess(token, user));
+      } catch {
+        setLoginError(true);
+        dispatch(signFailure());
+      }
+    },
+    [uuid, dispatch]
+  );
 
   const handleAppleLogin = useCallback(response => {
     console.log(response);
   }, []);
-  // const onAppleButtonPress = useCallback(async () => {
-  //   if (appleAuth.isSupported) {
-  //     const appleAuthRequestResponse = await appleAuth.performRequest({
-  //       requestedOperation: AppleAuthRequestOperation.LOGIN,
-  //       requestedScopes: [
-  //         AppleAuthRequestScope.EMAIL,
-  //         AppleAuthRequestScope.FULL_NAME,
-  //       ],
-  //     });
-
-  //     const credentialState = await appleAuth.getCredentialStateForUser(
-  //       appleAuthRequestResponse.user
-  //     );
-
-  //     if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
-  //       api
-  //         .post('auth/apple', appleAuthRequestResponse)
-  //         .then(response => {
-  //           const { token, user } = response.data.data;
-  //           api.defaults.headers.Authorization = `Bearer ${token}`;
-  //           dispatch(signInSuccess(token, user));
-
-  //           setTimeout(function () {
-  //             navigation.goBack();
-  //           }, 100);
-  //         })
-  //         .catch(() => {
-  //           Toast.show('Erro ao logar com Apple. Logue com seu e-mail.');
-  //         });
-  //     } else
-  //       Toast.show('Não foi possível fazer login, utilize seu email e senha.');
-  //   } else {
-  //     Toast.show('Seu dispositivo não tem suporte para esta funcionalidade.');
-  //   }
-  // }, [dispatch]);
-
-  // useEffect(() => {
-  //   if (appleAuth.isSupported) return appleAuth.onCredentialRevoked(() => {});
-  // }, []);
 
   return (
     <>
@@ -70,7 +129,7 @@ export default function Main({ setPage }) {
       </Button>
       <FacebookLogin
         appId="314220626404166"
-        callback={handleLogin}
+        callback={handleFbLogin}
         fields="name,email"
         render={({ onClick }) => (
           <Button onClick={onClick} color="#4267b2" shadowColor="#32549d">
@@ -81,10 +140,10 @@ export default function Main({ setPage }) {
 
       <AppleLogin
         clientId="com.tgoo.service.amfrutas"
-        redirectURI="https://sandbox.amfrutas.pt"
-        scope="email"
-        responseType="id_token"
-        usePopup
+        redirectURI="https://amfrutas.pt/cliente/apple/callback"
+        scope="name email"
+        responseType="code id_token"
+        responseMode="form_post"
         callback={handleAppleLogin}
         render={({ onClick }) => (
           <Button onClick={onClick} color="#000" shadowColor="#9c9c9c">
@@ -95,6 +154,12 @@ export default function Main({ setPage }) {
       <SecureLogin>
         Secure <img src={lock} alt="Lock" /> Login
       </SecureLogin>
+      {toastVisible && (
+        <Toast
+          status="Não foi possível fazer login com Facebook, realize o login com seu email e senha."
+          color="#f56060"
+        />
+      )}
     </>
   );
 }

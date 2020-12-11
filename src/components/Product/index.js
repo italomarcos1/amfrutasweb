@@ -51,6 +51,7 @@ export default function Product({ product, index }) {
     has_promotion,
     price,
     url,
+    cback,
   } = product;
 
   const handleAddToCart = useCallback(() => {
@@ -124,7 +125,7 @@ export default function Product({ product, index }) {
         >
           <span>
             <img src={coins} alt="coins" />
-            <strong>€&nbsp;{!!profile ? profile.cback_credit : '0.00'}</strong>
+            <strong>€&nbsp;{!!cback ? cback : '0.00'}</strong>
             DE CRÉDITO
           </span>
           {has_promotion ? (

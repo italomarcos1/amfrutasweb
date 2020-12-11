@@ -109,6 +109,10 @@ export function finishOrderRequest(order) {
   return { type: '@cart/FINISH_ORDER', payload: { order } };
 }
 
+export function finishOrderFailure() {
+  return { type: '@cart/FINISH_ORDER_FAILURE' };
+}
+
 export function orderFinished() {
   return { type: '@cart/ORDER_FINISHED' };
 }

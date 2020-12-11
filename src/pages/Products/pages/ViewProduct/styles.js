@@ -52,11 +52,12 @@ export const Content = styled.div`
   /* background-color: #ff0; */
   height: 400px;
 
-  img {
+  > img {
     border-radius: 6px;
     width: 400px;
     height: 400px;
-    /* background-color: #f00; */
+    object-fit: cover;
+    background-color: #333;
   }
 `;
 

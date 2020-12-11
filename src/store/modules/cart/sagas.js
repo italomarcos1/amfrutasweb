@@ -1,5 +1,4 @@
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
-import uuid from 'react-uuid';
 
 import backend from '~/services/api';
 
@@ -9,6 +8,7 @@ import {
   updateAmountSuccess,
   addToFavoritesSuccess,
   removeFromFavoritesSuccess,
+  finishOrderFailure,
 } from './actions';
 
 import { signInSuccess } from '../auth/actions';
@@ -26,14 +26,7 @@ export function* addToCart({ payload }) {
       return p.id === product.id;
     });
 
-    let newUuid;
-    newUuid = profile !== null ? profile.uuid : null;
-
-    if (!signed) {
-      newUuid = notSignedUuid;
-    } else {
-      newUuid = profile.uuid;
-    }
+    const newUuid = signed ? profile.uuid : notSignedUuid;
 
     const pushProduct = {
       uuid: newUuid,
@@ -75,7 +68,10 @@ export function* removeFromCart({ payload }) {
   try {
     const { id } = payload;
 
-    const { uuid: userUuid } = yield select(state => state.user.profile);
+    const profile = yield select(state => state.user.profile);
+    const signed = yield select(state => state.auth.signed);
+    const notSignedUuid = yield select(state => state.auth.uuid);
+
     const products = yield select(state => state.cart.products);
     const findIndex = products.findIndex(p => {
       return p.id === id;
@@ -83,7 +79,10 @@ export function* removeFromCart({ payload }) {
 
     const { rowId } = products[findIndex];
 
-    yield call(backend.delete, `/cart/${userUuid}/${rowId}`);
+    const newUuid = signed ? profile.uuid : notSignedUuid;
+
+    // yield call(backend.delete, `/cart/${newUuid}/${rowId}`);
+    yield call(backend.delete, `/cart/${rowId}`);
 
     yield put(removeFromCartSuccess(id));
   } catch (err) {
@@ -157,6 +156,7 @@ export function* finishOrder({ payload }) {
     // passar name com 'destination_name' + 'destination_last_name'
     yield put(setOrder(transaction));
   } catch (err) {
+    yield put(finishOrderFailure());
     console.log('erro no push order');
   }
 }

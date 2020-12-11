@@ -35,6 +35,10 @@ export function closeModalState() {
   return { type: '@auth/CLOSE_MODAL' };
 }
 
+export function loginLoading() {
+  return { type: '@auth/LOADING' };
+}
+
 export function signFailure() {
   return {
     type: '@auth/SIGN_FAILURE',

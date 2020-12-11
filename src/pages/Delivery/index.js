@@ -143,7 +143,9 @@ export default function Delivery() {
 
   const [email, setEmail] = useState(!!profile ? profile.email : '');
   const [emailError, setEmailError] = useState(false);
-  const [gender, setGender] = useState(!!profile ? profile.gender : 'male');
+  const [gender, setGender] = useState(
+    !!profile ? profile.gender : 'Masculino'
+  );
 
   const [invalidFields, setInvalidFields] = useState([
     false,
@@ -342,14 +344,6 @@ export default function Delivery() {
     populateAddress();
   }, [residence, addresses, populateAddress]);
 
-  const modifyGender = useCallback(() => {
-    return gender === 'Masculino'
-      ? 'male'
-      : gender === 'Feminino'
-      ? 'female'
-      : 'other';
-  }, [gender]);
-
   const handleFinishOrder = useCallback(() => {
     if (!finalProfile || (deliveryOption === 'delivery' && !finalAddress)) {
       return;
@@ -482,7 +476,7 @@ export default function Delivery() {
 
       const profileData = {
         ...formData,
-        gender: modifyGender(),
+        gender,
       };
 
       dispatch(addFinalProfileRequest(profileData));
@@ -497,7 +491,6 @@ export default function Delivery() {
       deliveryDay,
       deliveryHour,
       deliveryOption,
-      modifyGender,
     ]
   );
 
@@ -567,7 +560,7 @@ export default function Delivery() {
             address: { ...shippingData, default: newPrimaryAddress ? 1 : 0 },
             profile: {
               ...profileInfo,
-              gender: modifyGender(),
+              gender,
             },
           })
         );
@@ -577,7 +570,7 @@ export default function Delivery() {
             address: { ...shippingData, default: newPrimaryAddress ? 1 : 0 },
             profile: {
               ...profileInfo,
-              gender: modifyGender(),
+              gender,
             },
           })
         );
@@ -593,8 +586,8 @@ export default function Delivery() {
       locationInvalidFields,
       zipcode,
       newAddress,
+      gender,
       newPrimaryAddress,
-      modifyGender,
       deliveryDay,
       deliveryHour,
       deliveryOption,
