@@ -616,10 +616,10 @@ export default function Delivery() {
   const genderData = [
     {
       label: 'Masculino',
-      value: 'male',
+      value: 'Masculino',
     },
-    { label: 'Feminino', value: 'female' },
-    { label: 'Outro', value: 'other' },
+    { label: 'Feminino', value: 'Feminino' },
+    { label: 'Outro', value: 'Outro' },
   ];
 
   if (cart.length === 0 || !hasOrder) {
@@ -1131,7 +1131,9 @@ export default function Delivery() {
               <h1>Porte</h1>
               <h2 style={{ color: '#0CB68B' }}>
                 {deliveryOption === 'delivery'
-                  ? `€ ${shippingCost}.00`
+                  ? shippingCost !== 0
+                    ? `€ ${shippingCost}.00`
+                    : 'Grátis'
                   : 'Grátis'}
               </h2>
             </CheckoutItem>

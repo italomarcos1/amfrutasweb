@@ -46,7 +46,7 @@ import { knightFall } from '~/store/modules/user/actions';
 import { periodicProducts } from '~/data';
 
 import backend from '~/services/api';
-import { calculatePrice, formatPrice } from '~/utils/calculatePrice';
+import { customCalculatePrice, formatPrice } from '~/utils/calculatePrice';
 
 export default function Confirmation() {
   const [qty, setQty] = useState(4);
@@ -76,9 +76,10 @@ export default function Confirmation() {
     const {
       data: { data },
     } = await backend.get(`clients/transactions/${order.id}`);
-
     const { products } = data;
-    const { formattedSavedPrice, formattedPrice } = calculatePrice(products);
+    const { formattedSavedPrice, formattedPrice } = customCalculatePrice(
+      products
+    );
     setSaved(formatPrice(formattedSavedPrice - formattedPrice));
 
     setOrderInfo(data);
@@ -278,7 +279,7 @@ export default function Confirmation() {
                     ? orderInfo.shipping !== 0
                       ? `€ ${orderInfo.shipping}.00`
                       : 'Grátis'
-                    : '---'}
+                    : 'Grátis'}
                 </h2>
               </CheckoutItem>
               <CheckoutItem>

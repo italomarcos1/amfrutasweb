@@ -27,4 +27,27 @@ export function calculatePrice(products) {
   return { formattedPrice, formattedSavedPrice };
 }
 
+export function customCalculatePrice(products) {
+  if (products.length === 0) {
+    return { formattedPrice: '0.00', formattedSavedPrice: '0.00' };
+  }
+  const total = products.reduce((totalSum, product) => {
+    const selectedPrice = product.has_promotion
+      ? product.price_promotional
+      : product.price;
+
+    return totalSum + selectedPrice * product.qty;
+  }, 0);
+
+  const totalSaved = products.reduce((totalSum, product) => {
+    const selectedPrice = product.price;
+
+    return totalSum + selectedPrice * product.qty;
+  }, 0);
+
+  const formattedPrice = formatPrice(total);
+  const formattedSavedPrice = formatPrice(totalSaved);
+
+  return { formattedPrice, formattedSavedPrice };
+}
 // aqui1
