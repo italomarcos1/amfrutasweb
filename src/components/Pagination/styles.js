@@ -4,6 +4,8 @@ import Carousel from 'react-elastic-carousel';
 export const PaginationContainer = styled(Carousel)`
   display: flex;
   width: 218px;
+  /* width: ${({ isDesktop }) => (isDesktop ? 218 : 188)}px; */
+
   height: 30px;
   align-items: center;
   justify-content: center;

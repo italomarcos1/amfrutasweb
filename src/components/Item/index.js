@@ -24,7 +24,7 @@ import {
   DeleteItem,
 } from './styles';
 
-export default function Item({ item, index }) {
+export default function Item({ item, index, isDesktop }) {
   const {
     id,
     qty,
@@ -60,11 +60,16 @@ export default function Item({ item, index }) {
 
   // console.log(item);
   return (
-    <Container key={id} style={index > 1 ? { marginTop: 40 } : {}}>
+    <Container
+      key={id}
+      index={index}
+      style={index > 1 && isDesktop ? { marginTop: 40 } : {}}
+      isDesktop={isDesktop}
+    >
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <ItemPicture src={thumbs} />
         <ProductInfo>
-          <Title>{title}</Title>
+          <Title isDesktop={isDesktop}>{title}</Title>
           <PriceAndAmount>
             {has_promotion ? (
               <small>€&nbsp;{price}</small>
@@ -76,8 +81,8 @@ export default function Item({ item, index }) {
         </ProductInfo>
       </div>
       <Separator />
-      <Options>
-        <DeleteItem onClick={handleRemoveFromCart}>
+      <Options isDesktop={isDesktop}>
+        <DeleteItem onClick={handleRemoveFromCart} isDesktop={isDesktop}>
           <img src={close} alt="Delete Item" />
         </DeleteItem>
         <div>
@@ -119,4 +124,5 @@ Item.propTypes = {
     }),
   }).isRequired,
   index: PropTypes.number.isRequired,
+  isDesktop: PropTypes.bool.isRequired,
 };

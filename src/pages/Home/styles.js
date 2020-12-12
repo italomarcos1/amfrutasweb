@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { Form } from '@unform/web';
 import { darken } from 'polished';
 import { Link } from 'react-router-dom';
-import Carousel from 'react-elastic-carousel';
 
 export const Container = styled(Form)`
   display: flex;
@@ -21,13 +20,14 @@ export const OptionsContainer = styled.div`
   margin: 21px auto 0;
 `;
 
-export const ProductsContainer = styled(Carousel)`
+export const ProductsContainer = styled.div`
   display: flex;
   width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
   justify-content: space-between;
   height: 376px;
   margin: 30px auto 0;
   padding: 0;
+  /* flex-wrap: wrap; */
   align-items: center;
 `;
 

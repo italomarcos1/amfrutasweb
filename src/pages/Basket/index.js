@@ -56,6 +56,9 @@ export default function Basket() {
   const [minValueShipping, setMinValueShipping] = useState(0);
   const [minValueFreeShipping, setMinValueFreeShipping] = useState(0);
   const [minValueWithdrawStore, setMinValueWithdrawStore] = useState(0);
+  const [currentContainerHeight, setCurrentContainerHeight] = useState(
+    products.length * 167 - 20
+  );
 
   const loadData = useCallback(async () => {
     const keys = [
@@ -129,6 +132,10 @@ export default function Basket() {
     setShouldntProceed(+price < +minValueWithdrawStore);
   }, [price, minValueWithdrawStore]);
 
+  useEffect(() => {
+    setCurrentContainerHeight(products.length * 167 - 20);
+  }, [products, currentContainerHeight]);
+
   return (
     <>
       {isDesktop ? (
@@ -149,7 +156,7 @@ export default function Basket() {
             <Title>Cesto de Compras</Title>
             {shouldntProceed && (
               <MinValueContainer isDesktop={isDesktop}>
-                <MinValue>
+                <MinValue isDesktop={isDesktop}>
                   De momento o valor mínimo para encomendas é de €&nbsp;
                   {minValueWithdrawStore}
                 </MinValue>
@@ -157,7 +164,11 @@ export default function Basket() {
                   color="#1DC167"
                   shadowColor="#17A75B"
                   onClick={() => history.push('/produtos')}
-                  style={{ width: 400, marginTop: 0 }}
+                  style={
+                    isDesktop
+                      ? { width: 400, marginTop: 0 }
+                      : { width: '100%', marginTop: 0 }
+                  }
                 >
                   <b>Voltar a comprar</b>
                 </Button>
@@ -168,19 +179,27 @@ export default function Basket() {
               <ItemsList
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
-                containerHeight={708}
+                containerHeight={isDesktop ? 708 : currentContainerHeight}
               >
                 {paginatedProducts.map((item, index) => (
-                  <Item key={item.id} item={item} index={index} />
+                  <Item
+                    key={item.id}
+                    item={item}
+                    index={index}
+                    isDesktop={isDesktop}
+                  />
                 ))}
               </ItemsList>
             ) : (
-              <EmptyCartContainer message="Seu cesto de compras está vazio." />
+              <EmptyCartContainer
+                message="Seu cesto de compras está vazio."
+                isDesktop={isDesktop}
+              />
             )}
           </div>
           <div>
-            <Title>Resumo</Title>
-            <CheckoutDetails>
+            <Title style={isDesktop ? {} : { marginTop: 30 }}>Resumo</Title>
+            <CheckoutDetails isDesktop={isDesktop}>
               <CheckoutItem>
                 <h1>Produtos</h1>
                 <h2>{products.length !== 0 ? `€ ${price}` : '---'}</h2>
@@ -195,13 +214,17 @@ export default function Basket() {
                     : '---'}
                 </h2>
               </CheckoutItem>
-              <CheckoutItem style={{ height: 77 }}>
+              <CheckoutItem
+                style={isDesktop ? { height: 77 } : { height: 117 }}
+              >
                 <h1>
                   O seu crédito de <b>compras anteriores</b> <br />
                   estará disponível no passo seguinte
                 </h1>
               </CheckoutItem>
-              <CheckoutItem style={{ height: 77 }}>
+              <CheckoutItem
+                style={isDesktop ? { height: 77 } : { height: 117 }}
+              >
                 <h1>
                   Tem um <b>cupão de desconto?</b> <br />
                   Pode adicioná-lo no passo seguinte
@@ -236,7 +259,7 @@ export default function Basket() {
                   color="#1DC167"
                   shadowColor="#17A75B"
                   onClick={() => history.push('/produtos')}
-                  style={{ width: 309 }}
+                  style={isDesktop ? { width: 309 } : { width: '100%' }}
                 >
                   <b>Voltar a comprar</b>
                 </Button>
@@ -246,7 +269,7 @@ export default function Basket() {
                   color="#1DC167"
                   shadowColor="#17A75B"
                   onClick={() => handleProcessOrder()}
-                  style={{ width: 309 }}
+                  style={isDesktop ? { width: 309 } : { width: '100%' }}
                 >
                   <b>Processar Encomenda</b>
                 </Button>
@@ -255,7 +278,7 @@ export default function Basket() {
                 Acesso <img src={lock} alt="Lock" /> Seguro
               </SecureLogin>
             </CheckoutDetails>
-            <ShippingWarning>
+            <ShippingWarning isDesktop={isDesktop}>
               Levantamento na loja:
               <b>Grátis</b>
               <br /> Compras até € {minValueShipping}:

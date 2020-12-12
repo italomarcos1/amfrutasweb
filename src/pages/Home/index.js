@@ -341,14 +341,7 @@ export default function Home() {
           <strong>Mais vendidos</strong>
           <small>Conheça os produtos mais vendidos todos os dias</small>
         </SectionTitle>
-        <ProductsContainer
-          itemsToShow={isDesktop ? 6 : 1}
-          showArrows={false}
-          pagination={false}
-          autoPlay={isDesktop ? 0 : 1500}
-          enableAutoPlay={!isDesktop}
-          isDesktop={isDesktop}
-        >
+        <ProductsContainer isDesktop={isDesktop}>
           {loading ? (
             <h1>Carregando...</h1>
           ) : (
@@ -531,7 +524,11 @@ export default function Home() {
         <LoginModal closeModal={() => setLoginModal(false)} />
       )}
       {toastVisible && (
-        <Toast status="Bem-vindo ao AM Frutas." color="#1DC167" />
+        <Toast
+          status="Bem-vindo ao AM Frutas."
+          color="#1DC167"
+          isDesktop={isDesktop}
+        />
       )}
     </>
   );

@@ -4,9 +4,9 @@ import Container from './styles';
 
 import alert from '~/assets/alert-circle.svg';
 
-export default function EmptyCartContainer({ message }) {
+export default function EmptyCartContainer({ message, isDesktop }) {
   return (
-    <Container>
+    <Container isDesktop={isDesktop}>
       <img src={alert} alt="Alert" />
       <strong>{message}</strong>
     </Container>
@@ -15,4 +15,5 @@ export default function EmptyCartContainer({ message }) {
 
 EmptyCartContainer.propTypes = {
   message: PropTypes.string.isRequired,
+  isDesktop: PropTypes.bool.isRequired,
 };

@@ -37,7 +37,7 @@ export default class Pagination extends Component {
 
   render() {
     const { totalItems } = this.state;
-    const { currentPage, setCurrentPage, style } = this.props;
+    const { currentPage, setCurrentPage, style, isDesktop } = this.props;
 
     return (
       <PaginationContainer
@@ -46,6 +46,7 @@ export default class Pagination extends Component {
         pagination={false}
         renderArrow={this.myArrow}
         style={style}
+        isDesktop={isDesktop}
         totalItems={totalItems > 5 ? 5 : totalItems}
       >
         {totalItems.map(item => (
@@ -65,8 +66,10 @@ Pagination.propTypes = {
   currentPage: PropTypes.number.isRequired,
   setCurrentPage: PropTypes.func.isRequired,
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  isDesktop: PropTypes.bool,
 };
 
 Pagination.defaultProps = {
   style: {},
+  isDesktop: false,
 };

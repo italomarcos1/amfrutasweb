@@ -2,7 +2,7 @@ import styled, { keyframes } from 'styled-components';
 import { lighten, darken } from 'polished';
 
 export const Container = styled.div`
-  width: 20%;
+  width: ${({ isDesktop }) => (isDesktop ? '20%' : '90%')};
   height: 10%;
   position: fixed;
   background-color: transparent;
@@ -11,7 +11,7 @@ export const Container = styled.div`
   bottom: 0px;
   display: flex;
   margin: 0 auto;
-  left: 40%;
+  left: ${({ isDesktop }) => (isDesktop ? '40%' : '5%')};
   bottom: 20%;
   justify-content: center;
 `;
@@ -40,7 +40,7 @@ const popIn = keyframes`
 const popOut = keyframes`
   from {
     opacity:1;
-    height: 57px;
+    height: ${({ isDesktop }) => (isDesktop ? 57 : 77)}px;
 
     #click{
       display:none;
@@ -65,7 +65,7 @@ export const Toast = styled.div`
   border: 2.5px solid ${({ color }) => darken('0.2', color)};
   color: ${({ color }) => darken('0.15', color)};
   font-size: 16px;
-  height: 57px;
+  height: ${({ isDesktop }) => (isDesktop ? 57 : 77)}px;
   font-family: 'SFPro';
   border-radius: 6px;
   padding: 5px 30px;

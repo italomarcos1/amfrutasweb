@@ -13,6 +13,7 @@ export const Container = styled.div`
 export const List = styled.ul`
   display: flex;
   align-items: flex-start;
+  flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
   justify-content: space-between;
   flex-wrap: wrap;
   height: ${({ containerHeight }) => containerHeight};

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export default styled.div`
-  width: 840px;
-  height: 454px;
+  width: ${({ isDesktop }) => (isDesktop ? '840px' : '100%')};
+  height: ${({ isDesktop }) => (isDesktop ? 454 : 303)}px;
   /* background-color: #2cbdd3; */
 
   display: flex;
@@ -11,10 +11,11 @@ export default styled.div`
   justify-content: center;
 
   margin-top: 30px;
+  text-align: center;
 
   img {
-    width: 168px;
-    height: 168px;
+    width: ${({ isDesktop }) => (isDesktop ? 168 : 84)}px;
+    height: ${({ isDesktop }) => (isDesktop ? 168 : 84)}px;
   }
 
   strong {

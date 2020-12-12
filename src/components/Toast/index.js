@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Container, Toast } from './styles';
 
-export default function ToastContainer({ status, color }) {
+export default function ToastContainer({ status, color, isDesktop }) {
   const [visible, setVisible] = useState(true);
   const [toastVisible, setToastVisible] = useState(true);
 
@@ -17,9 +17,9 @@ export default function ToastContainer({ status, color }) {
   }, []);
 
   return (
-    <Container>
+    <Container isDesktop={isDesktop}>
       {toastVisible && (
-        <Toast color={color} visible={visible}>
+        <Toast color={color} visible={visible} isDesktop={isDesktop}>
           {status}
         </Toast>
       )}
@@ -30,4 +30,5 @@ export default function ToastContainer({ status, color }) {
 ToastContainer.status = {
   status: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired,
+  isDesktop: PropTypes.bool.isRequired,
 };

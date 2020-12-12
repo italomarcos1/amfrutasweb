@@ -9,11 +9,13 @@ export const Container = styled.div`
 `;
 
 export const Content = styled.div`
-  width: 1240px;
+  width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
   margin: 94.5px auto 0;
+  margin-top: ${({ isDesktop }) => (isDesktop ? 94.5 : 23.75)}px;
 
   /*ul {
     display: flex;
@@ -31,13 +33,14 @@ export const MinValueContainer = styled.div`
   width: 100%;
   align-items: flex-start;
   justify-content: space-between;
-  height: 60px;
+  height: ${({ isDesktop }) => (isDesktop ? 60 : 126)}px;
   margin-top: 30px;
+  flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
 `;
 
 export const MinValue = styled.div`
   display: flex;
-  width: 400px;
+  width: ${({ isDesktop }) => (isDesktop ? '400px' : '100%')};
   align-items: center;
   justify-content: center;
   height: 58px;
@@ -52,6 +55,7 @@ export const MinValue = styled.div`
 
 export const Title = styled.h1`
   font-family: 'SFPro';
+
   font-size: 25px;
   line-height: 33px;
   letter-spacing: 0px;
@@ -60,8 +64,8 @@ export const Title = styled.h1`
 `;
 
 export const CheckoutDetails = styled.div`
-  width: 360px;
-  height: 622px;
+  width: ${({ isDesktop }) => (isDesktop ? '360px' : '100%')};
+  height: ${({ isDesktop }) => (isDesktop ? 622 : 712)}px;
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 6px;
@@ -122,13 +126,13 @@ export const ShippingWarning = styled.div`
   margin-top: 40px;
 
   padding: 17px 25px;
-  width: 360px;
-  height: 100px;
+  width: ${({ isDesktop }) => (isDesktop ? '360px' : '100%')};
+  height: ${({ isDesktop }) => (isDesktop ? '100px' : '120px')};
 
   text-align: left;
   font-family: 'SFPro';
-  font-size: 15px;
-  line-height: 22px;
+  font-size: ${({ isDesktop }) => (isDesktop ? 15 : 13)}px;
+  line-height: ${({ isDesktop }) => (isDesktop ? 22 : 19)}px;
   letter-spacing: 0px;
   background-color: #2cbdd3;
   color: #fff;

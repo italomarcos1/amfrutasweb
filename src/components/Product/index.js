@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 
 import coins from '~/assets/coins.svg';
 import basket_active from '~/assets/icons/basket_active.svg';
@@ -31,6 +32,7 @@ import {
 
 export default function Product({ product, index }) {
   const dispatch = useDispatch();
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
 
   const [favorite, setFavorite] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
@@ -88,7 +90,7 @@ export default function Product({ product, index }) {
 
   return (
     <>
-      <Container>
+      <Container isDesktop={isDesktop}>
         <FavoriteButton
           type="button"
           onClick={() => {
@@ -166,6 +168,7 @@ export default function Product({ product, index }) {
         <Toast
           status={`O produto ${title} foi adicionado ao seu cesto de compras.`}
           color="#1DC167"
+          isDesktop={isDesktop}
         />
       )}
     </>
