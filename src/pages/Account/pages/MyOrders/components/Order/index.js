@@ -253,6 +253,10 @@ export default function Order({ order, isOpen, setOrder }) {
                       <b>Forma de pagamento</b>
                     </small>
                     <small>Dinheiro na entrega</small>
+                    <small>
+                      <b>Método da Compra</b>
+                    </small>
+                    <small>{transaction.origin}</small>
                   </ShippingInfo>
                   <ShippingInfo open={isOpen === id}>
                     <small>

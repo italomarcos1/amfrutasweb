@@ -10,7 +10,7 @@ import MyAccount from './components/MyAccount';
 import cashback from '~/assets/myAccount/cashback.svg';
 import orders from '~/assets/myAccount/orders.svg';
 import delivery from '~/assets/myAccount/delivery.svg';
-import cards from '~/assets/myAccount/cards.svg';
+import favorites from '~/assets/myAccount/favorites.svg';
 
 export default function ControlPanel() {
   const history = useHistory();
@@ -46,10 +46,11 @@ export default function ControlPanel() {
             onClick={() => history.push('/entregas')}
           />
           <Info
-            icon={cards}
-            alt="Seus cartões"
-            title="Os meus cartões"
-            subTitle="1 cartão vinculado"
+            icon={favorites}
+            alt="Favoritos"
+            title="Produtos favoritos"
+            subTitle="Adicione ao cesto de compras"
+            onClick={() => history.push('/favoritos')}
           />
         </DeliveryAndCardsContainer>
       </InfoContainer>

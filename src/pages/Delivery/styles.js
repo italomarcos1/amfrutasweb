@@ -52,12 +52,13 @@ export const LoadingContainer = styled.div`
   position: absolute;
   width: 683px;
   height: 399px;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.4);
   border: 1px solid #e0e0e0;
   border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 997;
 
   svg {
     z-index: 998;
@@ -363,8 +364,8 @@ export const TakeOnShop = styled.div`
   text-align: left;
   font-family: 'SFPro';
   font-size: 13px;
-  line-height: 22px;
-  letter-spacing: 0px;
+  line-height: 16px;
+  letter-spacing: 0.2px;
   background-color: #0cb68b;
 
   color: #fff;

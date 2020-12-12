@@ -315,6 +315,7 @@ export default function Delivery() {
     );
 
     if (findNewAddress < 0) return;
+    // aqui1
 
     const selectedAddress = addresses[findNewAddress];
     setZipcode(selectedAddress.zipcode);
@@ -549,7 +550,6 @@ export default function Delivery() {
         ...formData,
         destination_name: newName,
         destination_last_name: newNickname,
-        address: residence,
         country,
         zipcode,
       };
@@ -716,8 +716,7 @@ export default function Delivery() {
                 </DeliveryButtonContainer>
               </DeliveryButton>
             </div>
-            {hoverButton === 'withdrawinstore' ||
-            deliveryOption === 'withdrawinstore' ? (
+            {deliveryOption === 'withdrawinstore' ? (
               <TakeOnShop>{withdrawMessage}</TakeOnShop>
             ) : (
               <DeliveryDateContainer
@@ -889,7 +888,7 @@ export default function Delivery() {
                     value={residence}
                     onChange={({ target: { value } }) => setResidence(value)}
                     error={invalidResidence}
-                    disabled={deliveryOption === 'withdrawinstore'}
+                    disabled={loading || deliveryOption === 'withdrawinstore'}
                   />
                 ) : (
                   <Select
@@ -903,7 +902,7 @@ export default function Delivery() {
                     customWidth={325}
                     data={formattedAddresses}
                     error={invalidResidence}
-                    disabled={deliveryOption === 'withdrawinstore'}
+                    disabled={loading || deliveryOption === 'withdrawinstore'}
                   />
                 )}
                 <Input
@@ -912,7 +911,7 @@ export default function Delivery() {
                   placeholder="Escreve o nome do destinatário"
                   customWidth={283}
                   error={locationInvalidFields[0]}
-                  disabled={deliveryOption === 'withdrawinstore'}
+                  disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
               </InputContainer>
               <InputContainer style={{ width: 628 }}>
@@ -926,7 +925,7 @@ export default function Delivery() {
                   onChange={({ target: { value } }) => setZipcode(value)}
                   error={invalidPostcode}
                   onBlur={lookupAddress}
-                  disabled={deliveryOption === 'withdrawinstore'}
+                  disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
                 <Input
                   name="address"
@@ -934,7 +933,7 @@ export default function Delivery() {
                   placeholder="Escreve a tua morada"
                   customWidth={215}
                   error={locationInvalidFields[1]}
-                  disabled={deliveryOption === 'withdrawinstore'}
+                  disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
                 <Input
                   name="number"
@@ -942,7 +941,7 @@ export default function Delivery() {
                   placeholder="Escreve o teu número"
                   customWidth={90}
                   error={locationInvalidFields[2]}
-                  disabled={deliveryOption === 'withdrawinstore'}
+                  disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
                 <Input
                   name="district"
@@ -950,7 +949,7 @@ export default function Delivery() {
                   placeholder="Escreve o teu distrito"
                   customWidth={173}
                   error={locationInvalidFields[3]}
-                  disabled={deliveryOption === 'withdrawinstore'}
+                  disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
               </InputContainer>
               <InputContainer style={{ width: 628 }}>
@@ -960,7 +959,7 @@ export default function Delivery() {
                   placeholder="Escreve a tua cidade"
                   customWidth={194}
                   error={locationInvalidFields[4]}
-                  disabled={deliveryOption === 'withdrawinstore'}
+                  disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
                 <Input
                   name="state"
@@ -969,7 +968,7 @@ export default function Delivery() {
                   defaultValue="Lisboa"
                   customWidth={221}
                   error={locationInvalidFields[5]}
-                  disabled={deliveryOption === 'withdrawinstore'}
+                  disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
                 <Select
                   title="Localidade"
@@ -978,7 +977,7 @@ export default function Delivery() {
                   defaultValue={{ value: 'Portugal', label: 'Portugal' }}
                   customWidth={173}
                   error={invalidLocation}
-                  disabled={deliveryOption === 'withdrawinstore'}
+                  disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
               </InputContainer>
               <div
@@ -1165,7 +1164,7 @@ export default function Delivery() {
               onClick={() => {
                 accountButtonRef.current.click();
                 if (deliveryOption === 'delivery')
-                  shippingButtonRef.current.click(); // aqui1
+                  shippingButtonRef.current.click();
               }}
               style={{ width: 309 }}
               disabled={loading || processingOrder}
