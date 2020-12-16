@@ -45,8 +45,12 @@ export default function ItemsList({
     if (isDesktop) width = containerWidth;
     else width = '100%';
 
-    setContainerStyle(prevState => ({ ...prevState, width }));
-  }, [isDesktop, containerWidth]);
+    setContainerStyle(prevState => ({
+      ...prevState,
+      width,
+      height: containerHeight + 76,
+    }));
+  }, [isDesktop, containerWidth, containerHeight]);
 
   return (
     <Container

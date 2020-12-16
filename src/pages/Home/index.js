@@ -265,8 +265,6 @@ export default function Home() {
         formRef.current.reset();
         setEmail('');
         setBirthDate('');
-
-        console.log('done');
       } catch (err) {
         console.log('Erro na newsletter');
       }

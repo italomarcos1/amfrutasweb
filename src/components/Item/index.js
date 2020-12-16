@@ -40,6 +40,7 @@ export default function Item({ item, index, isDesktop }) {
     const newPrice = (Math.round(Number(price) * qty * 100) / 100).toFixed(2);
     setFinalPrice(newPrice);
   }, [qty, price]);
+
   useEffect(() => {
     const newPrice = (
       Math.round(Number(price_promotional) * qty * 100) / 100
@@ -58,7 +59,6 @@ export default function Item({ item, index, isDesktop }) {
     [id, dispatch]
   );
 
-  // console.log(item);
   return (
     <Container
       key={id}

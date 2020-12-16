@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 
 import Home from '~/pages/Home';
 import Contents from '~/pages/Contents';
@@ -7,6 +7,8 @@ import Content from '~/pages/Contents/pages/ViewContent';
 import Basket from '~/pages/Basket';
 import Delivery from '~/pages/Delivery';
 import Confirmation from '~/pages/Confirmation';
+
+import IsMobile from '~/pages/IsMobile';
 
 import ControlPanel from '~/pages/Account/pages/ControlPanel';
 import PeriodicDelivery from '~/pages/Account/pages/PeriodicDelivery';
@@ -20,22 +22,16 @@ import Product from '~/pages/Products/pages/ViewProduct';
 import ProductsPerCategory from '~/pages/Products/pages/ListProductsPerCategory';
 import Promotions from '~/pages/Promotions';
 
+import Route from './route';
 import AccountRoute from './accountRoute';
 import ProductsRoute from './productsRoute';
 
 export default function Routes() {
-  // const { pathname } = useLocation();
-
-  // useEffect(() => {
-  //   if (pathname === '/inicio' || pathname === '') {
-  //     return <Redirect to="/" />;
-  //   }
-  // }, [pathname]);
-
   return (
     <>
       <Switch>
         <Route path="/" exact component={Home} />
+        <Route path="/updating" exact component={IsMobile} />
         <Route path="/conteudos" component={Contents} isPrivate />
         <Route path="/cesto" component={Basket} isPrivate />
         <Route path="/entrega" component={Delivery} isPrivate />

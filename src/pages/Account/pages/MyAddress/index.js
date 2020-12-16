@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaSpinner } from 'react-icons/fa';
+import { useMediaQuery } from 'react-responsive';
 
 import {
   Container,
@@ -25,6 +26,8 @@ import {
 import { nameIsValid, postcodeIsValid } from '~/utils/validation';
 
 export default function MyAccount() {
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
+
   const [country, setCountry] = useState('Portugal');
 
   const [zipcode, setZipcode] = useState('');
@@ -191,7 +194,10 @@ export default function MyAccount() {
               <strong>Morada de entrega</strong>
               <small>Confira e atualize caso necessário.</small>
             </SectionTitle>
-            <InputContainer>
+            <InputContainer
+              isDesktop={isDesktop}
+              style={isDesktop ? {} : { width: '85%' }}
+            >
               <Input
                 name="destination_name"
                 title="Nome completo do destinatário"
@@ -200,7 +206,10 @@ export default function MyAccount() {
                 error={invalidFields[0]}
               />
             </InputContainer>
-            <InputContainer style={{ width: 628 }}>
+            <InputContainer
+              isDesktop={isDesktop}
+              style={isDesktop ? { width: 628 } : { width: '85%' }}
+            >
               <InputMask
                 name="zipcode"
                 title="Código Postal"
@@ -240,7 +249,10 @@ export default function MyAccount() {
                 hasMarginLeft
               />
             </InputContainer>
-            <InputContainer style={{ width: 628 }}>
+            <InputContainer
+              isDesktop={isDesktop}
+              style={isDesktop ? { width: 628 } : { width: '85%' }}
+            >
               <Input
                 name="city"
                 title="Cidade"

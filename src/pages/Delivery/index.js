@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaSpinner } from 'react-icons/fa';
+import { useMediaQuery } from 'react-responsive';
 
 import {
   Container,
@@ -55,6 +56,7 @@ import Select from '~/components/Select';
 import ItemsList from '~/components/ItemsList';
 
 import CheckoutHeader from '~/components/CheckoutHeader';
+import CheckoutHeaderMobile from '~/components/CheckoutHeaderMobile';
 import Item from '~/components/CheckoutItem';
 import Toast from '~/components/Toast';
 
@@ -124,7 +126,7 @@ export default function Delivery() {
   const [zipcode, setZipcode] = useState(() => {
     if (!!primaryAddress) {
       if (primaryAddress.length !== 0) {
-        return primaryAddress.zipcode;
+        return String(primaryAddress.zipcode);
       }
     }
     return '';
@@ -186,6 +188,8 @@ export default function Delivery() {
     label: 'Entrega em casa',
   });
 
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
+
   const [withdrawMessage, setWithdrawMessage] = useState('');
 
   const [deliveryInterval, setDeliveryInterval] = useState(-1);
@@ -196,6 +200,10 @@ export default function Delivery() {
 
   // os endereços são o objeto inteiro, com id e etc
   // o residence é só o label, pois o select mexe apenas com o label. se não, teríamos que mudar o Select ou criar um novo
+
+  const [currentContainerHeight, setCurrentContainerHeight] = useState(
+    cart.length * 102 - 20
+  );
 
   const [toastVisible, setToastVisible] = useState(false);
 
@@ -318,12 +326,21 @@ export default function Delivery() {
     // aqui1
 
     const selectedAddress = addresses[findNewAddress];
-    setZipcode(selectedAddress.zipcode);
 
     shippingInfoRef.current.setData({
       ...selectedAddress,
       destination_name: `${selectedAddress.destination_name} ${selectedAddress.destination_last_name}`,
     });
+
+    const zipcodeAsArray = [...selectedAddress.zipcode];
+
+    const findHyphen = zipcodeAsArray.indexOf('-');
+
+    if (findHyphen > -1) setZipcode(String(selectedAddress.zipcode));
+    else {
+      const formattedZipcode = `${zipcodeAsArray[0]}${zipcodeAsArray[1]}${zipcodeAsArray[2]}${zipcodeAsArray[3]}-${zipcodeAsArray[4]}${zipcodeAsArray[5]}${zipcodeAsArray[6]}`;
+      setZipcode(formattedZipcode);
+    }
   }, [addresses, residence, newAddress]);
 
   const populateDeliveryInterval = useCallback(() => {
@@ -385,8 +402,10 @@ export default function Delivery() {
 
   const lookupAddress = useCallback(async () => {
     if (!postcodeIsValid(zipcode)) {
+      setInvalidPostcode(true);
       return;
     }
+    setInvalidPostcode(false);
     setNewAddress(true);
 
     setLoading(true);
@@ -518,8 +537,14 @@ export default function Delivery() {
         return;
       }
 
-      if (!postcodeIsValid(zipcode) || nameIsValid(residence)) {
+      if (!postcodeIsValid(zipcode)) {
         setInvalidPostcode(!postcodeIsValid(zipcode));
+
+        window.scrollTo(0, 0);
+        return;
+      }
+
+      if (nameIsValid(residence)) {
         setInvalidResidence(nameIsValid(residence));
         window.scrollTo(0, 0);
 
@@ -610,8 +635,8 @@ export default function Delivery() {
   }, [orderFinished, history]);
 
   useEffect(() => {
-    // calcular subtotal
-  }, [cart]);
+    setCurrentContainerHeight(paginatedProducts.length * 102 - 20);
+  }, [paginatedProducts, currentContainerHeight]);
 
   const genderData = [
     {
@@ -628,12 +653,23 @@ export default function Delivery() {
 
   return (
     <>
-      <CheckoutHeader active={2} />
+      {isDesktop ? (
+        <CheckoutHeader active={2} />
+      ) : (
+        <CheckoutHeaderMobile active={2} />
+      )}
       <Container>
-        <Content>
-          <DeliveryOptionsContainer>
-            <div style={{ width: 416, display: 'flex' }}>
+        <Content isDesktop={isDesktop}>
+          <DeliveryOptionsContainer isDesktop={isDesktop}>
+            <div
+              style={
+                isDesktop
+                  ? { width: 416, display: 'flex' }
+                  : { display: 'flex', width: '100%' }
+              }
+            >
               <DeliveryButton
+                isDesktop={isDesktop}
                 selected={
                   deliveryOption === 'delivery' || hoverButton === 'delivery'
                 }
@@ -650,12 +686,13 @@ export default function Delivery() {
                   if (deliveryOption !== 'delivery') setHoverButton('none');
                 }}
               >
-                <DeliveryButtonContainer>
+                <DeliveryButtonContainer isDesktop={isDesktop}>
                   <DeliveryButtonContent
                     selected={
                       deliveryOption === 'delivery' ||
                       hoverButton === 'delivery'
                     }
+                    isDesktop={isDesktop}
                   >
                     <img
                       src={
@@ -673,6 +710,7 @@ export default function Delivery() {
                 </DeliveryButtonContainer>
               </DeliveryButton>
               <DeliveryButton
+                isDesktop={isDesktop}
                 selected={
                   deliveryOption === 'withdrawinstore' ||
                   hoverButton === 'withdrawinstore'
@@ -692,12 +730,14 @@ export default function Delivery() {
                     setHoverButton('none');
                 }}
               >
-                <DeliveryButtonContainer>
+                <DeliveryButtonContainer isDesktop={isDesktop}>
                   <DeliveryButtonContent
                     selected={
                       deliveryOption === 'withdrawinstore' ||
                       hoverButton === 'withdrawinstore'
                     }
+                    style={isDesktop ? {} : { fontSize: 12 }}
+                    isDesktop={isDesktop}
                   >
                     <img
                       src={
@@ -710,32 +750,57 @@ export default function Delivery() {
                       style={{ width: 28, height: 25 }}
                     />
                     Retirar
-                    <br /> na Loja
+                    {isDesktop && <br />} na {!isDesktop && <br />} Loja
                   </DeliveryButtonContent>
                   <div>Grátis</div>
                 </DeliveryButtonContainer>
               </DeliveryButton>
             </div>
             {deliveryOption === 'withdrawinstore' ? (
-              <TakeOnShop>{withdrawMessage}</TakeOnShop>
+              <TakeOnShop isDesktop={isDesktop}>{withdrawMessage}</TakeOnShop>
             ) : (
               <DeliveryDateContainer
                 error={invalidDeliveryDay || invalidDeliveryHour}
+                isDesktop={isDesktop}
               >
-                <div>
-                  <strong style={{ width: 269 }}>
+                <div
+                  style={
+                    isDesktop
+                      ? { width: 270, height: 53 }
+                      : { width: '100%', height: 145, padding: 10 }
+                  }
+                >
+                  <strong
+                    style={
+                      isDesktop
+                        ? { width: 197 }
+                        : { display: 'inline-block', width: '100%', height: 32 }
+                    }
+                  >
                     Selecione o melhor dia e horário para entrega
                   </strong>
-                  <div>
+                  <div
+                    style={
+                      isDesktop
+                        ? {}
+                        : {
+                            width: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            height: 70,
+                            marginTop: 10,
+                          }
+                    }
+                  >
                     <NoTitleSelect
                       setValue={setDeliveryDay}
-                      customWidth={125}
+                      customWidth={isDesktop ? 125 : 239}
                       placeholder="Dia"
                       data={deliveryDays}
                     />
                     <NoTitleSelect
                       setValue={setDeliveryHour}
-                      customWidth={190}
+                      customWidth={isDesktop ? 125 : 239}
                       placeholder="Hora"
                       data={deliveryHours}
                     />
@@ -743,7 +808,7 @@ export default function Delivery() {
                 </div>
               </DeliveryDateContainer>
             )}
-            <ShippingWarning>
+            <ShippingWarning isDesktop={isDesktop}>
               Levantamento na loja:
               <b>Grátis</b>
               <br /> Compras até € 30,00:
@@ -754,31 +819,34 @@ export default function Delivery() {
           </DeliveryOptionsContainer>
         </Content>
 
-        <Content style={{ marginTop: 40 }}>
+        <Content isDesktop={isDesktop} style={{ marginTop: 40 }}>
           <InfoContainer
             onSubmit={handleSubmit}
             initialData={profile}
             ref={profileInfoRef}
+            isDesktop={isDesktop}
           >
             <SectionTitle>
               <strong>Dados de contato</strong>
               <small>Confira e atualize caso necessário.</small>
             </SectionTitle>
-            <InputContainer>
+            <InputContainer isDesktop={isDesktop}>
               <Input
                 name="name"
                 title="Nome"
                 placeholder="Escreve o teu nome"
                 error={invalidFields[0]}
+                customWidth={isDesktop ? 221 : '100%'}
               />
               <Input
                 name="last_name"
                 title="Apelido"
                 placeholder="Escolhe o teu apelido"
                 error={invalidFields[1]}
+                customWidth={isDesktop ? 221 : '100%'}
               />
             </InputContainer>
-            <InputContainer>
+            <InputContainer isDesktop={isDesktop}>
               <Input
                 name="email"
                 title="Email"
@@ -789,20 +857,23 @@ export default function Delivery() {
                   onlyValues(value, setEmail)
                 }
                 error={emailError}
+                customWidth={isDesktop ? 221 : '100%'}
               />
 
               <InputMask
                 name="birth"
                 title="Data de nascimento"
                 error={invalidBirth}
+                customWidth={isDesktop ? 221 : '100%'}
               />
             </InputContainer>
-            <InputContainer>
+            <InputContainer isDesktop={isDesktop}>
               <InputMask
                 name="document"
                 type="9d"
                 title="NIF"
                 error={invalidDocument}
+                customWidth={isDesktop ? 221 : '100%'}
               />
 
               {gender !== '' ? (
@@ -811,7 +882,7 @@ export default function Delivery() {
                   placeholder="Escolha o gênero"
                   setValue={setGender}
                   defaultValue={{ label: gender, value: gender }}
-                  customWidth={221}
+                  customWidth={isDesktop ? 221 : '100%'}
                   data={genderData}
                   error={invalidGender}
                   clearValue
@@ -821,7 +892,7 @@ export default function Delivery() {
                   title="Gênero"
                   placeholder="Escolha o gênero"
                   setValue={setGender}
-                  customWidth={221}
+                  customWidth={isDesktop ? 221 : '100%'}
                   data={genderData}
                   error={invalidGender}
                 />
@@ -834,29 +905,36 @@ export default function Delivery() {
                 accountButton
               </button>
             </InputContainer>
-            <InputContainer>
+            <InputContainer isDesktop={isDesktop}>
               <InputMask
                 name="phone"
                 type="phone"
                 title="Telemóvel"
                 error={invalidPhone}
+                customWidth={isDesktop ? 221 : '100%'}
               />
             </InputContainer>
           </InfoContainer>
           <div>
             {loading && (
-              <LoadingContainer>
+              <LoadingContainer isDesktop={isDesktop}>
                 <FaSpinner color="#666" size={42} />
               </LoadingContainer>
             )}
             {deliveryOption === 'withdrawinstore' && (
-              <LoadingContainer>
-                {/* <FaSpinner color="#666" size={42} /> */}
-              </LoadingContainer>
+              <LoadingContainer
+                isDesktop={isDesktop}
+                style={isDesktop ? {} : { width: '80.95%' }}
+              />
             )}
             <InfoContainer
               onSubmit={handleShippingInfo}
-              style={{ width: 683 }}
+              isDesktop={isDesktop}
+              style={
+                isDesktop
+                  ? { width: 683 }
+                  : { width: '100%', height: 792, marginTop: 30 }
+              }
               initialData={
                 !!primaryAddress
                   ? primaryAddress.length !== 0
@@ -878,13 +956,16 @@ export default function Delivery() {
                     : 'Confira e atualize caso necessário.'}
                 </small>
               </SectionTitle>
-              <InputContainer style={{ width: 628 }}>
+              <InputContainer
+                style={isDesktop ? { width: 628 } : { width: '100%' }}
+                isDesktop={isDesktop}
+              >
                 {newAddress ? (
                   <Input
                     name="residence"
                     title="Nome da morada (para futuras entregas)"
                     placeholder="Escreve o nome da morada"
-                    customWidth={325}
+                    customWidth={isDesktop ? 325 : '100%'}
                     value={residence}
                     onChange={({ target: { value } }) => setResidence(value)}
                     error={invalidResidence}
@@ -899,7 +980,7 @@ export default function Delivery() {
                       value: residence,
                       label: residence,
                     }}
-                    customWidth={325}
+                    customWidth={isDesktop ? 325 : '100%'}
                     data={formattedAddresses}
                     error={invalidResidence}
                     disabled={loading || deliveryOption === 'withdrawinstore'}
@@ -909,18 +990,23 @@ export default function Delivery() {
                   name="destination_name"
                   title="Nome completo do destinatário"
                   placeholder="Escreve o nome do destinatário"
-                  customWidth={283}
+                  customWidth={isDesktop ? 283 : '100%'}
                   error={locationInvalidFields[0]}
                   disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
               </InputContainer>
-              <InputContainer style={{ width: 628 }}>
+              <InputContainer
+                style={
+                  isDesktop ? { width: 628 } : { width: '100%', height: 232 }
+                }
+                isDesktop={isDesktop}
+              >
                 <InputMask
                   name="zipcode"
                   mask="9999-999"
                   placeholder="0000-000"
                   title="Código Postal"
-                  customWidth={90}
+                  customWidth={isDesktop ? 90 : '100%'}
                   value={zipcode}
                   onChange={({ target: { value } }) => setZipcode(value)}
                   error={invalidPostcode}
@@ -931,7 +1017,7 @@ export default function Delivery() {
                   name="address"
                   title="Morada"
                   placeholder="Escreve a tua morada"
-                  customWidth={215}
+                  customWidth={isDesktop ? 215 : '100%'}
                   error={locationInvalidFields[1]}
                   disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
@@ -939,7 +1025,7 @@ export default function Delivery() {
                   name="number"
                   title="Número"
                   placeholder="Escreve o teu número"
-                  customWidth={90}
+                  customWidth={isDesktop ? 90 : '100%'}
                   error={locationInvalidFields[2]}
                   disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
@@ -947,17 +1033,22 @@ export default function Delivery() {
                   name="district"
                   title="Distrito"
                   placeholder="Escreve o teu distrito"
-                  customWidth={173}
+                  customWidth={isDesktop ? 173 : '100%'}
                   error={locationInvalidFields[3]}
                   disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
               </InputContainer>
-              <InputContainer style={{ width: 628 }}>
+              <InputContainer
+                style={
+                  isDesktop ? { width: 628 } : { width: '100%', height: 177 }
+                }
+                isDesktop={isDesktop}
+              >
                 <Input
                   name="city"
                   title="Cidade"
                   placeholder="Escreve a tua cidade"
-                  customWidth={194}
+                  customWidth={isDesktop ? 194 : '100%'}
                   error={locationInvalidFields[4]}
                   disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
@@ -966,18 +1057,20 @@ export default function Delivery() {
                   title="Localidade"
                   placeholder="Escolha a Localidade"
                   defaultValue="Lisboa"
-                  customWidth={221}
+                  customWidth={isDesktop ? 221 : '100%'}
                   error={locationInvalidFields[5]}
                   disabled={loading || deliveryOption === 'withdrawinstore'}
+                  style={isDesktop ? {} : { marginTop: 0 }}
                 />
                 <Select
-                  title="Localidade"
+                  title="País"
                   placeholder="Escolha o país"
                   setValue={setCountry}
                   defaultValue={{ value: 'Portugal', label: 'Portugal' }}
-                  customWidth={173}
+                  customWidth={isDesktop ? 173 : '100%'}
                   error={invalidLocation}
                   disabled={loading || deliveryOption === 'withdrawinstore'}
+                  style={isDesktop ? {} : { marginTop: 25 }}
                 />
               </InputContainer>
               <div
@@ -993,7 +1086,16 @@ export default function Delivery() {
                   shippingButton
                 </button>
                 {newAddress ? (
-                  <div style={{ display: 'flex' }}>
+                  <div
+                    style={
+                      isDesktop
+                        ? { display: 'flex' }
+                        : {
+                            display: 'flex',
+                            flexDirection: 'column',
+                          }
+                    }
+                  >
                     <StartStop selected={newPrimaryAddress}>
                       <button
                         type="button"
@@ -1010,7 +1112,16 @@ export default function Delivery() {
                     )}
                   </div>
                 ) : (
-                  <div style={{ display: 'flex' }}>
+                  <div
+                    style={
+                      isDesktop
+                        ? { display: 'flex' }
+                        : {
+                            display: 'flex',
+                            flexDirection: 'column',
+                          }
+                    }
+                  >
                     <StartStop selected={newPrimaryAddress}>
                       <button
                         type="button"
@@ -1027,6 +1138,7 @@ export default function Delivery() {
                         setResidence('');
                         setZipcode('');
                       }}
+                      isDesktop={isDesktop}
                     >
                       <small>Registar um novo endereço</small>
                     </UseAddress>
@@ -1037,12 +1149,20 @@ export default function Delivery() {
           </div>
         </Content>
         <Content
-          style={{
-            height: 55,
-            justifyContent: 'flex-start',
-            alignItems: 'flex-end',
-            marginTop: 40,
-          }}
+          style={
+            isDesktop
+              ? {
+                  height: 55,
+                  justifyContent: 'flex-start',
+                  alignItems: 'flex-end',
+                  marginTop: 40,
+                }
+              : {
+                  height: 118,
+                  marginTop: 40,
+                }
+          }
+          isDesktop={isDesktop}
         >
           <Button
             color="#2CBDD3"
@@ -1052,29 +1172,41 @@ export default function Delivery() {
           >
             Editar&nbsp;<b>Produtos</b>
           </Button>
-          <Title style={{ marginLeft: 685 }}>Resumo</Title>
+          <Title style={isDesktop ? { marginLeft: 685 } : { marginTop: 30 }}>
+            Resumo
+          </Title>
         </Content>
 
-        <Content style={{ marginTop: 20 }}>
+        <Content style={{ marginTop: 20 }} isDesktop={isDesktop}>
           <div>
             <ItemsList
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
+              containerHeight={isDesktop ? 708 : currentContainerHeight}
             >
               {paginatedProducts.map((item, index) => (
-                <Item key={item.id} item={item} index={index} />
+                <Item
+                  key={item.id}
+                  item={item}
+                  index={index}
+                  isDesktop={isDesktop}
+                />
               ))}
             </ItemsList>
             <TextArea
               title="Se não encontrou o que procura, digite abaixo que iremos verificar para si."
               name="notes"
               placeholder="Informe aqui"
-              style={{ width: 840, height: 108 }}
+              style={
+                isDesktop
+                  ? { width: 840, height: 108 }
+                  : { width: '100%', height: 108 }
+              }
               inputStyle={{ height: 87 }}
               error={false}
             />
           </div>
-          <CheckoutDetails>
+          <CheckoutDetails isDesktop={isDesktop}>
             <CheckoutItem>
               <h1>Produtos</h1>
               <h2>€&nbsp;{price}</h2>
@@ -1116,8 +1248,11 @@ export default function Delivery() {
                       placeholder="CUPOM"
                       value={coupon}
                       onChange={({ target: { value } }) => setCoupon(value)}
+                      isDesktop={isDesktop}
                     />
-                    <SendButton onClick={validateCoupon}>Validar</SendButton>
+                    <SendButton onClick={validateCoupon} isDesktop={isDesktop}>
+                      Validar
+                    </SendButton>
                   </>
                 )}
               </div>
@@ -1166,7 +1301,7 @@ export default function Delivery() {
                 if (deliveryOption === 'delivery')
                   shippingButtonRef.current.click();
               }}
-              style={{ width: 309 }}
+              style={isDesktop ? { width: 309 } : { width: '100%' }}
               disabled={loading || processingOrder}
             >
               {processingOrder ? (

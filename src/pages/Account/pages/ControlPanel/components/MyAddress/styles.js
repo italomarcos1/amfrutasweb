@@ -7,13 +7,13 @@ export const Container = styled.button.attrs({
   align-items: flex-start;
   flex-direction: column;
   justify-content: flex-start;
-  width: 410px;
+  width: ${({ isDesktop }) => (isDesktop ? '410px' : '100%')};
   height: 229px;
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 4px;
 
-  padding: 21px 30px;
+  padding: ${({ isDesktop }) => (isDesktop ? '21px 30px' : '10.5px 15px')};
 
   img {
     margin-right: 28px;
@@ -31,8 +31,8 @@ export const Container = styled.button.attrs({
 
   strong {
     font-weight: normal;
-    font-size: 22px;
-    line-height: 29px;
+    font-size: ${({ isDesktop }) => (isDesktop ? 22 : 18)}px;
+    line-height: ${({ isDesktop }) => (isDesktop ? 29 : 23.7)}px;
     font-family: 'SFPro';
     letter-spacing: 0px;
     color: #424242;
@@ -40,8 +40,8 @@ export const Container = styled.button.attrs({
 
   small {
     display: block;
-    font-size: 15px;
-    line-height: 20px;
+    font-size: ${({ isDesktop }) => (isDesktop ? 15 : 13)}px;
+    line-height: ${({ isDesktop }) => (isDesktop ? 20 : 17.3)}px;
     font-family: 'SFPro';
     letter-spacing: 0px;
     color: #9e9e9e;
@@ -60,11 +60,11 @@ export const Content = styled.div`
   align-items: flex-start;
   justify-content: space-between;
   height: 51px;
-  width: 253px;
+  width: ${({ isDesktop }) => (isDesktop ? '253px' : '60%')};
 `;
 
 export const AddressInfo = styled.div`
-  width: 267px;
+  width: ${({ isDesktop }) => (isDesktop ? '267px' : '65%')};
   height: 91px;
   margin-top: 15px;
   display: flex;

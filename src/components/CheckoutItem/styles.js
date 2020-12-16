@@ -1,12 +1,14 @@
 import styled from 'styled-components';
 
 export const Container = styled.li`
-  width: 400px;
+  width: ${({ isDesktop }) => (isDesktop ? '400px' : '100%')};
   height: 82px;
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 6px;
   padding: 6px;
+  margin-top: ${({ isDesktop, index }) =>
+    isDesktop ? 0 : index > 0 ? 20 : 0}px;
 `;
 
 export const ItemPicture = styled.img`
@@ -25,8 +27,8 @@ export const Title = styled.h1`
   padding: 0;
   padding-right: 5px;
   text-transform: capitalize;
-  height: 42px;
-  width: 245px;
+  height: ${({ isDesktop }) => (isDesktop ? 42 : 45)}px;
+  width: ${({ isDesktop }) => (isDesktop ? 245 : 165)}px;
   letter-spacing: 0px;
   overflow: hidden;
   text-overflow: ellipsis;

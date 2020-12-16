@@ -7,6 +7,8 @@ export const PaginationContainer = styled(Carousel)`
   /* width: ${({ isDesktop }) => (isDesktop ? 218 : 188)}px; */
 
   height: 30px;
+  min-height: 30px;
+  margin-top: 0px;
   align-items: center;
   justify-content: center;
 `;
@@ -17,6 +19,7 @@ export const ArrowButton = styled.div`
   height: 30px;
   display: flex;
   align-items: center;
+
   justify-content: center;
 `;
 

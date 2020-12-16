@@ -55,6 +55,9 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
           draft.products
         );
 
+        const totalPages = Math.ceil(draft.products.length / 8);
+        draft.pages = totalPages;
+
         draft.price = formattedPrice;
         draft.saved = formattedSavedPrice;
 

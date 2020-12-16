@@ -11,7 +11,7 @@ export const Container = styled.div`
 export const Layout = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 1240px;
+  width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
   margin: 0 auto;
 `;
 
@@ -62,7 +62,7 @@ export const MenuHeader = styled.div`
 export const Content = styled.div`
   display: flex;
   flex-direction: column;
-  width: 995px;
+  width: ${({ isDesktop }) => (isDesktop ? '995px' : '100%')};
   align-items: center;
   justify-content: flex-start;
 `;

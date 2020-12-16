@@ -19,7 +19,7 @@ import { populateAddresses } from '~/store/modules/addresses/actions';
 
 import lock from '~/assets/lock.svg';
 
-export default function Main({ setPage }) {
+export default function Main({ setPage, isDesktop }) {
   const dispatch = useDispatch();
   const uuid = useSelector(state => state.auth.uuid);
 
@@ -109,21 +109,31 @@ export default function Main({ setPage }) {
   );
 
   const handleAppleLogin = useCallback(response => {
-    console.log(response);
+    // console.log(response);
   }, []);
 
   return (
     <>
-      <Title>
+      <Title isDesktop={isDesktop}>
         INICIA SESSÃO PARA UMA
         <br />
         <b>EXPERIÊNCIA PERSONALIZADA</b>
       </Title>
       <Button
         onClick={() => setPage('login')}
-        style={{ marginTop: 95 }}
         color="#2CBDD3"
         shadowColor="#26A5BB"
+        style={
+          isDesktop
+            ? {
+                width: 441,
+                marginTop: 95,
+              }
+            : {
+                width: '85%',
+                marginTop: 95,
+              }
+        }
       >
         Iniciar sessão com&nbsp;<b>E-mail</b>
       </Button>
@@ -132,7 +142,12 @@ export default function Main({ setPage }) {
         callback={handleFbLogin}
         fields="name,email"
         render={({ onClick }) => (
-          <Button onClick={onClick} color="#4267b2" shadowColor="#32549d">
+          <Button
+            onClick={onClick}
+            color="#4267b2"
+            shadowColor="#32549d"
+            style={isDesktop ? { width: 441 } : { width: '85%' }}
+          >
             Iniciar sessão com&nbsp;<b>Facebook</b>
           </Button>
         )}
@@ -146,7 +161,12 @@ export default function Main({ setPage }) {
         responseMode="form_post"
         callback={handleAppleLogin}
         render={({ onClick }) => (
-          <Button onClick={onClick} color="#000" shadowColor="#9c9c9c">
+          <Button
+            onClick={onClick}
+            color="#000"
+            shadowColor="#9c9c9c"
+            style={isDesktop ? { width: 441 } : { width: '85%' }}
+          >
             Iniciar sessão com&nbsp;<b>Apple</b>
           </Button>
         )}
@@ -166,4 +186,5 @@ export default function Main({ setPage }) {
 
 Main.propTypes = {
   setPage: PropTypes.func.isRequired,
+  isDesktop: PropTypes.bool.isRequired,
 };

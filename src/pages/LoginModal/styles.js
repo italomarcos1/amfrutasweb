@@ -17,12 +17,12 @@ export const Background = styled.div`
 export const Container = styled(Form)`
   display: flex;
   align-items: center;
-  width: 820px;
+  width: ${({ isDesktop }) => (isDesktop ? '820px' : '90%')};
   height: 566px;
 `;
 
 export const LoginDetails = styled.div`
-  width: 569px;
+  width: ${({ isDesktop }) => (isDesktop ? '569px' : '100%')};
   height: 566px;
   background-color: #fff;
   display: flex;
@@ -32,16 +32,16 @@ export const LoginDetails = styled.div`
 
 export const Header = styled.div`
   display: flex;
-  width: 569px;
+  width: ${({ isDesktop }) => (isDesktop ? '569px' : '100%')};
 `;
 
 export const HeaderButton = styled.div`
-  width: 250px;
+  width: ${({ isDesktop }) => (isDesktop ? '250px' : '42.5%')};
   height: 61px;
   border-top: 7px #2cbdd3 solid;
   border-color: ${({ active }) => (active ? '#2cbdd3' : '#EDEDED')};
   font-family: 'SFPro';
-  font-size: 18px;
+  font-size: ${({ isDesktop }) => (isDesktop ? 18 : 16)}px;
   line-height: 22px;
   letter-spacing: 0px;
   color: ${({ active }) => (active ? '#181818' : '#7F7F7F')};
@@ -53,7 +53,7 @@ export const HeaderButton = styled.div`
 `;
 
 export const CloseButton = styled.button`
-  width: 69px;
+  width: ${({ isDesktop }) => (isDesktop ? '69px' : '15%')};
   height: 61px;
   display: flex;
   align-items: center;
@@ -62,8 +62,8 @@ export const CloseButton = styled.button`
   border: none;
 
   img {
-    width: 35px;
-    height: 35px;
+    width: ${({ isDesktop }) => (isDesktop ? 35 : 30)}px;
+    height: ${({ isDesktop }) => (isDesktop ? 35 : 30)}px;
   }
 `;
 

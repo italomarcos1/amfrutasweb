@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 import { ProductsContainer, NullProduct, Container, Content } from './styles';
 
 import Product from '~/components/Product';
@@ -14,6 +15,8 @@ import LoginModal from '~/pages/LoginModal';
 import backend from '~/services/api';
 
 export default function Promotions() {
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
+
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(0);
@@ -21,11 +24,12 @@ export default function Promotions() {
   const [nextPageUrl, setNextPageUrl] = useState('');
   const [pageHeight, setPageHeight] = useState(1184);
   const [paginationArray, setPaginationArray] = useState([]);
-  const [orderDirection, setOrderDirection] = useState('desc');
-  const [orderField, setOrderField] = useState('updated_at');
+  const [field, setField] = useState('latest');
   const [loginModal, setLoginModal] = useState(false);
   const noFavorite = useSelector(state => state.auth.noFavorite);
   const firstLogin = useSelector(state => state.auth.firstLogin);
+
+  const [perPage, setPerPage] = useState(() => (isDesktop ? 15 : 16));
 
   const history = useHistory();
 
@@ -45,7 +49,7 @@ export default function Promotions() {
 
   const loadProducts = useCallback(async () => {
     const productsResponse = await backend.get(
-      `ecommerce/products?page=${currentPage}&order_field=${orderField}&order_direction=${orderDirection}&only_promotional=true`
+      `ecommerce/products?page=${currentPage}&special_order=${field}&only_promotional=true&per_page=${perPage}`
     );
 
     const {
@@ -62,8 +66,20 @@ export default function Promotions() {
       }
     }
 
-    const hasLastRow =
-      data.length > 10 ? 1184 : Math.ceil(data.length / 5) * 404;
+    if (!isDesktop && data.length % 2 !== 0) {
+      const itemsToFill = Math.ceil(data.length / 2) * 2 - data.length;
+
+      for (let i = 0; i < itemsToFill; i++) {
+        data.push(null);
+      }
+    }
+
+    let hasLastRow;
+
+    if (isDesktop)
+      hasLastRow = data.length > 10 ? 1184 : Math.ceil(data.length / 5) * 404;
+    else
+      hasLastRow = data.length > 14 ? 2804 : Math.ceil(data.length / 2) * 354;
 
     setPageHeight(hasLastRow);
 
@@ -72,35 +88,27 @@ export default function Promotions() {
     setLastPage(last_page);
     setNextPageUrl(next_page_url);
     setPrevPageUrl(prev_page_url);
-  }, [currentPage, orderDirection, orderField]);
+  }, [currentPage, field, perPage, isDesktop]);
 
   useEffect(() => {
-    loadProducts(currentPage);
+    loadProducts();
     generatePaginationArray();
-  }, [
-    loadProducts,
-    generatePaginationArray,
-    currentPage,
-    orderDirection,
-    orderField,
-  ]);
+  }, [loadProducts, generatePaginationArray, currentPage, field]);
 
   return (
     <>
       <Header login={() => setLoginModal(true)} active="Promoções" />
 
       <Container>
-        <Content>
+        <Content isDesktop={isDesktop}>
           <CustomHeader
             currentPage={currentPage}
             lastPage={lastPage}
             setCurrentPage={setCurrentPage}
             paginationArray={paginationArray}
-            setOrderDirection={setOrderDirection}
-            setOrderField={setOrderField}
-            orderField={orderField}
+            setField={setField}
           />
-          <ProductsContainer pageHeight={pageHeight}>
+          <ProductsContainer pageHeight={pageHeight} isDesktop={isDesktop}>
             {products.map((p, index) =>
               p === null ? (
                 <NullProduct />
@@ -111,13 +119,15 @@ export default function Promotions() {
           </ProductsContainer>
         </Content>
         <FooterPagination
-          style={{ width: 995, marginLeft: 'auto', marginRight: 'auto' }}
+          style={{ marginLeft: 'auto', marginRight: 'auto' }}
+          isDesktop={isDesktop}
         >
           <Pagination
             currentPage={currentPage}
             lastPage={lastPage}
             setCurrentPage={setCurrentPage}
             paginationArray={paginationArray}
+            isDesktop={isDesktop}
           />
         </FooterPagination>
       </Container>

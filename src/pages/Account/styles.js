@@ -12,8 +12,9 @@ export const Container = styled.div`
 `;
 
 export const Content = styled.div`
-  width: 1095px;
+  width: ${({ isDesktop }) => (isDesktop ? '1095px' : '100%')};
   display: flex;
+  flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
   align-items: flex-start;
   justify-content: space-between;
   margin: 0 auto;

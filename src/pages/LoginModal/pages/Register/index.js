@@ -24,7 +24,7 @@ import { signUpRequest, cleanRegister } from '~/store/modules/auth/actions';
 
 import lock from '~/assets/lock.svg';
 
-export default function Register({ closeModal }) {
+export default function Register({ closeModal, isDesktop }) {
   const [name, setName] = useState('');
   const [invalidName, setInvalidName] = useState(false);
   const [lastName, setLastName] = useState('');
@@ -109,18 +109,19 @@ export default function Register({ closeModal }) {
 
   return (
     <>
-      <Title>
+      <Title isDesktop={isDesktop}>
         CRIA A TUA
         <br />
         <b>CONTA COM E-MAIL E SEGURANÇA</b>
       </Title>
-      <Form onSubmit={handleSubmit}>
-        <InputContainer>
+      <Form onSubmit={handleSubmit} style={isDesktop ? {} : { width: '85%' }}>
+        <InputContainer isDesktop={isDesktop}>
           <Input
             name="name"
             title="Nome"
             placeholder="Escreve o teu nome"
             error={invalidName}
+            customWidth={isDesktop ? 221 : '100%'}
             onChange={({ target: { value } }) => setName(value)}
             value={name}
           />
@@ -131,9 +132,10 @@ export default function Register({ closeModal }) {
             error={invalidLastName}
             onChange={({ target: { value } }) => setLastName(value)}
             value={lastName}
+            customWidth={isDesktop ? 221 : '100%'}
           />
         </InputContainer>
-        <InputContainer>
+        <InputContainer isDesktop={isDesktop} style={{ marginTop: 10 }}>
           <Input
             name="email"
             title="E-mail"
@@ -142,6 +144,7 @@ export default function Register({ closeModal }) {
             value={email}
             onChange={({ target: { value } }) => onlyValues(value, setEmail)}
             error={emailError}
+            customWidth={isDesktop ? 221 : '100%'}
           />
           <InputMask
             name="birthday"
@@ -150,9 +153,10 @@ export default function Register({ closeModal }) {
             value={birthday}
             onChange={({ target: { value } }) => setBirthDate(value)}
             error={birthDateError}
+            customWidth={isDesktop ? 221 : '100%'}
           />
         </InputContainer>
-        <InputContainer>
+        <InputContainer isDesktop={isDesktop} style={{ marginTop: 10 }}>
           <Input
             name="password"
             title="Palavra-passe"
@@ -161,6 +165,7 @@ export default function Register({ closeModal }) {
             value={password}
             onChange={({ target: { value } }) => setPassword(value)}
             error={passwordError}
+            customWidth={isDesktop ? 221 : '100%'}
           />
           <Input
             name="confirmPassword"
@@ -170,6 +175,7 @@ export default function Register({ closeModal }) {
             value={confirmPassword}
             onChange={({ target: { value } }) => setConfirmPassword(value)}
             error={confirmPasswordError}
+            customWidth={isDesktop ? 221 : '100%'}
           />
         </InputContainer>
       </Form>
@@ -178,11 +184,11 @@ export default function Register({ closeModal }) {
         onClick={handleSubmit}
         color="#1DC167"
         shadowColor="#17A75B"
-        style={{ marginTop: 47 }}
+        style={isDesktop ? { marginTop: 47 } : { width: '85%', marginTop: 17 }}
       >
         {loading ? <FaSpinner color="#fff" size={20} /> : 'Criar conta'}
       </Button>
-      <SecureLogin style={{ marginTop: 48 }}>
+      <SecureLogin style={isDesktop ? { marginTop: 48 } : { marginTop: 17 }}>
         Secure <img src={lock} alt="Lock" /> Login
       </SecureLogin>
       {toastVisible && (
@@ -194,3 +200,8 @@ export default function Register({ closeModal }) {
     </>
   );
 }
+
+Register.propTypes = {
+  closeModal: PropTypes.func.isRequired,
+  isDesktop: PropTypes.bool.isRequired,
+};

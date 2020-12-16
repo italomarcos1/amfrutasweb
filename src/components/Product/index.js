@@ -28,6 +28,11 @@ import {
   Options,
   FavoriteButton,
   Title,
+  Coins,
+  AmountContainer,
+  UpdateAmountButton,
+  Amount,
+  AddToCartButton,
 } from './styles';
 
 export default function Product({ product, index }) {
@@ -106,6 +111,7 @@ export default function Product({ product, index }) {
             pathname: `/${url}`,
             state: { id },
           }}
+          isDesktop={isDesktop}
         >
           <img src={thumbs} alt="Product" />
         </ImageContainer>
@@ -116,19 +122,20 @@ export default function Product({ product, index }) {
             state: { id },
           }}
         >
-          <Title>{title}</Title>
+          <Title isDesktop={isDesktop}>{title}</Title>
         </Link>
         <PriceContainer
           to={{
             pathname: `/${url}`,
-
             state: { id },
           }}
         >
           <span>
-            <img src={coins} alt="coins" />
-            <strong>€&nbsp;{!!cback ? cback : '0.00'}</strong>
-            DE CRÉDITO
+            <Coins src={coins} alt="coins" isDesktop={isDesktop} />
+            <strong style={isDesktop ? {} : { fontSize: 9 }}>
+              €&nbsp;{!!cback ? cback : '0.00'}
+            </strong>
+            <b style={isDesktop ? {} : { fontSize: 9 }}>DE CRÉDITO</b>
           </span>
           {has_promotion ? (
             <small>
@@ -140,28 +147,41 @@ export default function Product({ product, index }) {
           )}
           <strong>€&nbsp;{has_promotion ? price_promotional : price}</strong>
         </PriceContainer>
-        <Options>
-          <div>
-            <button
+        <Options isDesktop={isDesktop}>
+          <AmountContainer isDesktop={isDesktop}>
+            <UpdateAmountButton
               type="button"
               disabled={qty === 1}
               onClick={() => setQty(qty - 1)}
+              isDesktop={isDesktop}
               style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
             >
               <img src={minus} alt="icon" />
-            </button>
-            <strong>{qty === 0 ? 0 : qty < 10 ? `0${qty}` : qty}</strong>
-            <button
+            </UpdateAmountButton>
+            <Amount isDesktop={isDesktop}>
+              {qty === 0 ? 0 : qty < 10 ? `0${qty}` : qty}
+            </Amount>
+            <UpdateAmountButton
               type="button"
               onClick={() => setQty(qty + 1)}
+              isDesktop={isDesktop}
               style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
             >
               <img src={plus} alt="icon" />
-            </button>
-          </div>
-          <button type="button" onClick={handleAddToCart} disabled={qty === 0}>
-            <img src={basket_active} alt="icon" />
-          </button>
+            </UpdateAmountButton>
+          </AmountContainer>
+          <AddToCartButton
+            type="button"
+            onClick={handleAddToCart}
+            isDesktop={isDesktop}
+            disabled={qty === 0}
+          >
+            <img
+              src={basket_active}
+              alt="icon"
+              style={isDesktop ? {} : { width: '70%' }}
+            />
+          </AddToCartButton>
         </Options>
       </Container>
       {toastVisible && (

@@ -56,7 +56,7 @@ export default function Footer() {
     });
   }, []);
 
-  useEffect(() => loadMenu(), []);
+  useEffect(loadMenu, [loadMenu]);
 
   return (
     <>

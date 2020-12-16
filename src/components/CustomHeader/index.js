@@ -1,11 +1,14 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useMediaQuery } from 'react-responsive';
+
 import {
   Container,
   FilterProducts,
   FilterProductsContainer,
   FilterProductsOption,
   FilterProductsList,
+  Content,
 } from './styles';
 
 import SearchInput from '~/components/SearchInput';
@@ -25,6 +28,8 @@ export default function CustomHeader({
 }) {
   const [selectedOption, setSelectedOption] = useState('Mais Recentes');
   const [menuIsOpen, setMenuIsOpen] = useState(false);
+
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
 
   const handleSetOption = useCallback(
     option => {
@@ -66,28 +71,30 @@ export default function CustomHeader({
   ];
 
   return (
-    <Container style={style}>
+    <Container style={style} isDesktop={isDesktop}>
       <SearchInput
         value={inputValue}
         onChange={({ target: { value } }) => setInputValue(value)}
       />
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-        }}
+      <Content
+        isDesktop={isDesktop}
+        style={isDesktop ? {} : { width: '100%', height: 68 }}
       >
-        <FilterProductsContainer>
-          <FilterProducts onClick={() => setMenuIsOpen(!menuIsOpen)}>
+        <FilterProductsContainer isDesktop={isDesktop}>
+          <FilterProducts
+            isDesktop={isDesktop}
+            onClick={() => setMenuIsOpen(!menuIsOpen)}
+          >
             <small>{selectedOption}</small>
             <img src={arrow} alt="" />
           </FilterProducts>
 
-          <FilterProductsList visible={menuIsOpen}>
+          <FilterProductsList visible={menuIsOpen} isDesktop={isDesktop}>
             {data.map(({ id, option }) => (
               <FilterProductsOption
                 key={id}
                 onClick={() => handleSetOption(option)}
+                isDesktop={isDesktop}
               >
                 {option}
               </FilterProductsOption>
@@ -99,9 +106,10 @@ export default function CustomHeader({
           lastPage={lastPage}
           setCurrentPage={setCurrentPage}
           paginationArray={paginationArray}
-          style={{ marginLeft: 20 }}
+          isDesktop={isDesktop}
+          style={isDesktop ? { marginLeft: 20 } : { marginTop: 10 }}
         />
-      </div>
+      </Content>
     </Container>
   );
 }

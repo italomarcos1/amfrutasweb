@@ -5,8 +5,10 @@ import { darken } from 'polished';
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 176px;
-  height: 376px;
+  width: ${({ isDesktop }) => (isDesktop ? 176 : 116.55)}px;
+
+  height: ${({ isDesktop }) => (isDesktop ? 376 : 326)}px;
+
   background-color: #fff;
   border-radius: 6px;
   text-align: left;
@@ -17,9 +19,12 @@ export const Container = styled.div`
     border-color: #0cb68b;
   }
 
-  justify-content: space-between;
+  justify-content: ${({ isDesktop }) =>
+    isDesktop ? 'space-between' : 'flex-start'};
   font-family: 'SFProCustom';
   padding: 6px;
+
+  margin-bottom: 28px;
 `;
 
 export const Title = styled.div`
@@ -28,12 +33,18 @@ export const Title = styled.div`
   font-size: 15px;
   line-height: 22px;
   padding: 0 5px 0 4px;
+  padding: ${({ isDesktop }) => (isDesktop ? '0 5px 0 4px' : '0 2.5px 0 2px')};
   height: 64px;
-  width: 156px;
+
+  width: ${({ isDesktop }) => (isDesktop ? '156px' : '95%')};
   letter-spacing: 0px;
   overflow: hidden;
   text-overflow: ellipsis;
   background: none;
+  /* background-color: #f0f; */
+
+  margin-top: ${({ isDesktop }) => (isDesktop ? 0 : 5)}px;
+
   text-align: left;
   text-transform: capitalize;
 
@@ -65,12 +76,12 @@ export const ImageContainer = styled(Link)`
   border-radius: 4px;
   background-color: #fff;
 
-  width: 164px;
-  height: 164px;
+  width: ${({ isDesktop }) => (isDesktop ? 164 : 108.6)}px;
+  height: ${({ isDesktop }) => (isDesktop ? 164 : 108.6)}px;
 
   img {
     border-radius: 4px;
-    width: 164px;
+    width: ${({ isDesktop }) => (isDesktop ? 164 : 108.6)}px;
   }
 `;
 
@@ -79,8 +90,7 @@ export const PriceContainer = styled(Link)`
   flex-direction: column;
   height: 64px;
   width: 100%;
-  padding: 0 10px;
-  padding-left: 5px;
+  padding: 0;
   font-family: 'SFProCustom';
   margin: 10px 0 0;
   letter-spacing: 0px;
@@ -88,21 +98,20 @@ export const PriceContainer = styled(Link)`
 
   /* background-color: #404; */
 
-  img {
-    width: 30.3px;
-    height: 20.5px;
-    margin-right: 6px;
-  }
-
   span {
     padding: 0;
     display: flex;
     color: #e2a63b;
-    font-size: 10px;
+
+    b {
+      font-weight: normal;
+      font-size: 10px;
+      font-family: 'SFProCustom';
+    }
+
     height: 20px;
     align-items: center;
     letter-spacing: 0px;
-    font-family: 'SFProCustom';
 
     /* background-color: #4f4; */
 
@@ -142,69 +151,80 @@ export const PriceContainer = styled(Link)`
   }
 `;
 
+export const Coins = styled.img`
+  width: ${({ isDesktop }) => (isDesktop ? 30.3 : 21.21)}px;
+  height: ${({ isDesktop }) => (isDesktop ? 20.5 : 14.35)}px;
+  margin-right: ${({ isDesktop }) => (isDesktop ? 6 : 3)}px;
+`;
+
 export const Options = styled.div`
   display: flex;
-  height: 45px;
+  height: ${({ isDesktop }) => (isDesktop ? 45 : 35)}px;
+
   width: 100%;
   /* background-color: #4f4; */
   align-items: center;
   justify-content: space-between;
   margin-top: 10px;
   user-select: none;
+`;
 
-  div {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 103px;
-    height: 45px;
-    /* margin-right: 12px; */
+export const AmountContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: ${({ isDesktop }) => (isDesktop ? '103px' : '70%')};
 
-    strong {
-      display: inline;
-      font-size: 18px;
-      color: #393939;
-      /* margin: 0 10px; */
-      font-weight: normal;
-      font-family: 'SFProCustom';
-      width: 40px;
-      max-width: 40px;
-      text-align: center;
-    }
+  height: ${({ isDesktop }) => (isDesktop ? 45 : 35)}px;
 
-    button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex: 1;
-      width: 31px;
-      max-width: 31px;
-      padding: 10px;
-      height: 45px;
-      border-radius: 4px;
-      background-color: #f2f2f2;
-      transition: all 0.2s;
+  /* margin-right: 12px; */
+`;
 
-      &:hover {
-        background-color: ${darken(0.08, '#f2f2f2')};
-      }
-    }
+export const UpdateAmountButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: ${({ isDesktop }) => (isDesktop ? '30px' : '30%')};
+  max-width: ${({ isDesktop }) => (isDesktop ? '30px' : '30%')};
+  padding: ${({ isDesktop }) => (isDesktop ? '10px' : '5px')};
+  height: ${({ isDesktop }) => (isDesktop ? 45 : 35)}px;
+
+  border-radius: 4px;
+  background-color: #f2f2f2;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: ${darken(0.08, '#f2f2f2')};
   }
+`;
 
-  button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 45px;
-    height: 45px;
+export const Amount = styled.strong`
+  display: inline;
+  font-size: ${({ isDesktop }) => (isDesktop ? 18 : 16)}px;
 
-    /* width: 45px; */
-    /* height: 45px; */
-    background-color: #4fb78d;
-    border-radius: 4px;
+  color: #393939;
+  /* margin: 0 10px; */
+  font-weight: normal;
+  font-family: 'SFProCustom';
+  width: ${({ isDesktop }) => (isDesktop ? '40px' : '40%')};
+  max-width: ${({ isDesktop }) => (isDesktop ? '40px' : '40%')};
+  text-align: center;
+`;
 
-    &:hover {
-      background-color: ${darken(0.08, '#4fb78d')};
-    }
+export const AddToCartButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: ${({ isDesktop }) => (isDesktop ? '45px' : '25%')};
+
+  /* width: 45px; */
+  height: ${({ isDesktop }) => (isDesktop ? 45 : 35)}px;
+
+  background-color: #4fb78d;
+  border-radius: 4px;
+
+  &:hover {
+    background-color: ${darken(0.08, '#4fb78d')};
   }
 `;

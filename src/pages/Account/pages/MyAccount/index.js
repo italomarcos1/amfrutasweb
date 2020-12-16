@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useMediaQuery } from 'react-responsive';
 
 import { Container, Content, InfoContainer, SectionTitle } from './styles';
 
@@ -23,6 +24,8 @@ import Select from '~/components/Select';
 import { updateProfileRequest } from '~/store/modules/user/actions';
 
 export default function MyAccount() {
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
+
   const [emailError, setEmailError] = useState(false);
   const [invalidBirth, setInvalidBirth] = useState(false);
 
@@ -93,16 +96,17 @@ export default function MyAccount() {
   return (
     <>
       <Container>
-        <Content>
+        <Content isDesktop={isDesktop}>
           <InfoContainer
             onSubmit={handleSubmit}
             initialData={profile !== null ? profile : {}}
+            isDesktop={isDesktop}
           >
-            <SectionTitle>
+            <SectionTitle isDesktop={isDesktop}>
               <strong>Dados de contato</strong>
               <small>Confira e atualize caso necessário.</small>
             </SectionTitle>
-            <InputContainer>
+            <InputContainer isDesktop={isDesktop}>
               <Input
                 name="name"
                 title="Nome"
@@ -116,7 +120,7 @@ export default function MyAccount() {
                 error={invalidFields[1]}
               />
             </InputContainer>
-            <InputContainer>
+            <InputContainer isDesktop={isDesktop}>
               <Input
                 name="email"
                 title="Email"
@@ -134,7 +138,7 @@ export default function MyAccount() {
                 error={invalidBirth}
               />
             </InputContainer>
-            <InputContainer>
+            <InputContainer isDesktop={isDesktop}>
               <InputMask
                 name="document"
                 type="9d"
@@ -162,7 +166,7 @@ export default function MyAccount() {
                 />
               )}
             </InputContainer>
-            <InputContainer>
+            <InputContainer isDesktop={isDesktop}>
               <InputMask
                 name="phone"
                 type="phone"
@@ -187,7 +191,11 @@ export default function MyAccount() {
               <b>Gravar</b>
             </Button>
           </InfoContainer>
-          <InfoContainer onSubmit={() => {}} style={{ width: 274 }}>
+          <InfoContainer
+            onSubmit={() => {}}
+            style={isDesktop ? { width: 274 } : { height: 471, marginTop: 30 }}
+            isDesktop={isDesktop}
+          >
             <SectionTitle>
               <strong>Palavra-passe</strong>
               <small>Com validação por email</small>

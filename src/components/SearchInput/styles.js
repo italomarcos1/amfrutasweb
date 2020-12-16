@@ -4,7 +4,7 @@ export const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 330px;
+  width: ${({ isDesktop }) => (isDesktop ? '330px' : '100%')};
   height: 28px;
   background-color: #e7e7e7;
   border-radius: 4px;

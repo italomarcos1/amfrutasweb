@@ -1,4 +1,6 @@
 import React from 'react';
+import { useMediaQuery } from 'react-responsive';
+
 import PropTypes from 'prop-types';
 
 import { Container, Content } from './styles';
@@ -12,13 +14,16 @@ export default function Info({
   subTitle,
   style,
   titleStyle,
+  imageStyle,
   noButton,
   ...rest
 }) {
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
+
   return (
-    <Container style={style} {...rest}>
-      <img src={icon} alt={alt} />
-      <Content>
+    <Container style={style} {...rest} isDesktop={isDesktop}>
+      <img src={icon} alt={alt} style={isDesktop ? {} : imageStyle} />
+      <Content isDesktop={isDesktop}>
         <strong style={titleStyle}>{title}</strong>
         <small>{subTitle}</small>
       </Content>
@@ -38,11 +43,13 @@ Info.propTypes = {
   subTitle: PropTypes.string.isRequired,
   style: PropTypes.oneOfType([PropTypes.object]),
   titleStyle: PropTypes.oneOfType([PropTypes.object]),
+  imageStyle: PropTypes.oneOfType([PropTypes.object]),
   noButton: PropTypes.bool,
 };
 
 Info.defaultProps = {
   style: {},
   titleStyle: {},
+  imageStyle: {},
   noButton: true,
 };

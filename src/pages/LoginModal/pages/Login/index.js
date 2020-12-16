@@ -23,7 +23,7 @@ import { onlyValues } from '~/utils/onlyValues';
 
 import lock from '~/assets/lock.svg';
 
-export default function Login({ closeModal, setPage }) {
+export default function Login({ closeModal, setPage, isDesktop }) {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [password, setPassword] = useState('');
@@ -73,17 +73,17 @@ export default function Login({ closeModal, setPage }) {
 
   return (
     <>
-      <Title>
+      <Title isDesktop={isDesktop}>
         INICIA A TUA SESSÃO
         <br />
         <b>COM E-MAIL E SEGURANÇA</b>
       </Title>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} style={isDesktop ? {} : { width: '85%' }}>
         <Input
           name="email"
           title="E-mail"
           placeholder="Escreve o teu e-mail"
-          customWidth={462}
+          customWidth={isDesktop ? 462 : '100%'}
           style={{ marginTop: 20 }}
           setError={value => setEmailError(!mailIsValid(value))}
           value={email}
@@ -95,7 +95,7 @@ export default function Login({ closeModal, setPage }) {
           title="Palavra-passe"
           placeholder="Escolhe a tua palavra-passe"
           type="password"
-          customWidth={462}
+          customWidth={isDesktop ? 462 : '100%'}
           value={password}
           onChange={({ target: { value } }) => setPassword(value)}
           style={{ marginTop: 20 }}
@@ -105,7 +105,18 @@ export default function Login({ closeModal, setPage }) {
           Não se recorda da palavra-passe?
         </ForgotPassword>
       </Form>
-      <Button color="#1DC167" shadowColor="#17A75B" onClick={handleSubmit}>
+      <Button
+        color="#1DC167"
+        shadowColor="#17A75B"
+        onClick={handleSubmit}
+        style={
+          isDesktop
+            ? {}
+            : {
+                width: '85%',
+              }
+        }
+      >
         {loading ? <FaSpinner color="#fff" size={20} /> : 'Iniciar sessão'}
       </Button>
       <GoBack onClick={() => setPage('main')}>Ou voltar</GoBack>
@@ -125,4 +136,5 @@ export default function Login({ closeModal, setPage }) {
 Login.propTypes = {
   closeModal: PropTypes.func.isRequired,
   setPage: PropTypes.func.isRequired,
+  isDesktop: PropTypes.bool.isRequired,
 };

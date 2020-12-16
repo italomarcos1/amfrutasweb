@@ -3,22 +3,30 @@ import styled from 'styled-components';
 export const Container = styled.div`
   display: flex;
   padding: 10px;
-  padding-right: 21px;
   align-items: center;
   justify-content: space-between;
   background-color: #fff;
 
-  width: 995px;
-  height: 48px;
+  width: ${({ isDesktop }) => (isDesktop ? '995px' : '100%')};
+  flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
+
+  height: ${({ isDesktop }) => (isDesktop ? 48 : 126)}px;
+  padding-right: ${({ isDesktop }) => (isDesktop ? 21 : 10)}px;
+
   border-radius: 4px;
   position: relative;
 `;
 
+export const Content = styled.div`
+  display: flex;
+  flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
+  align-items: center;
+`;
+
 export const FilterProductsContainer = styled.div`
-  width: 200px;
+  width: ${({ isDesktop }) => (isDesktop ? '200px' : '100%')};
   align-items: flex-start;
   justify-content: flex-start;
-  background-color: #f0f;
   display: flex;
   flex-direction: column;
   border-radius: 4px;
@@ -28,7 +36,7 @@ export const FilterProductsContainer = styled.div`
 export const FilterProducts = styled.button.attrs({
   type: 'button',
 })`
-  width: 200px;
+  width: ${({ isDesktop }) => (isDesktop ? '200px' : '100%')};
   height: 28px;
   background: #3ab879;
   border-radius: 4px;
@@ -54,18 +62,18 @@ export const FilterProducts = styled.button.attrs({
 export const FilterProductsList = styled.div`
   display: flex;
   flex-direction: column;
-  width: 200px;
+  width: ${({ isDesktop }) => (isDesktop ? '200px' : '100%')};
   height: 140px;
   opacity: ${({ visible }) => (visible ? 1 : 0)};
   position: absolute;
-  z-index: 999;
+  z-index: ${({ visible }) => (visible ? 999 : -1)};
   top: 28px;
 `;
 
 export const FilterProductsOption = styled.button.attrs({
   type: 'button',
 })`
-  width: 200px;
+  width: ${({ isDesktop }) => (isDesktop ? '200px' : '100%')};
   height: 28px;
   display: flex;
   padding-left: 15px;

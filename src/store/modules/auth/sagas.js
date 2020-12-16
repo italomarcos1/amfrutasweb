@@ -96,7 +96,6 @@ export function* signIn({ payload }) {
     let userWithUuid = { ...user, uuid: newUuid };
 
     if (typeof user.default_address !== 'undefined') {
-      // the variable is defined
       userWithUuid = { ...userWithUuid, default_address: [] };
     }
 

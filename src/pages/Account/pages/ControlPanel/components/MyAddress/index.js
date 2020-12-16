@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useMediaQuery } from 'react-responsive';
 import { Container, Content, InfoContainer, AddressInfo } from './styles';
 
 import location from '~/assets/myAccount/location.svg';
@@ -8,6 +9,7 @@ import chevron from '~/assets/chevron-right.svg';
 
 export default function MyAddress() {
   const history = useHistory();
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
 
   const primaryAddress = useSelector(state => state.addresses.primaryAddress);
   const addresses = useSelector(state => state.addresses.addresses);
@@ -26,10 +28,14 @@ export default function MyAddress() {
   }, [formatAddressMessage]);
 
   return (
-    <Container onClick={() => history.push('/endereco')}>
-      <InfoContainer>
-        <img src={location} alt="Seus endereços" />
-        <Content>
+    <Container onClick={() => history.push('/endereco')} isDesktop={isDesktop}>
+      <InfoContainer isDesktop={isDesktop}>
+        <img
+          src={location}
+          alt="Seus endereços"
+          style={isDesktop ? {} : { width: '20%' }}
+        />
+        <Content isDesktop={isDesktop}>
           <strong>Meu endereço</strong>
           <small>
             {addresses.length !== 0
@@ -42,7 +48,7 @@ export default function MyAddress() {
         </button>
       </InfoContainer>
 
-      <AddressInfo>
+      <AddressInfo isDesktop={isDesktop}>
         {addressInfo[0] !== '' ? (
           <>
             <small>ENDEREÇO PRINCIPAL</small>

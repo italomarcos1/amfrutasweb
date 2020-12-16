@@ -133,8 +133,8 @@ export default function Basket() {
   }, [price, minValueWithdrawStore]);
 
   useEffect(() => {
-    setCurrentContainerHeight(products.length * 167 - 20);
-  }, [products, currentContainerHeight]);
+    setCurrentContainerHeight(paginatedProducts.length * 167 - 20);
+  }, [paginatedProducts, currentContainerHeight]);
 
   return (
     <>

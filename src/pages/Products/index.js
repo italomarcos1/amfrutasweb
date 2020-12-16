@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useMediaQuery } from 'react-responsive';
 
 import {
   Container,
@@ -37,6 +38,8 @@ export default function Products({ children }) {
 
   const noFavorite = useSelector(state => state.auth.noFavorite);
   const firstLogin = useSelector(state => state.auth.firstLogin);
+
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
 
   const history = useHistory();
 
@@ -86,26 +89,28 @@ export default function Products({ children }) {
     <>
       <Header login={() => setLoginModal(true)} active="Produtos" />
       <Container>
-        <Layout>
-          <Menu>
-            <MenuHeader>
-              <strong>Categorias</strong>
-              <small>Garantia de produtos frescos</small>
-            </MenuHeader>
-            {categories.map(category => (
-              <MenuItem
-                key={category.id}
-                category={category}
-                selected={selectedCategory}
-                setSelected={setSelectedCategory}
-                childrenSelected={childrenSelectedCategory}
-                setChildrenSelected={setChildrenSelectedCategory}
-                subSelected={subChildrenSelected}
-                setSubChildrenSelected={setSubChildrenSelected}
-              />
-            ))}
-          </Menu>
-          <Content>{children}</Content>
+        <Layout isDesktop={isDesktop}>
+          {isDesktop && (
+            <Menu>
+              <MenuHeader>
+                <strong>Categorias</strong>
+                <small>Garantia de produtos frescos</small>
+              </MenuHeader>
+              {categories.map(category => (
+                <MenuItem
+                  key={category.id}
+                  category={category}
+                  selected={selectedCategory}
+                  setSelected={setSelectedCategory}
+                  childrenSelected={childrenSelectedCategory}
+                  setChildrenSelected={setChildrenSelectedCategory}
+                  subSelected={subChildrenSelected}
+                  setSubChildrenSelected={setSubChildrenSelected}
+                />
+              ))}
+            </Menu>
+          )}
+          <Content isDesktop={isDesktop}>{children}</Content>
         </Layout>
       </Container>
 

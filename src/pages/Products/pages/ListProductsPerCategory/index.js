@@ -8,6 +8,8 @@ import CustomHeader from '~/components/CustomHeader';
 import Pagination from '~/components/Pagination';
 import FooterPagination from '~/components/FooterPagination';
 
+import { nameIsValid } from '~/utils/validation';
+
 import backend from '~/services/api';
 
 export default function ListProductsPerCategory() {
@@ -36,7 +38,7 @@ export default function ListProductsPerCategory() {
   }, [lastPage]);
 
   const loadProductsByCategory = useCallback(async () => {
-    if (searchInput !== '') return;
+    if (!nameIsValid(searchInput)) return;
 
     const productsResponse = await backend.get(
       `ecommerce/products/categories/${state.id}?page=${currentPage}&special_order=${field}`
@@ -71,7 +73,7 @@ export default function ListProductsPerCategory() {
 
   const searchProduct = useCallback(async () => {
     try {
-      if (searchInput === '') return;
+      if (nameIsValid(searchInput)) return;
       setLoading(true);
       const productsResponse = await backend.get(
         `ecommerce/products/search/${searchInput}?page=${currentPage}&special_order=${field}`
@@ -138,9 +140,13 @@ export default function ListProductsPerCategory() {
     state,
   ]);
 
+  useEffect(() => setSearchInput(''), [pathname]);
+
   useEffect(() => {
     setNoProductsFound(false);
-    searchProduct();
+    const timer = setTimeout(searchProduct, 1000);
+
+    return () => clearTimeout(timer);
   }, [searchInput, searchProduct]);
 
   return (

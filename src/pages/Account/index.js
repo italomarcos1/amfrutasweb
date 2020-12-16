@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useMediaQuery } from 'react-responsive';
+
 import PropTypes from 'prop-types';
 
 import { Container, Content, Menu, Option } from './styles';
@@ -33,6 +35,8 @@ export default function Account({ children }) {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
 
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
+
   const [active, setActive] = useState(pathname);
 
   const profile = useSelector(state => state.user.profile);
@@ -51,7 +55,7 @@ export default function Account({ children }) {
     <>
       <Header />
       <Container>
-        <Content>
+        <Content isDesktop={isDesktop}>
           <Menu>
             <strong>
               Olá,&nbsp;<b>{!!profile ? profile.name : 'Cliente'}</b>
@@ -144,7 +148,22 @@ export default function Account({ children }) {
               <b>Sair do AMFrutas</b>
             </Button>
           </Menu>
-          <div style={{ marginTop: 0 }}>{children}</div>
+          <div
+            style={
+              isDesktop
+                ? {
+                    marginTop: 0,
+                    backgroundColor: '#f0f',
+                  }
+                : {
+                    width: '100%',
+                    marginTop: 0,
+                    backgroundColor: '#3ff',
+                  }
+            }
+          >
+            {children}
+          </div>
         </Content>
       </Container>
     </>

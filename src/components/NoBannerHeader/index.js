@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useScrollYPosition } from 'react-use-scroll-position';
+import { useMediaQuery } from 'react-responsive';
 
 import { useSelector } from 'react-redux';
 
@@ -15,21 +16,24 @@ import {
   BadgeContainer,
   SubTitle,
   GoToCartContainer,
+  Background,
+  MenuMobile,
 } from './styles';
 
-import Logo from '~/assets/amfrutas-top.svg';
-import fruits1 from '~/assets/fruits-1@2x.png';
-import fruits2 from '~/assets/fruits-2@2x.png';
-
 import home from '~/assets/home.svg';
+import menu from '~/assets/menu.svg';
 import search from '~/assets/search.svg';
 import bag from '~/assets/bag.svg';
 import user from '~/assets/user-check.svg';
+
+import logo from '~/assets/amfrutas-white.svg';
 
 import backend from '~/services/api';
 
 export default function PageHeader({ login, active }) {
   const [selectedPage, setSelectedPage] = useState(active);
+
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
 
   const signed = useSelector(state => state.auth.signed);
   const products = useSelector(state => state.cart.products);
@@ -39,6 +43,8 @@ export default function PageHeader({ login, active }) {
   const { pathname } = useLocation();
 
   const scrollY = useScrollYPosition();
+
+  const [loading, setLoading] = useState(true);
 
   const [headerFixed, setHeaderFixed] = useState(false);
   const [headerAlertMessage, setHeaderAlertMessage] = useState(
@@ -52,8 +58,6 @@ export default function PageHeader({ login, active }) {
     'Informações',
     'Dicas e Receitas',
   ]);
-
-  // retirar o dominio 'am sandbox' dos produtos
 
   const loadMenu = useCallback(async () => {
     const keys = ['alert_message'];
@@ -76,6 +80,7 @@ export default function PageHeader({ login, active }) {
 
     data.splice(0, 1);
     setMenuItems(data);
+    setLoading(false);
   }, []);
 
   useEffect(() => loadMenu(), []);
@@ -91,16 +96,26 @@ export default function PageHeader({ login, active }) {
   return (
     <>
       <Menu style={headerFixed ? { position: 'fixed', top: 0 } : {}}>
-        <MenuContent>
+        <MenuContent isDesktop={isDesktop}>
+          {!isDesktop && (
+            <MenuItemButton
+              selected={selectedPage === 'Menu'}
+              onClick={() => setSelectedPage('Menu')}
+            >
+              <img src={menu} alt="search" />
+            </MenuItemButton>
+          )}
           <MenuItem selected={pathname === '/'} to="/">
             <img src={home} alt="home" />
           </MenuItem>
 
-          {menuItems.map(({ id, name, url }) => (
-            <MenuItem key={id} selected={pathname === `${url}`} to={`${url}`}>
-              {name}
-            </MenuItem>
-          ))}
+          {!loading &&
+            isDesktop &&
+            menuItems.map(({ id, name, url }) => (
+              <MenuItem key={id} selected={pathname === `${url}`} to={`${url}`}>
+                {name}
+              </MenuItem>
+            ))}
 
           <MenuItemButton
             selected={selectedPage === 'Busca'}
@@ -141,9 +156,61 @@ export default function PageHeader({ login, active }) {
           </GoToCartContainer>
         </MenuContent>
       </Menu>
-      <SubTitle style={headerFixed ? { position: 'fixed', top: 41 } : {}}>
+      <SubTitle
+        style={headerFixed ? { position: 'fixed', top: 41 } : {}}
+        isDesktop={isDesktop}
+      >
         {headerAlertMessage}
       </SubTitle>
+      {selectedPage === 'Menu' && (
+        <Background onClick={() => setSelectedPage('none')}>
+          <MenuMobile>
+            <img
+              src={logo}
+              alt="Logo"
+              style={{
+                width: 196,
+                height: 43,
+                marginTop: 20,
+                marginBottom: 40,
+              }}
+            />
+
+            {!loading &&
+              !isDesktop &&
+              menuItems.map(({ id, name, url }) => (
+                <MenuItem
+                  key={id}
+                  selected={pathname === `${url}`}
+                  to={{
+                    pathname: `${url}`,
+                    state: {
+                      id: url,
+                    },
+                  }}
+                  style={{ width: '100%' }}
+                  isDesktop={isDesktop}
+                >
+                  {name}
+                </MenuItem>
+              ))}
+            {!loading && (
+              <MenuItem
+                to="/"
+                style={{
+                  width: '100%',
+                  marginTop: 60,
+                  textAlign: 'center',
+                  justifyContent: 'center',
+                }}
+                isDesktop={isDesktop}
+              >
+                <strong>Fechar menu</strong>
+              </MenuItem>
+            )}
+          </MenuMobile>
+        </Background>
+      )}
     </>
   );
 }

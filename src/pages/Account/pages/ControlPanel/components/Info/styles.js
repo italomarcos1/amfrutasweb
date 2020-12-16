@@ -6,13 +6,13 @@ export const Container = styled.button.attrs({
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 410px;
+  width: ${({ isDesktop }) => (isDesktop ? '410px' : '100%')};
   height: 106px;
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 4px;
 
-  padding: 21px 30px;
+  padding: ${({ isDesktop }) => (isDesktop ? '21px 30px' : '10.5px 15px')};
 
   img {
     margin-right: 23px;
@@ -30,8 +30,8 @@ export const Container = styled.button.attrs({
 
   strong {
     font-weight: normal;
-    font-size: 22px;
-    line-height: 29px;
+    font-size: ${({ isDesktop }) => (isDesktop ? 22 : 20)}px;
+    line-height: ${({ isDesktop }) => (isDesktop ? 29 : 26)}px;
     font-family: 'SFPro';
     letter-spacing: 0px;
     color: #424242;
@@ -39,8 +39,8 @@ export const Container = styled.button.attrs({
 
   small {
     display: block;
-    font-size: 15px;
-    line-height: 20px;
+    font-size: ${({ isDesktop }) => (isDesktop ? 15 : 13)}px;
+    line-height: ${({ isDesktop }) => (isDesktop ? 20 : 17.3)}px;
     font-family: 'SFPro';
     letter-spacing: 0px;
     color: #9e9e9e;
@@ -53,5 +53,5 @@ export const Content = styled.div`
   align-items: flex-start;
   justify-content: space-between;
   height: 51px;
-  width: 253px;
+  width: ${({ isDesktop }) => (isDesktop ? '253px' : '60%')};
 `;

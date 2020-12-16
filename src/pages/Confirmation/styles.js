@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-import { InputContainer } from '~/components/LoginModal';
-
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -12,12 +10,13 @@ export const Container = styled.div`
 `;
 
 export const Content = styled.div`
-  width: 1240px;
+  width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
   display: flex;
+  flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
+
   align-items: flex-start;
   justify-content: space-between;
-  margin: 94.5px auto 0;
-
+  margin: ${({ isDesktop }) => (isDesktop ? '94.5px auto 0' : '30px auto 0')};
   /* ul {
     display: flex;
     align-items: flex-start;
@@ -41,8 +40,8 @@ export const Title = styled.h1`
 export const TopWarning = styled.div`
   display: flex;
   align-items: center;
-  width: 1240px;
-  height: 55px;
+  width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
+  height: ${({ isDesktop }) => (isDesktop ? 55 : 155)}px;
   background: #2cbdd3;
   border-radius: 6px;
   margin: 0 auto;
@@ -103,9 +102,14 @@ export const Info = styled.div`
   }
 `;
 
-export const CustomInputContainer = styled(InputContainer)`
-  height: 45px;
-  width: 328px;
+export const CustomInputContainer = styled.div`
+  height: ${({ isDesktop }) => (isDesktop ? 45 : 100)}px;
+  margin-top: ${({ isDesktop }) => (isDesktop ? 20 : 10)}px;
+
+  display: flex;
+  width: ${({ isDesktop }) => (isDesktop ? '328px' : '100%')};
+  flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
+  justify-content: space-between;
 `;
 
 export const CashbackCredit = styled.div`
@@ -132,8 +136,9 @@ export const CashbackCredit = styled.div`
 `;
 
 export const InfoContainer = styled.div`
-  width: 400px;
-  height: 304px;
+  width: ${({ isDesktop }) => (isDesktop ? '400px' : '100%')};
+  height: ${({ isDesktop }) => (isDesktop ? 304 : 414)}px;
+
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 6px;
@@ -142,11 +147,12 @@ export const InfoContainer = styled.div`
 `;
 
 export const WithdrawContainer = styled.div`
-  width: 400px;
+  width: ${({ isDesktop }) => (isDesktop ? '400px' : '100%')};
   height: 304px;
   background: #0cb68b;
   border: 1px solid #0cb68b;
   border-radius: 6px;
+  margin-top: ${({ isDesktop }) => (isDesktop ? 0 : 20)}px;
 
   padding: 21px 26px 37px;
   display: flex;
@@ -168,7 +174,7 @@ export const WithdrawContainer = styled.div`
 `;
 
 export const PeriodicDeliveryContainer = styled.div`
-  width: 1240px;
+  width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
   height: 596px;
   background: #fff;
   border: 1px solid #e0e0e0;
@@ -296,12 +302,13 @@ export const PeriodicDeliveryWannaReceive = styled.div`
 export const SectionTitle = styled.div`
   display: block;
   text-align: left;
-  width: 1240px;
+  width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
+
   margin: 0 auto;
 
   strong {
     font-weight: normal;
-    font-size: 22px;
+    font-size: ${({ isDesktop }) => (isDesktop ? 22 : 20)}px;
     line-height: 29px;
     font-family: 'SFProBold';
     letter-spacing: 0px;
@@ -320,8 +327,8 @@ export const SectionTitle = styled.div`
 `;
 
 export const CheckoutDetails = styled.div`
-  width: 360px;
-  height: 455px;
+  width: ${({ isDesktop }) => (isDesktop ? '360px' : '100%')};
+  height: ${({ isDesktop }) => (isDesktop ? 455 : 483)}px;
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 6px;

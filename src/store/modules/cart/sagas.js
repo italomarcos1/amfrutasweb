@@ -37,11 +37,13 @@ export function* addToCart({ payload }) {
     if (alreadyInCart >= 0) {
       const { rowId, qty: currentQty } = products[alreadyInCart];
       // conferir se o update retorna certo os dados
+
       const {
         data: { data },
       } = yield call(backend.put, `cart/${rowId}/${currentQty + qty}`, {
         ...pushProduct,
       });
+
       // 80%
 
       yield put(updateAmountSuccess(product.id, data.qty));

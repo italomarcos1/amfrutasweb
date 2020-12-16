@@ -46,6 +46,7 @@ export default class Pagination extends Component {
         pagination={false}
         renderArrow={this.myArrow}
         style={style}
+        showArrows={totalItems.length !== 0}
         isDesktop={isDesktop}
         totalItems={totalItems > 5 ? 5 : totalItems}
       >

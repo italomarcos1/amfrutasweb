@@ -14,7 +14,7 @@ import backend from '~/services/api';
 import { mailIsValid } from '~/utils/validation';
 import { onlyValues } from '~/utils/onlyValues';
 
-export default function ForgotPassword({ setPage }) {
+export default function ForgotPassword({ setPage, isDesktop }) {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -47,16 +47,16 @@ export default function ForgotPassword({ setPage }) {
 
   return (
     <>
-      <Title>
+      <Title isDesktop={isDesktop}>
         ESCREVA O SEU E-MAIL E LHE
         <br />
-        <b>ENVIAREMOS UMA NOVA PALAVRA-PASSE</b>
+        <b>ENVIAREMOS UMA NOVA {!isDesktop && <br />} PALAVRA-PASSE</b>
       </Title>
       <Input
         name="email"
         title="E-mail"
         placeholder="Escreve o teu e-mail"
-        customWidth={462}
+        customWidth={isDesktop ? 462 : '85%'}
         style={{ marginTop: 20 }}
         setError={value => setEmailError(!mailIsValid(value))}
         value={email}
@@ -67,7 +67,7 @@ export default function ForgotPassword({ setPage }) {
         onClick={handleForgotPassword}
         color="#1DC167"
         shadowColor="#17A75B"
-        style={{ marginTop: 48 }}
+        style={isDesktop ? { marginTop: 48 } : { width: '85%', marginTop: 48 }}
       >
         {loading ? (
           <FaSpinner color="#fff" size={20} />
@@ -97,4 +97,5 @@ export default function ForgotPassword({ setPage }) {
 
 ForgotPassword.propTypes = {
   setPage: PropTypes.func.isRequired,
+  isDesktop: PropTypes.bool.isRequired,
 };

@@ -48,7 +48,7 @@
   },
   "scripts": {
     "s": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "build": "rimraf ./build && react-app-rewired build && rimraf ./build/**/*.map",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "ln": "eslint --fix src --ext .js",

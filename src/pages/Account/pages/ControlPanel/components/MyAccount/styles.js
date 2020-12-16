@@ -7,13 +7,13 @@ export const Container = styled.button.attrs({
   align-items: flex-start;
   flex-direction: column;
   justify-content: flex-start;
-  width: 840px;
-  height: 190px;
+  width: ${({ isDesktop }) => (isDesktop ? '840px' : '100%')};
+  height: ${({ isDesktop }) => (isDesktop ? 190 : 482)}px;
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 4px;
 
-  padding: 21px 30px;
+  padding: ${({ isDesktop }) => (isDesktop ? '21px 30px' : '10.5px 15px')};
 
   img {
     margin-right: 24px;
@@ -51,7 +51,8 @@ export const Container = styled.button.attrs({
 export const InfoContainer = styled.div`
   display: flex;
   align-items: flex-start;
-  width: 775px;
+  width: ${({ isDesktop }) => (isDesktop ? '775px' : '100%')};
+  /* flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')}; */
   justify-content: space-between;
 `;
 
@@ -66,17 +67,19 @@ export const Content = styled.div`
   align-items: flex-start;
   justify-content: space-between;
   height: 51px;
-  width: 253px;
+  width: ${({ isDesktop }) => (isDesktop ? '253px' : '32%')};
 `;
 
 export const UserInfoContainer = styled.div`
   display: flex;
-  height: 34px;
+  height: ${({ isDesktop }) => (isDesktop ? 38 : 192)}px;
   align-items: center;
   justify-content: space-between;
-  width: 610px;
-  margin-left: 77px;
-  margin-top: 19px;
+  width: ${({ isDesktop }) => (isDesktop ? '610px' : '72%')};
+  margin-left: ${({ isDesktop }) => (isDesktop ? 77 : 0)}px;
+  flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
+
+  margin-top: ${({ isDesktop }) => (isDesktop ? 19 : 102)}px;
 `;
 
 export const UserInfo = styled.div`

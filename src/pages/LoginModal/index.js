@@ -1,6 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+import { useMediaQuery } from 'react-responsive';
 
 import {
   Background,
@@ -25,6 +26,8 @@ import Register from './pages/Register';
 export default function LoginModal({ closeModal }) {
   const [active, setActive] = useState('login');
   const [page, setPage] = useState('main');
+  const [customHeight, setCustomHeight] = useState(566);
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
 
   const dispatch = useDispatch();
 
@@ -33,35 +36,44 @@ export default function LoginModal({ closeModal }) {
     dispatch(closeModalState());
   }, [dispatch, closeModal]);
 
+  useEffect(() => {
+    if (page === 'register' && !isDesktop) {
+      setCustomHeight(666);
+    } else setCustomHeight(566);
+  }, [page, isDesktop]);
+
   return (
     <Background>
-      <Container onSubmit={() => {}}>
-        <ShopDetails>
-          <img src={logo} alt="" width={190} />
-          <p style={{ marginTop: 40 }}>
-            VARIEDADE DE PRODUTOS E <br /> MARCAS
-          </p>
-          <p>SEMPRE PREÇOS BAIXOS</p>
-          <p>
-            ECONOMIZA COM CADA <br /> COMPRA
-          </p>
-          <p>
-            OFERTAS EXCLUSIVAS PARA <br />
-            CLIENTES REGISTADOS
-          </p>
-          <p>
-            RECEBE EUROS DE CRÉDITO <br />
-            POR CADA COMPRA
-          </p>
-        </ShopDetails>
-        <LoginDetails>
-          <Header>
+      <Container onSubmit={() => {}} isDesktop={isDesktop} page={page}>
+        {isDesktop && (
+          <ShopDetails>
+            <img src={logo} alt="" width={190} />
+            <p style={{ marginTop: 40 }}>
+              VARIEDADE DE PRODUTOS E <br /> MARCAS
+            </p>
+            <p>SEMPRE PREÇOS BAIXOS</p>
+            <p>
+              ECONOMIZA COM CADA <br /> COMPRA
+            </p>
+            <p>
+              OFERTAS EXCLUSIVAS PARA <br />
+              CLIENTES REGISTADOS
+            </p>
+            <p>
+              RECEBE EUROS DE CRÉDITO <br />
+              POR CADA COMPRA
+            </p>
+          </ShopDetails>
+        )}
+        <LoginDetails isDesktop={isDesktop} style={{ height: customHeight }}>
+          <Header isDesktop={isDesktop}>
             <HeaderButton
               onClick={() => {
                 setActive('login');
                 setPage('main');
               }}
               active={active === 'login'}
+              isDesktop={isDesktop}
             >
               Iniciar sessão
             </HeaderButton>
@@ -71,23 +83,32 @@ export default function LoginModal({ closeModal }) {
                 setPage('register');
               }}
               active={active === 'signUp'}
+              isDesktop={isDesktop}
             >
               Criar conta
             </HeaderButton>
-            <CloseButton onClick={handleCloseModal}>
+            <CloseButton onClick={handleCloseModal} isDesktop={isDesktop}>
               <img src={close} alt="Close panel" />
             </CloseButton>
           </Header>
           {page === 'main' ? (
-            <Main setPage={value => setPage(value)} />
+            <Main setPage={value => setPage(value)} isDesktop={isDesktop} />
           ) : page === 'login' ? (
-            <Login closeModal={closeModal} setPage={value => setPage(value)} />
+            <Login
+              closeModal={closeModal}
+              setPage={value => setPage(value)}
+              isDesktop={isDesktop}
+            />
           ) : page === 'forgot' ? (
-            <ForgotPassword setPage={value => setPage(value)} />
+            <ForgotPassword
+              setPage={value => setPage(value)}
+              isDesktop={isDesktop}
+            />
           ) : (
             <Register
               closeModal={closeModal}
               setPage={value => setPage(value)}
+              isDesktop={isDesktop}
             />
           )}
         </LoginDetails>

@@ -18,11 +18,15 @@ import {
   BadgeContainer,
   SubTitle,
   GoToCartContainer,
+  Background,
+  MenuMobile,
 } from './styles';
 
 import Logo from '~/assets/amfrutas-top.svg';
 import fruits1 from '~/assets/fruits-1@2x.png';
 import fruits2 from '~/assets/fruits-2@2x.png';
+
+import logo from '~/assets/amfrutas-white.svg';
 
 import home from '~/assets/home.svg';
 import menu from '~/assets/menu.svg';
@@ -77,7 +81,6 @@ export default function PageHeader({ login, active }) {
       data: { data: alert },
     } = alertMessage;
 
-    console.log(alert.alert_message);
     setHeaderAlertMessage(alert.alert_message);
 
     data.splice(0, 1);
@@ -127,10 +130,7 @@ export default function PageHeader({ login, active }) {
           {!isDesktop && (
             <MenuItemButton
               selected={selectedPage === 'Menu'}
-              onClick={() => {
-                setSelectedPage('Menu');
-                // history.push('/produtos');
-              }}
+              onClick={() => setSelectedPage('Menu')}
             >
               <img src={menu} alt="search" />
             </MenuItemButton>
@@ -207,6 +207,55 @@ export default function PageHeader({ login, active }) {
       >
         {headerAlertMessage}
       </SubTitle>
+      {selectedPage === 'Menu' && (
+        <Background onClick={() => setSelectedPage('none')}>
+          <MenuMobile>
+            <img
+              src={logo}
+              alt="Logo"
+              style={{
+                width: 196,
+                height: 43,
+                marginTop: 20,
+                marginBottom: 40,
+              }}
+            />
+
+            {!loading &&
+              !isDesktop &&
+              menuItems.map(({ id, name, url }) => (
+                <MenuItem
+                  key={id}
+                  selected={pathname === `${url}`}
+                  to={{
+                    pathname: `${url}`,
+                    state: {
+                      id: url,
+                    },
+                  }}
+                  style={{ width: '100%' }}
+                  isDesktop={isDesktop}
+                >
+                  {name}
+                </MenuItem>
+              ))}
+            {!loading && (
+              <MenuItem
+                to="/"
+                style={{
+                  width: '100%',
+                  marginTop: 60,
+                  textAlign: 'center',
+                  justifyContent: 'center',
+                }}
+                isDesktop={isDesktop}
+              >
+                <strong>Fechar menu</strong>
+              </MenuItem>
+            )}
+          </MenuMobile>
+        </Background>
+      )}
     </>
   );
 }

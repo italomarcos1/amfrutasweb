@@ -10,7 +10,7 @@ import {
   ProductInfo,
 } from './styles';
 
-export default function Item({ item, index }) {
+export default function Item({ item, index, isDesktop }) {
   const {
     id,
     qty,
@@ -22,11 +22,16 @@ export default function Item({ item, index }) {
   } = item;
 
   return (
-    <Container key={id} style={index > 1 ? { marginTop: 40 } : {}}>
+    <Container
+      key={id}
+      index={index}
+      style={index > 1 ? { marginTop: 40 } : {}}
+      isDesktop={isDesktop}
+    >
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <ItemPicture src={thumbs} />
         <ProductInfo>
-          <Title>{title}</Title>
+          <Title isDesktop={isDesktop}>{title}</Title>
           <PriceAndAmount>
             <small>{qty} unidades</small>
             <strong>€&nbsp;{has_promotion ? price_promotional : price}</strong>
@@ -46,4 +51,5 @@ Item.propTypes = {
     qty: PropTypes.number,
   }).isRequired,
   index: PropTypes.number.isRequired,
+  isDesktop: PropTypes.bool.isRequired,
 };

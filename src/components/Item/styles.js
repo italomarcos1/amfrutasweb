@@ -29,7 +29,7 @@ export const Title = styled.h1`
   padding: 0;
   padding-right: 5px;
   text-transform: capitalize;
-  height: 42px;
+  height: ${({ isDesktop }) => (isDesktop ? 42 : 45)}px;
   width: ${({ isDesktop }) => (isDesktop ? 245 : 165)}px;
   letter-spacing: 0px;
   overflow: hidden;

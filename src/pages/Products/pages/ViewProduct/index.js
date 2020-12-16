@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { FacebookShareButton, WhatsappShareButton } from 'react-share';
 
+import { useMediaQuery } from 'react-responsive';
+
 import {
   Container,
   Content,
@@ -50,6 +52,8 @@ import barcode from '~/assets/icons/barcode.svg';
 import { formatPrice } from '~/utils/calculatePrice';
 import { notSignedAddedToFavorites } from '~/store/modules/auth/actions';
 
+import Toast from '~/components/Toast';
+
 import backend from '~/services/api';
 
 export default function ViewProduct() {
@@ -67,7 +71,11 @@ export default function ViewProduct() {
   const [shippingCost, setShippingCost] = useState(4);
   const [minValueFreeShipping, setMinValueFreeShipping] = useState(0);
 
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
+
   const [pressed, setPressed] = useState(false);
+
+  const [toastVisible, setToastVisible] = useState(false);
 
   const favorites = useSelector(reducer => reducer.cart.favorites);
   const updating = useSelector(reducer => reducer.cart.updating);
@@ -75,6 +83,12 @@ export default function ViewProduct() {
 
   const handleAddToCart = useCallback(() => {
     dispatch(addToCartRequest(product, qty));
+    setToastVisible(true);
+
+    setTimeout(() => {
+      setToastVisible(false);
+    }, 2800);
+
     setQty(1);
   }, [product, dispatch, qty]);
 
@@ -381,6 +395,13 @@ export default function ViewProduct() {
               __html: product.description,
             }}
           />
+          {toastVisible && (
+            <Toast
+              status={`O produto ${product.title} foi adicionado ao seu cesto de compras.`}
+              color="#1DC167"
+              isDesktop={isDesktop}
+            />
+          )}
         </>
       )}
     </div>

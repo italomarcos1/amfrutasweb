@@ -22,7 +22,7 @@ export const Button = styled.button`
     ${({ shadowColor, disabled }) => (disabled ? '#444' : shadowColor)};
   border-radius: 4px;
   font-family: 'SFPro';
-  font-size: 18px;
+  font-size: ${({ isDesktop }) => (isDesktop ? 18 : 16)}px;
   line-height: 22px;
   color: #fff;
   margin-top: 20px;
@@ -48,7 +48,7 @@ export const Button = styled.button`
 
 export const Title = styled.div`
   font-family: 'SFPro';
-  font-size: 18px;
+  font-size: ${({ isDesktop }) => (isDesktop ? 18 : 16)}px;
   line-height: 22px;
   color: #7f7f7f;
   margin: 30px auto 0;
@@ -61,10 +61,11 @@ export const Title = styled.div`
 
 export const InputContainer = styled.div`
   display: flex;
-  width: 462px;
-  height: 53px;
+  width: ${({ isDesktop }) => (isDesktop ? '462px' : '100%')};
+  flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
+  height: ${({ isDesktop }) => (isDesktop ? 53 : 116)}px;
   justify-content: space-between;
-  margin-top: 20px;
+  margin-top: ${({ isDesktop }) => (isDesktop ? 20 : 10)}px;
 `;
 
 export const GoBack = styled.button.attrs({

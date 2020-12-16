@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, useLocation } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
+
 import { useSelector } from 'react-redux';
 
 export default function RouteWrapper({
@@ -9,6 +11,14 @@ export default function RouteWrapper({
   ...rest
 }) {
   const signed = useSelector(state => state.auth.signed);
+
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
+
+  const { pathname } = useLocation();
+
+  // if (!isDesktop && pathname !== '/updating') {
+  //   return <Redirect to="/updating" />;
+  // }
 
   if (!signed && isPrivate) {
     return <Redirect to="/" />;

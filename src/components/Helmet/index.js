@@ -2,8 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useLocation } from 'react-router-dom';
 
-// import { Container } from './styles';
-
 import backend from '~/services/api';
 
 export default function CustomHelmet() {
@@ -34,7 +32,7 @@ export default function CustomHelmet() {
       setScriptData(scriptResponse.scripts);
 
       const formattedData = Object.entries(data);
-      console.log([...formattedData]);
+
       setMetaData(formattedData);
       setTitle(`AM Frutas | ${formattedData[1][1]}`);
     } catch {
