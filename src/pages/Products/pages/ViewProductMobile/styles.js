@@ -107,7 +107,7 @@ export const Title = styled.h1`
   padding: 0;
   padding-right: 5px;
   height: 54px;
-  width: 300px;
+  width: 280px;
   letter-spacing: 0px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -127,7 +127,7 @@ export const PriceAndInfoContainer = styled.div`
   align-items: flex-start;
   justify-content: flex-start;
   /* background-color: #00a0f0; */
-  margin-left: 20px;
+  margin-left: 10px;
 `;
 
 export const PriceContainer = styled.div`

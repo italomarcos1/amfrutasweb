@@ -132,7 +132,7 @@ export default function Main({ setPage, isDesktop }) {
               }
             : {
                 width: '85%',
-                marginTop: 95,
+                marginTop: 45,
               }
         }
       >

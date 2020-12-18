@@ -26,7 +26,7 @@ export const ProductsContainer = styled.div`
   align-items: flex-start;
   justify-content: space-between;
   width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
-  height: ${({ isDesktop }) => (isDesktop ? 376 : 680)}px;
+  height: ${({ isDesktop }) => (isDesktop ? '376px' : 'auto')};
   flex-wrap: ${({ isDesktop }) => (isDesktop ? 'nowrap' : 'wrap')};
   margin: 30px auto 0;
   padding: 0;

@@ -5,7 +5,8 @@ export const Container = styled.div`
   flex-direction: column;
   background-color: #fff;
   width: 100%;
-  padding: 27px 30px 146px;
+  padding: ${({ isDesktop }) =>
+    isDesktop ? '27px 30px 146px' : '20px 20px 146px'};
 `;
 
 export const Content = styled.div`
@@ -14,7 +15,6 @@ export const Content = styled.div`
   align-items: flex-start;
   justify-content: space-between;
   flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
-  margin: 94.5px auto 0;
   margin-top: ${({ isDesktop }) => (isDesktop ? 94.5 : 23.75)}px;
 
   /*ul {

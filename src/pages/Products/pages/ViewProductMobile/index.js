@@ -196,7 +196,7 @@ export default function ViewProduct() {
         <>
           <Container>
             <Content>
-              <span style={{ maxWidth: 320 }}>
+              <span style={{ maxWidth: 280 }}>
                 <Title>{product.title}</Title>
               </span>
               <ProductInfo>

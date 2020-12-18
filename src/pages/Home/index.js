@@ -233,8 +233,15 @@ export default function Home() {
     );
   }, []);
 
+  const calculateWidth = useCallback(() => {
+    const el = document.getElementById('productsContainer');
+    console.log(el.offsetWidth);
+    console.log(el.offsetHeight);
+  }, []);
+
   useEffect(() => {
     setLoading(true);
+    calculateWidth();
     loadData();
     loadRecommendedProducts();
     setLoading(false);
@@ -329,7 +336,7 @@ export default function Home() {
           <strong>Produtos recomendados para ti</strong>
           <small>Uma seleção especial com a qualidade garantida</small>
         </SectionTitle>
-        <ProductsContainer isDesktop={isDesktop}>
+        <ProductsContainer isDesktop={isDesktop} id="productsContainer">
           {loading ? (
             <h1>Carregando...</h1>
           ) : (
@@ -416,10 +423,6 @@ export default function Home() {
           )}
         </Section>
         <CategoriesCarousel categories={categories} isDesktop={isDesktop} />
-        {/* <SectionTitle isDesktop={isDesktop}>
-          <strong>Blog</strong>
-          <small>Dicas de receitas com frutas e verduras</small>
-        </SectionTitle> */}
         <BlogsCarousel isDesktop={isDesktop}>
           {blogData.map(post => (
             <BlogPost
