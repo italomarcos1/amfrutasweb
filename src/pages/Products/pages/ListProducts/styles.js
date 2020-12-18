@@ -9,7 +9,7 @@ export const Container = styled.ul`
 
   height: ${({ pageHeight }) => pageHeight}px;
   margin-top: 18px;
-  padding: 0 35px;
+  padding: 0 20px;
 `;
 
 export const NullProduct = styled.div`
