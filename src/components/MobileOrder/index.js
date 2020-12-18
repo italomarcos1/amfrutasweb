@@ -173,7 +173,8 @@ export default function Order({ order, isOpen, setOrder, index: orderIndex }) {
               width: '100.75%',
               border: '1px solid #ccc',
               borderTop: 'none',
-              borderRadius: 4,
+              borderBottomLeftRadius: 4,
+              borderBottomRightRadius: 4,
               backgroundColor: '#f90',
             }}
           >

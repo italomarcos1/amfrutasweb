@@ -53,6 +53,7 @@ export const OrderStatus = styled.div`
   display: flex;
   width: 100%;
   height: 159.5px;
+  background-color: #ff0;
 `;
 
 export const Info = styled.div`
