@@ -671,7 +671,8 @@ export default function Delivery() {
     if (couponDiscount && couponIsValid) {
       setTotalPrice(
         formatPrice(
-          Number(price - (couponDiscount / 100) * price) + formattingPrice
+          Number(price - (couponDiscount / 100) * price) +
+            Number(formattingPrice)
         )
       );
     } else setTotalPrice(Number(price) + Number(formattingPrice));

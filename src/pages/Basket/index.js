@@ -150,7 +150,7 @@ export default function Basket() {
           color="#1DC167"
         />
       )}
-      <Container>
+      <Container isDesktop={isDesktop}>
         <Content isDesktop={isDesktop}>
           <div>
             <Title>Cesto de Compras</Title>
