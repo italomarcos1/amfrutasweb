@@ -7,7 +7,7 @@ export const Container = styled.div`
   flex-direction: column;
   width: ${({ isDesktop }) => (isDesktop ? '176px' : '47.5%')};
 
-  height: ${({ isDesktop }) => (isDesktop ? 376 : 326)}px;
+  height: ${({ isDesktop }) => (isDesktop ? '376px' : 'auto')};
 
   background-color: #fff;
   border-radius: 6px;
@@ -70,14 +70,13 @@ export const FavoriteButton = styled.button`
 
 export const ImageContainer = styled(Link)`
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
   align-self: center;
   border-radius: 4px;
   background-color: #0ff;
 
   width: ${({ isDesktop }) => (isDesktop ? '164px' : '100%')};
-  height: ${({ isDesktop }) => (isDesktop ? '164px' : '100%')};
 
   img {
     border-radius: 4px;
