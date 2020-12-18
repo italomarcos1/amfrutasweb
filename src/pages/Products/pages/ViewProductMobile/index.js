@@ -314,9 +314,7 @@ export default function ViewProduct() {
                   height: 72,
                 }}
               >
-                <FlexStartContainer
-                  style={{ height: 72, backgroundColor: '#66f' }}
-                >
+                <FlexStartContainer style={{ height: 72 }}>
                   <FlexStartContainer>
                     <img src={barcode} alt="Barcode" />
                     <FlexStartText>Código: 837922</FlexStartText>

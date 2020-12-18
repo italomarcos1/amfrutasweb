@@ -206,7 +206,7 @@ export const TotalContainer = styled.div`
   display: flex;
   height: 45px;
   width: 100%;
-  background-color: #0f0;
+  /* background-color: #0f0; */
   margin-top: 24px;
 
   flex-direction: column;
@@ -342,7 +342,7 @@ export const ShippingContainer = styled.div`
   margin-top: 21px;
   width: 180px;
 
-  background-color: #390;
+  /* background-color: #390; */
 `;
 
 export const SectionTitle = styled.div`

@@ -105,17 +105,16 @@ export const DeliveryButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  width: ${({ isDesktop }) => (isDesktop ? '104px' : '50%')};
-
-  height: 59px;
+  justify-content: center;
+  width: ${({ isDesktop }) => (isDesktop ? '104px' : '80%')};
+  height: 90px;
 `;
 
 export const DeliveryButtonContent = styled.span`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 42px;
+  height: ${({ isDesktop }) => (isDesktop ? 42 : 60)}px;
 
   border-bottom: 2px solid #fff;
   border-color: ${({ selected }) => (selected ? '#fff' : '#000')};
