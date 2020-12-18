@@ -279,8 +279,8 @@ export default function ViewProduct() {
               <ShippingButtonContainer
                 style={{
                   height: 72,
-                  backgroundColor: '#390',
                   padding: 0,
+                  marginTop: 20,
                 }}
               >
                 <ShippingContainer style={{ marginTop: 0 }}>
@@ -312,7 +312,6 @@ export default function ViewProduct() {
                 style={{
                   marginTop: 20,
                   height: 72,
-                  backgroundColor: '#66f',
                 }}
               >
                 <FlexStartContainer

@@ -274,7 +274,7 @@ export const FreeShipping = styled.div`
   font-size: 14px;
   line-height: 16px;
 
-  background-color: #39f;
+  /* background-color: #39f; */
 
   b {
     font-family: 'SFProBold';
