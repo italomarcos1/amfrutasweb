@@ -41,7 +41,7 @@ export const Title = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   background: none;
-  background-color: #f0f;
+  /* background-color: #f0f; */
 
   margin-top: 0px;
 
@@ -74,7 +74,7 @@ export const ImageContainer = styled(Link)`
   justify-content: flex-start;
   align-self: center;
   border-radius: 4px;
-  background-color: #0ff;
+  background-color: #fff;
 
   width: ${({ isDesktop }) => (isDesktop ? '164px' : '100%')};
 
@@ -95,7 +95,7 @@ export const PriceContainer = styled(Link)`
   letter-spacing: 0px;
   background: none;
 
-  background-color: #404;
+  /* background-color: #404; */
 
   span {
     padding: 0;
