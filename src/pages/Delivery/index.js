@@ -776,7 +776,7 @@ export default function Delivery() {
                       deliveryOption === 'withdrawinstore' ||
                       hoverButton === 'withdrawinstore'
                     }
-                    style={isDesktop ? {} : { fontSize: 12, width: '10%' }}
+                    style={isDesktop ? {} : { fontSize: 12, width: '90%' }}
                     isDesktop={isDesktop}
                   >
                     <img
