@@ -306,6 +306,7 @@ export default function ViewProduct() {
                 style={{
                   height: 240,
                   marginTop: 20,
+                  backgroundColor: '#66f',
                 }}
               >
                 <FlexStartContainer>

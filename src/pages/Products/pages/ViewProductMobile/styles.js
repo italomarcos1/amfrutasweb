@@ -160,6 +160,8 @@ export const ShippingButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  background-color: #f90;
 `;
 
 export const FavoritesContainer = styled.div`
@@ -190,6 +192,8 @@ export const FreeShipping = styled.div`
   font-family: 'SFPro';
   font-size: 14px;
   line-height: 16px;
+
+  background-color: #39f;
 
   b {
     font-family: 'SFProBold';
@@ -293,6 +297,8 @@ export const ShippingContainer = styled.div`
   height: 34px;
   margin-top: 21px;
   width: 180px;
+
+  background-color: #390;
 `;
 
 export const Amount = styled.div`
