@@ -98,7 +98,7 @@ export default function Login({ closeModal, setPage, isDesktop }) {
           customWidth={isDesktop ? 462 : '100%'}
           value={password}
           onChange={({ target: { value } }) => setPassword(value)}
-          style={{ marginTop: 20 }}
+          style={isDesktop ? { marginTop: 20 } : { marginTop: 10 }}
           error={passwordError}
         />
         <ForgotPassword onClick={() => setPage('forgot')}>
@@ -120,7 +120,7 @@ export default function Login({ closeModal, setPage, isDesktop }) {
         {loading ? <FaSpinner color="#fff" size={20} /> : 'Iniciar sessão'}
       </Button>
       <GoBack onClick={() => setPage('main')}>Ou voltar</GoBack>
-      <SecureLogin style={{ marginTop: 60 }}>
+      <SecureLogin style={isDesktop ? { marginTop: 60 } : { marginTop: 19 }}>
         Secure <img src={lock} alt="Lock" /> Login
       </SecureLogin>
       {toastVisible && (

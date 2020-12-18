@@ -102,7 +102,7 @@ export const SecureLogin = styled.div`
   color: #7f7f7f;
   height: 31px;
   text-transform: uppercase;
-  margin-top: 49px;
+  margin-top: ${({ isDesktop }) => (isDesktop ? 49 : 19)}px;
 
   img {
     margin: 0 13px;

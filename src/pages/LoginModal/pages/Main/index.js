@@ -155,7 +155,7 @@ export default function Main({ setPage, isDesktop }) {
         )}
       />
 
-      <AppleLogin
+      {/* <AppleLogin
         clientId="com.tgoo.service.amfrutas"
         redirectURI="https://amfrutas.pt/cliente/apple/callback"
         scope="name email"
@@ -172,8 +172,8 @@ export default function Main({ setPage, isDesktop }) {
             Iniciar sessão com&nbsp;<b>Apple</b>
           </Button>
         )}
-      />
-      <SecureLogin>
+      /> */}
+      <SecureLogin isDesktop={isDesktop}>
         Secure <img src={lock} alt="Lock" /> Login
       </SecureLogin>
       {toastVisible && (
