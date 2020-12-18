@@ -278,7 +278,7 @@ export default function ViewProduct() {
               </ProductInfo>
               <ShippingButtonContainer
                 style={{
-                  height: 240,
+                  height: 72,
                   backgroundColor: '#390',
                 }}
               >
@@ -310,6 +310,7 @@ export default function ViewProduct() {
               <ShippingButtonContainer
                 style={{
                   marginTop: 20,
+                  height: 72,
                   backgroundColor: '#66f',
                 }}
               >
@@ -378,7 +379,7 @@ export default function ViewProduct() {
                 color="#1DC167"
                 shadowColor="#17A75B"
                 onClick={handleAddToCart}
-                style={{ width: 525, marginTop: 40 }}
+                style={{ width: 525, marginTop: 80 }}
               >
                 <b>Adicionar ao Cesto</b>
               </Button>

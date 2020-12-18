@@ -43,7 +43,6 @@ export const Container = styled.div`
 
   flex-wrap: wrap;
   width: 100%;
-  height: 694px;
   background-color: #fff;
   border-radius: 4px;
   padding: 10px;
