@@ -9,6 +9,7 @@ export const Container = styled.div`
   /* background-color: #c00; */
   border-radius: 4px;
   border: 1px solid #ccc;
+  margin-top: ${({ index }) => (index > 0 ? 20 : 0)}px;
 `;
 
 const rotate = keyframes` /** animação para rotacionar o icon. */

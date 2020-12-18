@@ -26,7 +26,7 @@ import CheckoutItem from '~/pages/Account/pages/MyOrders/components/OrderItem';
 
 import backend from '~/services/api';
 
-export default function Order({ order, isOpen, setOrder }) {
+export default function Order({ order, isOpen, setOrder, index: orderIndex }) {
   const { id, total, date, scheduledShipping, statuses } = order;
 
   const dispatch = useDispatch();
@@ -116,7 +116,10 @@ export default function Order({ order, isOpen, setOrder }) {
   }, [paginatedProducts, currentContainerHeight]);
 
   return (
-    <Container style={isOpen === id ? { borderBottom: 'none' } : {}}>
+    <Container
+      index={orderIndex}
+      style={isOpen === id ? { borderBottom: 'none' } : {}}
+    >
       <StatusContainer initialStatus={statuses[0].name} id={id} disabled />
       <OrderStatus>
         <Info>
@@ -167,6 +170,7 @@ export default function Order({ order, isOpen, setOrder }) {
               border: '1px solid #ccc',
               borderTop: 'none',
               borderRadius: 4,
+              backgroundColor: '#f90',
             }}
           >
             {loading ? (

@@ -58,7 +58,7 @@ export default function MyOrders() {
             <strong>Carregando suas encomendas, aguarde...</strong>
           </LoadingContainer>
         ) : transactions.length !== 0 ? (
-          transactions.map(order =>
+          transactions.map((order, index) =>
             isDesktop ? (
               <Order
                 order={order}
@@ -68,6 +68,7 @@ export default function MyOrders() {
             ) : (
               <MobileOrder
                 key={order.id}
+                index={index}
                 order={order}
                 isOpen={selectedOrder}
                 setOrder={setSelectedOrder}
