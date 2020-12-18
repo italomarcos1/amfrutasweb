@@ -21,13 +21,13 @@ import {
   ShareThisProduct,
   Description,
   Amount,
-  AmountAndPriceContainer,
-  AmountAndTotalContainer,
   TotalContainer,
   ShippingContainer,
   buttonStyle,
   buttonTitleStyle,
   imgButtonStyle,
+  SectionTitle,
+  ProductsContainer,
 } from './styles';
 
 import {
@@ -37,7 +37,7 @@ import {
 } from '~/store/modules/cart/actions';
 
 import { Button } from '~/components/LoginModal';
-import ImagesCarousel from '~/components/ImagesCarousel';
+import Product from '~/components/Product';
 
 import heartOn from '~/assets/icons/heart-on.svg';
 import heartOff from '~/assets/icons/heart-off.svg';
@@ -64,10 +64,11 @@ export default function ViewProduct() {
   const [banner, setBanner] = useState(null);
   const [favorite, setFavorite] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [productImages, setProductImages] = useState([]);
   const [qty, setQty] = useState(1);
   const [shippingCost, setShippingCost] = useState(4);
   const [minValueFreeShipping, setMinValueFreeShipping] = useState(0);
+
+  const [recommendedProducts, setRecommendedProducts] = useState([]);
 
   const [pressed, setPressed] = useState(false);
 
@@ -111,9 +112,12 @@ export default function ViewProduct() {
       search = state.id;
     }
 
-    const [productData, shipping] = await Promise.all([
+    const [productData, shipping, recommendedResponse] = await Promise.all([
       backend.get(`ecommerce/products/${search}`),
       backend.get('/configurations', { keys }),
+      backend.get(
+        `/ecommerce/products?page=${1}&per_page=4&special_order=most_viewed`
+      ),
     ]);
 
     const {
@@ -123,11 +127,17 @@ export default function ViewProduct() {
       data: { data: shippingData },
     } = shipping;
 
+    const {
+      data: {
+        data: { data: recommendedData },
+      },
+    } = recommendedResponse;
+
+    setRecommendedProducts(recommendedData);
+
     setProduct(data);
     setBanner(data.banner);
     setMinValueFreeShipping(shippingData.min_value_free_shipping);
-
-    setProductImages(data.product_images);
 
     setLoading(false);
   }, [state, pathname]);
@@ -372,6 +382,19 @@ export default function ViewProduct() {
               __html: product.description,
             }}
           />
+          <SectionTitle>
+            <strong>Promoções da Semana</strong>
+            <small>Todas as semanas com promoções especiais</small>
+          </SectionTitle>
+          <ProductsContainer>
+            {loading ? (
+              <h1>Carregando...</h1>
+            ) : (
+              recommendedProducts.map((p, index) => (
+                <Product key={p.id} index={index} product={p} />
+              ))
+            )}
+          </ProductsContainer>
           {toastVisible && (
             <Toast
               status={`O produto ${product.title} foi adicionado ao seu cesto de compras.`}

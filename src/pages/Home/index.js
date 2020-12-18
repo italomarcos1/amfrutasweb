@@ -32,6 +32,7 @@ import Input from '~/components/HomeInput';
 import InputMask from '~/components/HomeInputMask';
 import SlideShow from '~/components/SlideShow';
 import CategoriesCarousel from '~/components/CategoriesCarousel';
+import BlogsCarousel from '~/components/BlogsCarousel';
 import Toast from '~/components/Toast';
 
 import DeliveryModal from '~/pages/DeliveryModal';
@@ -409,14 +410,11 @@ export default function Home() {
           )}
         </Section>
         <CategoriesCarousel categories={categories} isDesktop={isDesktop} />
-        <SectionTitle isDesktop={isDesktop}>
+        {/* <SectionTitle isDesktop={isDesktop}>
           <strong>Blog</strong>
           <small>Dicas de receitas com frutas e verduras</small>
-        </SectionTitle>
-        <Section
-          style={isDesktop ? { height: 332 } : { height: 1505 }}
-          isDesktop={isDesktop}
-        >
+        </SectionTitle> */}
+        <BlogsCarousel isDesktop={isDesktop}>
           {blogData.map(post => (
             <BlogPost
               key={post.id}
@@ -430,7 +428,7 @@ export default function Home() {
               <small>{post.description}</small>
             </BlogPost>
           ))}
-        </Section>
+        </BlogsCarousel>
         <Promotions>Receba promoções exclusivas</Promotions>
         <PromotionsSubTitle>
           Deixe o seu e-mail e receba promoções e{isDesktop ? ' ' : <br />}

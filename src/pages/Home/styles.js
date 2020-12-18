@@ -8,7 +8,8 @@ export const Container = styled(Form)`
   flex-direction: column;
   background-color: #fff;
   width: 100%;
-  padding: 21px 30px 87px;
+  padding: ${({ isDesktop }) =>
+    isDesktop ? '21px 30px 87px' : '10px 20px 87px'};
 `;
 
 export const OptionsContainer = styled.div`
@@ -16,8 +17,8 @@ export const OptionsContainer = styled.div`
   flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
   width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
   justify-content: space-between;
-  height: ${({ isDesktop }) => (isDesktop ? 106 : 388)}px;
-  margin: 21px auto 0;
+  height: ${({ isDesktop }) => (isDesktop ? 106 : 338)}px;
+  margin: ${({ isDesktop }) => (isDesktop ? '21px auto 0' : '10px auto 0')};
 `;
 
 export const ProductsContainer = styled.div`
@@ -118,7 +119,7 @@ export const SectionTitle = styled.div`
   text-align: left;
   width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
 
-  margin: 35px auto 0;
+  margin: ${({ isDesktop }) => (isDesktop ? '35px auto 0' : '20px auto 0')};
 
   strong {
     font-weight: normal;

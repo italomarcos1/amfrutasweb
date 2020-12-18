@@ -249,28 +249,6 @@ export const Description = styled.div`
   padding: 35px 28px 50px 24px;
 `;
 
-export const AmountAndPriceContainer = styled.div`
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
-  /* background-color: #a0f0ff; */
-
-  height: 76px;
-  margin-top: 24px;
-  padding: 0;
-`;
-
-export const AmountAndTotalContainer = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0;
-`;
-
 export const TotalContainer = styled.div`
   display: flex;
   height: 45px;
@@ -360,4 +338,46 @@ export const Amount = styled.div`
       background-color: ${darken(0.08, '#f2f2f2')};
     }
   }
+`;
+
+export const SectionTitle = styled.div`
+  display: block;
+  text-align: left;
+  width: 100%;
+
+  margin: 35px auto 0;
+  padding-left: 25px;
+
+  strong {
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 22px;
+    font-family: 'SFProBold';
+    letter-spacing: 0px;
+    color: #000;
+  }
+
+  small {
+    display: block;
+    margin-top: 7.5px;
+
+    font-size: 15px;
+    line-height: 20px;
+    font-family: 'SFPro';
+    letter-spacing: 0px;
+    color: #8d8d8d;
+  }
+`;
+
+export const ProductsContainer = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  height: 680px;
+  flex-wrap: wrap;
+  margin: 30px auto 0;
+  padding: 0 25px;
+
+  /* flex-wrap: wrap; */
 `;
