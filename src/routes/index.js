@@ -38,7 +38,7 @@ export default function Routes() {
         <Route path="/" exact component={Home} />
         <Route path="/updating" exact component={IsMobile} />
         <Route path="/menu" component={Menu} />
-        <Route path="/conteudos" component={Contents} isPrivate />
+        <Route path="/conteudos" component={Contents} />
         <Route path="/cesto" component={Basket} />
         <Route path="/entrega" component={Delivery} isPrivate />
         <Route path="/confirmacao" component={Confirmation} isPrivate />
