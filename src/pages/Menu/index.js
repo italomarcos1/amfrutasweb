@@ -4,8 +4,6 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useScrollYPosition } from 'react-use-scroll-position';
 import { useMediaQuery } from 'react-responsive';
 
-import { useSelector } from 'react-redux';
-
 import {
   Header,
   HeaderContent,
@@ -13,21 +11,18 @@ import {
   MenuContent,
   MenuItem,
   MenuItemButton,
-  Price,
-  Badge,
-  BadgeContainer,
-  SubTitle,
-  GoToCartContainer,
   Background,
-  MenuMobile,
   Title,
   Separator,
   MenuItemLink,
+  ContactButton,
 } from './styles';
 
 import Logo from '~/assets/amfrutas-top.svg';
 
 import close from '~/assets/close-white.svg';
+import smartphone from '~/assets/smartphone.svg';
+import whatsapp from '~/assets/whatsapp_black.svg';
 
 import backend from '~/services/api';
 
@@ -113,10 +108,26 @@ export default function MainMenu({ route }) {
       data: { data: socialData },
     } = socialMedia;
 
-    const { facebook, instagram, youtube, social_nif } = socialData;
+    console.log(socialData);
+
+    const {
+      facebook,
+      instagram,
+      youtube,
+      social_nif,
+      phone_two,
+      whatsapp: whatsappNumber,
+    } = socialData;
 
     setFooterData(linkFooterData);
-    setSocial({ facebook, instagram, youtube, social_nif });
+    setSocial({
+      facebook,
+      instagram,
+      youtube,
+      social_nif,
+      phone_two,
+      whatsapp: whatsappNumber,
+    });
     setLoading(false);
   }, []);
 
@@ -140,6 +151,25 @@ export default function MainMenu({ route }) {
           <MenuItemButton onClick={() => history.push(route)}>
             <img src={close} alt="Close" style={{ width: 30, height: 30 }} />
           </MenuItemButton>
+          <ContactButton href={`tel:${social.phone_two}`} rel="noreferrer">
+            <img
+              src={smartphone}
+              alt="Phone"
+              style={{ width: 10, height: 16 }}
+            />
+            {social.phone_two}
+          </ContactButton>
+          <ContactButton
+            href={`https://api.whatsapp.com/send?phone=351${social.whatsapp}`}
+            rel="noreferrer"
+          >
+            <img
+              src={whatsapp}
+              alt="WhatsApp"
+              style={{ width: 13, height: 13 }}
+            />
+            WhatsApp
+          </ContactButton>
         </MenuContent>
       </Menu>
       <Background>

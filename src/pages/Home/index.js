@@ -76,6 +76,8 @@ export default function Home() {
   const [mostSold, setMostSold] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [whatsappNumber, setWhatsappNumber] = useState('');
+
   const [sellerPoints, setSellerPoints] = useState([null, null, null]);
 
   const signed = useSelector(state => state.auth.signed);
@@ -114,12 +116,16 @@ export default function Home() {
       bannersResponse,
       blogResponse,
       seller,
+      whatsappResponse,
     ] = await Promise.all([
       backend.get('ecommerce/categories'),
       backend.get('/banner/blocks'),
       backend.get('/blog/contents/categories/5?per_page=4'),
       backend.get('/seller-points'),
+      backend.get('configurations'),
     ]);
+
+    setWhatsappNumber(whatsappResponse.whatsapp);
 
     const {
       data: {
@@ -307,7 +313,7 @@ export default function Home() {
             </div>
           </Option>
           <Option
-            href="https://api.whatsapp.com/send?phone=351910457768"
+            href={`https://api.whatsapp.com/send?phone=351${whatsappNumber}`}
             rel="noreferrer"
             isDesktop={isDesktop}
             target="_blank"
