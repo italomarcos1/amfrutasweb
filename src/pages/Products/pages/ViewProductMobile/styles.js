@@ -123,7 +123,7 @@ export const Title = styled.h1`
 export const PriceAndInfoContainer = styled.div`
   width: 40%;
   display: flex;
-  height: 210px;
+  height: 235px;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
@@ -148,6 +148,90 @@ export const PriceContainer = styled.div`
     line-height: 43px;
     text-align: left;
     height: 43px;
+
+    b {
+      font-size: 22px;
+      font-family: 'SFProBold';
+    }
+  }
+`;
+
+export const Amount = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 103px;
+  height: 45px;
+  margin-top: 24px;
+
+  strong {
+    display: inline;
+    font-size: 18px;
+    line-height: 45px;
+    /* padding: 10px auto; */
+    height: 45px;
+    color: #393939;
+    /* margin: 0 10px; */
+    font-weight: normal;
+    font-family: 'SFProCustom';
+    width: 35px;
+    max-width: 35px;
+    text-align: center;
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    width: 34px;
+    max-width: 34px;
+    padding: 10px;
+    height: 45px;
+    border-radius: 4px;
+    background-color: #f2f2f2;
+    transition: all 0.2s;
+
+    img {
+      width: 13px;
+      height: 13px;
+    }
+
+    &:hover {
+      background-color: ${darken(0.08, '#f2f2f2')};
+    }
+  }
+`;
+
+export const TotalContainer = styled.div`
+  display: flex;
+  height: 45px;
+  width: 100%;
+  background-color: #0f0;
+  margin-top: 24px;
+
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  small {
+    letter-spacing: 0px;
+    color: #9e9e9e;
+    font-family: 'SFPro';
+    font-size: 14px;
+    line-height: 14px;
+    height: 14px;
+    text-align: left;
+  }
+
+  strong {
+    letter-spacing: 0px;
+    color: #3ab879;
+    font-family: 'SFProBold';
+    font-size: 36px;
+    line-height: 36px;
+    text-align: left;
+    height: 36px;
 
     b {
       font-size: 22px;
@@ -255,43 +339,6 @@ export const Description = styled.div`
   padding: 35px 28px 50px 24px;
 `;
 
-export const TotalContainer = styled.div`
-  display: flex;
-  height: 45px;
-  width: 100%;
-  /* background-color: #0f0; */
-  margin-top: 24px;
-
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-
-  small {
-    letter-spacing: 0px;
-    color: #9e9e9e;
-    font-family: 'SFPro';
-    font-size: 14px;
-    line-height: 14px;
-    height: 14px;
-    text-align: left;
-  }
-
-  strong {
-    letter-spacing: 0px;
-    color: #3ab879;
-    font-family: 'SFProBold';
-    font-size: 36px;
-    line-height: 36px;
-    text-align: left;
-    height: 36px;
-
-    b {
-      font-size: 22px;
-      font-family: 'SFProBold';
-    }
-  }
-`;
-
 export const ShippingContainer = styled.div`
   display: flex;
   height: 34px;
@@ -299,53 +346,6 @@ export const ShippingContainer = styled.div`
   width: 180px;
 
   background-color: #390;
-`;
-
-export const Amount = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 103px;
-  height: 45px;
-  margin-top: 24px;
-
-  strong {
-    display: inline;
-    font-size: 18px;
-    line-height: 45px;
-    /* padding: 10px auto; */
-    height: 45px;
-    color: #393939;
-    /* margin: 0 10px; */
-    font-weight: normal;
-    font-family: 'SFProCustom';
-    width: 35px;
-    max-width: 35px;
-    text-align: center;
-  }
-
-  button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-    width: 34px;
-    max-width: 34px;
-    padding: 10px;
-    height: 45px;
-    border-radius: 4px;
-    background-color: #f2f2f2;
-    transition: all 0.2s;
-
-    img {
-      width: 13px;
-      height: 13px;
-    }
-
-    &:hover {
-      background-color: ${darken(0.08, '#f2f2f2')};
-    }
-  }
 `;
 
 export const SectionTitle = styled.div`

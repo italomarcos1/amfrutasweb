@@ -279,6 +279,7 @@ export default function ViewProduct() {
               <ShippingButtonContainer
                 style={{
                   height: 240,
+                  backgroundColor: '#390',
                 }}
               >
                 <ShippingContainer>
