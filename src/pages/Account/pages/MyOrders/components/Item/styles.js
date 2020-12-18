@@ -87,7 +87,7 @@ export const PriceAndAmount = styled.div`
 export const Options = styled.div`
   display: flex;
   height: 27px;
-  width: ${({ isDesktop }) => (isDesktop ? '358px' : '100%')};
+  width: ${({ isDesktop }) => (isDesktop ? '358px' : '96%')};
   align-items: center;
   justify-content: space-between;
   margin-top: 12px;

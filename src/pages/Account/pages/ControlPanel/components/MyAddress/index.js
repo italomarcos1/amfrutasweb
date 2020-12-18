@@ -33,7 +33,7 @@ export default function MyAddress() {
         <img
           src={location}
           alt="Seus endereços"
-          style={isDesktop ? {} : { width: '20%' }}
+          style={isDesktop ? {} : { width: '15%', marginTop: 10 }}
         />
         <Content isDesktop={isDesktop}>
           <strong>Meu endereço</strong>

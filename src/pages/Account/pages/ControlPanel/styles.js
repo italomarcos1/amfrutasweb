@@ -14,7 +14,6 @@ export const InfoContainer = styled.div`
   flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
   align-items: center;
   justify-content: space-between;
-  background-color: #30f;
 
   & + div {
     margin-top: 18px;

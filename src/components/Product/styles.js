@@ -5,7 +5,7 @@ import { darken } from 'polished';
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: ${({ isDesktop }) => (isDesktop ? 176 : 116.55)}px;
+  width: ${({ isDesktop }) => (isDesktop ? '176px' : '47.5%')};
 
   height: ${({ isDesktop }) => (isDesktop ? 376 : 326)}px;
 
@@ -76,12 +76,12 @@ export const ImageContainer = styled(Link)`
   border-radius: 4px;
   background-color: #fff;
 
-  width: ${({ isDesktop }) => (isDesktop ? 164 : 108.6)}px;
-  height: ${({ isDesktop }) => (isDesktop ? 164 : 108.6)}px;
+  width: ${({ isDesktop }) => (isDesktop ? '164px' : '100%')};
+  height: ${({ isDesktop }) => (isDesktop ? '164px' : '100%')};
 
   img {
     border-radius: 4px;
-    width: ${({ isDesktop }) => (isDesktop ? 164 : 108.6)}px;
+    width: ${({ isDesktop }) => (isDesktop ? '164px' : '100%')};
   }
 `;
 

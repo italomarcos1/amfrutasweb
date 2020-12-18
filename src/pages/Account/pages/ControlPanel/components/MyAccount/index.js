@@ -25,23 +25,17 @@ export default function MyAccount() {
     <Container onClick={() => history.push('/conta')} isDesktop={isDesktop}>
       <InfoContainer isDesktop={isDesktop}>
         <IconAndDataContainer
-          style={
-            isDesktop
-              ? {}
-              : { width: '100%', alignItems: 'center', backgroundColor: '#c30' }
-          }
+          style={isDesktop ? {} : { width: '100%', alignItems: 'center' }}
         >
           <img src={myAccount} alt="Minha conta" />
           <Content
             isDesktop={isDesktop}
-            style={isDesktop ? {} : { width: '100%', backgroundColor: '#390' }}
+            style={isDesktop ? {} : { width: '100%' }}
           >
-            <strong>Minha conta</strong>
-            <small
-              style={
-                isDesktop ? {} : { width: '100%', backgroundColor: '#f90' }
-              }
-            >
+            <strong style={isDesktop ? {} : { fontSize: 20 }}>
+              Minha conta
+            </strong>
+            <small style={isDesktop ? {} : { width: '100%', fontSize: 13 }}>
               Você é um cliente desde 12/10/2020
             </small>
           </Content>

@@ -18,7 +18,7 @@ import {
   Button,
 } from './styles';
 
-export default function Item({ item, index }) {
+export default function Item({ item, index, isDesktop }) {
   const {
     id,
     thumbs,
@@ -35,9 +35,13 @@ export default function Item({ item, index }) {
   }, [item, dispatch]);
 
   return (
-    <Container key={id} style={index > 1 ? { marginTop: 20 } : {}}>
+    <Container
+      key={id}
+      style={index > 1 ? { marginTop: 20 } : {}}
+      isDesktop={isDesktop}
+    >
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <ItemPicture src={thumbs} />
+        <ItemPicture src={thumbs} isDesktop={isDesktop} />
         <ProductInfo>
           <div
             style={{
@@ -47,26 +51,33 @@ export default function Item({ item, index }) {
               alignItems: 'flex-start',
             }}
           >
-            <Title>{title}</Title>
+            <Title isDesktop={isDesktop}>{title}</Title>
           </div>
-          <PriceAndAmount>
+          <PriceAndAmount isDesktop={isDesktop}>
             <small>{qty} unidades</small>
             <strong>€&nbsp;{has_promotion ? price_promotional : price}</strong>
           </PriceAndAmount>
         </ProductInfo>
       </div>
-      <Options>
-        <Button color="#0cb68b">
+      <Options isDesktop={isDesktop}>
+        <Button
+          color="#0cb68b"
+          style={isDesktop ? { width: 185 } : { width: '51%', fontSize: 10 }}
+        >
           <img src={delivery} alt="" />
-          <small>Adicionar a entrega periódica</small>
+          <small style={isDesktop ? {} : { fontSize: 10 }}>
+            Adicionar a entrega periódica
+          </small>
         </Button>
         <Button
-          style={{ width: 132 }}
           color="#29B4CC"
           onClick={handleAddToCart}
+          style={isDesktop ? { width: 132 } : { width: '37%', fontSize: 10 }}
         >
           <img src={orders} alt="" style={{ width: 15, height: 15 }} />
-          <small>Adicionar ao cesto</small>
+          <small style={isDesktop ? {} : { fontSize: 10 }}>
+            Adicionar ao cesto
+          </small>
         </Button>
       </Options>
     </Container>
@@ -84,4 +95,5 @@ Item.propTypes = {
     qty: PropTypes.number,
   }).isRequired,
   index: PropTypes.number.isRequired,
+  isDesktop: PropTypes.bool.isRequired,
 };

@@ -105,10 +105,7 @@ export default function Account({ children }) {
                 />
                 <strong>Minhas encomendas</strong>
               </Option>
-              <Option
-                onClick={() => history.push('/entregas')}
-                active={active === '/entregas'}
-              >
+              <Option onClick={() => {}} active={active === '/entregas'}>
                 <img
                   src={active === '/entregas' ? deliveryIcon : deliveryIconOff}
                   alt=""
@@ -153,12 +150,10 @@ export default function Account({ children }) {
               isDesktop
                 ? {
                     marginTop: 0,
-                    backgroundColor: '#f0f',
                   }
                 : {
                     width: '100%',
                     marginTop: 0,
-                    backgroundColor: '#3ff',
                   }
             }
           >

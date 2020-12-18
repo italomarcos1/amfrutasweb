@@ -1,10 +1,10 @@
-import styled, { keyframes, css } from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { Form } from '@unform/web';
 
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 821px;
+  width: ${({ isDesktop }) => (isDesktop ? '821px' : '100%')};
   overflow-x: hidden;
 `;
 
@@ -20,8 +20,8 @@ const rotate = keyframes` /** animação para rotacionar o icon. */
 
 export const LoadingContainer = styled.div`
   position: absolute;
-  width: 683px;
-  height: 431px;
+  width: ${({ isDesktop }) => (isDesktop ? '683px' : '100%')};
+  height: ${({ isDesktop }) => (isDesktop ? 431 : 701)}px;
   background-color: rgba(255, 255, 255, 0.8);
   border: 1px solid #e0e0e0;
   border-radius: 6px;
@@ -36,38 +36,28 @@ export const LoadingContainer = styled.div`
 `;
 
 export const Content = styled.div`
-  width: 821px;
+  width: ${({ isDesktop }) => (isDesktop ? '821px' : '100%')};
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   position: relative;
-
-  ul {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    width: 840px;
-    height: 455px;
-    margin-top: 30px;
-  }
 `;
 
 export const InfoContainer = styled(Form)`
-  width: 683px;
-  height: 431px;
+  width: ${({ isDesktop }) => (isDesktop ? '683px' : '100%')};
+  height: ${({ isDesktop }) => (isDesktop ? 431 : 701)}px;
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 6px;
 
   opacity: ${({ loading }) => (loading ? 0.4 : 1)};
-  padding: 21px 29px 36px 27px;
+  padding: ${({ isDesktop }) => (isDesktop ? '21px 29px 36px 27px' : '19px')};
 `;
 
 export const SectionTitle = styled.div`
   display: block;
   text-align: left;
-  width: 1240px;
+  width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
   margin: 0 auto;
 
   strong {

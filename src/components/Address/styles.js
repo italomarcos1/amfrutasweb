@@ -44,9 +44,7 @@ export const Container = styled.div`
     }
   }
 
-  & + div {
-    margin-left: 40px;
-  }
+  margin-left: ${({ index }) => (index > 0 ? 10 : 0)}px;
 `;
 
 export const TitleContainer = styled.div`
@@ -67,6 +65,7 @@ export const StartStop = styled.div`
   display: flex;
   align-items: center;
   margin-top: 20px;
+  width: 100%;
 
   button {
     display: flex;

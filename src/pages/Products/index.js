@@ -88,7 +88,7 @@ export default function Products({ children }) {
   return (
     <>
       <Header login={() => setLoginModal(true)} active="Produtos" />
-      <Container>
+      <Container isDesktop={isDesktop}>
         <Layout isDesktop={isDesktop}>
           {isDesktop && (
             <Menu>
@@ -114,7 +114,7 @@ export default function Products({ children }) {
         </Layout>
       </Container>
 
-      {currentRoute === 'produto' && (
+      {isDesktop && currentRoute === 'produto' && (
         <PromotionsContainer>
           <SectionTitle>
             <strong>Promoções da Semana</strong>

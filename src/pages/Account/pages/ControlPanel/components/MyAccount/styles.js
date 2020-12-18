@@ -8,7 +8,7 @@ export const Container = styled.button.attrs({
   flex-direction: column;
   justify-content: flex-start;
   width: ${({ isDesktop }) => (isDesktop ? '840px' : '100%')};
-  height: ${({ isDesktop }) => (isDesktop ? 190 : 482)}px;
+  height: ${({ isDesktop }) => (isDesktop ? 190 : 322)}px;
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 4px;
@@ -79,7 +79,7 @@ export const UserInfoContainer = styled.div`
   margin-left: ${({ isDesktop }) => (isDesktop ? 77 : 0)}px;
   flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
 
-  margin-top: ${({ isDesktop }) => (isDesktop ? 19 : 102)}px;
+  margin-top: ${({ isDesktop }) => (isDesktop ? 19 : 52)}px;
 `;
 
 export const UserInfo = styled.div`

@@ -14,16 +14,6 @@ export const Content = styled.div`
   align-items: flex-start;
   justify-content: space-between;
   flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
-
-  ul {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    width: 840px;
-    height: 455px;
-    margin-top: 30px;
-  }
 `;
 
 export const InfoContainer = styled(Form)`

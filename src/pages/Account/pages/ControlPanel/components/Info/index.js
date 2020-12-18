@@ -14,6 +14,8 @@ export default function Info({
   subTitle,
   style,
   titleStyle,
+  subTitleStyle,
+  contentStyle,
   imageStyle,
   noButton,
   ...rest
@@ -23,9 +25,9 @@ export default function Info({
   return (
     <Container style={style} {...rest} isDesktop={isDesktop}>
       <img src={icon} alt={alt} style={isDesktop ? {} : imageStyle} />
-      <Content isDesktop={isDesktop}>
+      <Content isDesktop={isDesktop} style={contentStyle}>
         <strong style={titleStyle}>{title}</strong>
-        <small>{subTitle}</small>
+        <small style={subTitleStyle}>{subTitle}</small>
       </Content>
       {noButton && (
         <button type="button">
@@ -43,13 +45,17 @@ Info.propTypes = {
   subTitle: PropTypes.string.isRequired,
   style: PropTypes.oneOfType([PropTypes.object]),
   titleStyle: PropTypes.oneOfType([PropTypes.object]),
+  subTitleStyle: PropTypes.oneOfType([PropTypes.object]),
   imageStyle: PropTypes.oneOfType([PropTypes.object]),
+  contentStyle: PropTypes.oneOfType([PropTypes.object]),
   noButton: PropTypes.bool,
 };
 
 Info.defaultProps = {
   style: {},
   titleStyle: {},
+  subTitleStyle: {},
   imageStyle: {},
+  contentStyle: {},
   noButton: true,
 };

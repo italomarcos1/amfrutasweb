@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
+import { useMediaQuery } from 'react-responsive';
 
 import { Container, StartStop, Options, TitleContainer } from './styles';
 
@@ -17,6 +18,7 @@ export default function Address({
   selected,
   setSelected,
   setEdit,
+  index,
 }) {
   const {
     id,
@@ -29,6 +31,8 @@ export default function Address({
   } = addressInfo;
 
   const profile = useSelector(state => state.user.profile);
+
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
 
   const dispatch = useDispatch();
 
@@ -43,7 +47,7 @@ export default function Address({
   }, [id, dispatch]);
 
   return (
-    <Container>
+    <Container index={index} isDesktop={isDesktop}>
       <TitleContainer>
         <small>
           <b>Endereço de envio</b>
@@ -72,7 +76,7 @@ export default function Address({
         >
           <img src={checked} alt="Item selecionado" />
         </button>
-        <strong>Endereço Principal</strong>
+        <strong style={{ width: '70%' }}>Endereço Principal</strong>
       </StartStop>
       <Options visible={visible}>
         <button
@@ -111,4 +115,5 @@ Address.propTypes = {
   address: PropTypes.oneOfType([PropTypes.object]).isRequired,
   selected: PropTypes.bool.isRequired,
   setEdit: PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired,
 };

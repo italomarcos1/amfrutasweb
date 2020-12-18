@@ -6,6 +6,7 @@ import { FacebookShareButton, WhatsappShareButton } from 'react-share';
 import { useMediaQuery } from 'react-responsive';
 
 import {
+  FullContainer,
   Container,
   Content,
   Details,
@@ -183,14 +184,7 @@ export default function ViewProduct() {
   }, [pressed, signed, dispatch, favorite, product]);
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        paddingTop: 0,
-        justifyContent: 'flex-start',
-      }}
-    >
+    <FullContainer>
       {loading ? (
         <h1>Carregando...</h1>
       ) : (
@@ -404,6 +398,6 @@ export default function ViewProduct() {
           )}
         </>
       )}
-    </div>
+    </FullContainer>
   );
 }

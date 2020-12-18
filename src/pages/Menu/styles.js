@@ -10,15 +10,10 @@ export const Header = styled.div`
   z-index: 999;
 `;
 
-export const Background = styled.button.attrs({
-  type: 'button',
-})`
+export const Background = styled.button`
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-  z-index: 999;
-  position: fixed;
-  top: 0;
+  background-color: #fff;
 `;
 
 export const MenuMobile = styled.div`
@@ -33,6 +28,44 @@ export const MenuMobile = styled.div`
   align-items: center;
   justify-content: flex-start;
   padding: 10px;
+`;
+
+export const Title = styled.div`
+  width: 100%;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #0cb68b;
+  background-color: #fff;
+  font-family: 'SFProBold';
+  font-size: 16px;
+  line-height: 19px;
+  font-weight: bold;
+  padding: 0 9.5px;
+  border-bottom: 1px solid #ccc;
+`;
+
+export const MenuItem = styled(Link)`
+  width: 100%;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: #141319;
+  background-color: #fff;
+  font-family: 'SFPro';
+  font-size: 13px;
+  line-height: 14px;
+  font-weight: normal;
+  padding: 0 9.5px;
+  border-bottom: 1px solid #ccc;
+`;
+
+export const Separator = styled.div`
+  width: 100%;
+  height: 18px;
+  background-color: #0cb68b;
 `;
 
 export const HeaderContent = styled.div`
@@ -55,8 +88,8 @@ export const Menu = styled.div`
 `;
 
 export const MenuContent = styled.div`
-  width: ${({ isDesktop }) => (isDesktop ? '1122px' : '100%')};
-  padding: ${({ isDesktop }) => (isDesktop ? 0 : '0 10px')};
+  width: 100%;
+  padding: 0 4px;
   height: 41px;
   margin: 0 auto;
   display: flex;
@@ -64,14 +97,15 @@ export const MenuContent = styled.div`
   justify-content: space-between;
 `;
 
-export const MenuItem = styled(Link)`
+export const MenuItemButton = styled.button.attrs({
+  type: 'button',
+})`
   font-family: ${({ selected }) => (selected ? 'SFProBold' : 'SFPro')};
   font-size: 15px;
   line-height: 20px;
   letter-spacing: 0px;
   color: #fff;
-  padding: ${({ isDesktop }) => (isDesktop ? '0 20px' : '0 5px')};
-  padding-left: 20px;
+  padding: 0 10px;
   text-align: center;
   height: 37px;
   display: flex;
@@ -83,21 +117,21 @@ export const MenuItem = styled(Link)`
     height: 18px;
   }
 `;
-
-export const MenuItemButton = styled.button.attrs({
-  type: 'button',
-})`
-  font-family: ${({ selected }) => (selected ? 'SFProBold' : 'SFPro')};
+export const MenuItemLink = styled.a`
+  font-family: 'SFPro';
   font-size: 15px;
   line-height: 20px;
   letter-spacing: 0px;
-  color: #ffffff;
+  color: #141319;
+  background-color: #fff;
   padding: 0 10px;
   text-align: center;
   height: 37px;
   display: flex;
   align-items: center;
-  background: none;
+  font-size: 13px;
+  line-height: 15px;
+  border-bottom: 1px solid #ccc;
 
   img {
     width: 18px;
@@ -139,7 +173,7 @@ export const BadgeContainer = styled.span`
 
 export const SubTitle = styled.div`
   width: 100%;
-  height: ${({ isDesktop }) => (isDesktop ? 40 : 95)}px;
+  height: ${({ isDesktop }) => (isDesktop ? 40 : 108)}px;
   padding: 0 16px;
   background-color: #ededed;
   text-align: center;
@@ -148,8 +182,8 @@ export const SubTitle = styled.div`
   align-items: center;
   text-transform: uppercase;
   font-family: 'SFProBold';
-  font-size: ${({ isDesktop }) => (isDesktop ? 12 : 14)}px;
-  line-height: ${({ isDesktop }) => (isDesktop ? 16 : 18)}px;
+  font-size: 12px;
+  line-height: 16px;
   letter-spacing: 0px;
   color: #000;
   position: relative;

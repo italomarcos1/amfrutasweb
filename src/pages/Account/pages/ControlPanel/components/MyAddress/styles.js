@@ -13,7 +13,7 @@ export const Container = styled.button.attrs({
   border: 1px solid #e0e0e0;
   border-radius: 4px;
 
-  padding: ${({ isDesktop }) => (isDesktop ? '21px 30px' : '10.5px 15px')};
+  padding: ${({ isDesktop }) => (isDesktop ? '21px 30px' : '21px 15px')};
 
   img {
     margin-right: 28px;

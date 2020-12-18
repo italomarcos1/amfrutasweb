@@ -17,6 +17,7 @@ import Input from '~/components/Input';
 import InputMask from '~/components/InputMask';
 import Select from '~/components/Select';
 import Address from '~/components/Address';
+import AddressesCarousel from '~/components/AddressesCarousel';
 
 import backend from '~/services/api';
 import {
@@ -177,8 +178,8 @@ export default function MyAccount() {
 
   return (
     <>
-      <Container>
-        <Content>
+      <Container isDesktop={isDesktop}>
+        <Content isDesktop={isDesktop}>
           {loading && (
             <LoadingContainer>
               <FaSpinner color="#666" size={42} />
@@ -189,26 +190,29 @@ export default function MyAccount() {
             initialData={addressInfo}
             loading={loading}
             ref={formRef}
+            isDesktop={isDesktop}
           >
-            <SectionTitle>
+            <SectionTitle isDesktop={isDesktop}>
               <strong>Morada de entrega</strong>
               <small>Confira e atualize caso necessário.</small>
             </SectionTitle>
             <InputContainer
               isDesktop={isDesktop}
-              style={isDesktop ? {} : { width: '85%' }}
+              style={isDesktop ? {} : { width: '100%', height: 53 }}
             >
               <Input
                 name="destination_name"
                 title="Nome completo do destinatário"
                 placeholder="Escreve o teu nome"
-                customWidth={215}
+                customWidth={isDesktop ? 215 : '100%'}
                 error={invalidFields[0]}
               />
             </InputContainer>
             <InputContainer
               isDesktop={isDesktop}
-              style={isDesktop ? { width: 628 } : { width: '85%' }}
+              style={
+                isDesktop ? { width: 628 } : { width: '100%', height: 242 }
+              }
             >
               <InputMask
                 name="zipcode"
@@ -217,7 +221,7 @@ export default function MyAccount() {
                 mask="9999-999"
                 value={zipcode}
                 onChange={({ target: { value } }) => setZipcode(value)}
-                customWidth={90}
+                customWidth={isDesktop ? 90 : '100%'}
                 error={invalidFields[1]}
                 onBlur={lookupAddress}
               />
@@ -225,39 +229,41 @@ export default function MyAccount() {
                 name="address"
                 title="Morada"
                 placeholder="Morada"
-                customWidth={215}
+                customWidth={isDesktop ? 215 : '100%'}
                 error={invalidFields[2]}
                 disabled={addressInfo === {}}
-                hasMarginLeft
+                hasMarginLeft={isDesktop}
               />
               <Input
                 name="number"
                 title="Número"
                 placeholder="Nº da morada"
-                customWidth={90}
+                customWidth={isDesktop ? 90 : '100%'}
                 error={invalidFields[3]}
                 disabled={addressInfo === {}}
-                hasMarginLeft
+                hasMarginLeft={isDesktop}
               />
               <Input
                 name="district"
                 title="Distrito"
                 placeholder="Escreve o teu distrito"
-                customWidth={173}
+                customWidth={isDesktop ? 173 : '100%'}
                 error={invalidFields[4]}
                 disabled={addressInfo === {}}
-                hasMarginLeft
+                hasMarginLeft={isDesktop}
               />
             </InputContainer>
             <InputContainer
               isDesktop={isDesktop}
-              style={isDesktop ? { width: 628 } : { width: '85%' }}
+              style={
+                isDesktop ? { width: 628 } : { width: '100%', height: 179 }
+              }
             >
               <Input
                 name="city"
                 title="Cidade"
                 placeholder="Escreve a tua cidade"
-                customWidth={194}
+                customWidth={isDesktop ? 194 : '100%'}
                 error={invalidFields[5]}
                 disabled={addressInfo === {}}
               />
@@ -267,16 +273,16 @@ export default function MyAccount() {
                 placeholder="Escolha a localidade"
                 error={invalidFields[6]}
                 defaultValue="Lisboa"
-                hasMarginLeft
+                hasMarginLeft={isDesktop}
               />
               <Select
                 title="País"
                 placeholder="Escolha o país"
                 setValue={setCountry}
-                customWidth={173}
+                customWidth={isDesktop ? 173 : '100%'}
                 defaultValue={{ label: 'Portugal', value: 'Portugal' }}
                 data={countryData}
-                hasMarginLeft
+                hasMarginLeft={isDesktop}
               />
             </InputContainer>
 
@@ -292,20 +298,21 @@ export default function MyAccount() {
           </InfoContainer>
         </Content>
 
-        <div style={{ display: 'flex', marginTop: 40, height: 203 }}>
-          {addresses.length !== 0 ? (
-            addresses.map(address => (
+        {addresses.length !== 0 ? (
+          <AddressesCarousel isDesktop={isDesktop}>
+            {addresses.map((address, index) => (
               <Address
                 address={address}
                 selected={selected}
                 setSelected={setSelected}
                 setEdit={setAddressEdit}
+                index={index}
               />
-            ))
-          ) : (
-            <h1>Você ainda não tem nenhum endereço adicionado.</h1>
-          )}
-        </div>
+            ))}
+          </AddressesCarousel>
+        ) : (
+          <h1>Você ainda não tem nenhum endereço adicionado.</h1>
+        )}
       </Container>
       <div style={{ width: 840, height: 320 }} />
     </>

@@ -209,8 +209,21 @@ export default function Home() {
       },
     } = mostSoldResponse;
 
-    setRecommendedProducts(recommendedData);
-    setMostSold(mostSoldData);
+    setRecommendedProducts(
+      isDesktop
+        ? recommendedData
+        : [
+            recommendedData[0],
+            recommendedData[1],
+            recommendedData[2],
+            recommendedData[3],
+          ]
+    );
+    setMostSold(
+      isDesktop
+        ? mostSoldData
+        : [mostSoldData[0], mostSoldData[1], mostSoldData[2], mostSoldData[3]]
+    );
   }, []);
 
   useEffect(() => {
@@ -309,14 +322,7 @@ export default function Home() {
           <strong>Produtos recomendados para ti</strong>
           <small>Uma seleção especial com a qualidade garantida</small>
         </SectionTitle>
-        <ProductsContainer
-          itemsToShow={isDesktop ? 6 : 1}
-          showArrows={false}
-          pagination={false}
-          autoPlay={isDesktop ? 0 : 1500}
-          enableAutoPlay={!isDesktop}
-          isDesktop={isDesktop}
-        >
+        <ProductsContainer isDesktop={isDesktop}>
           {loading ? (
             <h1>Carregando...</h1>
           ) : (

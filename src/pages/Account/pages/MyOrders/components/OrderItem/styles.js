@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { darken } from 'polished';
 
 export const Container = styled.li`
-  width: 370px;
+  width: ${({ isDesktop }) => (isDesktop ? '370px' : '100%')};
   height: 120px;
   background: #fff;
   border: 1px solid #e0e0e0;
@@ -12,8 +12,8 @@ export const Container = styled.li`
 `;
 
 export const ItemPicture = styled.img`
-  width: 70px;
-  height: 70px;
+  width: ${({ isDesktop }) => (isDesktop ? 70 : 56)}px;
+  height: ${({ isDesktop }) => (isDesktop ? 70 : 56)}px;
 `;
 
 export const Title = styled.h1`
@@ -27,8 +27,8 @@ export const Title = styled.h1`
   padding: 0;
   padding-right: 5px;
   text-transform: capitalize;
-  height: 42px;
-  width: 245px;
+  height: ${({ isDesktop }) => (isDesktop ? 42 : 45)}px;
+  width: ${({ isDesktop }) => (isDesktop ? 245 : 165)}px;
   letter-spacing: 0px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -85,7 +85,7 @@ export const PriceAndAmount = styled.div`
 export const Options = styled.div`
   display: flex;
   height: 27px;
-  width: 358px;
+  width: ${({ isDesktop }) => (isDesktop ? '358px' : '96%')};
   align-items: center;
   justify-content: space-between;
   margin-top: 12px;

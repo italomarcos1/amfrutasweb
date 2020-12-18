@@ -63,8 +63,6 @@ export default function PageHeader({ login, active }) {
     'Dicas e Receitas',
   ]);
 
-  // retirar o dominio 'am sandbox' dos produtos
-
   const loadMenu = useCallback(async () => {
     const keys = ['alert_message'];
 
@@ -129,8 +127,10 @@ export default function PageHeader({ login, active }) {
         <MenuContent isDesktop={isDesktop}>
           {!isDesktop && (
             <MenuItemButton
-              selected={selectedPage === 'Menu'}
-              onClick={() => setSelectedPage('Menu')}
+              onClick={() => {
+                setSelectedPage('none');
+                history.push('/menu');
+              }}
             >
               <img src={menu} alt="search" />
             </MenuItemButton>
@@ -207,55 +207,6 @@ export default function PageHeader({ login, active }) {
       >
         {headerAlertMessage}
       </SubTitle>
-      {selectedPage === 'Menu' && (
-        <Background onClick={() => setSelectedPage('none')}>
-          <MenuMobile>
-            <img
-              src={logo}
-              alt="Logo"
-              style={{
-                width: 196,
-                height: 43,
-                marginTop: 20,
-                marginBottom: 40,
-              }}
-            />
-
-            {!loading &&
-              !isDesktop &&
-              menuItems.map(({ id, name, url }) => (
-                <MenuItem
-                  key={id}
-                  selected={pathname === `${url}`}
-                  to={{
-                    pathname: `${url}`,
-                    state: {
-                      id: url,
-                    },
-                  }}
-                  style={{ width: '100%' }}
-                  isDesktop={isDesktop}
-                >
-                  {name}
-                </MenuItem>
-              ))}
-            {!loading && (
-              <MenuItem
-                to="/"
-                style={{
-                  width: '100%',
-                  marginTop: 60,
-                  textAlign: 'center',
-                  justifyContent: 'center',
-                }}
-                isDesktop={isDesktop}
-              >
-                <strong>Fechar menu</strong>
-              </MenuItem>
-            )}
-          </MenuMobile>
-        </Background>
-      )}
     </>
   );
 }

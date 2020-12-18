@@ -34,6 +34,7 @@ export const FullContainer = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   padding-top: 0;
+  width: 100%;
 `;
 
 export const Container = styled.div`
@@ -41,13 +42,12 @@ export const Container = styled.div`
   align-items: flex-start;
 
   flex-wrap: wrap;
-  width: 995px;
-  height: 542px;
-  height: ${({ pageHeight }) => pageHeight}px;
+  width: 100%;
+  height: 694px;
   background-color: #fff;
   border-radius: 4px;
-  padding: 20px;
-  padding-right: 30px;
+  padding: 10px;
+  padding-right: 15px;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
@@ -55,21 +55,11 @@ export const Container = styled.div`
 
 export const Content = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 
   width: 100%;
   /* background-color: #ff0; */
-  height: 400px;
-
-  > img {
-    border-radius: 6px;
-    width: 400px;
-    /* background-color: #f00; */
-
-    /* height: 400px; */
-    object-fit: cover;
-    background-color: #333;
-  }
+  height: 557px;
 `;
 
 export const Details = styled.div`
@@ -82,52 +72,21 @@ export const Details = styled.div`
 `;
 
 export const ProductInfo = styled.div`
-  width: 525px;
-  height: 400px;
-  margin-left: 20px;
-  display: flex;
-  flex-direction: column;
-  /* background-color: #f0f; */
-`;
-
-export const Title = styled.h1`
-  color: #141319;
-  font-family: 'SFProBold';
-  font-size: 20px;
-  line-height: 24px;
-  padding: 0;
-  padding-right: 5px;
-  height: 54px;
-  width: 525px;
-  letter-spacing: 0px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  background: none;
-  text-align: left;
-  /* background-color: #00f; */
-
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-`;
-
-export const PriceAndInfoContainer = styled.div`
-  width: 525px;
-  height: 339px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  width: 100%;
+  height: 235px;
   margin-top: 20px;
-  /* background-color: #00a0f0; */
-`;
-
-export const PriceContainer = styled.div`
-  width: 130px;
-  height: 92px;
-  /* background-color: #f0a0f0; */
   display: flex;
-  flex-direction: column;
-  text-align: left;
+  /* background-color: #f0f; */
+
+  > img {
+    border-radius: 6px;
+    width: 55%;
+    /* background-color: #f00; */
+
+    /* height: 400px; */
+    object-fit: cover;
+    background-color: #333;
+  }
 
   small {
     letter-spacing: 0px;
@@ -138,39 +97,61 @@ export const PriceContainer = styled.div`
     height: 16px;
     text-align: left;
   }
+`;
+
+export const Title = styled.h1`
+  color: #141319;
+  font-family: 'SFProBold';
+  font-size: 20px;
+  line-height: 24px;
+  padding: 0;
+  padding-right: 5px;
+  height: 54px;
+  width: 300px;
+  letter-spacing: 0px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  background-color: none;
+  white-space: wrap;
+
+  display: inline-block;
+  line-clamp: 2;
+  box-orient: vertical;
+`;
+
+export const PriceAndInfoContainer = styled.div`
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  /* background-color: #00a0f0; */
+  margin-left: 20px;
+`;
+
+export const PriceContainer = styled.div`
+  width: 100%;
+  height: 72px;
+  /* background-color: #f0a0f0; */
+  display: flex;
+  flex-direction: column;
+  text-align: left;
 
   strong {
     letter-spacing: 0px;
     color: #3ab879;
     font-family: 'SFProBold';
-    font-size: 50px;
-    line-height: 60px;
+    font-size: 36px;
+    line-height: 43px;
     text-align: left;
-    height: 60px;
+    height: 43px;
 
     b {
-      font-size: 30px;
+      font-size: 22px;
       font-family: 'SFProBold';
     }
   }
-`;
-
-export const Warning = styled.div`
-  width: 130px;
-  height: 92px;
-  padding: 16px 17px 19px;
-
-  width: 226px;
-  height: 147px;
-  background-color: #d4eaf5;
-  border-radius: 4px;
-
-  letter-spacing: 0px;
-  color: #2d6684;
-  font-family: 'SFPro';
-  font-size: 12px;
-  line-height: 14px;
-  text-align: left;
 `;
 
 export const ShippingButtonContainer = styled.div`
@@ -244,7 +225,7 @@ export const FlexStartText = styled.small`
 
 export const ShareThisProduct = styled.div`
   width: 239px;
-  height: 51px;
+  height: 60px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -273,10 +254,33 @@ export const AmountAndPriceContainer = styled.div`
   align-items: flex-start;
   flex-direction: column;
   justify-content: space-between;
-  width: 165px;
+  width: 100%;
+  /* background-color: #a0f0ff; */
+
   height: 76px;
-  margin-top: 34px;
+  margin-top: 24px;
   padding: 0;
+`;
+
+export const AmountAndTotalContainer = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+`;
+
+export const TotalContainer = styled.div`
+  display: flex;
+  height: 45px;
+  width: 100%;
+  /* background-color: #0f0; */
+  margin-top: 24px;
+
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 
   small {
     letter-spacing: 0px;
@@ -304,23 +308,6 @@ export const AmountAndPriceContainer = styled.div`
   }
 `;
 
-export const AmountAndTotalContainer = styled.div`
-  display: flex;
-  width: 165px;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0;
-`;
-
-export const TotalContainer = styled.div`
-  display: flex;
-  height: 45px;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  margin-left: 21px;
-`;
-
 export const ShippingContainer = styled.div`
   display: flex;
   height: 34px;
@@ -334,7 +321,7 @@ export const Amount = styled.div`
   justify-content: space-between;
   width: 103px;
   height: 45px;
-  /* margin-right: 12px; */
+  margin-top: 24px;
 
   strong {
     display: inline;

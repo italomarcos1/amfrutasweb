@@ -4,7 +4,8 @@ export const Container = styled.button.attrs({
   type: 'button',
 })`
   display: flex;
-  align-items: center;
+  align-items: ${({ isDesktop }) => (isDesktop ? 'center' : 'flex-start')};
+
   justify-content: space-between;
   width: ${({ isDesktop }) => (isDesktop ? '410px' : '100%')};
   height: 106px;
@@ -12,7 +13,7 @@ export const Container = styled.button.attrs({
   border: 1px solid #e0e0e0;
   border-radius: 4px;
 
-  padding: ${({ isDesktop }) => (isDesktop ? '21px 30px' : '10.5px 15px')};
+  padding: ${({ isDesktop }) => (isDesktop ? '21px 30px' : '21px 15px')};
 
   img {
     margin-right: 23px;
@@ -53,5 +54,5 @@ export const Content = styled.div`
   align-items: flex-start;
   justify-content: space-between;
   height: 51px;
-  width: ${({ isDesktop }) => (isDesktop ? '253px' : '60%')};
+  width: ${({ isDesktop }) => (isDesktop ? '253px' : '80%')};
 `;

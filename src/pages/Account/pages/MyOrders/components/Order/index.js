@@ -307,7 +307,7 @@ export default function Order({ order, isOpen, setOrder }) {
             style={{ backgroundColor: '#00000000' }}
           >
             {paginatedProducts.map((item, index) => (
-              <CheckoutItem key={item.id} item={item} index={index} />
+              <CheckoutItem key={item.id} item={item} index={index} isDesktop />
             ))}
           </ItemsList>
 

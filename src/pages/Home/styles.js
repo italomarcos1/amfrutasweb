@@ -22,13 +22,14 @@ export const OptionsContainer = styled.div`
 
 export const ProductsContainer = styled.div`
   display: flex;
-  width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
+  align-items: flex-start;
   justify-content: space-between;
-  height: 376px;
+  width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
+  height: ${({ isDesktop }) => (isDesktop ? 376 : 680)}px;
+  flex-wrap: ${({ isDesktop }) => (isDesktop ? 'nowrap' : 'wrap')};
   margin: 30px auto 0;
   padding: 0;
   /* flex-wrap: wrap; */
-  align-items: center;
 `;
 
 export const SecurityContainer = styled.div`
@@ -39,7 +40,7 @@ export const SecurityContainer = styled.div`
   width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
   height: 89px;
   background-color: #f2f2f2;
-  margin: 30px auto 0;
+  margin: 20px auto 0;
 
   text-align: center;
   letter-spacing: 0px;
@@ -55,8 +56,9 @@ export const SecurityContainer = styled.div`
 export const StoreButtonContainer = styled.div`
   display: flex;
   width: ${({ isDesktop }) => (isDesktop ? '343px' : '100%')};
-  flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
   height: ${({ isDesktop }) => (isDesktop ? 50 : 110)}px;
+  flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
+
   justify-content: space-between;
   align-items: center;
   margin-top: ${({ isDesktop }) => (isDesktop ? 20 : 40)}px;

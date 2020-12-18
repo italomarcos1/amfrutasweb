@@ -1,15 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Container, ChildrenCategories, ChildrenCategory } from './styles';
+import {
+  Container,
+  ContainerButton,
+  ChildrenCategories,
+  ChildrenCategory,
+} from './styles';
 
 import arrowGreen from '~/assets/icons/arrow_green.svg';
 
-export default function MenuItem({ category, childrenSelected }) {
+export default function MenuItem({
+  category,
+  childrenSelected,
+  categoryActive,
+  setCategoryActive,
+}) {
   const { id, name, slug, url, all_children_categories } = category;
 
   const { pathname } = useLocation();
 
-  const [active, setActive] = useState('');
+  const [active, setActive] = useState(categoryActive);
   const [categoryUrl, setCategoryUrl] = useState(() => {
     const formattedUrl = url.split('/');
 
@@ -34,20 +44,35 @@ export default function MenuItem({ category, childrenSelected }) {
 
   return (
     <>
-      <Container
-        to={{
-          pathname: `/${url}`,
-          state: { id },
-        }}
-        active={pathname === `/${url}` || active}
-      >
-        <strong>{name}</strong>
-        {all_children_categories.length !== 0 && (
-          <img src={arrowGreen} alt="Abrir menu" />
-        )}
-      </Container>
+      {all_children_categories.length === 0 ? (
+        <Container
+          to={{
+            pathname: `/${url}`,
+            state: { id },
+          }}
+          active={pathname === `/${url}` || active}
+        >
+          <strong>{name}</strong>
+        </Container>
+      ) : (
+        <ContainerButton
+          onClick={() => {
+            if (active === name) setActive('');
+            else {
+              setActive(name);
+              setCategoryActive(name);
+            }
+          }}
+          active={categoryActive === name}
+        >
+          <strong>{name}</strong>
+          {all_children_categories.length !== 0 && (
+            <img src={arrowGreen} alt="Abrir menu" />
+          )}
+        </ContainerButton>
+      )}
       {all_children_categories.length !== 0 &&
-        (pathname === `/${url}` || active) && (
+        (pathname === `/${url}` || (active && categoryActive === active)) && (
           <ChildrenCategories>
             {all_children_categories.map(cc => (
               <>
