@@ -109,7 +109,8 @@ export default function Main({ setPage, isDesktop }) {
   );
 
   const handleAppleLogin = useCallback(response => {
-    // console.log(response);
+    console.log(response);
+    alert('batata');
   }, []);
 
   return (
@@ -141,6 +142,7 @@ export default function Main({ setPage, isDesktop }) {
         appId="314220626404166"
         callback={handleFbLogin}
         fields="name,email"
+        usePopup
         render={({ onClick }) => (
           <Button
             onClick={onClick}

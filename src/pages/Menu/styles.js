@@ -10,10 +10,17 @@ export const Header = styled.div`
   z-index: 999;
 `;
 
-export const Background = styled.button`
+export const Background = styled.div`
   width: 100%;
   height: 100%;
   background-color: #fff;
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0.1px;
+  }
 `;
 
 export const MenuMobile = styled.div`

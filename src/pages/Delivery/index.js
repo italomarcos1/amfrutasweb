@@ -126,7 +126,14 @@ export default function Delivery() {
   const [zipcode, setZipcode] = useState(() => {
     if (!!primaryAddress) {
       if (primaryAddress.length !== 0) {
-        return String(primaryAddress.zipcode);
+        const zipcodeAsArray = [...primaryAddress.zipcode];
+
+        const findHyphen = zipcodeAsArray.indexOf('-');
+
+        if (findHyphen > -1) return primaryAddress.zipcode;
+
+        const formattedZipcode = `${zipcodeAsArray[0]}${zipcodeAsArray[1]}${zipcodeAsArray[2]}${zipcodeAsArray[3]}-${zipcodeAsArray[4]}${zipcodeAsArray[5]}${zipcodeAsArray[6]}`;
+        return formattedZipcode;
       }
     }
     return '';
@@ -224,7 +231,12 @@ export default function Delivery() {
   const validateCoupon = useCallback(async () => {
     try {
       setLoadingCoupon(true);
-      await backend.get(`vouchers/${coupon}`);
+      const {
+        data: {
+          data: { discount },
+        },
+      } = await backend.get(`vouchers/${coupon}`);
+      console.log(discount);
 
       setCouponIsValid(true);
 
@@ -1229,7 +1241,7 @@ export default function Delivery() {
               </h2>
             </CheckoutItem>
             <CheckoutItem style={{ height: 77 }}>
-              <div style={{ display: 'flex' }}>
+              <div style={{ display: 'flex', width: '100%' }}>
                 {loadingCoupon ? (
                   <LoadingCoupon onClick={() => setCouponIsValid(false)}>
                     <FaSpinner color="#fff" size={20} />

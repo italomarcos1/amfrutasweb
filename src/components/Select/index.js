@@ -1,5 +1,6 @@
 import React from 'react';
 import chroma from 'chroma-js';
+import { useMediaQuery } from 'react-responsive';
 
 import Select, { components } from 'react-select';
 
@@ -91,6 +92,8 @@ export default function BankingSelect({
   hasMarginLeft,
   disabled,
 }) {
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
+
   return (
     <Select
       title={title}
@@ -162,13 +165,13 @@ export default function BankingSelect({
           backgroundColor: '#fff',
           marginTop: -2.5,
           borderRadius: 0,
-          width: customWidth + 0.5,
+          width: isDesktop ? customWidth + 0.5 : '100%',
           zIndex: 1099,
         }),
         menuList: base => ({
           ...base,
           borderRadius: 0,
-          width: customWidth + 0.5,
+          width: isDesktop ? customWidth + 0.5 : '100%',
           zIndex: 1099,
         }),
         option: (styles, { isDisabled, isFocused, isSelected }) => {
@@ -184,7 +187,7 @@ export default function BankingSelect({
               ? '#f4f5f8'
               : null,
             color: isSelected ? '#fff' : isFocused ? '#1DC167' : '#424242',
-            width: customWidth - 8,
+            width: isDesktop ? customWidth - 8 : '100%',
             marginLeft: 4,
             marginTop: 4,
             zIndex: 1099,

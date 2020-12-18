@@ -54,9 +54,9 @@ export default function Account({ children }) {
   return (
     <>
       <Header />
-      <Container>
+      <Container isDesktop={isDesktop}>
         <Content isDesktop={isDesktop}>
-          <Menu>
+          <Menu isDesktop={isDesktop}>
             <strong>
               Olá,&nbsp;<b>{!!profile ? profile.name : 'Cliente'}</b>
             </strong>

@@ -5,7 +5,7 @@ export const Container = styled.div`
   flex-direction: column;
   background-color: #fff;
   width: 100%;
-  padding: 27px 30px 0;
+  padding: ${({ isDesktop }) => (isDesktop ? '27px 30px 0' : '20px')};
   overflow-x: hidden;
   overflow-y: hidden;
   margin-top: 0px;
@@ -15,7 +15,7 @@ export const Content = styled.div`
   width: ${({ isDesktop }) => (isDesktop ? '1095px' : '100%')};
   display: flex;
   flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
-  align-items: flex-start;
+  align-items: ${({ isDesktop }) => (isDesktop ? 'flex-start' : 'center')};
   justify-content: space-between;
   margin: 0 auto;
 `;
@@ -34,7 +34,7 @@ export const Menu = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  margin-right: 32px;
+  margin-right: ${({ isDesktop }) => (isDesktop ? 32 : 0)}px;
   /* background-color: #ff4242; */
 
   strong {

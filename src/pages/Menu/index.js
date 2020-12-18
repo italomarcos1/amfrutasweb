@@ -144,81 +144,91 @@ export default function MainMenu({ route }) {
       </Menu>
       <Background>
         <Title>Principal</Title>
-        {!loading &&
-          menuItems.map(({ id, name, url }) => (
-            <MenuItem
-              key={id}
-              to={{
-                pathname: `${url}`,
-                state: {
-                  id: url,
-                },
-              }}
-            >
-              {name}
-            </MenuItem>
-          ))}
+        <ul>
+          {!loading &&
+            menuItems.map(({ id, name, url }) => (
+              <MenuItem
+                key={id}
+                to={{
+                  pathname: `${url}`,
+                  state: {
+                    id: url,
+                  },
+                }}
+              >
+                {name}
+              </MenuItem>
+            ))}
+        </ul>
         <Separator />
         <Title>Produtos</Title>
-        {!loading &&
-          categories.map(category => (
-            <Category
-              key={category.id}
-              category={category}
-              childrenSelected={childrenSelectedCategory}
-              categoryActive={categoryActive}
-              setCategoryActive={setCategoryActive}
-            />
-          ))}
+        <ul>
+          {!loading &&
+            categories.map(category => (
+              <Category
+                key={category.id}
+                category={category}
+                childrenSelected={childrenSelectedCategory}
+                categoryActive={categoryActive}
+                setCategoryActive={setCategoryActive}
+              />
+            ))}
+        </ul>
         <Separator />
         <Title>Atendimento e Social</Title>
-        {!loading &&
-          footerData.map(({ id, url, name }) => (
-            <MenuItem
-              key={id}
-              to={{
-                pathname: `${url}`,
-                state: {
-                  id: url,
-                },
-              }}
-            >
-              {name}
-            </MenuItem>
-          ))}
-        {!loading && (
-          <>
-            <MenuItemLink
-              href={
-                !!social ? `https://www.facebook.com/${social.facebook}` : ''
-              }
-              target="_blank"
-              rel="noreferrer"
-            >
-              Facebook
-            </MenuItemLink>
-            <MenuItemLink
-              href={!!social ? `https://instagram.com/${social.instagram}` : ''}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Instagram
-            </MenuItemLink>
-            <MenuItemLink
-              href={
-                !!social ? `https://youtube.com/channel/${social.youtube}` : ''
-              }
-              target="_blank"
-              rel="noreferrer"
-              style={{ borderBottom: 'none' }}
-            >
-              YouTube
-            </MenuItemLink>
-            <MenuItemLink href="#" rel="noreferrer">
-              &nbsp;
-            </MenuItemLink>
-          </>
-        )}
+        <ul>
+          {!loading &&
+            footerData.map(({ id, url, name }) => (
+              <MenuItem
+                key={id}
+                to={{
+                  pathname: `${url}`,
+                  state: {
+                    id: url,
+                  },
+                }}
+              >
+                {name}
+              </MenuItem>
+            ))}
+          {!loading && (
+            <>
+              <MenuItemLink
+                href={
+                  !!social ? `https://www.facebook.com/${social.facebook}` : ''
+                }
+                target="_blank"
+                rel="noreferrer"
+              >
+                Facebook
+              </MenuItemLink>
+              <MenuItemLink
+                href={
+                  !!social ? `https://instagram.com/${social.instagram}` : ''
+                }
+                target="_blank"
+                rel="noreferrer"
+              >
+                Instagram
+              </MenuItemLink>
+              <MenuItemLink
+                href={
+                  !!social
+                    ? `https://youtube.com/channel/${social.youtube}`
+                    : ''
+                }
+                target="_blank"
+                rel="noreferrer"
+                style={{ borderBottom: 'none' }}
+              >
+                YouTube
+              </MenuItemLink>
+              <MenuItemLink href="#" rel="noreferrer">
+                &nbsp;
+              </MenuItemLink>
+            </>
+          )}
+        </ul>
       </Background>
     </div>
   );
