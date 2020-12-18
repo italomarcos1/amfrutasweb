@@ -99,8 +99,10 @@ export default function PageHeader({ login, active }) {
         <MenuContent isDesktop={isDesktop}>
           {!isDesktop && (
             <MenuItemButton
-              selected={selectedPage === 'Menu'}
-              onClick={() => setSelectedPage('Menu')}
+              onClick={() => {
+                setSelectedPage('none');
+                history.push('/menu');
+              }}
             >
               <img src={menu} alt="search" />
             </MenuItemButton>
