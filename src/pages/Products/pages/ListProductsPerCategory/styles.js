@@ -5,15 +5,16 @@ export const Container = styled.ul`
   align-items: flex-start;
   justify-content: space-between;
   flex-wrap: wrap;
-  width: 995px;
+  width: ${({ isDesktop }) => (isDesktop ? '995px' : '100%')};
+
   height: ${({ pageHeight }) => pageHeight}px;
   margin-top: 18px;
 `;
 
 export const NullProduct = styled.div`
   opacity: 0;
-  width: 176px;
-  height: 376px;
+  width: ${({ isDesktop }) => (isDesktop ? 176 : 116.55)}px;
+  height: ${({ isDesktop }) => (isDesktop ? 376 : 326)}px;
 `;
 
 const rotate = keyframes` /** animação para rotacionar o icon. */
@@ -27,7 +28,8 @@ const rotate = keyframes` /** animação para rotacionar o icon. */
 `;
 
 export const LoadingContainer = styled.div`
-  width: 840px;
+  width: ${({ isDesktop }) => (isDesktop ? '840px' : '100%')};
+
   height: 454px;
 
   display: flex;

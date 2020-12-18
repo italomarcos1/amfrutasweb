@@ -17,7 +17,7 @@ export const NullProduct = styled.div`
   height: ${({ isDesktop }) => (isDesktop ? 376 : 326)}px;
 `;
 
-const rotate = keyframes` /** animação para rotacionar o icon. */
+const rotate = keyframes` /** widtwidtwidth: 840px;h: 840px;h: 840px;animação para rotacionar o icon. */
   from {
     transform: rotate(0deg);
   }

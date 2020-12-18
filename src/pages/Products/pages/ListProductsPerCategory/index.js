@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { FaSpinner } from 'react-icons/fa';
+import { useMediaQuery } from 'react-responsive';
 import { Container, NullProduct, LoadingContainer } from './styles';
 
 import Product from '~/components/Product';
@@ -13,6 +14,8 @@ import { nameIsValid } from '~/utils/validation';
 import backend from '~/services/api';
 
 export default function ListProductsPerCategory() {
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
+
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(0);
@@ -58,8 +61,19 @@ export default function ListProductsPerCategory() {
       }
     }
 
-    const hasLastRow =
-      data.length > 10 ? 1184 : Math.ceil(data.length / 5) * 404;
+    if (!isDesktop && data.length % 2 !== 0) {
+      const itemsToFill = Math.ceil(data.length / 2) * 2 - data.length;
+
+      for (let i = 0; i < itemsToFill; i++) {
+        data.push(null);
+      }
+    }
+    let hasLastRow;
+
+    if (isDesktop)
+      hasLastRow = data.length > 10 ? 1184 : Math.ceil(data.length / 5) * 404;
+    else
+      hasLastRow = data.length > 14 ? 2804 : Math.ceil(data.length / 2) * 354;
 
     setPageHeight(hasLastRow);
 
@@ -69,7 +83,7 @@ export default function ListProductsPerCategory() {
     setNextPageUrl(next_page_url);
 
     // console.tron.log(data);
-  }, [state.id, currentPage, searchInput, field]);
+  }, [state.id, currentPage, searchInput, isDesktop, field]);
 
   const searchProduct = useCallback(async () => {
     try {
@@ -105,8 +119,20 @@ export default function ListProductsPerCategory() {
         }
       }
 
-      const hasLastRow =
-        data.length > 10 ? 1184 : Math.ceil(data.length / 5) * 404;
+      if (!isDesktop && data.length % 2 !== 0) {
+        const itemsToFill = Math.ceil(data.length / 2) * 2 - data.length;
+
+        for (let i = 0; i < itemsToFill; i++) {
+          data.push(null);
+        }
+      }
+
+      let hasLastRow;
+
+      if (isDesktop)
+        hasLastRow = data.length > 10 ? 1184 : Math.ceil(data.length / 5) * 404;
+      else
+        hasLastRow = data.length > 14 ? 2804 : Math.ceil(data.length / 2) * 354;
 
       setPageHeight(hasLastRow);
 
@@ -121,7 +147,7 @@ export default function ListProductsPerCategory() {
       setLoading(false);
       alert('Erro');
     }
-  }, [currentPage, field, searchInput]);
+  }, [currentPage, field, isDesktop, searchInput]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
