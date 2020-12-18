@@ -276,7 +276,11 @@ export default function ViewProduct() {
                   )}
                 </PriceAndInfoContainer>
               </ProductInfo>
-              <ShippingButtonContainer>
+              <ShippingButtonContainer
+                style={{
+                  height: 240,
+                }}
+              >
                 <ShippingContainer>
                   <ShippingButton
                     style={{
@@ -304,12 +308,13 @@ export default function ViewProduct() {
               </ShippingButtonContainer>
               <ShippingButtonContainer
                 style={{
-                  height: 240,
                   marginTop: 20,
                   backgroundColor: '#66f',
                 }}
               >
-                <FlexStartContainer>
+                <FlexStartContainer
+                  style={{ height: 72, backgroundColor: '#66f' }}
+                >
                   <FlexStartContainer>
                     <img src={barcode} alt="Barcode" />
                     <FlexStartText>Código: 837922</FlexStartText>
