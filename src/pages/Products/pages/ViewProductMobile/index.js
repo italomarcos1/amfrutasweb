@@ -280,9 +280,10 @@ export default function ViewProduct() {
                 style={{
                   height: 72,
                   backgroundColor: '#390',
+                  padding: 0,
                 }}
               >
-                <ShippingContainer>
+                <ShippingContainer style={{ marginTop: 0 }}>
                   <ShippingButton
                     style={{
                       borderBottomRightRadius: 0,

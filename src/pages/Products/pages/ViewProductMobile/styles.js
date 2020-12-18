@@ -243,8 +243,6 @@ export const ShippingButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
-  background-color: #f90;
 `;
 
 export const FavoritesContainer = styled.div`
