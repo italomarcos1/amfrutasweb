@@ -200,7 +200,7 @@ export default function ListProductsPerCategory() {
           </strong>
         </LoadingContainer>
       ) : (
-        <Container pageHeight={pageHeight}>
+        <Container pageHeight={pageHeight} isDesktop={isDesktop}>
           {products.map((p, index) =>
             p === null ? (
               <NullProduct />
@@ -210,12 +210,13 @@ export default function ListProductsPerCategory() {
           )}
         </Container>
       )}
-      <FooterPagination>
+      <FooterPagination isDesktop={isDesktop}>
         <Pagination
           currentPage={currentPage}
           lastPage={lastPage}
           setCurrentPage={setCurrentPage}
           paginationArray={paginationArray}
+          isDesktop={isDesktop}
         />
       </FooterPagination>
     </>

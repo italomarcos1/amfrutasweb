@@ -12,10 +12,11 @@ export const Container = styled.div`
 export const Content = styled.div`
   width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
   display: flex;
-  align-items: flex-start;
+  align-items: ${({ isDesktop }) => (isDesktop ? 'center' : 'flex-start')};
   justify-content: space-between;
   flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
-  margin-top: ${({ isDesktop }) => (isDesktop ? 94.5 : 23.75)}px;
+  margin: ${({ isDesktop }) =>
+    isDesktop ? '94.5px auto 0' : '23.75px auto 0'};
 
   /*ul {
     display: flex;

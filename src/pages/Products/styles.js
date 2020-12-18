@@ -5,7 +5,8 @@ export const Container = styled.div`
   flex-direction: column;
   background-color: #ececec;
   width: 100%;
-  padding: ${({ isDesktop }) => (isDesktop ? '17px 30px 43.5px' : '0 20px')};
+  padding: ${({ isDesktop }) =>
+    isDesktop ? '17px 30px 43.5px' : '0 20px 43.5px'};
   margin-top: ${({ isDesktop }) => (isDesktop ? 0 : 20)}px;
 `;
 
