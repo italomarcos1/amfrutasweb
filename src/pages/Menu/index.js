@@ -127,7 +127,7 @@ export default function MainMenu({ route }) {
   }, [pathname]);
 
   return (
-    <>
+    <div style={{ width: '100%', height: '100%' }}>
       <Header>
         <HeaderContent isDesktop={isDesktop}>
           <Link to="/" style={{ marginLeft: 20, marginRight: 20 }}>
@@ -220,7 +220,7 @@ export default function MainMenu({ route }) {
           </>
         )}
       </Background>
-    </>
+    </div>
   );
 }
 

@@ -18,12 +18,12 @@ export const Container = styled(Form)`
   display: flex;
   align-items: center;
   width: ${({ isDesktop }) => (isDesktop ? '820px' : '90%')};
-  height: 566px;
+  height: ${({ isDesktop }) => (isDesktop ? '566px' : '90%')};
 `;
 
 export const LoginDetails = styled.div`
   width: ${({ isDesktop }) => (isDesktop ? '569px' : '100%')};
-  height: 566px;
+  height: ${({ isDesktop }) => (isDesktop ? '566px' : '100%')};
   background-color: #fff;
   display: flex;
   flex-direction: column;

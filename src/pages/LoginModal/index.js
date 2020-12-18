@@ -36,11 +36,11 @@ export default function LoginModal({ closeModal }) {
     dispatch(closeModalState());
   }, [dispatch, closeModal]);
 
-  useEffect(() => {
-    if (page === 'register' && !isDesktop) {
-      setCustomHeight(666);
-    } else setCustomHeight(566);
-  }, [page, isDesktop]);
+  // useEffect(() => {
+  //   if (page === 'register' && !isDesktop) {
+  //     setCustomHeight(666);
+  //   } else setCustomHeight(566);
+  // }, [page, isDesktop]);
 
   return (
     <Background>
@@ -65,7 +65,10 @@ export default function LoginModal({ closeModal }) {
             </p>
           </ShopDetails>
         )}
-        <LoginDetails isDesktop={isDesktop} style={{ height: customHeight }}>
+        <LoginDetails
+          isDesktop={isDesktop}
+          // style={{ height: customHeight }}
+        >
           <Header isDesktop={isDesktop}>
             <HeaderButton
               onClick={() => {
