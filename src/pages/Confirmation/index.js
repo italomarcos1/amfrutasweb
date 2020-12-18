@@ -286,7 +286,7 @@ export default function Confirmation() {
             <CheckoutDetails isDesktop={isDesktop}>
               <CheckoutItem>
                 <h1>Produtos</h1>
-                <h2>{!!orderInfo ? `${orderInfo.total}` : '0.00'}</h2>
+                <h2>€&nbsp;{!!orderInfo ? `${orderInfo.total}` : '0.00'}</h2>
               </CheckoutItem>
               <CheckoutItem>
                 <h1>Economizou</h1>

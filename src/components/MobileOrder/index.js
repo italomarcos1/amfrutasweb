@@ -125,7 +125,9 @@ export default function Order({ order, isOpen, setOrder, index: orderIndex }) {
       }
     >
       <StatusContainer initialStatus={statuses[0].name} id={id} disabled />
-      <OrderStatus>
+      <OrderStatus
+        style={isOpen === id ? { height: 159.5 } : { height: 139.5 }}
+      >
         <Info>
           <OrderInfoContainer>
             <OrderInfo>
