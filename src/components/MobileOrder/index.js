@@ -118,7 +118,11 @@ export default function Order({ order, isOpen, setOrder, index: orderIndex }) {
   return (
     <Container
       index={orderIndex}
-      style={isOpen === id ? { borderBottom: 'none' } : {}}
+      style={
+        isOpen === id
+          ? { borderBottom: 'none', height: 'auto' }
+          : { height: 193 }
+      }
     >
       <StatusContainer initialStatus={statuses[0].name} id={id} disabled />
       <OrderStatus>
