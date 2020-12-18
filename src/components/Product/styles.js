@@ -112,7 +112,7 @@ export const PriceContainer = styled(Link)`
     align-items: center;
     letter-spacing: 0px;
 
-    background-color: #4f4;
+    /* background-color: #4f4; */
 
     strong {
       font-size: 10.5px;

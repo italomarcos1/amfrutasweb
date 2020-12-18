@@ -86,8 +86,8 @@ export default function Delivery() {
   const [deliveryHour, setDeliveryHour] = useState('');
   const [country, setCountry] = useState('Portugal');
   const [coupon, setCoupon] = useState('');
-  const [couponIsValid, setCouponIsValid] = useState('');
-  const [hoverCouponValid, setHoverCouponValid] = useState('');
+  const [couponIsValid, setCouponIsValid] = useState(false);
+  const [hoverCouponValid, setHoverCouponValid] = useState(false);
   const [hoverButton, setHoverButton] = useState('none');
   const [loadingCoupon, setLoadingCoupon] = useState(false);
   const [invalidCoupon, setInvalidCoupon] = useState(false);
@@ -205,6 +205,9 @@ export default function Delivery() {
   const [invalidDeliveryDay, setInvalidDeliveryDay] = useState(false);
   const [invalidDeliveryHour, setInvalidDeliveryHour] = useState(false);
 
+  const [totalPrice, setTotalPrice] = useState('0.00');
+  const [couponDiscount, setCouponDiscount] = useState(null);
+
   // os endereços são o objeto inteiro, com id e etc
   // o residence é só o label, pois o select mexe apenas com o label. se não, teríamos que mudar o Select ou criar um novo
 
@@ -239,6 +242,7 @@ export default function Delivery() {
       console.log(discount);
 
       setCouponIsValid(true);
+      setCouponDiscount(discount);
 
       setLoadingCoupon(false);
     } catch {
@@ -391,20 +395,23 @@ export default function Delivery() {
       };
     }
 
-    dispatch(
-      finishOrderRequest({
-        shipping_address:
-          deliveryOption === 'delivery' ? formattedFinalAddress : fakeAddress,
-        shippingMethod: deliveryOption,
-        deliveryDate: formattedDeliveryDay,
-        deliveryInterval,
-        products: cart,
-      })
-    );
-    // os objetos usados para popular o form irão para cá, junto com os dados do carrinho
+    let checkout = {
+      shipping_address:
+        deliveryOption === 'delivery' ? formattedFinalAddress : fakeAddress,
+      shippingMethod: deliveryOption,
+      deliveryDate: formattedDeliveryDay,
+      deliveryInterval,
+      products: cart,
+    };
+
+    if (couponIsValid) checkout = { ...checkout, voucher: coupon };
+
+    dispatch(finishOrderRequest(checkout));
   }, [
     dispatch,
     cart,
+    coupon,
+    couponIsValid,
     deliveryOption,
     finalAddress,
     finalProfile,
@@ -649,6 +656,24 @@ export default function Delivery() {
   useEffect(() => {
     setCurrentContainerHeight(paginatedProducts.length * 102 - 20);
   }, [paginatedProducts, currentContainerHeight]);
+
+  useEffect(() => {
+    const formattingPrice = formatPrice(
+      Number(shippingCost) -
+        Number(
+          !!profile
+            ? !!profile.cback_credit
+              ? profile.cback_credit
+              : '0.00'
+            : '0.00'
+        )
+    );
+    if (couponDiscount && couponIsValid) {
+      setTotalPrice(
+        formatPrice(Number((couponDiscount / 100) * price) + formattingPrice)
+      );
+    } else setTotalPrice(Number(price) + formattingPrice);
+  }, [price, shippingCost, profile, couponDiscount, couponIsValid]);
 
   const genderData = [
     {
@@ -1250,7 +1275,10 @@ export default function Delivery() {
                   <CouponIsValid
                     onMouseOver={() => setHoverCouponValid(true)}
                     onMouseLeave={() => setHoverCouponValid(false)}
-                    onClick={() => setCouponIsValid(false)}
+                    onClick={() => {
+                      setCouponIsValid(false);
+                      setCouponDiscount(null);
+                    }}
                   >
                     {hoverCouponValid ? 'Remover Cupom' : 'Cupom Válido'}
                   </CouponIsValid>
@@ -1287,17 +1315,7 @@ export default function Delivery() {
               <h2>Total</h2>
               <h2 style={{ fontSize: 25, color: '#0CB68B' }}>
                 €&nbsp;
-                {formatPrice(
-                  Number(price) +
-                    Number(shippingCost) -
-                    Number(
-                      !!profile
-                        ? !!profile.cback_credit
-                          ? profile.cback_credit
-                          : '0.00'
-                        : '0.00'
-                    )
-                )}
+                {totalPrice}
               </h2>
             </CheckoutItem>
             <ConfirmationText>

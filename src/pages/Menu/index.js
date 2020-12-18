@@ -151,7 +151,7 @@ export default function MainMenu({ route }) {
           <MenuItemButton onClick={() => history.push(route)}>
             <img src={close} alt="Close" style={{ width: 30, height: 30 }} />
           </MenuItemButton>
-          <ContactButton href={`tel:${social.phone_two}`} rel="noreferrer">
+          <ContactButton href={`tel:351${social.phone_two}`} rel="noreferrer">
             <img
               src={smartphone}
               alt="Phone"
