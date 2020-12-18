@@ -177,7 +177,7 @@ export default function Order({ order, isOpen, setOrder, index: orderIndex }) {
               borderTop: 'none',
               borderBottomLeftRadius: 4,
               borderBottomRightRadius: 4,
-              backgroundColor: '#f90',
+              // backgroundColor: '#f90',
             }}
           >
             {loading ? (
