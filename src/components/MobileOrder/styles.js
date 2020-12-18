@@ -53,7 +53,7 @@ export const OrderStatus = styled.div`
   display: flex;
   width: 100%;
   height: 159.5px;
-  background-color: #ff0;
+  /* background-color: #ff0; */
 `;
 
 export const Info = styled.div`
@@ -63,7 +63,7 @@ export const Info = styled.div`
   text-align: left;
   width: 100%;
   height: 111px;
-  background-color: #0f0;
+  /* background-color: #0f0; */
   margin-top: 10px;
   padding: 0 5px 0;
 
