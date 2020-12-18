@@ -675,7 +675,7 @@ export default function Delivery() {
             Number(formattingPrice)
         )
       );
-    } else setTotalPrice(Number(price) + Number(formattingPrice));
+    } else setTotalPrice(formatPrice(Number(price) + Number(formattingPrice)));
   }, [price, shippingCost, profile, couponDiscount, couponIsValid]);
 
   const genderData = [
