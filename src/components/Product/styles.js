@@ -41,9 +41,9 @@ export const Title = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   background: none;
-  /* background-color: #f0f; */
+  background-color: #f0f;
 
-  margin-top: ${({ isDesktop }) => (isDesktop ? 0 : 5)}px;
+  margin-top: 0px;
 
   text-align: left;
   text-transform: capitalize;
@@ -74,7 +74,7 @@ export const ImageContainer = styled(Link)`
   justify-content: center;
   align-self: center;
   border-radius: 4px;
-  background-color: #fff;
+  background-color: #0ff;
 
   width: ${({ isDesktop }) => (isDesktop ? '164px' : '100%')};
   height: ${({ isDesktop }) => (isDesktop ? '164px' : '100%')};
@@ -96,7 +96,7 @@ export const PriceContainer = styled(Link)`
   letter-spacing: 0px;
   background: none;
 
-  /* background-color: #404; */
+  background-color: #404;
 
   span {
     padding: 0;
@@ -113,7 +113,7 @@ export const PriceContainer = styled(Link)`
     align-items: center;
     letter-spacing: 0px;
 
-    /* background-color: #4f4; */
+    background-color: #4f4;
 
     strong {
       font-size: 10.5px;
@@ -165,7 +165,7 @@ export const Options = styled.div`
   /* background-color: #4f4; */
   align-items: center;
   justify-content: space-between;
-  margin-top: 10px;
+  margin-top: ${({ isDesktop }) => (isDesktop ? 10 : 5)}px;
   user-select: none;
 `;
 
