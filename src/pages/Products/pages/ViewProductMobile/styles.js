@@ -123,6 +123,7 @@ export const Title = styled.h1`
 export const PriceAndInfoContainer = styled.div`
   width: 40%;
   display: flex;
+  height: 210px;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
@@ -133,6 +134,7 @@ export const PriceAndInfoContainer = styled.div`
 export const PriceContainer = styled.div`
   width: 100%;
   height: 72px;
+
   /* background-color: #f0a0f0; */
   display: flex;
   flex-direction: column;
@@ -345,7 +347,7 @@ export const SectionTitle = styled.div`
   text-align: left;
   width: 100%;
 
-  margin: 35px auto 0;
+  margin: 20px auto 0;
   padding-left: 25px;
 
   strong {
@@ -377,7 +379,7 @@ export const ProductsContainer = styled.div`
   height: 680px;
   flex-wrap: wrap;
   margin: 30px auto 0;
-  padding: 0 25px;
+  padding: 0 20px;
 
   /* flex-wrap: wrap; */
 `;
