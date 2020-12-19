@@ -259,7 +259,7 @@ export default function Confirmation() {
           </InfoContainer>
         </Content>
         <Content style={{ marginTop: 40 }} isDesktop={isDesktop}>
-          <div>
+          <div style={isDesktop ? {} : { width: '100%' }}>
             <Title>Produtos</Title>
             {!loading ? (
               <ItemsList
@@ -281,7 +281,7 @@ export default function Confirmation() {
               <h1>Carregando...</h1>
             )}
           </div>
-          <div>
+          <div style={isDesktop ? {} : { width: '100%' }}>
             <Title style={isDesktop ? {} : { marginTop: 20 }}>Resumo</Title>
             <CheckoutDetails isDesktop={isDesktop}>
               <CheckoutItem>

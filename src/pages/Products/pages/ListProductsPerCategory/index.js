@@ -22,6 +22,7 @@ export default function ListProductsPerCategory() {
   const [prevPageUrl, setPrevPageUrl] = useState('');
   const [nextPageUrl, setNextPageUrl] = useState('');
   const [pageHeight, setPageHeight] = useState(1184);
+  const [productHeight, setProductHeight] = useState('');
   const [loading, setLoading] = useState(true);
   const [paginationArray, setPaginationArray] = useState([]);
   const [field, setField] = useState('title');
@@ -53,7 +54,7 @@ export default function ListProductsPerCategory() {
       },
     } = productsResponse;
 
-    if (data.length % 5 !== 0) {
+    if (isDesktop && data.length % 5 !== 0) {
       const itemsToFill = Math.ceil(data.length / 5) * 5 - data.length;
 
       for (let i = 0; i < itemsToFill; i++) {
@@ -68,14 +69,6 @@ export default function ListProductsPerCategory() {
         data.push(null);
       }
     }
-    let hasLastRow;
-
-    if (isDesktop)
-      hasLastRow = data.length > 10 ? 1184 : Math.ceil(data.length / 5) * 404;
-    else
-      hasLastRow = data.length > 14 ? 2804 : Math.ceil(data.length / 2) * 354;
-
-    setPageHeight(hasLastRow);
 
     setProducts(data);
     setCurrentPage(current_page);
@@ -111,7 +104,7 @@ export default function ListProductsPerCategory() {
         },
       } = productsResponse;
 
-      if (data.length % 5 !== 0) {
+      if (isDesktop && data.length % 5 !== 0) {
         const itemsToFill = Math.ceil(data.length / 5) * 5 - data.length;
 
         for (let i = 0; i < itemsToFill; i++) {
@@ -127,15 +120,6 @@ export default function ListProductsPerCategory() {
         }
       }
 
-      let hasLastRow;
-
-      if (isDesktop)
-        hasLastRow = data.length > 10 ? 1184 : Math.ceil(data.length / 5) * 404;
-      else
-        hasLastRow = data.length > 14 ? 2804 : Math.ceil(data.length / 2) * 354;
-
-      setPageHeight(hasLastRow);
-
       setProducts(data);
       setCurrentPage(current_page);
 
@@ -148,6 +132,18 @@ export default function ListProductsPerCategory() {
       alert('Erro');
     }
   }, [currentPage, field, isDesktop, searchInput]);
+
+  useEffect(() => {
+    if (products.length === 0) return;
+    let hasLastRow;
+
+    if (isDesktop)
+      hasLastRow =
+        products.length > 10 ? 1184 : Math.ceil(products.length / 5) * 404;
+    else hasLastRow = Math.ceil(products.length / 2) * (productHeight + 25);
+    // console.log(products.length);
+    setPageHeight(hasLastRow);
+  }, [isDesktop, products, productHeight]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -205,7 +201,12 @@ export default function ListProductsPerCategory() {
             p === null ? (
               <NullProduct />
             ) : (
-              <Product key={p.id} index={index} product={p} />
+              <Product
+                key={p.id}
+                index={index}
+                product={p}
+                setHeight={setProductHeight}
+              />
             )
           )}
         </Container>

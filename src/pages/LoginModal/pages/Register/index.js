@@ -28,7 +28,9 @@ export default function Register({ closeModal, isDesktop }) {
   const [name, setName] = useState('');
   const [invalidName, setInvalidName] = useState(false);
   const [lastName, setLastName] = useState('');
+  const [fullName, setFullName] = useState('');
   const [invalidLastName, setInvalidLastName] = useState(false);
+  const [invalidFullName, setInvalidFullName] = useState(false);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [password, setPassword] = useState('');
@@ -36,7 +38,7 @@ export default function Register({ closeModal, isDesktop }) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState(false);
 
-  const [birthday, setBirthDate] = useState('');
+  const [birthday, setBirthDate] = useState(isDesktop ? '' : '01/01/2020');
   const [birthDateError, setBirthDateError] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
 
@@ -70,6 +72,7 @@ export default function Register({ closeModal, isDesktop }) {
     try {
       setInvalidName(false);
       setInvalidLastName(false);
+      setInvalidFullName(false);
       setEmailError(false);
       setBirthDateError(false);
       setPasswordError(false);
@@ -96,6 +99,11 @@ export default function Register({ closeModal, isDesktop }) {
         return;
       }
 
+      if (!isDesktop && nameIsValid(fullName)) {
+        setInvalidFullName(nameIsValid(fullName));
+        return;
+      }
+
       if (confirmPassword !== password) {
         setConfirmPasswordError(true);
         return;
@@ -105,7 +113,17 @@ export default function Register({ closeModal, isDesktop }) {
     } catch (err) {
       console.log('Erro na newsletter');
     }
-  }, [dispatch, name, lastName, email, password, birthday, confirmPassword]);
+  }, [
+    dispatch,
+    name,
+    lastName,
+    email,
+    password,
+    birthday,
+    fullName,
+    confirmPassword,
+    isDesktop,
+  ]);
 
   return (
     <>
@@ -115,27 +133,48 @@ export default function Register({ closeModal, isDesktop }) {
         <b>CONTA COM E-MAIL E SEGURANÇA</b>
       </Title>
       <Form onSubmit={handleSubmit} style={isDesktop ? {} : { width: '85%' }}>
-        <InputContainer isDesktop={isDesktop}>
-          <Input
-            name="name"
-            title="Nome"
-            placeholder="Escreve o teu nome"
-            error={invalidName}
-            customWidth={isDesktop ? 221 : '100%'}
-            onChange={({ target: { value } }) => setName(value)}
-            value={name}
-          />
-          <Input
-            name="last_name"
-            title="Apelido"
-            placeholder="Escolhe o teu apelido"
-            error={invalidLastName}
-            onChange={({ target: { value } }) => setLastName(value)}
-            value={lastName}
-            customWidth={isDesktop ? 221 : '100%'}
-          />
+        <InputContainer
+          isDesktop={isDesktop}
+          style={isDesktop ? {} : { height: 53 }}
+        >
+          {isDesktop && (
+            <>
+              <Input
+                name="name"
+                title="Nome"
+                placeholder="Escreve o teu nome"
+                error={invalidName}
+                customWidth={isDesktop ? 221 : '100%'}
+                onChange={({ target: { value } }) => setName(value)}
+                value={name}
+              />
+              <Input
+                name="last_name"
+                title="Apelido"
+                placeholder="Escolhe o teu apelido"
+                error={invalidLastName}
+                onChange={({ target: { value } }) => setLastName(value)}
+                value={lastName}
+                customWidth={isDesktop ? 221 : '100%'}
+              />
+            </>
+          )}
+          {!isDesktop && (
+            <Input
+              name="full_name"
+              title="Apelido"
+              placeholder="Escreve o teu nome"
+              error={invalidLastName}
+              onChange={({ target: { value } }) => setFullName(value)}
+              value={fullName}
+              customWidth="100%"
+            />
+          )}
         </InputContainer>
-        <InputContainer isDesktop={isDesktop} style={{ marginTop: 10 }}>
+        <InputContainer
+          style={isDesktop ? { marginTop: 10 } : { marginTop: 10, height: 53 }}
+          isDesktop={isDesktop}
+        >
           <Input
             name="email"
             title="E-mail"
@@ -146,15 +185,17 @@ export default function Register({ closeModal, isDesktop }) {
             error={emailError}
             customWidth={isDesktop ? 221 : '100%'}
           />
-          <InputMask
-            name="birthday"
-            title="Data de Nascimento"
-            placeholder="Data de Nascimento"
-            value={birthday}
-            onChange={({ target: { value } }) => setBirthDate(value)}
-            error={birthDateError}
-            customWidth={isDesktop ? 221 : '100%'}
-          />
+          {isDesktop && (
+            <InputMask
+              name="birthday"
+              title="Data de Nascimento"
+              placeholder="Data de Nascimento"
+              value={birthday}
+              onChange={({ target: { value } }) => setBirthDate(value)}
+              error={birthDateError}
+              customWidth={isDesktop ? 221 : '100%'}
+            />
+          )}
         </InputContainer>
         <InputContainer isDesktop={isDesktop} style={{ marginTop: 10 }}>
           <Input
@@ -184,16 +225,16 @@ export default function Register({ closeModal, isDesktop }) {
         onClick={handleSubmit}
         color="#1DC167"
         shadowColor="#17A75B"
-        style={isDesktop ? { marginTop: 47 } : { width: '85%', marginTop: 17 }}
+        style={isDesktop ? { marginTop: 47 } : { width: '85%', marginTop: 12 }}
       >
         {loading ? <FaSpinner color="#fff" size={20} /> : 'Criar conta'}
       </Button>
-      <SecureLogin style={isDesktop ? { marginTop: 48 } : { marginTop: 17 }}>
+      <SecureLogin style={isDesktop ? { marginTop: 48 } : { marginTop: 12 }}>
         Secure <img src={lock} alt="Lock" /> Login
       </SecureLogin>
       {toastVisible && (
         <Toast
-          status="Houve um erro no cadastro. Confira seus dados e tente novamente."
+          status="O email informado já existe, faça login."
           color="#f56060"
         />
       )}

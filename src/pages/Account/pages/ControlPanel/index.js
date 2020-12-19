@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 
@@ -16,6 +16,8 @@ import favorites from '~/assets/myAccount/favorites.svg';
 export default function ControlPanel() {
   const history = useHistory();
   const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
+
+  useEffect(() => window.scrollTo(0, 0), []);
 
   return (
     <>

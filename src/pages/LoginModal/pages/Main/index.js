@@ -108,10 +108,10 @@ export default function Main({ setPage, isDesktop }) {
     [uuid, dispatch]
   );
 
-  const handleAppleLogin = useCallback(response => {
-    console.log(response);
-    alert('batata');
-  }, []);
+  // const handleAppleLogin = useCallback(response => {
+  //   console.log(response);
+  //   alert('batata');
+  // }, []);
 
   return (
     <>

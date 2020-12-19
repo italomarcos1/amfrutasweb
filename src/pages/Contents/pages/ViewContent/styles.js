@@ -28,12 +28,21 @@ export const imgButtonStyle = {
   marginLeft: 0,
 };
 
+export const FullContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #ececec;
+`;
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #ececec;
   width: 100%;
-  padding: 21px 30px 30px;
+
+  padding: ${({ isDesktop }) => (isDesktop ? '21px 30px 30px' : '10px')};
 `;
 
 export const InfoContainer = styled.div`
@@ -42,7 +51,8 @@ export const InfoContainer = styled.div`
   justify-content: space-between;
   flex-wrap: wrap;
 
-  width: 1240px;
+  width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
+
   margin-top: 18px;
   border-radius: 4px;
 
@@ -53,7 +63,7 @@ export const InfoContainer = styled.div`
 
 export const Content = styled.div`
   display: flex;
-  width: 1046px;
+  width: ${({ isDesktop }) => (isDesktop ? '1046px' : '100%')};
   padding: 20px;
   background-color: #fff;
 
@@ -78,8 +88,9 @@ export const ProductsList = styled.ul`
 
 export const TitleContainer = styled.div`
   display: flex;
-  height: 84px;
+  height: ${({ isDesktop }) => (isDesktop ? 84 : 135)}px;
   width: 100%;
+  flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
   align-items: center;
   justify-content: space-between;
   margin-top: 17px;
@@ -89,11 +100,12 @@ export const Title = styled.h1`
   color: #0cb68b;
   font-family: 'SFProBold';
   font-size: 30px;
-  line-height: 45px;
+  line-height: ${({ isDesktop }) => (isDesktop ? 45 : 36)}px;
   padding: 0;
   padding-right: 5px;
-  height: 54px;
-  width: 525px;
+  height: ${({ isDesktop }) => (isDesktop ? 54 : 74)}px;
+  width: ${({ isDesktop }) => (isDesktop ? '525px' : '100%')};
+  max-width: 300px;
   letter-spacing: 0px;
   overflow: hidden;
   text-overflow: ellipsis;

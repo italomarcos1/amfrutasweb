@@ -108,8 +108,6 @@ export default function MainMenu({ route }) {
       data: { data: socialData },
     } = socialMedia;
 
-    console.log(socialData);
-
     const {
       facebook,
       instagram,

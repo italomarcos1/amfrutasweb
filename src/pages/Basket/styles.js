@@ -17,16 +17,6 @@ export const Content = styled.div`
   flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
   margin: ${({ isDesktop }) =>
     isDesktop ? '94.5px auto 0' : '23.75px auto 0'};
-
-  /*ul {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    width: 840px;
-    max-height: 708px;
-    margin-top: 27px;
-  }*/
 `;
 
 export const MinValueContainer = styled.div`

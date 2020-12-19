@@ -1,32 +1,40 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useMediaQuery } from 'react-responsive';
 
 import { FaSpinner } from 'react-icons/fa';
 
 import {
   Container,
   Section,
-  BlogPost,
   FooterPagination,
   LoadingContainer,
+  NullBlogPost,
 } from './styles';
 
 import Header from '~/components/Header';
 import Footer from '~/components/Footer';
 import CustomHeader from '~/components/CustomHeaderContent';
 import Pagination from '~/components/Pagination';
+import BlogPost from '~/components/BlogPost';
 
 import LoginModal from '~/pages/LoginModal';
+
+import { nameIsValid } from '~/utils/validation';
 
 import backend from '~/services/api';
 
 export default function Contents() {
   const [loginModal, setLoginModal] = useState(false);
 
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
+
   const [contents, setContents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(0);
+  const [pageHeight, setPageHeight] = useState(1184);
+  const [contentHeight, setContentHeight] = useState('');
   const [paginationArray, setPaginationArray] = useState([]);
   const [orderDirection, setOrderDirection] = useState('desc');
   const [orderField, setOrderField] = useState('updated_at');
@@ -56,7 +64,7 @@ export default function Contents() {
   }, [lastPage]);
 
   const loadContents = useCallback(async () => {
-    if (searchInput !== '') return;
+    if (!nameIsValid(searchInput)) return;
 
     const arrayId = state.id.split('/');
     const getId = arrayId[arrayId.length - 1];
@@ -69,7 +77,7 @@ export default function Contents() {
       `blog/contents/categories/${getId}?page=${currentPage}&per_page=12&&order_field=${orderField}&order_direction=${orderDirection}`
     );
 
-    if (data.length % 4 !== 0) {
+    if (isDesktop && data.length % 4 !== 0) {
       const itemsToFill = Math.ceil(data.length / 4) * 4 - data.length;
 
       for (let i = 0; i < itemsToFill; i++) {
@@ -85,11 +93,11 @@ export default function Contents() {
     setCurrentPage(current_page);
     setLastPage(last_page);
     setContents(data);
-  }, [currentPage, state, orderField, orderDirection, searchInput]);
+  }, [currentPage, state, orderField, orderDirection, searchInput, isDesktop]);
 
   const searchContent = useCallback(async () => {
     try {
-      if (searchInput === '') return;
+      if (nameIsValid(searchInput)) return;
       setLoading(true);
       const contentsResponse = await backend.get(
         `blog/contents/search/${searchInput}?page=${currentPage}&order_field=${orderField}&order_direction=${orderDirection}`
@@ -111,7 +119,7 @@ export default function Contents() {
         },
       } = contentsResponse;
 
-      if (data.length % 4 !== 0) {
+      if (isDesktop && data.length % 4 !== 0) {
         const itemsToFill = Math.ceil(data.length / 4) * 4 - data.length;
 
         for (let i = 0; i < itemsToFill; i++) {
@@ -134,22 +142,36 @@ export default function Contents() {
       setLoading(false);
       alert('Erro');
     }
-  }, [currentPage, orderField, orderDirection, searchInput]);
+  }, [currentPage, orderField, orderDirection, searchInput, isDesktop]);
 
   useEffect(() => {
+    if (isDesktop || contents.length === 0) return;
+
+    const hasLastRow = contents.length * (contentHeight + 20);
+
+    setPageHeight(hasLastRow);
+  }, [isDesktop, contents, contentHeight]);
+
+  // console.log(products.length);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
     loadContents();
     generatePaginationArray();
   }, [loadContents, generatePaginationArray, currentPage]);
 
   useEffect(() => {
     setNoContentsFound(false);
-    searchContent();
+
+    const timer = setTimeout(searchContent, 1000);
+
+    return () => clearTimeout(timer);
   }, [searchInput, searchContent]);
 
   return (
     <>
       <Header login={() => setLoginModal(true)} active="Dicas" />
-      <Container>
+      <Container isDesktop={isDesktop}>
         <CustomHeader
           currentPage={currentPage}
           lastPage={lastPage}
@@ -161,48 +183,48 @@ export default function Contents() {
           inputValue={searchInput}
           setInputValue={setSearchInput}
           search={searchContent}
-          style={{ marginLeft: 'auto', marginRight: 'auto', width: 1240 }}
+          style={
+            isDesktop
+              ? { marginLeft: 'auto', marginRight: 'auto', width: 1240 }
+              : {}
+          }
         />
 
-        <Section>
+        <Section pageHeight={pageHeight} isDesktop={isDesktop}>
           {loading ? (
-            <LoadingContainer>
+            <LoadingContainer isDesktop={isDesktop}>
               <FaSpinner color="#666" size={42} />
               <strong>Carregando os conteúdos do blog, aguarde...</strong>
             </LoadingContainer>
           ) : noContentsFound ? (
-            <LoadingContainer>
+            <LoadingContainer isDesktop={isDesktop}>
               <strong>
                 Não encontramos nenhuma conteúdo com esse nome no blog. <br />{' '}
                 Tente novamente.
               </strong>
             </LoadingContainer>
           ) : (
-            contents.map(content =>
+            contents.map((content, index) =>
               content === null ? (
-                <BlogPost isNull />
+                <NullBlogPost isDesktop={isDesktop} />
               ) : (
                 <BlogPost
                   key={content.id}
-                  to={{
-                    pathname: `/${content.url}`,
-                    state: { id: content.id },
-                  }}
-                >
-                  <img src={content.thumbs} alt="" />
-                  <strong>{content.title}</strong>
-                  <small>{content.description}</small>
-                </BlogPost>
+                  content={content}
+                  index={index}
+                  setHeight={setContentHeight}
+                />
               )
             )
           )}
         </Section>
-        <FooterPagination>
+        <FooterPagination isDesktop={isDesktop}>
           <Pagination
             currentPage={currentPage}
             lastPage={lastPage}
             setCurrentPage={setCurrentPage}
             paginationArray={paginationArray}
+            isDesktop={isDesktop}
           />
         </FooterPagination>
       </Container>

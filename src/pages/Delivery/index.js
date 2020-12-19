@@ -216,6 +216,12 @@ export default function Delivery() {
   );
 
   const [toastVisible, setToastVisible] = useState(false);
+  const [finishingOrder, setFinishingOrder] = useState(false);
+
+  useEffect(() => {
+    if (!processingOrder) setFinishingOrder(false);
+    else setFinishingOrder(true);
+  }, [processingOrder]);
 
   useEffect(() => {
     if (invalidCoupon) {
@@ -239,7 +245,6 @@ export default function Delivery() {
           data: { discount },
         },
       } = await backend.get(`vouchers/${coupon}`);
-      console.log(discount);
 
       setCouponIsValid(true);
       setCouponDiscount(discount);
@@ -955,7 +960,7 @@ export default function Delivery() {
               />
             </InputContainer>
           </InfoContainer>
-          <div>
+          <div style={isDesktop ? {} : { width: '100%' }}>
             {loading && (
               <LoadingContainer isDesktop={isDesktop}>
                 <FaSpinner color="#666" size={42} />
@@ -964,7 +969,7 @@ export default function Delivery() {
             {deliveryOption === 'withdrawinstore' && (
               <LoadingContainer
                 isDesktop={isDesktop}
-                style={isDesktop ? {} : { width: '80.95%' }}
+                style={isDesktop ? {} : { width: '100%' }}
               />
             )}
             <InfoContainer
@@ -1330,12 +1335,13 @@ export default function Delivery() {
               color="#1DC167"
               shadowColor="#17A75B"
               onClick={() => {
+                setFinishingOrder(true);
                 accountButtonRef.current.click();
                 if (deliveryOption === 'delivery')
                   shippingButtonRef.current.click();
               }}
               style={isDesktop ? { width: 309 } : { width: '100%' }}
-              disabled={loading || processingOrder}
+              disabled={loading || processingOrder || finishingOrder}
             >
               {processingOrder ? (
                 <FaSpinner color="#fff" size={20} />

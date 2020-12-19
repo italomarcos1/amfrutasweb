@@ -119,7 +119,12 @@ export default function Login({ closeModal, setPage, isDesktop }) {
       >
         {loading ? <FaSpinner color="#fff" size={20} /> : 'Iniciar sessão'}
       </Button>
-      <GoBack onClick={() => setPage('main')}>Ou voltar</GoBack>
+      <GoBack
+        style={isDesktop ? { marginTop: 28 } : { marginTop: 14 }}
+        onClick={() => setPage('main')}
+      >
+        Ou voltar
+      </GoBack>
       <SecureLogin style={isDesktop ? { marginTop: 60 } : { marginTop: 19 }}>
         Secure <img src={lock} alt="Lock" /> Login
       </SecureLogin>

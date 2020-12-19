@@ -18,7 +18,7 @@ export const Container = styled(Form)`
   display: flex;
   align-items: center;
   width: ${({ isDesktop }) => (isDesktop ? '820px' : '90%')};
-  height: ${({ isDesktop }) => (isDesktop ? '566px' : '90%')};
+  height: ${({ isDesktop }) => (isDesktop ? '566px' : '92%')};
 `;
 
 export const LoginDetails = styled.div`

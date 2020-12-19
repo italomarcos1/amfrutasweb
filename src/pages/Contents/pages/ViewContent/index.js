@@ -2,8 +2,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { FacebookShareButton, WhatsappShareButton } from 'react-share';
+import { useMediaQuery } from 'react-responsive';
 
 import {
+  FullContainer,
   Container,
   InfoContainer,
   Content,
@@ -41,6 +43,8 @@ export default function ViewContent() {
   const [loading, setLoading] = useState(true);
   const [promotionsData, setPromotionsData] = useState([]);
 
+  const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
+
   const noFavorite = useSelector(reducer => reducer.auth.noFavorite);
 
   const firstLogin = useSelector(reducer => reducer.auth.firstLogin);
@@ -52,11 +56,16 @@ export default function ViewContent() {
   }, [history, firstLogin]);
 
   const loadQuote = useCallback(async () => {
+    const formattingPathname = [...pathname];
+    formattingPathname.splice(0, 1);
+
+    console.log(`/seos/${formattingPathname.join('')}`);
+    const response = await backend.get(`/seos/${formattingPathname.join('')}`);
     const {
       data: {
         data: { page_title },
       },
-    } = await backend.get(`/seos/${pathname}`);
+    } = response;
     setQuote(page_title);
     setMessage(`Veja esse conteúdo no AMFrutas: ${page_title}`);
   }, [pathname]);
@@ -110,29 +119,27 @@ export default function ViewContent() {
     loadContent();
   }, [loadContent]);
 
+  // useEffect(())
+
   return (
     <>
       <Header login={() => setLoginModal(true)} active="Dicas" />
 
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-start',
-          alignItems: 'center',
-          backgroundColor: '#ececec',
-        }}
-      >
-        <Container>
+      <FullContainer>
+        <Container isDesktop={isDesktop}>
           {loading ? (
             <h1>Carregando...</h1>
           ) : (
             <>
-              <InfoContainer>
-                <Content>
-                  <img src={banner} alt="" />
-                  <TitleContainer>
-                    <Title>{product.title}</Title>
+              <InfoContainer isDesktop={isDesktop}>
+                <Content isDesktop={isDesktop}>
+                  <img
+                    src={banner}
+                    alt=""
+                    style={isDesktop ? {} : { width: '100%', height: 'auto' }}
+                  />
+                  <TitleContainer isDesktop={isDesktop}>
+                    <Title isDesktop={isDesktop}>{product.title}</Title>
                     <ShareThisProduct>
                       <strong>Compartilhe esse produto:</strong>
                       <div
@@ -174,17 +181,19 @@ export default function ViewContent() {
                     }}
                   />
                 </Content>
-                <ProductsList>
-                  {promotionsData.length !== 0 &&
-                    promotionsData.map((p, index) => (
-                      <Product key={p.id} index={index} product={p} />
-                    ))}
-                </ProductsList>
+                {isDesktop && (
+                  <ProductsList>
+                    {promotionsData.length !== 0 &&
+                      promotionsData.map((p, index) => (
+                        <Product key={p.id} index={index} product={p} />
+                      ))}
+                  </ProductsList>
+                )}
               </InfoContainer>
             </>
           )}
         </Container>
-      </div>
+      </FullContainer>
 
       <Footer />
 

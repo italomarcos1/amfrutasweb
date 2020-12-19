@@ -35,7 +35,7 @@ import {
   AddToCartButton,
 } from './styles';
 
-export default function Product({ product, index }) {
+export default function Product({ product, index, setHeight }) {
   const dispatch = useDispatch();
   const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
 
@@ -93,9 +93,16 @@ export default function Product({ product, index }) {
     }
   }, [pressed, signed, dispatch, favorite, id, product]);
 
+  useEffect(() => {
+    if (isDesktop || !setHeight) return;
+    const el = document.getElementById(`product${index}`);
+
+    setHeight(el.offsetHeight);
+  }, [isDesktop, index, setHeight, product]);
+
   return (
     <>
-      <Container isDesktop={isDesktop}>
+      <Container isDesktop={isDesktop} id={`product${index}`}>
         <FavoriteButton
           type="button"
           onClick={() => {
@@ -207,4 +214,9 @@ Product.propTypes = {
     isFavorite: PropTypes.bool,
   }).isRequired,
   index: PropTypes.number.isRequired,
+  setHeight: PropTypes.func,
+};
+
+Product.defaultProps = {
+  setHeight: null,
 };

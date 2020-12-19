@@ -35,6 +35,8 @@ export default function MyFavorites() {
     setPaginatedProducts(newPage);
   }, [dispatch, currentPage, favorites]);
 
+  useEffect(() => window.scrollTo(0, 0), []);
+
   useEffect(() => {
     handlePagination();
   }, [favorites, handlePagination]);

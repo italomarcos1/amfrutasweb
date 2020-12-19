@@ -61,6 +61,8 @@ export default function MyAccount() {
   ]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     if (!!primaryAddress) {
       setSelected(primaryAddress.id);
     } else setSelected('');

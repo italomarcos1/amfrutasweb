@@ -124,8 +124,13 @@ export default function Home() {
       backend.get('/seller-points'),
       backend.get('configurations'),
     ]);
+    const {
+      data: {
+        data: { whatsapp: whatsappData },
+      },
+    } = whatsappResponse;
 
-    setWhatsappNumber(whatsappResponse.whatsapp);
+    setWhatsappNumber(whatsappData);
 
     const {
       data: {
@@ -233,15 +238,8 @@ export default function Home() {
     );
   }, []);
 
-  const calculateWidth = useCallback(() => {
-    const el = document.getElementById('productsContainer');
-    console.log(el.offsetWidth);
-    console.log(el.offsetHeight);
-  }, []);
-
   useEffect(() => {
     setLoading(true);
-    calculateWidth();
     loadData();
     loadRecommendedProducts();
     setLoading(false);
@@ -303,7 +301,7 @@ export default function Home() {
     <>
       <Header login={() => setLoginModal(true)} />
       <Container onSubmit={handleSubmit} ref={formRef}>
-        {isDesktop && <SlideShow data={bannersURL} />}{' '}
+        {isDesktop && <SlideShow data={bannersURL} />}
         <OptionsContainer isDesktop={isDesktop}>
           <Option href="#" rel="noreferrer" isDesktop={isDesktop}>
             <img src={envio} alt="Envio Gratuito" />

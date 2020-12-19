@@ -94,11 +94,13 @@ export default function ViewProduct() {
   }, [product, dispatch, qty]);
 
   const loadQuote = useCallback(async () => {
+    const formattingPathname = [...pathname];
+    formattingPathname.splice(0, 1);
     const {
       data: {
         data: { page_title },
       },
-    } = await backend.get(`/seos/${pathname}`);
+    } = await backend.get(`/seos/${formattingPathname.join('')}`);
     setQuote(page_title);
     setMessage(`Veja esse conteúdo no AMFrutas: ${page_title}`);
   }, [pathname]);

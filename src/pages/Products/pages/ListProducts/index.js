@@ -24,6 +24,7 @@ export default function ListProducts() {
   const [prevPageUrl, setPrevPageUrl] = useState('');
   const [nextPageUrl, setNextPageUrl] = useState('');
   const [pageHeight, setPageHeight] = useState(1184);
+  const [productHeight, setProductHeight] = useState('');
   const [paginationArray, setPaginationArray] = useState([]);
   const [field, setField] = useState('latest');
   const [searchInput, setSearchInput] = useState('');
@@ -55,21 +56,21 @@ export default function ListProducts() {
       },
     } = productsResponse;
 
-    if (data.length % 5 !== 0) {
+    if (isDesktop && data.length % 5 !== 0) {
       const itemsToFill = Math.ceil(data.length / 5) * 5 - data.length;
 
       for (let i = 0; i < itemsToFill; i++) {
         data.push(null);
       }
     }
-    let hasLastRow;
 
-    if (isDesktop)
-      hasLastRow = data.length > 10 ? 1184 : Math.ceil(data.length / 5) * 404;
-    else
-      hasLastRow = data.length > 14 ? 2804 : Math.ceil(data.length / 2) * 354;
+    if (!isDesktop && data.length % 2 !== 0) {
+      const itemsToFill = Math.ceil(data.length / 2) * 2 - data.length;
 
-    setPageHeight(hasLastRow);
+      for (let i = 0; i < itemsToFill; i++) {
+        data.push(null);
+      }
+    }
 
     setProducts(data);
     setCurrentPage(current_page);
@@ -120,15 +121,6 @@ export default function ListProducts() {
         }
       }
 
-      let hasLastRow;
-
-      if (isDesktop)
-        hasLastRow = data.length > 10 ? 1184 : Math.ceil(data.length / 5) * 404;
-      else
-        hasLastRow = data.length > 14 ? 2804 : Math.ceil(data.length / 2) * 354;
-
-      setPageHeight(hasLastRow);
-
       setProducts(data);
       setCurrentPage(current_page);
 
@@ -141,6 +133,21 @@ export default function ListProducts() {
       alert('Erro');
     }
   }, [currentPage, field, searchInput, isDesktop, perPage]);
+
+  useEffect(() => {
+    if (products.length === 0) return;
+    let hasLastRow;
+
+    if (isDesktop)
+      hasLastRow =
+        products.length > 10 ? 1184 : Math.ceil(products.length / 5) * 404;
+    else hasLastRow = Math.ceil(products.length / 2) * (productHeight + 25);
+    // console.log(products.length);
+    setPageHeight(hasLastRow);
+    console.log(products.length);
+  }, [isDesktop, products, productHeight]);
+
+  // useEffect(() => console.log(pageHeight), [pageHeight]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -187,7 +194,12 @@ export default function ListProducts() {
             p === null ? (
               <NullProduct isDesktop={isDesktop} />
             ) : (
-              <Product key={p.id} index={index} product={p} />
+              <Product
+                key={p.id}
+                index={index}
+                product={p}
+                setHeight={setProductHeight}
+              />
             )
           )
         )}

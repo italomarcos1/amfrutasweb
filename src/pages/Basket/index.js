@@ -152,7 +152,7 @@ export default function Basket() {
       )}
       <Container isDesktop={isDesktop}>
         <Content isDesktop={isDesktop}>
-          <div>
+          <div style={isDesktop ? {} : { width: '100%' }}>
             <Title>Cesto de Compras</Title>
             {shouldntProceed && (
               <MinValueContainer isDesktop={isDesktop}>

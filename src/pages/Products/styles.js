@@ -12,6 +12,8 @@ export const Container = styled.div`
 
 export const Layout = styled.div`
   display: flex;
+  background-color: #ececec;
+
   justify-content: space-between;
   width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
   margin: 0 auto;
@@ -67,6 +69,7 @@ export const Content = styled.div`
   width: ${({ isDesktop }) => (isDesktop ? '995px' : '100%')};
   align-items: center;
   justify-content: flex-start;
+  background-color: #ececec;
 `;
 
 export const SectionTitle = styled.div`
