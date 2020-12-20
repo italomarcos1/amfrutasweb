@@ -190,7 +190,7 @@ export default function Contents() {
           }
         />
         <div style={isDesktop ? {} : { height: pageHeight, width: '100%' }}>
-          <Section pageHeight={pageHeight} isDesktop={isDesktop}>
+          <Section pageHeight="auto" isDesktop={isDesktop}>
             {loading ? (
               <LoadingContainer isDesktop={isDesktop}>
                 <FaSpinner color="#666" size={42} />
