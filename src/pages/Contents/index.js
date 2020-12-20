@@ -189,45 +189,40 @@ export default function Contents() {
               : {}
           }
         />
-        {/* <div
+        <div
           style={
-            isDesktop
-              ? { height: pageHeight * 1.2 }
-              : { height: pageHeight, width: '100%' }
+            isDesktop ? { height: 1056 } : { height: pageHeight, width: '100%' }
           }
-        > */}
-        <Section
-          pageHeight={isDesktop ? { pageHeight } : 'auto'}
-          isDesktop={isDesktop}
         >
-          {loading ? (
-            <LoadingContainer isDesktop={isDesktop}>
-              <FaSpinner color="#666" size={42} />
-              <strong>Carregando os conteúdos do blog, aguarde...</strong>
-            </LoadingContainer>
-          ) : noContentsFound ? (
-            <LoadingContainer isDesktop={isDesktop}>
-              <strong>
-                Não encontramos nenhuma conteúdo com esse nome no blog. <br />{' '}
-                Tente novamente.
-              </strong>
-            </LoadingContainer>
-          ) : (
-            contents.map((content, index) =>
-              content === null ? (
-                <NullBlogPost isDesktop={isDesktop} />
-              ) : (
-                <BlogPost
-                  key={content.id}
-                  content={content}
-                  index={index}
-                  setHeight={setContentHeight}
-                />
+          <Section pageHeight={isDesktop ? 1056 : 'auto'} isDesktop={isDesktop}>
+            {loading ? (
+              <LoadingContainer isDesktop={isDesktop}>
+                <FaSpinner color="#666" size={42} />
+                <strong>Carregando os conteúdos do blog, aguarde...</strong>
+              </LoadingContainer>
+            ) : noContentsFound ? (
+              <LoadingContainer isDesktop={isDesktop}>
+                <strong>
+                  Não encontramos nenhuma conteúdo com esse nome no blog. <br />{' '}
+                  Tente novamente.
+                </strong>
+              </LoadingContainer>
+            ) : (
+              contents.map((content, index) =>
+                content === null ? (
+                  <NullBlogPost isDesktop={isDesktop} />
+                ) : (
+                  <BlogPost
+                    key={content.id}
+                    content={content}
+                    index={index}
+                    setHeight={setContentHeight}
+                  />
+                )
               )
-            )
-          )}
-        </Section>
-        {/* </div> */}
+            )}
+          </Section>
+        </div>
 
         <FooterPagination isDesktop={isDesktop}>
           <Pagination
