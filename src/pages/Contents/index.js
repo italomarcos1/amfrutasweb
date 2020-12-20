@@ -192,7 +192,7 @@ export default function Contents() {
         <div
           style={
             isDesktop
-              ? { height: pageHeight }
+              ? { height: pageHeight * 1.2 }
               : { height: pageHeight, width: '100%' }
           }
         >
