@@ -189,7 +189,13 @@ export default function Contents() {
               : {}
           }
         />
-        <div style={isDesktop ? {} : { height: pageHeight, width: '100%' }}>
+        <div
+          style={
+            isDesktop
+              ? { height: pageHeight }
+              : { height: pageHeight, width: '100%' }
+          }
+        >
           <Section
             pageHeight={isDesktop ? { pageHeight } : 'auto'}
             isDesktop={isDesktop}
