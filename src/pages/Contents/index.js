@@ -189,35 +189,37 @@ export default function Contents() {
               : {}
           }
         />
-
-        <Section pageHeight={pageHeight} isDesktop={isDesktop}>
-          {loading ? (
-            <LoadingContainer isDesktop={isDesktop}>
-              <FaSpinner color="#666" size={42} />
-              <strong>Carregando os conteúdos do blog, aguarde...</strong>
-            </LoadingContainer>
-          ) : noContentsFound ? (
-            <LoadingContainer isDesktop={isDesktop}>
-              <strong>
-                Não encontramos nenhuma conteúdo com esse nome no blog. <br />{' '}
-                Tente novamente.
-              </strong>
-            </LoadingContainer>
-          ) : (
-            contents.map((content, index) =>
-              content === null ? (
-                <NullBlogPost isDesktop={isDesktop} />
-              ) : (
-                <BlogPost
-                  key={content.id}
-                  content={content}
-                  index={index}
-                  setHeight={setContentHeight}
-                />
+        <div style={isDesktop ? {} : { height: pageHeight, width: '100%' }}>
+          <Section pageHeight={pageHeight} isDesktop={isDesktop}>
+            {loading ? (
+              <LoadingContainer isDesktop={isDesktop}>
+                <FaSpinner color="#666" size={42} />
+                <strong>Carregando os conteúdos do blog, aguarde...</strong>
+              </LoadingContainer>
+            ) : noContentsFound ? (
+              <LoadingContainer isDesktop={isDesktop}>
+                <strong>
+                  Não encontramos nenhuma conteúdo com esse nome no blog. <br />{' '}
+                  Tente novamente.
+                </strong>
+              </LoadingContainer>
+            ) : (
+              contents.map((content, index) =>
+                content === null ? (
+                  <NullBlogPost isDesktop={isDesktop} />
+                ) : (
+                  <BlogPost
+                    key={content.id}
+                    content={content}
+                    index={index}
+                    setHeight={setContentHeight}
+                  />
+                )
               )
-            )
-          )}
-        </Section>
+            )}
+          </Section>
+        </div>
+
         <FooterPagination isDesktop={isDesktop}>
           <Pagination
             currentPage={currentPage}
