@@ -83,19 +83,19 @@ export default function Register({ closeModal, isDesktop }) {
       if (
         (isDesktop && nameIsValid(name)) ||
         (isDesktop && nameIsValid(lastName)) ||
-		(!isDesktop && nameIsValid(fullName)) ||
+        (!isDesktop && nameIsValid(fullName)) ||
         !mailIsValid(email) ||
         !dateIsValid(birthday) ||
         nameIsValid(password) ||
         nameIsValid(confirmPassword)
       ) {
-        if(isDesktop) {
-			setInvalidName(nameIsValid(name));
-	        setInvalidLastName(nameIsValid(lastName));
-		}
-		 if (!isDesktop && nameIsValid(fullName)) {
-	        setInvalidFullName(nameIsValid(fullName));
-      	}
+        if (isDesktop) {
+          setInvalidName(nameIsValid(name));
+          setInvalidLastName(nameIsValid(lastName));
+        }
+        if (!isDesktop && nameIsValid(fullName)) {
+          setInvalidFullName(nameIsValid(fullName));
+        }
         setEmailError(!mailIsValid(email));
         setBirthDateError(!dateIsValid(birthday));
         setPasswordError(nameIsValid(password));
@@ -110,18 +110,25 @@ export default function Register({ closeModal, isDesktop }) {
         return;
       }
 
-	if(isDesktop){
-      dispatch(signUpRequest({ name, lastName, email, password, birthday }));
-	 
- 	  return;
-	}
-	
-	const[currentName, ...restOfName]= fullName.split(' ');
+      if (isDesktop) {
+        dispatch(signUpRequest({ name, lastName, email, password, birthday }));
 
-	const currentLastName = restOfName.join(' ');
+        return;
+      }
 
-	 dispatch(signUpRequest({ name: currentName, lastName: currentLastName, email, password, birthday }));
+      const [currentName, ...restOfName] = fullName.split(' ');
 
+      const currentLastName = restOfName.join(' ');
+
+      dispatch(
+        signUpRequest({
+          name: currentName,
+          lastName: currentLastName,
+          email,
+          password,
+          birthday,
+        })
+      );
     } catch (err) {
       console.log('Erro na newsletter');
     }
