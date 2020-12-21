@@ -110,7 +110,18 @@ export default function Register({ closeModal, isDesktop }) {
         return;
       }
 
+	if(isDesktop){
       dispatch(signUpRequest({ name, lastName, email, password, birthday }));
+	 
+ 	  return;
+	}
+	
+	const[currentName, ...restOfName]= fullName.split(' ');
+
+	const currentLastName = restOfName.join(' ');
+
+	 dispatch(signUpRequest({ name: currentName, lastName: currentLastName, email, password, birthday }));
+
     } catch (err) {
       console.log('Erro na newsletter');
     }
@@ -163,7 +174,7 @@ export default function Register({ closeModal, isDesktop }) {
           {!isDesktop && (
             <Input
               name="full_name"
-              title="Apelido"
+              title="Nome completo"
               placeholder="Escreve o teu nome"
               error={invalidLastName}
               onChange={({ target: { value } }) => setFullName(value)}
