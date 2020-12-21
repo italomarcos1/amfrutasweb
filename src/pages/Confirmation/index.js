@@ -16,22 +16,22 @@ import {
   SectionTitle,
   CustomInputContainer,
   CashbackCredit,
-  PeriodicDeliveryContainer,
-  PeriodicDeliveryItem,
-  PeriodicDeliveryList,
-  PeriodicDeliveryUnwantedProducts,
-  PeriodicDeliveryWannaReceive,
-  Options,
+  // PeriodicDeliveryContainer,
+  // PeriodicDeliveryItem,
+  // PeriodicDeliveryList,
+  // PeriodicDeliveryUnwantedProducts,
+  // PeriodicDeliveryWannaReceive,
+  // Options,
   WithdrawContainer,
 } from './styles';
 
 import check from '~/assets/check_white.svg';
-import checked from '~/assets/checked.svg';
+// import checked from '~/assets/checked.svg';
 import cashback from '~/assets/cashback.svg';
-import minus from '~/assets/icons/minus.svg';
-import plus from '~/assets/icons/plus.svg';
+// import minus from '~/assets/icons/minus.svg';
+// import plus from '~/assets/icons/plus.svg';
 
-import delivery from '~/assets/entrega-periodica.svg';
+// import delivery from '~/assets/entrega-periodica.svg';
 
 import Footer from '~/components/Footer';
 
@@ -40,20 +40,20 @@ import { Button } from '~/components/LoginModal';
 import CheckoutHeader from '~/components/CheckoutHeader';
 import CheckoutHeaderMobile from '~/components/CheckoutHeaderMobile';
 import Item from '~/components/ConfirmationItem';
-import PeriodicDeliveryListItem from '~/components/PeriodicDeliveryListItem';
+// import PeriodicDeliveryListItem from '~/components/PeriodicDeliveryListItem';
 import ItemsList from '~/components/ItemsList';
 
-import { knightFall } from '~/store/modules/user/actions';
+import { updateProfileRequest, knightFall } from '~/store/modules/user/actions';
 
-import { periodicProducts } from '~/data';
+// import { periodicProducts } from '~/data';
 
 import backend from '~/services/api';
 import { customCalculatePrice, formatPrice } from '~/utils/calculatePrice';
 
 export default function Confirmation() {
   const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
-  const [qty, setQty] = useState(4);
-  const [periodicDelivery, setPeriodicDelivery] = useState(true);
+  // const [qty, setQty] = useState(4);
+  // const [periodicDelivery, setPeriodicDelivery] = useState(true);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -75,6 +75,16 @@ export default function Confirmation() {
   const [saved, setSaved] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const [clientCback, setClientCback] = useState(
+    !!profile
+      ? !!profile.cback_credit
+        ? profile.cback_credit
+        : '0.00'
+      : '0.00'
+  );
+
+  const [newCback, setNewCback] = useState('0.00');
+
   const [currentContainerHeight, setCurrentContainerHeight] = useState(
     cart.length * 102 - 20
   );
@@ -95,9 +105,19 @@ export default function Confirmation() {
     setOrderInfo(data);
   }, [order]);
 
+  const loadCback = useCallback(async () => {
+    const {
+      data: { data },
+    } = await backend.get('/clients/cbacks');
+
+    setNewCback(data);
+    dispatch(updateProfileRequest({ ...profile, cback_credit: data }));
+  }, [dispatch, profile]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     loadData();
+    loadCback();
   }, [loadData]);
 
   useEffect(() => {
@@ -247,14 +267,7 @@ export default function Confirmation() {
             </SectionTitle>
             <CashbackCredit>
               <img src={cashback} alt="Cashback" />
-              <strong>
-                €&nbsp;
-                {!!profile
-                  ? !!profile.cback_credit
-                    ? profile.cback_credit
-                    : '0.00'
-                  : '0.00'}
-              </strong>
+              <strong>€&nbsp;{newCback}</strong>
             </CashbackCredit>
           </InfoContainer>
         </Content>
@@ -294,14 +307,7 @@ export default function Confirmation() {
               </CheckoutItem>
               <CheckoutItem>
                 <h1>Crédito Disponível</h1>
-                <h2 style={{ color: '#0CB68B' }}>
-                  €&nbsp;
-                  {!!profile
-                    ? !!profile.cback_credit
-                      ? profile.cback_credit
-                      : '0.00'
-                    : '0.00'}
-                </h2>
+                <h2 style={{ color: '#0CB68B' }}>€&nbsp;{clientCback}</h2>
               </CheckoutItem>
               <CheckoutItem>
                 <h1 style={isDesktop ? {} : { fontSize: 13.5 }}>

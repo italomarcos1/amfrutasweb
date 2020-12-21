@@ -137,7 +137,7 @@ export default function Product({ product, index, setHeight }) {
             state: { id },
           }}
         >
-          <span>
+          <span style={!!cback ? (cback === '0.00' ? { opacity: 0 } : {}) : {}}>
             <Coins src={coins} alt="coins" isDesktop={isDesktop} />
             <strong style={isDesktop ? {} : { fontSize: 9 }}>
               €&nbsp;{!!cback ? cback : '0.00'}

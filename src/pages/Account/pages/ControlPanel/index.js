@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
+import { useSelector } from 'react-redux';
 
 import { InfoContainer, DeliveryAndCardsContainer } from './styles';
 
@@ -17,6 +18,8 @@ export default function ControlPanel() {
   const history = useHistory();
   const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
 
+  const profile = useSelector(state => state.user.profile);
+
   useEffect(() => window.scrollTo(0, 0), []);
 
   return (
@@ -25,7 +28,13 @@ export default function ControlPanel() {
         <Info
           icon={cashback}
           alt="Crédito disponível"
-          title="€ 2,78"
+          title={`€ ${
+            !!profile
+              ? !!profile.cback_credit
+                ? profile.cback_credit
+                : '0.00'
+              : '0.00'
+          }`}
           subTitle="Cashback - Crédito disponível"
           titleStyle={{ color: '#0CB68B' }}
           imageStyle={isDesktop ? {} : { width: '20%', marginTop: 5 }}

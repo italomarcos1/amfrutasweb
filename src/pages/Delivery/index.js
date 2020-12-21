@@ -60,7 +60,10 @@ import CheckoutHeaderMobile from '~/components/CheckoutHeaderMobile';
 import Item from '~/components/CheckoutItem';
 import Toast from '~/components/Toast';
 
-import { addFinalProfileRequest } from '~/store/modules/user/actions';
+import {
+  addFinalProfileRequest,
+  updateProfileRequest,
+} from '~/store/modules/user/actions';
 import {
   addFinalAddressRequest,
   updateFinalShippingInfoRequest,
@@ -154,6 +157,14 @@ export default function Delivery() {
   const [emailError, setEmailError] = useState(false);
   const [gender, setGender] = useState(
     !!profile ? profile.gender : 'Masculino'
+  );
+
+  const [clientCback, setClientCback] = useState(
+    !!profile
+      ? !!profile.cback_credit
+        ? profile.cback_credit
+        : '0.00'
+      : '0.00'
   );
 
   const [invalidFields, setInvalidFields] = useState([
@@ -270,10 +281,16 @@ export default function Delivery() {
   const loadData = useCallback(async () => {
     const keys = ['withdrawinstore_message'];
 
-    const [delivery, shipping, withdraw] = await Promise.all([
+    const [
+      delivery,
+      shipping,
+      withdraw,
+      availableCbackResponse,
+    ] = await Promise.all([
       backend.get('checkout/delivery-intervals'),
       backend.get('checkout/shipping-methods'),
       backend.get('/configurations', { keys }),
+      backend.get('/clients/cbacks'),
     ]);
 
     const {
@@ -288,6 +305,10 @@ export default function Delivery() {
       data: { data: withdrawData },
     } = withdraw;
 
+    const {
+      data: { data: availableCback },
+    } = availableCbackResponse;
+
     const formattingDeliveryDays = deliveryData.map(d => ({
       ...d,
       value: d.label,
@@ -296,7 +317,14 @@ export default function Delivery() {
     setDeliveryDays(formattingDeliveryDays);
     setShippingMethods(shippingData);
     setWithdrawMessage(withdrawData.withdrawinstore_message);
-  }, []);
+
+    if (clientCback !== availableCback) {
+      dispatch(
+        updateProfileRequest({ ...profile, cback_credit: availableCback })
+      );
+    }
+    setClientCback(availableCback);
+  }, [dispatch, clientCback, profile]);
 
   useEffect(() => {
     const findIndex = deliveryDays.findIndex(d => d.label === deliveryDay);
@@ -664,14 +692,7 @@ export default function Delivery() {
 
   useEffect(() => {
     const formattingPrice = formatPrice(
-      Number(shippingCost) -
-        Number(
-          !!profile
-            ? !!profile.cback_credit
-              ? profile.cback_credit
-              : '0.00'
-            : '0.00'
-        )
+      Number(shippingCost) - Number(clientCback)
     );
     if (couponDiscount && couponIsValid) {
       setTotalPrice(
@@ -681,7 +702,14 @@ export default function Delivery() {
         )
       );
     } else setTotalPrice(formatPrice(Number(price) + Number(formattingPrice)));
-  }, [price, shippingCost, profile, couponDiscount, couponIsValid]);
+  }, [
+    price,
+    shippingCost,
+    profile,
+    couponDiscount,
+    couponIsValid,
+    clientCback,
+  ]);
 
   const genderData = [
     {
@@ -1264,14 +1292,7 @@ export default function Delivery() {
             </CheckoutItem>
             <CheckoutItem>
               <h1>Crédito Disponível</h1>
-              <h2 style={{ color: '#0CB68B' }}>
-                €&nbsp;
-                {!!profile
-                  ? !!profile.cback_credit
-                    ? profile.cback_credit
-                    : '0.00'
-                  : '0.00'}
-              </h2>
+              <h2 style={{ color: '#0CB68B' }}>€&nbsp;{clientCback}</h2>
             </CheckoutItem>
             <CheckoutItem style={{ height: 77 }}>
               <div style={{ display: 'flex', width: '100%' }}>
