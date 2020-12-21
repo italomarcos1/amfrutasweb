@@ -531,6 +531,7 @@ export default function Delivery() {
         setInvalidGender(nameIsValid(gender));
         setInvalidBirth(!dateIsValid(formData.birth));
         window.scrollTo(0, 0);
+        setFinishingOrder(false);
 
         return;
       }
@@ -543,6 +544,8 @@ export default function Delivery() {
         setInvalidDeliveryHour(nameIsValid(deliveryHour));
 
         window.scrollTo(0, 0);
+        setFinishingOrder(false);
+
         return;
       }
 
@@ -554,6 +557,7 @@ export default function Delivery() {
       dispatch(addFinalProfileRequest(profileData));
 
       setValidUserInfo(true);
+      setFinishingOrder(false);
     },
     [
       dispatch,
@@ -585,6 +589,7 @@ export default function Delivery() {
         setInvalidPostcode(!postcodeIsValid(zipcode));
         setInvalidLocation(nameIsValid(country));
         window.scrollTo(0, 0);
+        setFinishingOrder(false);
 
         return;
       }
@@ -593,12 +598,17 @@ export default function Delivery() {
         setInvalidPostcode(!postcodeIsValid(zipcode));
 
         window.scrollTo(0, 0);
+
+        setFinishingOrder(false);
+
         return;
       }
 
       if (nameIsValid(residence)) {
         setInvalidResidence(nameIsValid(residence));
         window.scrollTo(0, 0);
+
+        setFinishingOrder(false);
 
         return;
       }
@@ -611,6 +621,9 @@ export default function Delivery() {
         setInvalidDeliveryHour(nameIsValid(deliveryHour));
 
         window.scrollTo(0, 0);
+
+        setFinishingOrder(false);
+
         return;
       }
 
@@ -654,6 +667,7 @@ export default function Delivery() {
       }
 
       setValidShippingInfo(true);
+      setFinishingOrder(false);
     },
     [
       dispatch,
@@ -683,7 +697,10 @@ export default function Delivery() {
   }, [cart, handlePagination]);
 
   useEffect(() => {
-    if (orderFinished) history.push('/confirmacao');
+    if (orderFinished) {
+      history.push('/confirmacao');
+      setFinishingOrder(false);
+    }
   }, [orderFinished, history]);
 
   useEffect(() => {
@@ -694,6 +711,7 @@ export default function Delivery() {
     const formattingPrice = formatPrice(
       Number(shippingCost) - Number(clientCback)
     );
+
     if (couponDiscount && couponIsValid) {
       setTotalPrice(
         formatPrice(

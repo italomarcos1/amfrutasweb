@@ -81,26 +81,27 @@ export default function Register({ closeModal, isDesktop }) {
       setToastVisible(false);
 
       if (
-        nameIsValid(name) ||
-        nameIsValid(lastName) ||
+        (isDesktop && nameIsValid(name)) ||
+        (isDesktop && nameIsValid(lastName)) ||
+		(!isDesktop && nameIsValid(fullName)) ||
         !mailIsValid(email) ||
         !dateIsValid(birthday) ||
         nameIsValid(password) ||
         nameIsValid(confirmPassword)
       ) {
-        setInvalidName(nameIsValid(name));
-        setInvalidLastName(nameIsValid(lastName));
+        if(isDesktop) {
+			setInvalidName(nameIsValid(name));
+	        setInvalidLastName(nameIsValid(lastName));
+		}
+		 if (!isDesktop && nameIsValid(fullName)) {
+	        setInvalidFullName(nameIsValid(fullName));
+      	}
         setEmailError(!mailIsValid(email));
         setBirthDateError(!dateIsValid(birthday));
         setPasswordError(nameIsValid(password));
         setConfirmPasswordError(nameIsValid(confirmPassword));
         setToastVisible(true);
 
-        return;
-      }
-
-      if (!isDesktop && nameIsValid(fullName)) {
-        setInvalidFullName(nameIsValid(fullName));
         return;
       }
 
