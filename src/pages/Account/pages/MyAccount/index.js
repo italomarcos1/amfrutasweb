@@ -35,20 +35,13 @@ export default function MyAccount() {
   const [email, setEmail] = useState(profile !== null ? profile.email : '');
   const [gender, setGender] = useState(profile !== null ? profile.gender : '');
 
-  const [invalidFields, setInvalidFields] = useState([
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-  ]);
+  const [invalidName, setInvalidName] = useState(false);
+  const [invalidLastName, setInvalidLastName] = useState(false);
 
   const [invalidDocument, setInvalidDocument] = useState(false);
   const [invalidGender, setInvalidGender] = useState(false);
   const [invalidPhone, setInvalidPhone] = useState(false);
-  const [invalidMailCode, setInvalidMailCode] = useState(false);
+  // const [invalidMailCode, setInvalidMailCode] = useState(false);
 
   const genderData = [
     {
@@ -62,10 +55,11 @@ export default function MyAccount() {
   const handleSubmit = useCallback(
     async formData => {
       const formattedData = Object.values(formData);
-      invalidFields.fill(false);
+      setInvalidName(false);
+      setInvalidLastName(false);
       setInvalidDocument(false);
       setInvalidPhone(false);
-      setInvalidMailCode(false);
+      // setInvalidMailCode(false);
       setInvalidGender(false);
       setEmailError(false);
       setInvalidBirth(false);
@@ -73,11 +67,12 @@ export default function MyAccount() {
       const anyEmptyField = formattedData.some(field => nameIsValid(field));
 
       if (anyEmptyField) {
-        setInvalidFields(formattedData.map(field => nameIsValid(field)));
+        setInvalidName(nameIsValid(formData.name));
+        setInvalidLastName(nameIsValid(formData.last_name));
         setEmailError(!mailIsValid(formData.email));
         setInvalidDocument(!documentIsValid(formData.document));
         setInvalidPhone(!phoneIsValid(formData.phone));
-        setInvalidMailCode(!mailCodeIsValid(formData.verification_code));
+        // setInvalidMailCode(!mailCodeIsValid(formData.verification_code));
         setInvalidGender(nameIsValid(gender));
         setInvalidBirth(!dateIsValid(formData.birth));
 
@@ -90,7 +85,7 @@ export default function MyAccount() {
       };
       dispatch(updateProfileRequest(profileData));
     },
-    [dispatch, gender, invalidFields]
+    [dispatch, gender]
   );
 
   return (
@@ -111,13 +106,13 @@ export default function MyAccount() {
                 name="name"
                 title="Nome"
                 placeholder="Escreve o teu nome"
-                error={invalidFields[0]}
+                error={invalidName}
               />
               <Input
                 name="last_name"
                 title="Apelido"
                 placeholder="Escolhe o teu apelido"
-                error={invalidFields[1]}
+                error={invalidLastName}
               />
             </InputContainer>
             <InputContainer isDesktop={isDesktop}>
@@ -143,7 +138,7 @@ export default function MyAccount() {
                 name="document"
                 type="9d"
                 title="NIF"
-                error={invalidFields[3] || invalidDocument}
+                error={invalidDocument}
               />
               {gender !== '' ? (
                 <Select
@@ -171,15 +166,15 @@ export default function MyAccount() {
                 name="phone"
                 type="phone"
                 title="Telemóvel"
-                error={invalidFields[4] || invalidPhone}
+                error={invalidPhone}
               />
-              <InputMask
+              {/* <InputMask
                 name="verification_code"
                 mask="99 99 99"
                 placeholder="00 00 00"
                 title="Código de validação por e-mail"
-                error={invalidFields[5] || invalidMailCode}
-              />
+                error={invalidMailCode}
+              /> */}
             </InputContainer>
             <Button
               onClick={() => {}}
