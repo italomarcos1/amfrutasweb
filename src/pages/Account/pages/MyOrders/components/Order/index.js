@@ -262,7 +262,7 @@ export default function Order({ order, isOpen, setOrder }) {
                     <small>
                       <b>Resumo do pedido</b>
                     </small>
-                    <small>Subtotal dos produtos</small>
+                    <small>Produtos</small>
                     <small>Economizou</small>
                     <small>Crédito utilizado</small>
                     <small>Cupom de desconto</small>

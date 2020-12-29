@@ -21,7 +21,7 @@ export default function ListProductsPerCategory() {
   const [lastPage, setLastPage] = useState(0);
   const [prevPageUrl, setPrevPageUrl] = useState('');
   const [nextPageUrl, setNextPageUrl] = useState('');
-  const [pageHeight, setPageHeight] = useState(1184);
+  const [pageHeight, setPageHeight] = useState(isDesktop ? 1184 : 2688);
   const [productHeight, setProductHeight] = useState('');
   const [loading, setLoading] = useState(true);
   const [paginationArray, setPaginationArray] = useState([]);
@@ -134,7 +134,7 @@ export default function ListProductsPerCategory() {
   }, [currentPage, field, isDesktop, searchInput]);
 
   useEffect(() => {
-    if (products.length === 0) return;
+    if (products.length === 0 || productHeight < 250) return;
     let hasLastRow;
 
     if (isDesktop)
@@ -142,6 +142,8 @@ export default function ListProductsPerCategory() {
         products.length > 10 ? 1184 : Math.ceil(products.length / 5) * 404;
     else hasLastRow = Math.ceil(products.length / 2) * (productHeight + 25);
     // console.log(products.length);
+    // console.log(productHeight);
+    // console.log(hasLastRow);
     setPageHeight(hasLastRow);
   }, [isDesktop, products, productHeight]);
 
