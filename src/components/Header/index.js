@@ -104,8 +104,8 @@ export default function PageHeader({ login, active }) {
       console.log(differenceInMinutes(currentDate, parseISO(ttl)));
 
       // if (!(differenceInHours(currentDate, parseISO(ttl)) > 23)) {
+      setMenuItems(data);
       if (!(differenceInMinutes(currentDate, parseISO(ttl)) > 1)) {
-        setMenuItems(data);
         setLoading(false);
 
         return;
