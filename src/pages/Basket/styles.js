@@ -12,7 +12,7 @@ export const Container = styled.div`
 export const Content = styled.div`
   width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
   display: flex;
-  align-items: ${({ isDesktop }) => (isDesktop ? 'center' : 'flex-start')};
+  align-items: flex-start;
   justify-content: space-between;
   flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
   margin: ${({ isDesktop }) =>
@@ -56,7 +56,7 @@ export const Title = styled.h1`
 
 export const CheckoutDetails = styled.div`
   width: ${({ isDesktop }) => (isDesktop ? '360px' : '100%')};
-  height: ${({ isDesktop }) => (isDesktop ? 622 : 712)}px;
+  height: ${({ isDesktop }) => (isDesktop ? 669.5 : 759.5)}px;
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 6px;

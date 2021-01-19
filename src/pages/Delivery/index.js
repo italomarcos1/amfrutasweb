@@ -30,7 +30,7 @@ import {
 } from './styles';
 
 import { onlyValues } from '~/utils/onlyValues';
-import { formatPrice } from '~/utils/calculatePrice';
+import { calculateCashback, formatPrice } from '~/utils/calculatePrice';
 
 import backend from '~/services/api';
 
@@ -212,6 +212,7 @@ export default function Delivery() {
 
   const [deliveryInterval, setDeliveryInterval] = useState(-1);
   const [shippingCost, setShippingCost] = useState(0);
+  const [totalCashback, setTotalCashback] = useState(0);
 
   const [invalidDeliveryDay, setInvalidDeliveryDay] = useState(false);
   const [invalidDeliveryHour, setInvalidDeliveryHour] = useState(false);
@@ -689,6 +690,10 @@ export default function Delivery() {
     const pageIndex = 8 * (currentPage - 1);
     const newPage = cart.slice(pageIndex, pageIndex + 8);
 
+    const { formattedPrice } = calculateCashback(cart);
+
+    setTotalCashback(formattedPrice);
+
     setPaginatedProducts(newPage);
   }, [currentPage, cart]);
 
@@ -857,15 +862,19 @@ export default function Delivery() {
                 <div
                   style={
                     isDesktop
-                      ? { width: 270, height: 53 }
+                      ? { width: '80%', height: 53 }
                       : { width: '100%', height: 145, padding: 10 }
                   }
                 >
                   <strong
                     style={
                       isDesktop
-                        ? { width: 197 }
-                        : { display: 'inline-block', width: '100%', height: 32 }
+                        ? { width: '100%' }
+                        : {
+                            display: 'inline-block',
+                            width: '100%',
+                            height: 32,
+                          }
                     }
                   >
                     Selecione o melhor dia e horário para entrega
@@ -885,13 +894,13 @@ export default function Delivery() {
                   >
                     <NoTitleSelect
                       setValue={setDeliveryDay}
-                      customWidth={isDesktop ? 125 : 239}
+                      customWidth={isDesktop ? 125 : 229}
                       placeholder="Dia"
                       data={deliveryDays}
                     />
                     <NoTitleSelect
                       setValue={setDeliveryHour}
-                      customWidth={isDesktop ? 125 : 239}
+                      customWidth={isDesktop ? 125 : 229}
                       placeholder="Hora"
                       data={deliveryHours}
                     />
@@ -1303,6 +1312,12 @@ export default function Delivery() {
               <h2>€&nbsp;{price}</h2>
             </CheckoutItem>
             <CheckoutItem>
+              <h1>Cashback</h1>
+              <h2 style={{ color: '#ff9d22' }}>
+                {totalCashback === '0.00' ? '---' : `€ ${totalCashback}`}
+              </h2>
+            </CheckoutItem>
+            <CheckoutItem>
               <h1>Economizou</h1>
               <h2>
                 €&nbsp;{saved === '0.00' ? '0.00' : formatPrice(saved - price)}
@@ -1374,6 +1389,7 @@ export default function Delivery() {
               color="#1DC167"
               shadowColor="#17A75B"
               onClick={() => {
+                console.log('CLICADO');
                 setFinishingOrder(true);
                 accountButtonRef.current.click();
                 if (deliveryOption === 'delivery')

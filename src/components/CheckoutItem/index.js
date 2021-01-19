@@ -15,7 +15,7 @@ export default function Item({ item, index, isDesktop }) {
     id,
     qty,
     price,
-    product: { thumbs, title, price_promotional, has_promotion },
+    product: { thumbs, title, price_promotional, cback, has_promotion },
   } = item;
 
   return (
@@ -29,7 +29,16 @@ export default function Item({ item, index, isDesktop }) {
         <ItemPicture src={thumbs} />
         <ProductInfo>
           <Title isDesktop={isDesktop}>{title}</Title>
-          <PriceAndAmount>
+          <PriceAndAmount hasCback={!!cback}>
+            {!!cback ? (
+              cback !== '0.00' ? (
+                <b>Cashback €&nbsp;{cback}</b>
+              ) : (
+                ''
+              )
+            ) : (
+              <></>
+            )}
             <small>{qty} unidades</small>
             <strong>€&nbsp;{has_promotion ? price_promotional : price}</strong>
           </PriceAndAmount>

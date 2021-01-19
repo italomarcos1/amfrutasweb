@@ -136,6 +136,8 @@ export default function ListProducts() {
 
   useEffect(() => {
     if (products.length === 0) return;
+    if (productHeight < 290) return;
+
     let hasLastRow;
 
     if (isDesktop)
@@ -144,7 +146,9 @@ export default function ListProducts() {
     else hasLastRow = Math.ceil(products.length / 2) * (productHeight + 25);
     // console.log(products.length);
     setPageHeight(hasLastRow);
-    console.log(products.length);
+    // console.log(products.length);
+    // console.log(productHeight);
+    // console.log(hasLastRow);
   }, [isDesktop, products, productHeight]);
 
   // useEffect(() => console.log(pageHeight), [pageHeight]);

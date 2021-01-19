@@ -295,7 +295,7 @@ export default function MyAccount() {
               style={{ width: 221, marginTop: 40 }}
               type="submit"
             >
-              <b>{!!addressEdit ? 'Editar' : 'Adicionar'}</b>
+              <b>{!!addressEdit ? 'Salvar' : 'Adicionar'}</b>
             </Button>
           </InfoContainer>
         </Content>

@@ -31,7 +31,7 @@ import LoginModal from '~/pages/LoginModal';
 
 import { processOrder } from '~/store/modules/cart/actions';
 
-import { formatPrice } from '~/utils/calculatePrice';
+import { calculateCashback, formatPrice } from '~/utils/calculatePrice';
 
 import { Button, SecureLogin } from '~/components/LoginModal';
 
@@ -51,6 +51,7 @@ export default function Basket() {
   const [toastVisible, setToastVisible] = useState(false);
   const [shouldntProceed, setShouldntProceed] = useState(false);
 
+  const [totalCashback, setTotalCashback] = useState(0);
   const [shippingCost, setShippingCost] = useState(0);
   const [fixedShippingCost, setFixedShippingCost] = useState(0);
   const [minValueShipping, setMinValueShipping] = useState(0);
@@ -87,8 +88,14 @@ export default function Basket() {
   }, [price]);
 
   useEffect(() => {
+    const { formattedPrice } = calculateCashback(products);
+
+    setTotalCashback(formattedPrice);
+  }, [products]);
+
+  useEffect(() => {
     loadData();
-  }, []);
+  }, [loadData]);
 
   useEffect(() => loadShippingCost(), [loadShippingCost, price]);
 
@@ -234,6 +241,12 @@ export default function Basket() {
                 <h1>Porte</h1>
                 <h2 style={{ color: '#0CB68B' }}>
                   {shippingCost === 0 ? 'Grátis' : `€ ${shippingCost}.00`}
+                </h2>
+              </CheckoutItem>
+              <CheckoutItem>
+                <h1>Cashback</h1>
+                <h2 style={{ color: '#FF9D22' }}>
+                  {totalCashback === '0.00' ? '---' : `€ ${totalCashback}`}
                 </h2>
               </CheckoutItem>
               <CheckoutItem>

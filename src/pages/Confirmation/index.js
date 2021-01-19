@@ -68,6 +68,8 @@ export default function Confirmation() {
   const order = useSelector(state => state.user.order);
   const cart = useSelector(state => state.cart.products);
 
+  const [totalCashback, setTotalCashback] = useState(0);
+
   const [paginatedProducts, setPaginatedProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 

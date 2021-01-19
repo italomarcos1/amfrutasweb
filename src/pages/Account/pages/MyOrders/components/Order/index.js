@@ -25,7 +25,7 @@ import StatusContainer from '../StatusContainer';
 import Input from '~/components/Input';
 import ItemsList from '~/components/ItemsList';
 
-import star from '~/assets/star.svg';
+// import star from '~/assets/star.svg';
 
 import cancelado from '~/assets/orders/cancelado.svg';
 import completo from '~/assets/orders/completo.svg';
@@ -37,7 +37,7 @@ import starOn from '~/assets/orders/starOn.svg';
 import starOff from '~/assets/orders/starOff.svg';
 
 import backend from '~/services/api';
-import { calculatePrice, formatPrice } from '~/utils/calculatePrice';
+import { customCalculatePrice, formatPrice } from '~/utils/calculatePrice';
 
 import { updatePages } from '~/store/modules/cart/actions';
 
@@ -110,8 +110,7 @@ export default function Order({ order, isOpen, setOrder }) {
 
       setTransaction(data);
       setShippingAddress(data.shippingAddress);
-
-      const { formattedSavedPrice, formattedPrice } = calculatePrice(
+      const { formattedSavedPrice, formattedPrice } = customCalculatePrice(
         data.products
       );
       setPrice(formattedPrice);
@@ -267,6 +266,7 @@ export default function Order({ order, isOpen, setOrder }) {
                     <small>Crédito utilizado</small>
                     <small>Cupom de desconto</small>
                     <small>Porte</small>
+                    <small>Crédito (CashBack)</small>
                     <small style={{ fontFamily: 'SFProBold' }}>Total</small>
                   </ShippingInfo>
                   <ShippingInfo open={isOpen === id}>
@@ -290,6 +290,15 @@ export default function Order({ order, isOpen, setOrder }) {
                     <small>
                       €&nbsp;
                       {transaction.shipping}.00
+                    </small>
+                    <small
+                      style={{
+                        color: '#FF9D22',
+                        fontFamily: 'SFProBold',
+                      }}
+                    >
+                      €&nbsp;
+                      {transaction.cback_received}
                     </small>
                     <small style={{ fontFamily: 'SFProBold' }}>
                       €&nbsp;{transaction.total}

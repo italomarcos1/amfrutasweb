@@ -65,9 +65,11 @@ export default function Contents() {
 
   const loadContents = useCallback(async () => {
     if (!nameIsValid(searchInput)) return;
-
+    console.log(state.id);
     const arrayId = state.id.split('/');
+    console.log(arrayId);
     const getId = arrayId[arrayId.length - 1];
+    console.log(getId);
 
     const {
       data: {

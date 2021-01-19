@@ -210,7 +210,7 @@ export const SectionTitle = styled.div`
 
 export const CheckoutDetails = styled.div`
   width: ${({ isDesktop }) => (isDesktop ? '360px' : '100%')};
-  height: ${({ isDesktop }) => (isDesktop ? 661 : 751)}px;
+  height: ${({ isDesktop }) => (isDesktop ? 708.5 : 798.5)}px;
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 6px;

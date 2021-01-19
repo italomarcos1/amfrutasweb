@@ -88,24 +88,25 @@ export const ProductsList = styled.ul`
 
 export const TitleContainer = styled.div`
   display: flex;
-  height: ${({ isDesktop }) => (isDesktop ? 84 : 135)}px;
+  height: ${({ isDesktop }) => (isDesktop ? 124 : 185)}px;
   width: 100%;
   flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
   align-items: center;
   justify-content: space-between;
   margin-top: 17px;
+  /* background-color: #0ff; */
 `;
 
 export const Title = styled.h1`
   color: #0cb68b;
   font-family: 'SFProBold';
-  font-size: 30px;
+  font-size: ${({ isDesktop }) => (isDesktop ? 30 : 24)}px;
   line-height: ${({ isDesktop }) => (isDesktop ? 45 : 36)}px;
   padding: 0;
-  padding-right: 5px;
-  height: ${({ isDesktop }) => (isDesktop ? 54 : 74)}px;
-  width: ${({ isDesktop }) => (isDesktop ? '525px' : '100%')};
-  max-width: 300px;
+  padding-right: 2.5px;
+  height: ${({ isDesktop }) => (isDesktop ? 94 : 134)}px;
+  width: ${({ isDesktop }) => (isDesktop ? '70%' : '100%')};
+  max-width: ${({ isDesktop }) => (isDesktop ? 'none' : '300px')};
   letter-spacing: 0px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -114,7 +115,7 @@ export const Title = styled.h1`
   /* background-color: #00f; */
 
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: ${({ isDesktop }) => (isDesktop ? 2 : 3)};
   -webkit-box-orient: vertical;
 `;
 

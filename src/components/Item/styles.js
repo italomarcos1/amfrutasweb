@@ -69,7 +69,7 @@ export const PriceAndAmount = styled.div`
   justify-content: space-between;
   align-items: center;
   align-self: flex-end;
-  width: 75%;
+  width: ${({ hasCback }) => (hasCback ? '100%' : '75%')};
   margin-top: 10px;
   height: 21px;
 
@@ -91,7 +91,17 @@ export const PriceAndAmount = styled.div`
     line-height: 22px;
     letter-spacing: 0px;
     color: #393939;
+    margin-left: ${({ hasCback }) => (hasCback ? 5 : 0)}px;
     align-self: flex-end;
+  }
+
+  b {
+    font-family: 'SFPro';
+    font-size: 14px;
+    line-height: 22px;
+    letter-spacing: 0px;
+    color: #ff9d22;
+    /* background-color: #f39; */
   }
 `;
 

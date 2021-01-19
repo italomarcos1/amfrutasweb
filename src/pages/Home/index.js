@@ -75,6 +75,7 @@ export default function Home() {
   const [recommendedProducts, setRecommendedProducts] = useState([]);
   const [mostSold, setMostSold] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [minValueFreeShipping, setMinValueFreeShipping] = useState('0.00');
 
   const [whatsappNumber, setWhatsappNumber] = useState('');
 
@@ -111,6 +112,8 @@ export default function Home() {
   }, [signed]);
 
   const loadData = useCallback(async () => {
+    const keys = ['min_value_free_shipping'];
+
     const [
       categoriesResponse,
       bannersResponse,
@@ -124,13 +127,18 @@ export default function Home() {
       backend.get('/seller-points'),
       backend.get('configurations'),
     ]);
+
     const {
       data: {
-        data: { whatsapp: whatsappData },
+        data: {
+          whatsapp: whatsappData,
+          min_value_free_shipping: minValueFreeShippingData,
+        },
       },
     } = whatsappResponse;
 
     setWhatsappNumber(whatsappData);
+    setMinValueFreeShipping(minValueFreeShippingData);
 
     const {
       data: {
@@ -307,7 +315,7 @@ export default function Home() {
             <img src={envio} alt="Envio Gratuito" />
             <div>
               <strong>Envio Gratuito</strong>
-              <small>Para compras acima de € 50,00</small>
+              <small>Para compras acima de €&nbsp;{minValueFreeShipping}</small>
             </div>
           </Option>
           <Option href="#" rel="noreferrer" isDesktop={isDesktop}>

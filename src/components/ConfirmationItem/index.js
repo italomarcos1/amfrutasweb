@@ -19,7 +19,10 @@ export default function Item({ item, index, isDesktop }) {
     title,
     price_promotional,
     has_promotion,
+    cback,
   } = item;
+
+  console.log(item);
 
   return (
     <Container
@@ -32,7 +35,16 @@ export default function Item({ item, index, isDesktop }) {
         <ItemPicture src={thumbs} />
         <ProductInfo>
           <Title isDesktop={isDesktop}>{title}</Title>
-          <PriceAndAmount>
+          <PriceAndAmount hasCback={!!cback}>
+            {!!cback ? (
+              cback !== '0.00' ? (
+                <b>Cashback €&nbsp;{cback}</b>
+              ) : (
+                ''
+              )
+            ) : (
+              <></>
+            )}
             <small>{qty} unidades</small>
             <strong>€&nbsp;{has_promotion ? price_promotional : price}</strong>
           </PriceAndAmount>

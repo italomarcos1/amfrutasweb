@@ -28,7 +28,7 @@ export default function Item({ item, index, isDesktop }) {
   const {
     id,
     qty,
-    product: { thumbs, title, price, price_promotional, has_promotion },
+    product: { thumbs, title, price, price_promotional, has_promotion, cback },
   } = item;
 
   const dispatch = useDispatch();
@@ -70,7 +70,18 @@ export default function Item({ item, index, isDesktop }) {
         <ItemPicture src={thumbs} />
         <ProductInfo>
           <Title isDesktop={isDesktop}>{title}</Title>
-          <PriceAndAmount>
+          <PriceAndAmount hasCback={!!cback}>
+            {!!cback ? (
+              cback !== '0.00' ? (
+                <b style={isDesktop ? { fontSize: 15 } : { fontSize: 13 }}>
+                  Cashback €&nbsp;{cback}
+                </b>
+              ) : (
+                ''
+              )
+            ) : (
+              <></>
+            )}
             {has_promotion ? (
               <small>€&nbsp;{price}</small>
             ) : (
