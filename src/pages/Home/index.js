@@ -274,8 +274,8 @@ export default function Home() {
       console.log(differenceInMinutes(currentDate, parseISO(ttl)));
 
       // if (!(differenceInHours(currentDate, parseISO(ttl)) > 23)) {
+      setRecommendedProducts(products);
       if (!(differenceInMinutes(currentDate, parseISO(ttl)) > 1)) {
-        setRecommendedProducts(products);
         setLoading(false);
 
         return;
