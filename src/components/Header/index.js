@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useScrollYPosition } from 'react-use-scroll-position';
 import { useMediaQuery } from 'react-responsive';
+import { differenceInHours, differenceInMinutes, parseISO } from 'date-fns';
 
 import { useSelector } from 'react-redux';
 
@@ -66,6 +67,8 @@ export default function PageHeader({ login, active }) {
   const loadMenu = useCallback(async () => {
     const keys = ['alert_message'];
 
+    console.log('req');
+
     const [links, alertMessage] = await Promise.all([
       backend.get('/menus/links/3'),
       backend.get('configurations', { keys }),
@@ -83,10 +86,32 @@ export default function PageHeader({ login, active }) {
 
     data.splice(0, 1);
     setMenuItems(data);
+    const menuDataWithTtl = { ttl: new Date(), data };
+
+    localStorage.setItem('@AMFrutas:Menu', JSON.stringify(menuDataWithTtl));
+
     setLoading(false);
   }, []);
 
-  useEffect(() => loadMenu(), []);
+  useEffect(() => {
+    const hasMenuData = localStorage.getItem('@AMFrutas:Menu');
+    if (!!hasMenuData) {
+      const { ttl, data } = JSON.parse(hasMenuData);
+
+      const currentDate = new Date();
+      console.log(parseISO(ttl));
+      console.log(currentDate);
+      console.log(differenceInMinutes(currentDate, parseISO(ttl)));
+
+      // if (!(differenceInHours(currentDate, parseISO(ttl)) > 23)) {
+      if (!(differenceInMinutes(currentDate, parseISO(ttl)) > 1)) {
+        setMenuItems(data);
+        setLoading(false);
+        return;
+      }
+    }
+    loadMenu();
+  }, [loadMenu]);
 
   useEffect(() => {
     if (scrollY >= 71) {
@@ -95,6 +120,10 @@ export default function PageHeader({ login, active }) {
       setHeaderFixed(false);
     }
   }, [scrollY]);
+
+  useEffect(() => {
+    console.log(menuItems);
+  }, [menuItems]);
 
   return (
     <>

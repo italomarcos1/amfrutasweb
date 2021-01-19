@@ -251,7 +251,7 @@ export default function Home() {
     loadData();
     loadRecommendedProducts();
     setLoading(false);
-  }, []);
+  }, [loadRecommendedProducts, loadData]);
 
   useEffect(() => {
     if (!uuid) dispatch(generateUuid());
