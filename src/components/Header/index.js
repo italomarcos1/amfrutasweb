@@ -107,6 +107,7 @@ export default function PageHeader({ login, active }) {
       if (!(differenceInMinutes(currentDate, parseISO(ttl)) > 1)) {
         setMenuItems(data);
         setLoading(false);
+
         return;
       }
     }

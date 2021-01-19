@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
+import { differenceInHours, differenceInMinutes, parseISO } from 'date-fns';
 
 import {
   Container,
@@ -229,26 +230,57 @@ export default function Home() {
       },
     } = mostSoldResponse;
 
-    setRecommendedProducts(
-      isDesktop
-        ? recommendedData
-        : [
-            recommendedData[0],
-            recommendedData[1],
-            recommendedData[2],
-            recommendedData[3],
-          ]
-    );
+    const formattedProducts = isDesktop
+      ? recommendedData
+      : [
+          recommendedData[0],
+          recommendedData[1],
+          recommendedData[2],
+          recommendedData[3],
+        ];
+
+    setRecommendedProducts(formattedProducts);
     setMostSold(
       isDesktop
         ? mostSoldData
         : [mostSoldData[0], mostSoldData[1], mostSoldData[2], mostSoldData[3]]
+    );
+
+    const productsDataWithTtl = {
+      ttl: new Date(),
+      products: formattedProducts,
+    };
+
+    localStorage.setItem(
+      '@AMFrutas:ProdutosRecomendados',
+      JSON.stringify(productsDataWithTtl)
     );
   }, []);
 
   useEffect(() => {
     setLoading(true);
     loadData();
+
+    const hasRecommendedProducts = localStorage.getItem(
+      '@AMFrutas:ProdutosRecomendados'
+    );
+
+    if (!!hasRecommendedProducts) {
+      const { ttl, products } = JSON.parse(hasRecommendedProducts);
+
+      const currentDate = new Date();
+      console.log(parseISO(ttl));
+      console.log(currentDate);
+      console.log(differenceInMinutes(currentDate, parseISO(ttl)));
+
+      // if (!(differenceInHours(currentDate, parseISO(ttl)) > 23)) {
+      if (!(differenceInMinutes(currentDate, parseISO(ttl)) > 1)) {
+        setRecommendedProducts(products);
+        setLoading(false);
+
+        return;
+      }
+    }
     loadRecommendedProducts();
     setLoading(false);
   }, [loadRecommendedProducts, loadData]);
