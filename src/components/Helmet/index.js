@@ -26,7 +26,7 @@ export default function CustomHelmet() {
 
       const {
         data: { data: scriptResponse },
-      } = await backend.get('configurations', { keys });
+      } = await backend.get(`configurations?keys=${keys.join()}`);
 
       const {
         data: { data },
@@ -36,16 +36,12 @@ export default function CustomHelmet() {
 
       const formattedData = Object.entries(data);
 
-      setMetaData(formattedData);
-      console.log(formattedData);
-      const findIndex = formattedData.findIndex(el => el[0] === 'page_image');
       const filterProperties = formattedData.filter(
         el =>
           el[0] === 'page_image' ||
           el[0] === 'page_title' ||
           el[0] === 'page_description'
       );
-      console.log(filterProperties);
 
       const formatFilterProperties = filterProperties.map(el => {
         const value = [...el[0]];
@@ -53,13 +49,16 @@ export default function CustomHelmet() {
         return [value.join(''), el[1]];
       });
 
-      console.log(formatFilterProperties);
       setMetaProperties(formatFilterProperties);
 
+      const findIndex = formattedData.findIndex(el => el[0] === 'page_image');
       if (findIndex > -1) {
         formattedData.push(['og:image', formattedData[findIndex][1]]);
         formattedData.push(['image', formattedData[findIndex][1]]);
       }
+
+      setMetaData(formattedData);
+
       setTitle(`AM Frutas | ${formattedData[1][1]}`);
     } catch {
       console.log('erro no request de script');

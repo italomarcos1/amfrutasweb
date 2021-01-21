@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useScrollYPosition } from 'react-use-scroll-position';
 import { useMediaQuery } from 'react-responsive';
-import { differenceInHours, differenceInMinutes, parseISO } from 'date-fns';
 
 import { useSelector } from 'react-redux';
 
@@ -20,8 +19,6 @@ import {
   BadgeContainer,
   SubTitle,
   GoToCartContainer,
-  Background,
-  MenuMobile,
 } from './styles';
 
 import Logo from '~/assets/amfrutas-top.svg';
@@ -52,37 +49,41 @@ export default function PageHeader({ login, active }) {
   const scrollY = useScrollYPosition();
 
   const [headerFixed, setHeaderFixed] = useState(false);
-  const [headerAlertMessage, setHeaderAlertMessage] = useState(
-    'Bem-vindo ao AM Frutas'
-  );
 
   const loadMenu = useCallback(async () => {
-    const keys = ['alert_message'];
-
-    console.log('req');
-
-    const [links, alertMessage] = await Promise.all([
-      backend.get('/menus/links/3'),
-      backend.get('configurations', { keys }),
-    ]);
-
     const {
-      data: { data },
-    } = links;
+      data: { data: menuData },
+    } = await backend.get('/menus/links/3');
 
+    menuData.splice(0, 1);
+
+    return menuData;
+  }, []);
+
+  const loadAlert = useCallback(async () => {
     const {
-      data: { data: alert },
-    } = alertMessage;
+      data: {
+        data: { alert_message: alert },
+      },
+    } = await backend.get('configurations?keys=alert_message');
 
-    setHeaderAlertMessage(alert.alert_message);
-
-    data.splice(0, 1);
-    return data;
+    return alert;
   }, []);
 
   const { data: menuItems, isLoading: loading } = useQuery(
     'headerMenu',
-    loadMenu
+    loadMenu,
+    {
+      staleTime: 1000 * 60 * 60 * 24, // 24 hours
+    }
+  );
+
+  const { data: alert, isLoading: alertLoading } = useQuery(
+    'alertMessage',
+    loadAlert,
+    {
+      staleTime: 1000 * 60 * 60 * 10, // 10 hours
+    }
   );
 
   useEffect(() => {
@@ -92,10 +93,6 @@ export default function PageHeader({ login, active }) {
       setHeaderFixed(false);
     }
   }, [scrollY]);
-
-  useEffect(() => {
-    console.log(menuItems);
-  }, [menuItems]);
 
   return (
     <>
@@ -206,7 +203,7 @@ export default function PageHeader({ login, active }) {
         isDesktop={isDesktop}
         style={headerFixed ? { position: 'fixed', top: 41 } : {}}
       >
-        {headerAlertMessage}
+        {!alertLoading && alert}
       </SubTitle>
     </>
   );

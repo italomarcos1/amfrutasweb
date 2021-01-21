@@ -10,31 +10,6 @@ export const Header = styled.div`
   z-index: 999;
 `;
 
-export const Background = styled.button.attrs({
-  type: 'button',
-})`
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-  z-index: 999;
-  position: fixed;
-  top: 0;
-`;
-
-export const MenuMobile = styled.div`
-  width: 80%;
-  height: 100%;
-  background-color: #0cb68b;
-  z-index: 999;
-  position: fixed;
-  top: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 10px;
-`;
-
 export const HeaderContent = styled.div`
   display: flex;
   align-items: center;

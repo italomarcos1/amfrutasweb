@@ -44,7 +44,7 @@ import backend from '~/services/api';
 
 import envio from '~/assets/envio-gratuito.svg';
 import cashback from '~/assets/cashback.svg';
-import whatsapp from '~/assets/whatsapp_green.svg';
+import whatsappGreen from '~/assets/whatsapp_green.svg';
 import appStore from '~/assets/appStore.svg';
 import playStore from '~/assets/playStore.svg';
 
@@ -71,11 +71,7 @@ export default function Home() {
     false,
     false,
   ]);
-  const [bannersURL, setBannersURL] = useState([]);
   // const [recommendedProducts, setRecommendedProducts] = useState([]);
-  const [minValueFreeShipping, setMinValueFreeShipping] = useState('0.00');
-
-  const [whatsappNumber, setWhatsappNumber] = useState('');
 
   const signed = useSelector(state => state.auth.signed);
   const profile = useSelector(state => state.user.profile);
@@ -107,69 +103,55 @@ export default function Home() {
     }
   }, [signed]);
 
-  const loadData = useCallback(async () => {
-    const keys = ['min_value_free_shipping'];
-
-    const [bannersResponse, whatsappResponse] = await Promise.all([
-      backend.get('/banner/blocks'),
-      backend.get('configurations'),
-    ]);
-
+  const loadWhatsappAndShipping = useCallback(async () => {
+    const keys = ['whatsapp', 'min_value_free_shipping'];
     const {
-      data: {
-        data: {
-          whatsapp: whatsappData,
-          min_value_free_shipping: minValueFreeShippingData,
-        },
-      },
-    } = whatsappResponse;
+      data: { data },
+    } = await backend.get(`configurations?keys=${keys.join()}`);
 
-    setWhatsappNumber(whatsappData);
-    setMinValueFreeShipping(minValueFreeShippingData);
+    console.log(data);
 
+    return data;
+  }, []);
+
+  const loadBanners = useCallback(async () => {
     const {
       data: {
         meta: { message },
       },
-    } = bannersResponse;
+    } = await backend.get('/banner/blocks');
 
-    message.forEach(({ hash }) =>
-      backend.get(`/banner/${hash}`).then(({ data: { data: { banners } } }) =>
-        setBannersURL(banners)
-      )
-    );
+    console.log(message);
 
-    const configurationsWithTtl = {
-      ttl: new Date(),
-      whatsapp: whatsappData,
-      minFreeShipping: minValueFreeShippingData,
-    };
+    const {
+      data: {
+        data: { banners },
+      },
+    } = await backend.get(`/banner/${message[0].hash}`);
 
-    localStorage.setItem(
-      '@AMFrutas:Config',
-      JSON.stringify(configurationsWithTtl)
-    );
+    console.log('currentBanners');
+    console.log(banners);
+
+    return banners;
   }, []);
 
   const loadSellerPoints = useCallback(async () => {
     const {
-      data: {
-        data: { data },
-      },
+      data: { data },
     } = await backend.get('/seller-points');
 
+    console.log(data);
     return data;
   }, []);
 
   const loadBlog = useCallback(async () => {
     const {
       data: {
-        data: {
-          data: { data },
-        },
+        data: { data },
       },
     } = await backend.get('/blog/contents/categories/5?per_page=4');
 
+    console.log(data);
     return data;
   }, []);
 
@@ -300,42 +282,71 @@ export default function Home() {
     [email, birthday, invalidFields]
   );
 
-  const { data: recommendedProducts, isLoading, error } = useQuery(
+  const { data: recommendedProducts, isLoading } = useQuery(
     'recommendedProducts',
-    loadRecommendedProducts
+    loadRecommendedProducts,
+    {
+      staleTime: 1000 * 60 * 20,
+    }
   );
 
   const { data: sellerPoints, isLoading: sellerIsLoading } = useQuery(
     'sellerPoints',
-    loadSellerPoints
+    loadSellerPoints,
+    {
+      staleTime: 1000 * 60 * 60 * 24 * 5, // 120 hours | 5 days
+    }
   );
 
-  const {
-    data: blogData,
-    isLoading: blogIsLoading,
-    error: blogError,
-  } = useQuery('blogData', loadBlog);
+  const { data: blogData, isLoading: blogIsLoading } = useQuery(
+    'blogData',
+    loadBlog,
+    {
+      staleTime: 1000 * 60 * 60 * 12, // 12 hours
+    }
+  );
 
   const { data: mostSold, isLoading: mostSoldIsLoading } = useQuery(
     'mostSold',
-    loadMostSold
+    loadMostSold,
+    {
+      staleTime: 1000 * 60 * 60, // 1 hour
+    }
   );
+
   const { data: categories, isLoading: categoriesIsLoading } = useQuery(
     'categories',
-    loadCategories
+    loadCategories,
+    {
+      staleTime: 1000 * 60 * 60 * 24 * 3, // 72 hours | 3 days
+    }
+  );
+
+  const { data: banners, isLoading: bannerIsLoading } = useQuery(
+    'banners',
+    loadBanners
+  );
+
+  const { data, isLoading: menuLoading } = useQuery(
+    'whatsappAndShipping',
+    loadWhatsappAndShipping
   );
 
   return (
     <>
       <Header login={() => setLoginModal(true)} />
       <Container onSubmit={handleSubmit} ref={formRef}>
-        {isDesktop && <SlideShow data={bannersURL} />}
+        {!bannerIsLoading && isDesktop && <SlideShow data={banners} />}
         <OptionsContainer isDesktop={isDesktop}>
           <Option href="#" rel="noreferrer" isDesktop={isDesktop}>
             <img src={envio} alt="Envio Gratuito" />
             <div>
               <strong>Envio Gratuito</strong>
-              <small>Para compras acima de €&nbsp;{minValueFreeShipping}</small>
+              {!menuLoading && (
+                <small>
+                  Para compras acima de €&nbsp;{data.min_value_free_shipping}
+                </small>
+              )}
             </div>
           </Option>
           <Option href="#" rel="noreferrer" isDesktop={isDesktop}>
@@ -346,12 +357,14 @@ export default function Home() {
             </div>
           </Option>
           <Option
-            href={`https://api.whatsapp.com/send?phone=351${whatsappNumber}`}
+            href={`https://api.whatsapp.com/send?phone=351${
+              menuLoading ? '' : data.whatsapp
+            }`}
             rel="noreferrer"
             isDesktop={isDesktop}
             target="_blank"
           >
-            <img src={whatsapp} alt="WhatsApp" />
+            <img src={whatsappGreen} alt="WhatsApp" />
             <div>
               <strong>Atendimento</strong>
               <small>Dúvidas online no WhatsApp</small>
@@ -422,9 +435,51 @@ export default function Home() {
           </StoreButtonContainer>
         </SecurityContainer>
 
+        <Section isDesktop={isDesktop}>
+          {!sellerIsLoading &&
+            sellerPoints.map(seller => (
+              <Location key={seller.id} isDesktop={isDesktop}>
+                <h1>{seller.name}</h1>
+                <p>{seller.address}</p>
+                <p>
+                  {seller.phone}
+                  <br />
+                  {seller.whatsapp}
+                  <small>&nbsp;Whatsapp</small>
+                </p>
+                <p>
+                  {seller.timetable_line1}
+                  <br />
+                  {seller.timetable_line2}
+                </p>
+                <p>{seller.email}</p>
+                <a href={seller.location} target="_blank" rel="noreferrer">
+                  <strong>Localização</strong>
+                </a>
+              </Location>
+            ))}
+        </Section>
+
         {!categoriesIsLoading && (
           <CategoriesCarousel categories={categories} isDesktop={isDesktop} />
         )}
+
+        <BlogsCarousel isDesktop={isDesktop}>
+          {!blogIsLoading &&
+            blogData.map(post => (
+              <BlogPost
+                key={post.id}
+                to={{
+                  pathname: `/${post.url}`,
+                  state: { id: post.id },
+                }}
+              >
+                <img src={post.thumbs} alt="" />
+                <strong>{post.title}</strong>
+                <small>{post.description}</small>
+              </BlogPost>
+            ))}
+        </BlogsCarousel>
 
         <Promotions>Receba promoções exclusivas</Promotions>
         <PromotionsSubTitle>
