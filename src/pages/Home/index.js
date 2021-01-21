@@ -324,12 +324,18 @@ export default function Home() {
 
   const { data: banners, isLoading: bannerIsLoading } = useQuery(
     'banners',
-    loadBanners
+    loadBanners,
+    {
+      staleTime: 1000 * 60 * 60 * 10,
+    }
   );
 
   const { data, isLoading: menuLoading } = useQuery(
     'whatsappAndShipping',
-    loadWhatsappAndShipping
+    loadWhatsappAndShipping,
+    {
+      staleTime: 1000 * 60 * 60 * 10,
+    }
   );
 
   return (
