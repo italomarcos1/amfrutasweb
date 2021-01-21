@@ -4,6 +4,7 @@ import { useMediaQuery } from 'react-responsive';
 
 import { FaSpinner } from 'react-icons/fa';
 
+import { useQuery } from 'react-query';
 import { Container, NullProduct, LoadingContainer } from './styles';
 
 import Product from '~/components/Product';
@@ -20,9 +21,6 @@ export default function ListProducts() {
 
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [lastPage, setLastPage] = useState(0);
-  const [prevPageUrl, setPrevPageUrl] = useState('');
-  const [nextPageUrl, setNextPageUrl] = useState('');
   const [pageHeight, setPageHeight] = useState(1184);
   const [productHeight, setProductHeight] = useState('');
   const [paginationArray, setPaginationArray] = useState([]);
@@ -33,7 +31,7 @@ export default function ListProducts() {
 
   const [perPage, setPerPage] = useState(() => (isDesktop ? 15 : 16));
 
-  const generatePaginationArray = useCallback(() => {
+  const generatePaginationArray = useCallback(lastPage => {
     const items = [];
 
     for (let i = 0; i < lastPage; i += 1) {
@@ -41,18 +39,16 @@ export default function ListProducts() {
     }
 
     setPaginationArray(items);
-  }, [lastPage]);
+  }, []);
 
   const loadProducts = useCallback(async () => {
-    if (!nameIsValid(searchInput)) return;
-
     const productsResponse = await backend.get(
       `ecommerce/products?page=${currentPage}&special_order=${field}&per_page=${perPage}`
     );
 
     const {
       data: {
-        data: { data, current_page, last_page, next_page_url, prev_page_url },
+        data: { data, current_page, last_page },
       },
     } = productsResponse;
 
@@ -72,11 +68,16 @@ export default function ListProducts() {
       }
     }
 
-    setProducts(data);
-    setCurrentPage(current_page);
-    setLastPage(last_page);
-    setNextPageUrl(next_page_url);
-  }, [currentPage, field, searchInput, isDesktop, perPage]);
+    generatePaginationArray(last_page);
+
+    const productsData = {
+      products: data,
+      currentPage: current_page,
+      lastPage: last_page,
+    };
+
+    return productsData;
+  }, [currentPage, field, generatePaginationArray, isDesktop, perPage]);
 
   const searchProduct = useCallback(async () => {
     try {
@@ -101,7 +102,7 @@ export default function ListProducts() {
 
       const {
         data: {
-          data: { data, current_page, last_page, next_page_url, prev_page_url },
+          data: { data, current_page, last_page },
         },
       } = productsResponse;
 
@@ -124,15 +125,20 @@ export default function ListProducts() {
       setProducts(data);
       setCurrentPage(current_page);
 
-      setLastPage(last_page);
-      setNextPageUrl(next_page_url);
-      setPrevPageUrl(prev_page_url);
+      generatePaginationArray(last_page);
       setLoading(false);
     } catch {
       setLoading(false);
       alert('Erro');
     }
-  }, [currentPage, field, searchInput, isDesktop, perPage]);
+  }, [
+    currentPage,
+    generatePaginationArray,
+    field,
+    searchInput,
+    isDesktop,
+    perPage,
+  ]);
 
   useEffect(() => {
     if (products.length === 0) return;
@@ -155,12 +161,7 @@ export default function ListProducts() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    setLoading(true);
-
-    loadProducts();
-    generatePaginationArray();
-    setLoading(false);
-  }, [loadProducts, generatePaginationArray, currentPage, field]);
+  }, []);
 
   useEffect(() => {
     setNoProductsFound(false);
@@ -169,19 +170,41 @@ export default function ListProducts() {
     return () => clearTimeout(timer);
   }, [searchInput, searchProduct]);
 
+  const { data, isLoading, status, isError } = useQuery(
+    ['products', currentPage, field, perPage],
+    loadProducts,
+    {
+      staleTime: 1000 * 60 * 60 * 24,
+      cacheTime: 1000 * 60,
+    }
+  );
+
+  useEffect(() => {
+    if (isLoading || isError || paginationArray.length !== 0) return;
+
+    generatePaginationArray(data.lastPage);
+    console.log(paginationArray);
+  }, [isLoading, paginationArray, isError, generatePaginationArray, data]);
+
+  useEffect(() => {
+    console.log(isLoading);
+  }, [isLoading]);
+
   return (
     <>
-      <CustomHeader
-        currentPage={currentPage}
-        lastPage={lastPage}
-        setCurrentPage={setCurrentPage}
-        paginationArray={paginationArray}
-        setField={setField}
-        inputValue={searchInput}
-        setInputValue={setSearchInput}
-      />
+      {!isLoading && (
+        <CustomHeader
+          currentPage={currentPage}
+          lastPage={data.lastPage}
+          setCurrentPage={setCurrentPage}
+          paginationArray={paginationArray}
+          setField={setField}
+          inputValue={searchInput}
+          setInputValue={setSearchInput}
+        />
+      )}
       <Container pageHeight={pageHeight} isDesktop={isDesktop}>
-        {loading ? (
+        {isLoading ? (
           <LoadingContainer isDesktop={isDesktop}>
             <FaSpinner color="#666" size={42} />
             <strong>Carregando os produtos, aguarde...</strong>
@@ -194,7 +217,8 @@ export default function ListProducts() {
             </strong>
           </LoadingContainer>
         ) : (
-          products.map((p, index) =>
+          status === 'success' &&
+          data.products.map((p, index) =>
             p === null ? (
               <NullProduct isDesktop={isDesktop} />
             ) : (
@@ -209,13 +233,15 @@ export default function ListProducts() {
         )}
       </Container>
       <FooterPagination isDesktop={isDesktop}>
-        <Pagination
-          currentPage={currentPage}
-          lastPage={lastPage}
-          setCurrentPage={setCurrentPage}
-          paginationArray={paginationArray}
-          isDesktop={isDesktop}
-        />
+        {!isLoading && (
+          <Pagination
+            currentPage={currentPage}
+            lastPage={data.lastPage}
+            setCurrentPage={setCurrentPage}
+            paginationArray={paginationArray}
+            isDesktop={isDesktop}
+          />
+        )}
       </FooterPagination>
     </>
   );

@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import { FaSpinner } from 'react-icons/fa';
 
-import { useQueries, useQuery } from 'react-query';
+import { useQuery } from 'react-query';
 import {
   ProductsContainer,
   NullProduct,
@@ -175,7 +175,7 @@ export default function Promotions() {
     window.scrollTo(0, 0);
   }, []);
 
-  const { data, isLoading, status, isError } = useQuery(
+  const { data, isLoading, isError } = useQuery(
     ['promotions', currentPage, field, perPage],
     loadProducts,
     {
@@ -201,11 +201,6 @@ export default function Promotions() {
 
     return () => clearTimeout(timer);
   }, [searchInput, searchProduct]);
-
-  useEffect(() => {
-    console.log(isError);
-    console.log(status);
-  }, [status, isError]);
 
   return (
     <>
