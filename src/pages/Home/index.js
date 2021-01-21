@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
-import { differenceInHours, differenceInMinutes, parseISO } from 'date-fns';
+import { differenceInMinutes, parseISO } from 'date-fns';
+import { useQuery } from 'react-query';
 
 import {
   Container,
@@ -71,16 +72,10 @@ export default function Home() {
     false,
   ]);
   const [bannersURL, setBannersURL] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [blogData, setBlogData] = useState([]);
-  const [recommendedProducts, setRecommendedProducts] = useState([]);
-  const [mostSold, setMostSold] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [recommendedProducts, setRecommendedProducts] = useState([]);
   const [minValueFreeShipping, setMinValueFreeShipping] = useState('0.00');
 
   const [whatsappNumber, setWhatsappNumber] = useState('');
-
-  const [sellerPoints, setSellerPoints] = useState([null, null, null]);
 
   const signed = useSelector(state => state.auth.signed);
   const profile = useSelector(state => state.user.profile);
@@ -115,17 +110,8 @@ export default function Home() {
   const loadData = useCallback(async () => {
     const keys = ['min_value_free_shipping'];
 
-    const [
-      categoriesResponse,
-      bannersResponse,
-      blogResponse,
-      seller,
-      whatsappResponse,
-    ] = await Promise.all([
-      backend.get('ecommerce/categories'),
+    const [bannersResponse, whatsappResponse] = await Promise.all([
       backend.get('/banner/blocks'),
-      backend.get('/blog/contents/categories/5?per_page=4'),
-      backend.get('/seller-points'),
       backend.get('configurations'),
     ]);
 
@@ -143,14 +129,6 @@ export default function Home() {
 
     const {
       data: {
-        data: { data },
-      },
-    } = categoriesResponse;
-
-    setCategories(data);
-
-    const {
-      data: {
         meta: { message },
       },
     } = bannersResponse;
@@ -161,74 +139,72 @@ export default function Home() {
       )
     );
 
+    const configurationsWithTtl = {
+      ttl: new Date(),
+      whatsapp: whatsappData,
+      minFreeShipping: minValueFreeShippingData,
+    };
+
+    localStorage.setItem(
+      '@AMFrutas:Config',
+      JSON.stringify(configurationsWithTtl)
+    );
+  }, []);
+
+  const loadSellerPoints = useCallback(async () => {
     const {
       data: {
-        data: { data: blogResponseData },
+        data: { data },
       },
-    } = blogResponse;
+    } = await backend.get('/seller-points');
 
-    setBlogData(blogResponseData);
+    return data;
+  }, []);
 
+  const loadBlog = useCallback(async () => {
     const {
-      data: { data: sellerData },
-    } = seller;
+      data: {
+        data: {
+          data: { data },
+        },
+      },
+    } = await backend.get('/blog/contents/categories/5?per_page=4');
 
-    setSellerPoints(sellerData);
+    return data;
+  }, []);
+
+  const loadCategories = useCallback(async () => {
+    const {
+      data: {
+        data: { data },
+      },
+    } = await backend.get('ecommerce/categories');
+
+    return data;
   }, []);
 
   const loadRecommendedProducts = useCallback(async () => {
-    const [recommendedIndex, mostSoldIndex] = await Promise.all([
-      backend.get(
-        '/ecommerce/products?page=1&per_page=6&special_order=most_viewed'
-      ),
-      backend.get(
-        '/ecommerce/products?page=1&per_page=6&special_order=most_selled'
-      ),
-    ]);
-
     const {
       data: {
         data: { last_page: lastPageRecommended },
       },
-    } = recommendedIndex;
-
-    const {
-      data: {
-        data: { last_page: lastPageMostSold },
-      },
-    } = mostSoldIndex;
+    } = await backend.get(
+      '/ecommerce/products?page=1&per_page=6&special_order=most_viewed'
+    );
 
     let index = 0;
-    let index2 = 0;
 
     do {
       index = Math.floor(Math.random() * 10);
     } while (index > lastPageRecommended);
-    do {
-      index2 = Math.floor(Math.random() * 10);
-    } while (index2 > lastPageMostSold);
-
-    const [recommendedResponse, mostSoldResponse] = await Promise.all([
-      backend.get(
-        `/ecommerce/products?page=${index}&per_page=6&special_order=most_viewed`
-      ),
-
-      backend.get(
-        `/ecommerce/products?page=${index2}&per_page=6&special_order=most_selled`
-      ),
-    ]);
 
     const {
       data: {
         data: { data: recommendedData },
       },
-    } = recommendedResponse;
-
-    const {
-      data: {
-        data: { data: mostSoldData },
-      },
-    } = mostSoldResponse;
+    } = await backend.get(
+      `/ecommerce/products?page=${index}&per_page=6&special_order=most_viewed`
+    );
 
     const formattedProducts = isDesktop
       ? recommendedData
@@ -239,51 +215,38 @@ export default function Home() {
           recommendedData[3],
         ];
 
-    setRecommendedProducts(formattedProducts);
-    setMostSold(
-      isDesktop
-        ? mostSoldData
-        : [mostSoldData[0], mostSoldData[1], mostSoldData[2], mostSoldData[3]]
+    return formattedProducts;
+  }, [isDesktop]);
+
+  const loadMostSold = useCallback(async () => {
+    const {
+      data: {
+        data: { last_page: lastPageMostSold },
+      },
+    } = await backend.get(
+      '/ecommerce/products?page=1&per_page=6&special_order=most_selled'
     );
 
-    const productsDataWithTtl = {
-      ttl: new Date(),
-      products: formattedProducts,
-    };
+    let index = 0;
 
-    localStorage.setItem(
-      '@AMFrutas:ProdutosRecomendados',
-      JSON.stringify(productsDataWithTtl)
-    );
-  }, []);
+    do {
+      index = Math.floor(Math.random() * 10);
+    } while (index > lastPageMostSold);
 
-  useEffect(() => {
-    setLoading(true);
-    loadData();
-
-    const hasRecommendedProducts = localStorage.getItem(
-      '@AMFrutas:ProdutosRecomendados'
+    const {
+      data: {
+        data: { data: mostSoldData },
+      },
+    } = await backend.get(
+      `/ecommerce/products?page=${index}&per_page=6&special_order=most_selled`
     );
 
-    if (!!hasRecommendedProducts) {
-      const { ttl, products } = JSON.parse(hasRecommendedProducts);
+    const formattedMostSold = isDesktop
+      ? mostSoldData
+      : [mostSoldData[0], mostSoldData[1], mostSoldData[2], mostSoldData[3]];
 
-      const currentDate = new Date();
-      console.log(parseISO(ttl));
-      console.log(currentDate);
-      console.log(differenceInMinutes(currentDate, parseISO(ttl)));
-
-      // if (!(differenceInHours(currentDate, parseISO(ttl)) > 23)) {
-      setRecommendedProducts(products);
-      if (!(differenceInMinutes(currentDate, parseISO(ttl)) > 1)) {
-        setLoading(false);
-
-        return;
-      }
-    }
-    loadRecommendedProducts();
-    setLoading(false);
-  }, [loadRecommendedProducts, loadData]);
+    return formattedMostSold;
+  }, [isDesktop]);
 
   useEffect(() => {
     if (!uuid) dispatch(generateUuid());
@@ -337,6 +300,31 @@ export default function Home() {
     [email, birthday, invalidFields]
   );
 
+  const { data: recommendedProducts, isLoading, error } = useQuery(
+    'recommendedProducts',
+    loadRecommendedProducts
+  );
+
+  const { data: sellerPoints, isLoading: sellerIsLoading } = useQuery(
+    'sellerPoints',
+    loadSellerPoints
+  );
+
+  const {
+    data: blogData,
+    isLoading: blogIsLoading,
+    error: blogError,
+  } = useQuery('blogData', loadBlog);
+
+  const { data: mostSold, isLoading: mostSoldIsLoading } = useQuery(
+    'mostSold',
+    loadMostSold
+  );
+  const { data: categories, isLoading: categoriesIsLoading } = useQuery(
+    'categories',
+    loadCategories
+  );
+
   return (
     <>
       <Header login={() => setLoginModal(true)} />
@@ -375,7 +363,7 @@ export default function Home() {
           <small>Uma seleção especial com a qualidade garantida</small>
         </SectionTitle>
         <ProductsContainer isDesktop={isDesktop} id="productsContainer">
-          {loading ? (
+          {isLoading ? (
             <h1>Carregando...</h1>
           ) : (
             recommendedProducts.map((p, index) => (
@@ -398,7 +386,7 @@ export default function Home() {
           <small>Conheça os produtos mais vendidos todos os dias</small>
         </SectionTitle>
         <ProductsContainer isDesktop={isDesktop}>
-          {loading ? (
+          {mostSoldIsLoading ? (
             <h1>Carregando...</h1>
           ) : (
             mostSold.map((p, index) => (
@@ -433,49 +421,11 @@ export default function Home() {
             </StoreButton>
           </StoreButtonContainer>
         </SecurityContainer>
-        <Section isDesktop={isDesktop}>
-          {sellerPoints.map(seller =>
-            seller === null ? (
-              <NullLocation isDesktop={isDesktop} />
-            ) : (
-              <Location key={seller.id} isDesktop={isDesktop}>
-                <h1>{seller.name}</h1>
-                <p>{seller.address}</p>
-                <p>
-                  {seller.phone}
-                  <br />
-                  {seller.whatsapp}
-                  <small>&nbsp;Whatsapp</small>
-                </p>
-                <p>
-                  {seller.timetable_line1}
-                  <br />
-                  {seller.timetable_line2}
-                </p>
-                <p>{seller.email}</p>
-                <a href={seller.location} target="_blank" rel="noreferrer">
-                  <strong>Localização</strong>
-                </a>
-              </Location>
-            )
-          )}
-        </Section>
-        <CategoriesCarousel categories={categories} isDesktop={isDesktop} />
-        <BlogsCarousel isDesktop={isDesktop}>
-          {blogData.map(post => (
-            <BlogPost
-              key={post.id}
-              to={{
-                pathname: `/${post.url}`,
-                state: { id: post.id },
-              }}
-            >
-              <img src={post.thumbs} alt="" />
-              <strong>{post.title}</strong>
-              <small>{post.description}</small>
-            </BlogPost>
-          ))}
-        </BlogsCarousel>
+
+        {!categoriesIsLoading && (
+          <CategoriesCarousel categories={categories} isDesktop={isDesktop} />
+        )}
+
         <Promotions>Receba promoções exclusivas</Promotions>
         <PromotionsSubTitle>
           Deixe o seu e-mail e receba promoções e{isDesktop ? ' ' : <br />}

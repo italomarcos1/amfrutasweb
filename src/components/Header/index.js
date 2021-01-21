@@ -7,6 +7,7 @@ import { differenceInHours, differenceInMinutes, parseISO } from 'date-fns';
 
 import { useSelector } from 'react-redux';
 
+import { useQuery } from 'react-query';
 import {
   Header,
   HeaderContent,
@@ -51,18 +52,9 @@ export default function PageHeader({ login, active }) {
   const scrollY = useScrollYPosition();
 
   const [headerFixed, setHeaderFixed] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [headerAlertMessage, setHeaderAlertMessage] = useState(
     'Bem-vindo ao AM Frutas'
   );
-
-  const [menuItems, setMenuItems] = useState([
-    'Lojas e Contatos',
-    'Produtos',
-    'Promoções da Semana',
-    'Informações',
-    'Dicas e Receitas',
-  ]);
 
   const loadMenu = useCallback(async () => {
     const keys = ['alert_message'];
@@ -85,34 +77,13 @@ export default function PageHeader({ login, active }) {
     setHeaderAlertMessage(alert.alert_message);
 
     data.splice(0, 1);
-    setMenuItems(data);
-    const menuDataWithTtl = { ttl: new Date(), data };
-
-    localStorage.setItem('@AMFrutas:Menu', JSON.stringify(menuDataWithTtl));
-
-    setLoading(false);
+    return data;
   }, []);
 
-  useEffect(() => {
-    const hasMenuData = localStorage.getItem('@AMFrutas:Menu');
-    if (!!hasMenuData) {
-      const { ttl, data } = JSON.parse(hasMenuData);
-
-      const currentDate = new Date();
-      console.log(parseISO(ttl));
-      console.log(currentDate);
-      console.log(differenceInMinutes(currentDate, parseISO(ttl)));
-
-      // if (!(differenceInHours(currentDate, parseISO(ttl)) > 23)) {
-      setMenuItems(data);
-      if (!(differenceInMinutes(currentDate, parseISO(ttl)) > 1)) {
-        setLoading(false);
-
-        return;
-      }
-    }
-    loadMenu();
-  }, [loadMenu]);
+  const { data: menuItems, isLoading: loading } = useQuery(
+    'headerMenu',
+    loadMenu
+  );
 
   useEffect(() => {
     if (scrollY >= 71) {
