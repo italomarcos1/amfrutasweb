@@ -30,20 +30,19 @@ export default function Promotions() {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(0);
-  const [prevPageUrl, setPrevPageUrl] = useState('');
-  const [nextPageUrl, setNextPageUrl] = useState('');
   const [pageHeight, setPageHeight] = useState(1184);
   const [productHeight, setProductHeight] = useState('');
   const [paginationArray, setPaginationArray] = useState([]);
   const [field, setField] = useState('latest');
   const [searchInput, setSearchInput] = useState('');
   const [loginModal, setLoginModal] = useState(false);
-  const noFavorite = useSelector(state => state.auth.noFavorite);
-  const firstLogin = useSelector(state => state.auth.firstLogin);
   const [loading, setLoading] = useState(false);
   const [noProductsFound, setNoProductsFound] = useState(false);
 
   const [perPage, setPerPage] = useState(() => (isDesktop ? 15 : 16));
+
+  const firstLogin = useSelector(state => state.auth.firstLogin);
+  const noFavorite = useSelector(state => state.auth.noFavorite);
 
   const history = useHistory();
 
@@ -70,7 +69,7 @@ export default function Promotions() {
 
     const {
       data: {
-        data: { data, current_page, last_page, next_page_url, prev_page_url },
+        data: { data, current_page, last_page },
       },
     } = productsResponse;
 
@@ -93,9 +92,24 @@ export default function Promotions() {
     setProducts(data);
     setCurrentPage(current_page);
     setLastPage(last_page);
-    setNextPageUrl(next_page_url);
-    setPrevPageUrl(prev_page_url);
-  }, [currentPage, field, perPage, isDesktop, searchInput]);
+
+    generatePaginationArray();
+
+    const promotionsData = {
+      products: data,
+      currentPage: current_page,
+      lastPage: last_page,
+    };
+
+    return promotionsData;
+  }, [
+    currentPage,
+    field,
+    perPage,
+    isDesktop,
+    searchInput,
+    generatePaginationArray,
+  ]);
 
   const searchProduct = useCallback(async () => {
     try {
@@ -120,7 +134,7 @@ export default function Promotions() {
 
       const {
         data: {
-          data: { data, current_page, last_page, next_page_url, prev_page_url },
+          data: { data, current_page, last_page },
         },
       } = productsResponse;
 
@@ -144,8 +158,6 @@ export default function Promotions() {
       setCurrentPage(current_page);
 
       setLastPage(last_page);
-      setNextPageUrl(next_page_url);
-      setPrevPageUrl(prev_page_url);
       setLoading(false);
     } catch {
       setLoading(false);
@@ -169,11 +181,12 @@ export default function Promotions() {
     window.scrollTo(0, 0);
 
     loadProducts();
-    generatePaginationArray();
   }, [loadProducts, generatePaginationArray, currentPage, field]);
 
   useEffect(() => {
     setNoProductsFound(false);
+
+    // executar a query
     const timer = setTimeout(searchProduct, 1000);
 
     return () => clearTimeout(timer);
