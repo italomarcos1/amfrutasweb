@@ -48,7 +48,7 @@ export default class Pagination extends Component {
         style={style}
         showArrows={totalItems.length !== 0}
         isDesktop={isDesktop}
-        totalItems={totalItems > 5 ? 5 : totalItems}
+        totalItems={totalItems.length > 5 ? 5 : totalItems.length}
       >
         {totalItems.map(item => (
           <PaginationButton

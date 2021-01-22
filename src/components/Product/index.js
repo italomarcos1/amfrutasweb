@@ -45,7 +45,6 @@ export default function Product({ product, index, setHeight }) {
 
   const favorites = useSelector(state => state.cart.favorites);
   const updating = useSelector(state => state.cart.updating);
-  const profile = useSelector(state => state.user.profile);
   const signed = useSelector(state => state.auth.signed);
 
   const [qty, setQty] = useState(1);
@@ -96,7 +95,7 @@ export default function Product({ product, index, setHeight }) {
   useEffect(() => {
     if (isDesktop || !setHeight) return;
     const el = document.getElementById(`product${index}`);
-
+    console.log(el);
     setHeight(el.offsetHeight);
   }, [isDesktop, index, setHeight, product]);
 
@@ -208,6 +207,7 @@ Product.propTypes = {
     title: PropTypes.string,
     thumbs: PropTypes.string,
     price: PropTypes.string,
+    cback: PropTypes.string,
     price_promotional: PropTypes.string,
     url: PropTypes.string,
     has_promotion: PropTypes.bool,

@@ -7,13 +7,13 @@ import { FaSpinner } from 'react-icons/fa';
 import { useQuery } from 'react-query';
 import {
   ProductsContainer,
-  NullProduct,
   Container,
   Content,
   LoadingContainer,
 } from './styles';
 
 import Product from '~/components/Product';
+import NullProduct from '~/components/NullProduct';
 import CustomHeader from '~/components/CustomHeader';
 import Pagination from '~/components/Pagination';
 import FooterPagination from '~/components/FooterPagination';
@@ -38,6 +38,8 @@ export default function Promotions() {
   const [loginModal, setLoginModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [noProductsFound, setNoProductsFound] = useState(false);
+
+  const [searchResults, setSearchResults] = useState([]);
 
   const [perPage, setPerPage] = useState(() => (isDesktop ? 15 : 16));
 
@@ -88,6 +90,14 @@ export default function Promotions() {
 
     generatePaginationArray(last_page);
 
+    let hasLastRow;
+
+    if (isDesktop)
+      hasLastRow = data.length > 10 ? 1184 : Math.ceil(data.length / 5) * 404;
+    else hasLastRow = Math.ceil(data.length / 2) * (productHeight + 25);
+    // console.log(products.length);
+    setPageHeight(hasLastRow);
+
     const promotionsData = {
       products: data,
       currentPage: current_page,
@@ -95,7 +105,21 @@ export default function Promotions() {
     };
 
     return promotionsData;
-  }, [currentPage, field, perPage, isDesktop, generatePaginationArray]);
+  }, [
+    currentPage,
+    field,
+    perPage,
+    isDesktop,
+    generatePaginationArray,
+    productHeight,
+  ]);
+
+  // falta ajustar a busca de produtos - v
+  // alternar a busca e os conteúdos do cache - v
+  // testar o filtro (mais visitados, etc) - o
+  // testar a altura da página
+
+  // ajustar a paginação
 
   const searchProduct = useCallback(async () => {
     try {
@@ -160,22 +184,10 @@ export default function Promotions() {
   ]);
 
   useEffect(() => {
-    if (products.length === 0) return;
-    let hasLastRow;
-
-    if (isDesktop)
-      hasLastRow =
-        products.length > 10 ? 1184 : Math.ceil(products.length / 5) * 404;
-    else hasLastRow = Math.ceil(products.length / 2) * (productHeight + 25);
-    // console.log(products.length);
-    setPageHeight(hasLastRow);
-  }, [isDesktop, products, productHeight]);
-
-  useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const { data, isLoading, isError } = useQuery(
+  const { data, isLoading, isError, status } = useQuery(
     ['promotions', currentPage, field, perPage],
     loadProducts,
     {
@@ -188,19 +200,48 @@ export default function Promotions() {
     if (isLoading || isError || paginationArray.length !== 0) return;
 
     generatePaginationArray(data.lastPage);
-    console.log(paginationArray);
   }, [isLoading, paginationArray, isError, generatePaginationArray, data]);
 
   useEffect(() => {
+    console.log('aaa');
+    if (isLoading) return;
+    if (nameIsValid(searchInput)) {
+      console.log('a');
+      setProducts(data.products);
+      generatePaginationArray(data.lastPage);
+
+      return;
+    }
+
     setNoProductsFound(false);
-
-    // executar a query
-    // if (!nameIsValid(searchInput)) return;
-
     const timer = setTimeout(searchProduct, 1000);
 
     return () => clearTimeout(timer);
-  }, [searchInput, searchProduct]);
+  }, [data, searchInput, isLoading, generatePaginationArray, searchProduct]);
+
+  useEffect(() => {
+    // console.log(productHeight);
+    // console.log('should1');
+
+    if (products.length === 0) return;
+
+    const height = Number(productHeight) < 290 ? 352 : productHeight;
+
+    let hasLastRow;
+    // console.log('should2');
+
+    if (isDesktop)
+      hasLastRow =
+        products.length > 10 ? 1184 : Math.ceil(products.length / 5) * 404;
+    else {
+      const rowsTotal = Math.ceil(products.length / 2);
+      console.log(rowsTotal);
+      hasLastRow = rowsTotal * (height + 25);
+    }
+    // console.log(height);
+    setPageHeight(hasLastRow);
+    // console.log(hasLastRow);
+  }, [isDesktop, products, productHeight]);
 
   return (
     <>
@@ -221,7 +262,7 @@ export default function Promotions() {
           )}
 
           <ProductsContainer pageHeight={pageHeight} isDesktop={isDesktop}>
-            {isLoading ? (
+            {loading || isLoading ? (
               <LoadingContainer isDesktop={isDesktop}>
                 <FaSpinner color="#666" size={42} />
                 <strong>Carregando os produtos, aguarde...</strong>
@@ -235,7 +276,8 @@ export default function Promotions() {
               </LoadingContainer>
             ) : (
               !isError &&
-              data.products.map((p, index) =>
+              status === 'success' &&
+              products.map((p, index) =>
                 p === null ? (
                   <NullProduct />
                 ) : (

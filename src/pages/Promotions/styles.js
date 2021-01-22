@@ -49,12 +49,6 @@ export const LoadingContainer = styled.div`
   }
 `;
 
-export const NullProduct = styled.div`
-  opacity: 0;
-  width: ${({ isDesktop }) => (isDesktop ? 176 : 116.55)}px;
-  height: ${({ isDesktop }) => (isDesktop ? 376 : 326)}px;
-`;
-
 export const Content = styled.div`
   display: flex;
   flex-direction: column;
