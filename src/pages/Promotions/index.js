@@ -30,6 +30,7 @@ export default function Promotions() {
 
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setLastPage] = useState(0);
   const [pageHeight, setPageHeight] = useState(1184);
   const [productHeight, setProductHeight] = useState('');
   const [paginationArray, setPaginationArray] = useState([]);
@@ -52,14 +53,14 @@ export default function Promotions() {
     if (firstLogin) history.push('/painel');
   }, [history, firstLogin]);
 
-  const generatePaginationArray = useCallback(lastPage => {
+  const generatePaginationArray = useCallback(() => {
     const items = [];
 
     for (let i = 0; i < lastPage; i += 1) {
       items.push(i);
     }
     setPaginationArray(items);
-  }, []);
+  }, [lastPage]);
 
   const loadProducts = useCallback(async () => {
     const productsResponse = await backend.get(
@@ -88,15 +89,9 @@ export default function Promotions() {
       }
     }
 
-    generatePaginationArray(last_page);
+    setLastPage(last_page);
 
-    let hasLastRow;
-
-    if (isDesktop)
-      hasLastRow = data.length > 10 ? 1184 : Math.ceil(data.length / 5) * 404;
-    else hasLastRow = Math.ceil(data.length / 2) * (productHeight + 25);
     // console.log(products.length);
-    setPageHeight(hasLastRow);
 
     const promotionsData = {
       products: data,
@@ -105,14 +100,7 @@ export default function Promotions() {
     };
 
     return promotionsData;
-  }, [
-    currentPage,
-    field,
-    perPage,
-    isDesktop,
-    generatePaginationArray,
-    productHeight,
-  ]);
+  }, [currentPage, field, perPage, isDesktop]);
 
   // falta ajustar a busca de produtos - v
   // alternar a busca e os conteúdos do cache - v
@@ -166,22 +154,14 @@ export default function Promotions() {
 
       setProducts(data);
       setCurrentPage(current_page);
-
-      generatePaginationArray(last_page);
+      setLastPage(last_page);
 
       setLoading(false);
     } catch {
       setLoading(false);
       alert('Erro');
     }
-  }, [
-    currentPage,
-    generatePaginationArray,
-    field,
-    searchInput,
-    isDesktop,
-    perPage,
-  ]);
+  }, [currentPage, field, searchInput, isDesktop, perPage]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -192,23 +172,15 @@ export default function Promotions() {
     loadProducts,
     {
       staleTime: 1000 * 60 * 60 * 24,
-      cacheTime: 1000 * 60,
     }
   );
 
   useEffect(() => {
-    if (isLoading || isError || paginationArray.length !== 0) return;
-
-    generatePaginationArray(data.lastPage);
-  }, [isLoading, paginationArray, isError, generatePaginationArray, data]);
-
-  useEffect(() => {
-    console.log('aaa');
     if (isLoading) return;
+
     if (nameIsValid(searchInput)) {
-      console.log('a');
       setProducts(data.products);
-      generatePaginationArray(data.lastPage);
+      setLastPage(data.lastPage);
 
       return;
     }
@@ -220,27 +192,18 @@ export default function Promotions() {
   }, [data, searchInput, isLoading, generatePaginationArray, searchProduct]);
 
   useEffect(() => {
-    // console.log(productHeight);
-    // console.log('should1');
-
     if (products.length === 0) return;
 
     const height = Number(productHeight) < 290 ? 352 : productHeight;
 
     let hasLastRow;
-    // console.log('should2');
 
     if (isDesktop)
       hasLastRow =
         products.length > 10 ? 1184 : Math.ceil(products.length / 5) * 404;
-    else {
-      const rowsTotal = Math.ceil(products.length / 2);
-      console.log(rowsTotal);
-      hasLastRow = rowsTotal * (height + 25);
-    }
-    // console.log(height);
+    else hasLastRow = Math.ceil(products.length / 2) * (height + 25);
+
     setPageHeight(hasLastRow);
-    // console.log(hasLastRow);
   }, [isDesktop, products, productHeight]);
 
   return (
@@ -252,7 +215,7 @@ export default function Promotions() {
           {!isLoading && (
             <CustomHeader
               currentPage={currentPage}
-              lastPage={data.lastPage}
+              lastPage={lastPage}
               setCurrentPage={setCurrentPage}
               paginationArray={paginationArray}
               setField={setField}
@@ -299,7 +262,7 @@ export default function Promotions() {
           {!isLoading && (
             <Pagination
               currentPage={currentPage}
-              lastPage={data.lastPage}
+              lastPage={lastPage}
               setCurrentPage={setCurrentPage}
               paginationArray={paginationArray}
               isDesktop={isDesktop}

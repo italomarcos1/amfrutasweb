@@ -2,9 +2,11 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { FaSpinner } from 'react-icons/fa';
 import { useMediaQuery } from 'react-responsive';
-import { Container, NullProduct, LoadingContainer } from './styles';
+import { useQuery } from 'react-query';
+import { Container, LoadingContainer } from './styles';
 
 import Product from '~/components/Product';
+import NullProduct from '~/components/NullProduct';
 import CustomHeader from '~/components/CustomHeader';
 import Pagination from '~/components/Pagination';
 import FooterPagination from '~/components/FooterPagination';
@@ -19,8 +21,6 @@ export default function ListProductsPerCategory() {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(0);
-  const [prevPageUrl, setPrevPageUrl] = useState('');
-  const [nextPageUrl, setNextPageUrl] = useState('');
   const [pageHeight, setPageHeight] = useState(isDesktop ? 1184 : 2688);
   const [productHeight, setProductHeight] = useState('');
   const [loading, setLoading] = useState(true);
@@ -30,6 +30,8 @@ export default function ListProductsPerCategory() {
   const [noProductsFound, setNoProductsFound] = useState(false);
 
   const { state, pathname } = useLocation();
+
+  const [perPage, setPerPage] = useState(() => (isDesktop ? 15 : 16));
 
   const generatePaginationArray = useCallback(() => {
     const items = [];
@@ -42,15 +44,13 @@ export default function ListProductsPerCategory() {
   }, [lastPage]);
 
   const loadProductsByCategory = useCallback(async () => {
-    if (!nameIsValid(searchInput)) return;
-
     const productsResponse = await backend.get(
-      `ecommerce/products/categories/${state.id}?page=${currentPage}&special_order=${field}`
+      `ecommerce/products/categories/${state.id}?page=${currentPage}&special_order=${field}&per_page=${perPage}`
     );
 
     const {
       data: {
-        data: { data, current_page, last_page, next_page_url, prev_page_url },
+        data: { data, current_page, last_page },
       },
     } = productsResponse;
 
@@ -70,13 +70,16 @@ export default function ListProductsPerCategory() {
       }
     }
 
-    setProducts(data);
-    setCurrentPage(current_page);
     setLastPage(last_page);
-    setNextPageUrl(next_page_url);
 
-    // console.tron.log(data);
-  }, [state.id, currentPage, searchInput, isDesktop, field]);
+    const categoriesData = {
+      products: data,
+      currentPage: current_page,
+      lastPage: last_page,
+    };
+
+    return categoriesData;
+  }, [state.id, currentPage, isDesktop, field, perPage]);
 
   const searchProduct = useCallback(async () => {
     try {
@@ -100,7 +103,7 @@ export default function ListProductsPerCategory() {
 
       const {
         data: {
-          data: { data, current_page, last_page, next_page_url, prev_page_url },
+          data: { data, current_page, last_page },
         },
       } = productsResponse;
 
@@ -122,10 +125,8 @@ export default function ListProductsPerCategory() {
 
       setProducts(data);
       setCurrentPage(current_page);
-
       setLastPage(last_page);
-      setNextPageUrl(next_page_url);
-      setPrevPageUrl(prev_page_url);
+
       setLoading(false);
     } catch {
       setLoading(false);
@@ -134,58 +135,65 @@ export default function ListProductsPerCategory() {
   }, [currentPage, field, isDesktop, searchInput]);
 
   useEffect(() => {
-    if (products.length === 0 || productHeight < 250) return;
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => setSearchInput(''), [pathname]);
+
+  const { data, isLoading, isError, status } = useQuery(
+    [`categories/${pathname}`, currentPage, field, perPage],
+    loadProductsByCategory,
+    {
+      staleTime: 1000 * 60 * 60 * 24,
+    }
+  );
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    if (nameIsValid(searchInput)) {
+      setProducts(data.products);
+      setLastPage(data.lastPage);
+
+      return;
+    }
+
+    setNoProductsFound(false);
+    const timer = setTimeout(searchProduct, 1000);
+
+    return () => clearTimeout(timer);
+  }, [data, searchInput, isLoading, generatePaginationArray, searchProduct]);
+
+  useEffect(() => {
+    if (products.length === 0) return;
+
+    const height = Number(productHeight) < 290 ? 352 : productHeight;
+
     let hasLastRow;
 
     if (isDesktop)
       hasLastRow =
         products.length > 10 ? 1184 : Math.ceil(products.length / 5) * 404;
-    else hasLastRow = Math.ceil(products.length / 2) * (productHeight + 25);
-    // console.log(products.length);
-    // console.log(productHeight);
-    // console.log(hasLastRow);
+    else hasLastRow = Math.ceil(products.length / 2) * (height + 25);
+
     setPageHeight(hasLastRow);
   }, [isDesktop, products, productHeight]);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-
-    setLoading(true);
-    loadProductsByCategory();
-    generatePaginationArray();
-
-    setLoading(false);
-  }, [
-    loadProductsByCategory,
-    generatePaginationArray,
-    currentPage,
-    field,
-    pathname,
-    state,
-  ]);
-
-  useEffect(() => setSearchInput(''), [pathname]);
-
-  useEffect(() => {
-    setNoProductsFound(false);
-    const timer = setTimeout(searchProduct, 1000);
-
-    return () => clearTimeout(timer);
-  }, [searchInput, searchProduct]);
-
   return (
     <>
-      <CustomHeader
-        currentPage={currentPage}
-        lastPage={lastPage}
-        setCurrentPage={setCurrentPage}
-        paginationArray={paginationArray}
-        setField={setField}
-        inputValue={searchInput}
-        setInputValue={setSearchInput}
-      />
+      {!isLoading && (
+        <CustomHeader
+          currentPage={currentPage}
+          lastPage={lastPage}
+          setCurrentPage={setCurrentPage}
+          paginationArray={paginationArray}
+          setField={setField}
+          inputValue={searchInput}
+          setInputValue={setSearchInput}
+        />
+      )}
 
-      {loading ? (
+      {loading || isLoading ? (
         <LoadingContainer>
           <FaSpinner color="#666" size={42} />
           <strong>Carregando os produtos, aguarde...</strong>
@@ -199,28 +207,32 @@ export default function ListProductsPerCategory() {
         </LoadingContainer>
       ) : (
         <Container pageHeight={pageHeight} isDesktop={isDesktop}>
-          {products.map((p, index) =>
-            p === null ? (
-              <NullProduct />
-            ) : (
-              <Product
-                key={p.id}
-                index={index}
-                product={p}
-                setHeight={setProductHeight}
-              />
-            )
-          )}
+          {!isError &&
+            status === 'success' &&
+            products.map((p, index) =>
+              p === null ? (
+                <NullProduct />
+              ) : (
+                <Product
+                  key={p.id}
+                  index={index}
+                  product={p}
+                  setHeight={setProductHeight}
+                />
+              )
+            )}
         </Container>
       )}
       <FooterPagination isDesktop={isDesktop}>
-        <Pagination
-          currentPage={currentPage}
-          lastPage={lastPage}
-          setCurrentPage={setCurrentPage}
-          paginationArray={paginationArray}
-          isDesktop={isDesktop}
-        />
+        {!isLoading && (
+          <Pagination
+            currentPage={currentPage}
+            lastPage={lastPage}
+            setCurrentPage={setCurrentPage}
+            paginationArray={paginationArray}
+            isDesktop={isDesktop}
+          />
+        )}
       </FooterPagination>
     </>
   );

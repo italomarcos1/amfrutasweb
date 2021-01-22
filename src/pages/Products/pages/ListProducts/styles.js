@@ -11,13 +11,6 @@ export const Container = styled.ul`
   margin-top: 18px;
 `;
 
-export const NullProduct = styled.div`
-  opacity: 0;
-
-  width: ${({ isDesktop }) => (isDesktop ? 176 : 116.55)}px;
-  height: ${({ isDesktop }) => (isDesktop ? 376 : 326)}px;
-`;
-
 const rotate = keyframes` /** widtwidtwidth: 840px;h: 840px;h: 840px;animação para rotacionar o icon. */
   from {
     transform: rotate(0deg);
