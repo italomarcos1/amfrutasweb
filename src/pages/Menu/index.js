@@ -100,29 +100,11 @@ export default function MainMenu({ route }) {
       data: { data: socialData },
     } = socialMedia;
 
-    const {
-      facebook,
-      instagram,
-      youtube,
-      social_nif,
-      phone_two,
-      whatsapp: whatsappNumber,
-    } = socialData;
-
-    const socialInfo = {
-      facebook,
-      instagram,
-      youtube,
-      social_nif,
-      phone_two,
-      whatsapp: whatsappNumber,
-    };
-
     const menuMobileData = {
       categories: categoriesData,
       menuItems: linksData,
       footerData: linkFooterData,
-      social: socialInfo,
+      social: { ...socialData, whatsapp: socialData.whatsapp },
     };
 
     return menuMobileData;
