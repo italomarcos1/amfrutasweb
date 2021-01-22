@@ -4,6 +4,7 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useScrollYPosition } from 'react-use-scroll-position';
 import { useMediaQuery } from 'react-responsive';
 
+import { useQuery } from 'react-query';
 import {
   Header,
   HeaderContent,
@@ -44,20 +45,8 @@ export default function MainMenu({ route }) {
   const [categories, setCategories] = useState([]);
 
   const [headerFixed, setHeaderFixed] = useState(false);
-  const [loading, setLoading] = useState(true);
 
   const [categoryActive, setCategoryActive] = useState('none');
-
-  const [menuItems, setMenuItems] = useState([
-    'Promoções',
-    'Lojas',
-    'Condições de Venda',
-    'Minha Conta',
-    'Carrinho de Compras',
-  ]);
-
-  const [footerData, setFooterData] = useState([]);
-  const [social, setSocial] = useState([]);
 
   useEffect(() => {
     if (scrollY >= 71) {
@@ -70,7 +59,6 @@ export default function MainMenu({ route }) {
   const keys = ['facebook', 'instagram', 'twitter', 'youtube', 'social_nif'];
 
   const loadData = useCallback(async () => {
-    setLoading(true);
     const [
       categoriesResponse,
       linksResponse,
@@ -81,7 +69,7 @@ export default function MainMenu({ route }) {
         '/ecommerce/categories?recursively=1&per_page=100&order_field=slug&order_direction=asc'
       ),
       backend.get('/menus/links/3'),
-      backend.get('configurations', { keys }),
+      backend.get(`configurations?keys=${keys.join()}`),
       backend.get('/menus/links/2'),
     ]);
 
@@ -91,14 +79,11 @@ export default function MainMenu({ route }) {
       },
     } = categoriesResponse;
 
-    setCategories(categoriesData);
-
     const {
       data: { data: linksData },
     } = linksResponse;
 
     linksData.splice(0, 1);
-    setMenuItems(linksData);
 
     const {
       data: { data: linkFooterData },
@@ -117,19 +102,26 @@ export default function MainMenu({ route }) {
       whatsapp: whatsappNumber,
     } = socialData;
 
-    setFooterData(linkFooterData);
-    setSocial({
+    const socialInfo = {
       facebook,
       instagram,
       youtube,
       social_nif,
       phone_two,
       whatsapp: whatsappNumber,
-    });
-    setLoading(false);
+    };
+
+    const menuMobileData = {
+      categories: categoriesData,
+      menuItems: linksData,
+      footerData: linkFooterData,
+      social: socialInfo,
+    };
+
+    return menuMobileData;
   }, []);
 
-  useEffect(loadData, [loadData]);
+  const { data, isLoading } = useQuery('menuMobile', loadData);
 
   useEffect(() => {
     if (pathname === '/produtos') setSelectedCategory('none');
@@ -146,35 +138,46 @@ export default function MainMenu({ route }) {
       </Header>
       <Menu style={headerFixed ? { position: 'fixed', top: 0 } : {}}>
         <MenuContent isDesktop={isDesktop}>
-          <MenuItemButton onClick={() => history.push(route)}>
-            <img src={close} alt="Close" style={{ width: 30, height: 30 }} />
-          </MenuItemButton>
-          <ContactButton href={`tel:351${social.phone_two}`} rel="noreferrer">
-            <img
-              src={smartphone}
-              alt="Phone"
-              style={{ width: 10, height: 16 }}
-            />
-            {social.phone_two}
-          </ContactButton>
-          <ContactButton
-            href={`https://api.whatsapp.com/send?phone=351${social.whatsapp}`}
-            rel="noreferrer"
-          >
-            <img
-              src={whatsapp}
-              alt="WhatsApp"
-              style={{ width: 13, height: 13 }}
-            />
-            WhatsApp
-          </ContactButton>
+          {!isLoading && (
+            <>
+              <MenuItemButton onClick={() => history.push(route)}>
+                <img
+                  src={close}
+                  alt="Close"
+                  style={{ width: 30, height: 30 }}
+                />
+              </MenuItemButton>
+              <ContactButton
+                href={`tel:351${data.social.phone_two}`}
+                rel="noreferrer"
+              >
+                <img
+                  src={smartphone}
+                  alt="Phone"
+                  style={{ width: 10, height: 16 }}
+                />
+                {data.social.phone_two}
+              </ContactButton>
+              <ContactButton
+                href={`https://api.whatsapp.com/send?phone=351${data.social.whatsapp}`}
+                rel="noreferrer"
+              >
+                <img
+                  src={whatsapp}
+                  alt="WhatsApp"
+                  style={{ width: 13, height: 13 }}
+                />
+                WhatsApp
+              </ContactButton>
+            </>
+          )}
         </MenuContent>
       </Menu>
       <Background>
         <Title>Principal</Title>
         <ul>
-          {!loading &&
-            menuItems.map(({ id, name, url }) => (
+          {!isLoading &&
+            data.menuItems.map(({ id, name, url }) => (
               <MenuItem
                 key={id}
                 to={{
@@ -191,8 +194,8 @@ export default function MainMenu({ route }) {
         <Separator />
         <Title>Produtos</Title>
         <ul>
-          {!loading &&
-            categories.map(category => (
+          {!isLoading &&
+            data.categories.map(category => (
               <Category
                 key={category.id}
                 category={category}
@@ -205,8 +208,8 @@ export default function MainMenu({ route }) {
         <Separator />
         <Title>Atendimento e Social</Title>
         <ul>
-          {!loading &&
-            footerData.map(({ id, url, name }) => (
+          {!isLoading &&
+            data.footerData.map(({ id, url, name }) => (
               <MenuItem
                 key={id}
                 to={{
@@ -219,11 +222,13 @@ export default function MainMenu({ route }) {
                 {name}
               </MenuItem>
             ))}
-          {!loading && (
+          {!isLoading && (
             <>
               <MenuItemLink
                 href={
-                  !!social ? `https://www.facebook.com/${social.facebook}` : ''
+                  !!data.social
+                    ? `https://www.facebook.com/${data.social.facebook}`
+                    : ''
                 }
                 target="_blank"
                 rel="noreferrer"
@@ -232,7 +237,9 @@ export default function MainMenu({ route }) {
               </MenuItemLink>
               <MenuItemLink
                 href={
-                  !!social ? `https://instagram.com/${social.instagram}` : ''
+                  !!data.social
+                    ? `https://instagram.com/${data.social.instagram}`
+                    : ''
                 }
                 target="_blank"
                 rel="noreferrer"
@@ -241,8 +248,8 @@ export default function MainMenu({ route }) {
               </MenuItemLink>
               <MenuItemLink
                 href={
-                  !!social
-                    ? `https://youtube.com/channel/${social.youtube}`
+                  !!data.social
+                    ? `https://youtube.com/channel/${data.social.youtube}`
                     : ''
                 }
                 target="_blank"

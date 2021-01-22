@@ -171,7 +171,7 @@ export default function Promotions() {
     ['promotions', currentPage, field, perPage],
     loadProducts,
     {
-      staleTime: 1000 * 60 * 60 * 24,
+      staleTime: 1000 * 60 * 30,
     }
   );
 

@@ -144,7 +144,7 @@ export default function ListProductsPerCategory() {
     [`categories/${pathname}`, currentPage, field, perPage],
     loadProductsByCategory,
     {
-      staleTime: 1000 * 60 * 60 * 24,
+      staleTime: 1000 * 60 * 30,
     }
   );
 

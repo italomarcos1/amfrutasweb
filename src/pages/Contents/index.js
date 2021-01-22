@@ -168,7 +168,7 @@ export default function Contents() {
     [`contents/${state.id}`, currentPage, orderField, orderDirection],
     loadContents,
     {
-      staleTime: 1000 * 60 * 60 * 24,
+      staleTime: 1000 * 60 * 30,
     }
   );
 
