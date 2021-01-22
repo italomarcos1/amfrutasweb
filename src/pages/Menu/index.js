@@ -56,7 +56,14 @@ export default function MainMenu({ route }) {
     }
   }, [scrollY]);
 
-  const keys = ['facebook', 'instagram', 'twitter', 'youtube', 'social_nif'];
+  const keys = [
+    'facebook',
+    'instagram',
+    'twitter',
+    'youtube',
+    'social_nif',
+    'phone_two',
+  ];
 
   const loadData = useCallback(async () => {
     const [
