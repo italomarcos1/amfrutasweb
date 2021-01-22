@@ -5,6 +5,7 @@ import { useMediaQuery } from 'react-responsive';
 
 import { FaSpinner } from 'react-icons/fa';
 
+import { useQuery } from 'react-query';
 import {
   Container,
   Section,
@@ -64,19 +65,15 @@ export default function Contents() {
   }, [lastPage]);
 
   const loadContents = useCallback(async () => {
-    if (!nameIsValid(searchInput)) return;
-    console.log(state.id);
     const arrayId = state.id.split('/');
-    console.log(arrayId);
     const getId = arrayId[arrayId.length - 1];
-    console.log(getId);
 
     const {
       data: {
         data: { data, current_page, last_page },
       },
     } = await backend.get(
-      `blog/contents/categories/${getId}?page=${currentPage}&per_page=12&&order_field=${orderField}&order_direction=${orderDirection}`
+      `blog/contents/categories/${getId}?page=${currentPage}&per_page=12&order_field=${orderField}&order_direction=${orderDirection}`
     );
 
     if (isDesktop && data.length % 4 !== 0) {
@@ -92,17 +89,24 @@ export default function Contents() {
         }
       }
     }
-    setCurrentPage(current_page);
+
     setLastPage(last_page);
-    setContents(data);
-  }, [currentPage, state, orderField, orderDirection, searchInput, isDesktop]);
+
+    const contentsData = {
+      contents: data,
+      currentPage: current_page,
+      lastPage: last_page,
+    };
+
+    return contentsData;
+  }, [currentPage, state, orderField, orderDirection, isDesktop]);
 
   const searchContent = useCallback(async () => {
     try {
       if (nameIsValid(searchInput)) return;
       setLoading(true);
       const contentsResponse = await backend.get(
-        `blog/contents/search/${searchInput}?page=${currentPage}&order_field=${orderField}&order_direction=${orderDirection}`
+        `blog/contents/search/${searchInput}?page=${currentPage}&per_page=12&order_field=${orderField}&order_direction=${orderDirection}`
       );
       const {
         data: {
@@ -117,7 +121,7 @@ export default function Contents() {
 
       const {
         data: {
-          data: { data, current_page, last_page, next_page_url, prev_page_url },
+          data: { data, current_page, last_page },
         },
       } = contentsResponse;
 
@@ -158,46 +162,66 @@ export default function Contents() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    loadContents();
-    generatePaginationArray();
-  }, [loadContents, generatePaginationArray, currentPage]);
+  }, []);
+
+  const { data, isLoading, isError, status } = useQuery(
+    [`contents/${state.id}`, currentPage, orderField, orderDirection],
+    loadContents,
+    {
+      staleTime: 1000 * 60 * 60 * 24,
+    }
+  );
 
   useEffect(() => {
-    setNoContentsFound(false);
+    if (isLoading) return;
 
+    if (nameIsValid(searchInput)) {
+      setContents(data.contents);
+      setLastPage(data.lastPage);
+
+      return;
+    }
+
+    setNoContentsFound(false);
     const timer = setTimeout(searchContent, 1000);
 
     return () => clearTimeout(timer);
-  }, [searchInput, searchContent]);
+  }, [data, searchInput, isLoading, generatePaginationArray, searchContent]);
+
+  useEffect(() => {
+    generatePaginationArray();
+  }, [generatePaginationArray, lastPage]);
 
   return (
     <>
       <Header login={() => setLoginModal(true)} active="Dicas" />
       <Container isDesktop={isDesktop}>
-        <CustomHeader
-          currentPage={currentPage}
-          lastPage={lastPage}
-          setCurrentPage={setCurrentPage}
-          paginationArray={paginationArray}
-          setOrderDirection={setOrderDirection}
-          setOrderField={setOrderField}
-          orderField={orderField}
-          inputValue={searchInput}
-          setInputValue={setSearchInput}
-          search={searchContent}
-          style={
-            isDesktop
-              ? { marginLeft: 'auto', marginRight: 'auto', width: 1240 }
-              : {}
-          }
-        />
+        {!isLoading && (
+          <CustomHeader
+            currentPage={currentPage}
+            lastPage={lastPage}
+            setCurrentPage={setCurrentPage}
+            paginationArray={paginationArray}
+            setOrderDirection={setOrderDirection}
+            setOrderField={setOrderField}
+            orderField={orderField}
+            inputValue={searchInput}
+            setInputValue={setSearchInput}
+            search={searchContent}
+            style={
+              isDesktop
+                ? { marginLeft: 'auto', marginRight: 'auto', width: 1240 }
+                : {}
+            }
+          />
+        )}
         <div
           style={
             isDesktop ? { height: 1056 } : { height: pageHeight, width: '100%' }
           }
         >
           <Section pageHeight={isDesktop ? 1056 : 'auto'} isDesktop={isDesktop}>
-            {loading ? (
+            {loading || isLoading ? (
               <LoadingContainer isDesktop={isDesktop}>
                 <FaSpinner color="#666" size={42} />
                 <strong>Carregando os conteúdos do blog, aguarde...</strong>
@@ -210,6 +234,8 @@ export default function Contents() {
                 </strong>
               </LoadingContainer>
             ) : (
+              !isError &&
+              status === 'success' &&
               contents.map((content, index) =>
                 content === null ? (
                   <NullBlogPost isDesktop={isDesktop} />
@@ -227,13 +253,15 @@ export default function Contents() {
         </div>
 
         <FooterPagination isDesktop={isDesktop}>
-          <Pagination
-            currentPage={currentPage}
-            lastPage={lastPage}
-            setCurrentPage={setCurrentPage}
-            paginationArray={paginationArray}
-            isDesktop={isDesktop}
-          />
+          {!isLoading && (
+            <Pagination
+              currentPage={currentPage}
+              lastPage={lastPage}
+              setCurrentPage={setCurrentPage}
+              paginationArray={paginationArray}
+              isDesktop={isDesktop}
+            />
+          )}
         </FooterPagination>
       </Container>
       <Footer />
