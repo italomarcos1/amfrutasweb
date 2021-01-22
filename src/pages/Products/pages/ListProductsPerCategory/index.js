@@ -23,7 +23,7 @@ export default function ListProductsPerCategory() {
   const [lastPage, setLastPage] = useState(0);
   const [pageHeight, setPageHeight] = useState(isDesktop ? 1184 : 2688);
   const [productHeight, setProductHeight] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [paginationArray, setPaginationArray] = useState([]);
   const [field, setField] = useState('title');
   const [searchInput, setSearchInput] = useState('');
@@ -178,6 +178,10 @@ export default function ListProductsPerCategory() {
 
     setPageHeight(hasLastRow);
   }, [isDesktop, products, productHeight]);
+
+  useEffect(() => {
+    generatePaginationArray();
+  }, [generatePaginationArray, lastPage]);
 
   return (
     <>

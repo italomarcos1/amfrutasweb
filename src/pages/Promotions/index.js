@@ -206,6 +206,10 @@ export default function Promotions() {
     setPageHeight(hasLastRow);
   }, [isDesktop, products, productHeight]);
 
+  useEffect(() => {
+    generatePaginationArray();
+  }, [generatePaginationArray, lastPage]);
+
   return (
     <>
       <Header login={() => setLoginModal(true)} active="Promoções" />

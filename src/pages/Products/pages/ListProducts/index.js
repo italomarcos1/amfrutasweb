@@ -39,7 +39,7 @@ export default function ListProducts() {
     for (let i = 0; i < lastPage; i += 1) {
       items.push(i);
     }
-
+    console.log('fook');
     setPaginationArray(items);
   }, [lastPage]);
 
@@ -176,6 +176,10 @@ export default function ListProducts() {
 
     setPageHeight(hasLastRow);
   }, [isDesktop, products, productHeight]);
+
+  useEffect(() => {
+    generatePaginationArray();
+  }, [generatePaginationArray, lastPage]);
 
   return (
     <>
