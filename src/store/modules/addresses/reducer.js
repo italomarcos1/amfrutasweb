@@ -48,16 +48,6 @@ export default function addresses(state = INITIAL_STATE, { type, payload }) {
         break;
       }
 
-      case '@addresses/SET_PRIMARY_ADDRESS': {
-        const { id } = payload;
-
-        const findAddressIndex = draft.addresses.findIndex(
-          address => address.id === id
-        );
-
-        break;
-      }
-
       case '@addresses/UPDATE_SHIPPING_INFO_SUCCESS': {
         const { shipping } = payload;
         const findAddressIndex = draft.addresses.findIndex(

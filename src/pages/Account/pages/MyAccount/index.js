@@ -71,7 +71,7 @@ export default function MyAccount() {
         setInvalidLastName(nameIsValid(formData.last_name));
         setEmailError(!mailIsValid(formData.email));
         setInvalidDocument(!documentIsValid(formData.document));
-        setInvalidPhone(!phoneIsValid(formData.phone));
+        setInvalidPhone(!phoneIsValid(formData.cellphone));
         // setInvalidMailCode(!mailCodeIsValid(formData.verification_code));
         setInvalidGender(nameIsValid(gender));
         setInvalidBirth(!dateIsValid(formData.birth));
@@ -163,7 +163,7 @@ export default function MyAccount() {
             </InputContainer>
             <InputContainer isDesktop={isDesktop}>
               <InputMask
-                name="phone"
+                name="cellphone"
                 type="phone"
                 title="Telemóvel"
                 error={invalidPhone}

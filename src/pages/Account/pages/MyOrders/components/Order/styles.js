@@ -1,11 +1,12 @@
 import styled, { keyframes } from 'styled-components';
 import { Form } from '@unform/web';
+import { darken } from 'polished';
 
 export const Container = styled(Form)`
   display: flex;
   flex-direction: column;
   width: 840px;
-  height: ${({ open }) => (open ? '1131px' : '190px')};
+  height: ${({ open }) => (open ? '1181px' : '190px')};
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 4px;
@@ -46,6 +47,25 @@ export const LoadingContainer = styled.div`
 
   svg {
     animation: ${rotate} 2s linear infinite;
+  }
+`;
+
+export const ReviewContainer = styled.div`
+  display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
+  margin-top: 20px;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  button {
+    height: 32px;
+    width: 133px;
+    background-color: #0cb68b;
+    border-radius: 4px;
+    color: #fff;
+
+    &:hover {
+      background-color: ${darken('0.08', '#0cb68b')};
+    }
   }
 `;
 

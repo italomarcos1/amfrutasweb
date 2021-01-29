@@ -1,12 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
+
+import { FaSpinner } from 'react-icons/fa';
 
 import {
   Background,
   Container,
   LoginDetails,
+  LoginLoading,
   ShopDetails,
   Header,
   HeaderButton,
@@ -29,7 +32,17 @@ export default function LoginModal({ closeModal }) {
   const [customHeight, setCustomHeight] = useState(566);
   const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
 
+  const loginLoading = useSelector(s => s.auth.loading);
+
   const dispatch = useDispatch();
+
+  const [loginLoadingWidth, setLoginLoadingWidth] = useState(500);
+
+  useEffect(() => {
+    const el = document.getElementById('loginDetails');
+
+    setLoginLoadingWidth(el.offsetWidth);
+  }, []);
 
   const handleCloseModal = useCallback(() => {
     closeModal();
@@ -65,10 +78,17 @@ export default function LoginModal({ closeModal }) {
             </p>
           </ShopDetails>
         )}
+
         <LoginDetails
           isDesktop={isDesktop}
+          id="loginDetails"
           // style={{ height: customHeight }}
         >
+          {loginLoading && (
+            <LoginLoading width={loginLoadingWidth}>
+              <FaSpinner color="#666" size={38} />
+            </LoginLoading>
+          )}
           <Header isDesktop={isDesktop}>
             <HeaderButton
               onClick={() => {

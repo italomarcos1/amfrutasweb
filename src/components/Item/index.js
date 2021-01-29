@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 // import { Container } from './styles';
+
+import { FaSpinner } from 'react-icons/fa';
 
 import minus from '~/assets/icons/minus.svg';
 import plus from '~/assets/icons/plus.svg';
@@ -32,21 +34,25 @@ export default function Item({ item, index, isDesktop }) {
   } = item;
 
   const dispatch = useDispatch();
+  const updatingAmount = useSelector(state => state.cart.updatingAmount);
 
   const [finalPrice, setFinalPrice] = useState(price);
   const [finalPromotionalPrice, setFinalPromotionalPrice] = useState(price);
+  const [finalCback, setFinalCback] = useState(cback);
 
   useEffect(() => {
     const newPrice = (Math.round(Number(price) * qty * 100) / 100).toFixed(2);
     setFinalPrice(newPrice);
-  }, [qty, price]);
 
-  useEffect(() => {
-    const newPrice = (
+    const newPromotionalPrice = (
       Math.round(Number(price_promotional) * qty * 100) / 100
     ).toFixed(2);
-    setFinalPromotionalPrice(newPrice);
-  }, [qty, price_promotional]);
+    setFinalPromotionalPrice(newPromotionalPrice);
+
+    const newCback = (Math.round(Number(cback) * qty * 100) / 100).toFixed(2);
+
+    setFinalCback(newCback);
+  }, [qty, price, price_promotional, cback]);
 
   const handleRemoveFromCart = useCallback(() => {
     dispatch(removeFromCartRequest(id));
@@ -74,7 +80,7 @@ export default function Item({ item, index, isDesktop }) {
             {!!cback ? (
               cback !== '0.00' ? (
                 <b style={isDesktop ? { fontSize: 15 } : { fontSize: 13 }}>
-                  Cashback €&nbsp;{cback}
+                  Cashback €&nbsp;{finalCback}
                 </b>
               ) : (
                 ''
@@ -99,17 +105,20 @@ export default function Item({ item, index, isDesktop }) {
         <div>
           <button
             type="button"
-            disabled={qty === 1}
+            disabled={qty === 1 || updatingAmount}
             onClick={() => handleUpdateAmount(qty - 1)}
             style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
           >
             <img src={minus} alt="icon" />
           </button>
-          <strong>{qty}</strong>
+          <strong>
+            {updatingAmount ? <FaSpinner color="#666" size={22} /> : qty}
+          </strong>
           <button
             type="button"
             onClick={() => handleUpdateAmount(qty + 1)}
             style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+            disabled={updatingAmount}
           >
             <img src={plus} alt="icon" />
           </button>

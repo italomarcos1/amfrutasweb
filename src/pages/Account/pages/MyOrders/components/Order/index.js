@@ -17,6 +17,7 @@ import {
   RatingTitle,
   StarsContainer,
   LoadingContainer,
+  ReviewContainer,
 } from './styles';
 
 import CheckoutItem from '../OrderItem';
@@ -36,6 +37,8 @@ import setaUp from '~/assets/orders/seta-up.svg';
 import starOn from '~/assets/orders/starOn.svg';
 import starOff from '~/assets/orders/starOff.svg';
 
+import Toast from '~/components/Toast';
+
 import backend from '~/services/api';
 import { customCalculatePrice, formatPrice } from '~/utils/calculatePrice';
 
@@ -50,7 +53,7 @@ import { updatePages } from '~/store/modules/cart/actions';
 // Cancelado
 
 export default function Order({ order, isOpen, setOrder }) {
-  const { id, total, date, scheduledShipping, statuses } = order;
+  const { id, total, date, scheduledShipping, statuses, review_rate } = order;
 
   const dispatch = useDispatch();
 
@@ -59,10 +62,16 @@ export default function Order({ order, isOpen, setOrder }) {
   const [transaction, setTransaction] = useState(null);
   const [shippingAddress, setShippingAddress] = useState(null);
 
-  const [productRating, setProductRating] = useState(5);
+  const [rate, setRate] = useState(
+    review_rate === 'Sem avaliação' ? '---' : review_rate
+  );
+  const [review, setReview] = useState('');
+  const [sending, setSending] = useState(false);
+
   const [startHour, setStartHour] = useState('00:00');
 
   const [endHour, setEndHour] = useState('00:00');
+  const [scheduledDate, setScheduledDate] = useState('---');
 
   const [paginatedProducts, setPaginatedProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -70,14 +79,20 @@ export default function Order({ order, isOpen, setOrder }) {
   const [price, setPrice] = useState('0.00');
   const [savedPrice, setSavedPrice] = useState('0.00');
 
+  const [toastVisible, setToastVisible] = useState(false);
+  const [toastStatus, setToastStatus] = useState('');
+  const [toastColor, setToastColor] = useState('#1DC167');
+
   useEffect(() => {
     if (!scheduledShipping) return;
+    console.log(scheduledShipping);
     const formattingSchedule = scheduledShipping.split(' ');
     const formattingStartHour = formattingSchedule[1].substring(1);
     const formattingEndHour = formattingSchedule[3].substring(
       0,
       formattingSchedule[3].length - 2
     );
+    setScheduledDate(formattingSchedule[0]);
     setStartHour(formattingStartHour);
     setEndHour(formattingEndHour);
   }, [scheduledShipping]);
@@ -116,6 +131,10 @@ export default function Order({ order, isOpen, setOrder }) {
       setPrice(formattedPrice);
       setSavedPrice(formatPrice(formattedSavedPrice - formattedPrice));
 
+      const currentReview = data.review;
+      setRate(!!currentReview ? currentReview.rate : '---');
+      setReview(!!currentReview ? currentReview.review : '');
+
       setLoading(false);
     } catch {
       alert('Erro no carregamento da transação, confira sua conexão.');
@@ -130,6 +149,43 @@ export default function Order({ order, isOpen, setOrder }) {
   useEffect(() => {
     loadTransaction();
   }, [isOpen, loadTransaction]);
+
+  const handleSubmitRating = useCallback(async () => {
+    try {
+      if (!review || rate === '---') return;
+
+      setSending(true);
+
+      console.log(review);
+      console.log(rate);
+      await backend.post(`/clients/transactions/${id}/reviews`, {
+        review,
+        rate,
+      });
+
+      setToastColor('#1DC167');
+      setToastStatus('Avaliação adicionada com sucesso.');
+
+      setReview('');
+
+      setToastVisible(true);
+      setTimeout(() => {
+        setToastVisible(false);
+      }, 2800);
+      console.log('abc');
+    } catch (err) {
+      console.log(err);
+      setToastVisible(true);
+      setToastStatus('Erro ao adicionar a avaliação.');
+      setToastColor('#f56060');
+
+      setSending(false);
+
+      setTimeout(() => {
+        setToastVisible(false);
+      }, 2800);
+    }
+  }, [id, rate, review]);
 
   return (
     <Container
@@ -161,7 +217,7 @@ export default function Order({ order, isOpen, setOrder }) {
               <strong>
                 <b>
                   {!!scheduledShipping
-                    ? `${date} entre ${startHour}h e ${endHour}h`
+                    ? `${scheduledDate} entre ${startHour}h e ${endHour}h`
                     : '---'}
                 </b>
               </strong>
@@ -187,7 +243,7 @@ export default function Order({ order, isOpen, setOrder }) {
             <OrderInfo>
               <strong>Avaliação do serviço</strong>
               <strong>
-                <b>{productRating}</b>
+                <b>{rate}</b>
               </strong>
             </OrderInfo>
           </OrderInfoContainer>
@@ -240,7 +296,9 @@ export default function Order({ order, isOpen, setOrder }) {
                       </small>
                       <small>{shippingAddress.country}</small>
                       <small>
-                        {!!profile.phone ? profile.phone : '00 000 00 00'}
+                        {!!profile.cellphone
+                          ? profile.cellphone
+                          : '00 000 00 00'}
                       </small>
                     </ShippingInfo>
                   )}
@@ -329,34 +387,43 @@ export default function Order({ order, isOpen, setOrder }) {
           >
             <RatingTitle>Avaliação do Serviço</RatingTitle>
             <StarsContainer>
-              <button onClick={() => setProductRating(1)} type="button">
-                <img src={productRating >= 1 ? starOn : starOff} alt="" />
+              <button onClick={() => setRate(1)} type="button">
+                <img src={rate >= 1 ? starOn : starOff} alt="" />
               </button>
-              <button onClick={() => setProductRating(2)} type="button">
-                <img src={productRating >= 2 ? starOn : starOff} alt="" />
+              <button onClick={() => setRate(2)} type="button">
+                <img src={rate >= 2 ? starOn : starOff} alt="" />
               </button>
-              <button onClick={() => setProductRating(3)} type="button">
-                <img src={productRating >= 3 ? starOn : starOff} alt="" />
+              <button onClick={() => setRate(3)} type="button">
+                <img src={rate >= 3 ? starOn : starOff} alt="" />
               </button>
-              <button onClick={() => setProductRating(4)} type="button">
-                <img src={productRating >= 4 ? starOn : starOff} alt="" />
+              <button onClick={() => setRate(4)} type="button">
+                <img src={rate >= 4 ? starOn : starOff} alt="" />
               </button>
-              <button onClick={() => setProductRating(5)} type="button">
-                <img src={productRating === 5 ? starOn : starOff} alt="" />
+              <button onClick={() => setRate(5)} type="button">
+                <img src={rate === 5 ? starOn : starOff} alt="" />
               </button>
             </StarsContainer>
           </div>
-          <Input
-            name="comment"
-            title="Deixe seu comentário"
-            customWidth={760}
-            style={
-              isOpen === id
-                ? { display: 'flex', marginTop: 20 }
-                : { display: 'none', marginTop: 20 }
-            }
-            placeholder="Digite seu comentário aqui"
-          />
+          <ReviewContainer isOpen={isOpen === id}>
+            <Input
+              name="comment"
+              title="Deixe seu comentário"
+              customWidth={660}
+              onChange={e => setReview(e.target.value)}
+              value={review}
+              placeholder="Digite seu comentário aqui"
+            />
+            <button
+              type="button"
+              disabled={!review || sending}
+              onClick={handleSubmitRating}
+            >
+              Enviar
+            </button>
+          </ReviewContainer>
+          {toastVisible && (
+            <Toast status={toastStatus} color={toastColor} isDesktop />
+          )}
         </>
       )}
     </Container>
@@ -370,6 +437,7 @@ Order.propTypes = {
     number: PropTypes.string,
     total: PropTypes.number,
     date: PropTypes.string,
+    review_rate: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     scheduledShipping: PropTypes.string,
     startHour: PropTypes.string,
     endHour: PropTypes.string,

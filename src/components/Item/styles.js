@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import { darken } from 'polished';
+import styled, { keyframes } from 'styled-components';
 
 export const Container = styled.li`
   width: ${({ isDesktop }) => (isDesktop ? '400px' : '100%')};
@@ -113,6 +114,16 @@ export const Separator = styled.hr`
   margin: 10.5px auto 0;
 `;
 
+const rotate = keyframes` /** animação para rotacionar o icon. */
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
 export const Options = styled.div`
   display: flex;
   height: 59.5px;
@@ -138,6 +149,10 @@ export const Options = styled.div`
       letter-spacing: 0px;
       text-align: center;
       margin: 0 11px;
+
+      svg {
+        animation: ${rotate} 2s linear infinite;
+      }
     }
 
     button {
@@ -150,10 +165,19 @@ export const Options = styled.div`
       padding-left: 0;
       background-color: #f2f2f2;
       border-radius: 4px;
+      transition: background 0.2s;
+
+      &[disabled] {
+        background-color: ${darken('0.08', '#f2f2f2')};
+      }
 
       img {
         width: 35%;
         margin: 0 auto;
+      }
+
+      &:hover {
+        background-color: ${darken('0.08', '#f2f2f2')};
       }
     }
   }

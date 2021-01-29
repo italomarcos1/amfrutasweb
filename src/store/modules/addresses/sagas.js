@@ -99,6 +99,7 @@ export function* updateFinalAddress({ payload }) {
     } = yield call(backend.put, `clients/addresses/${addressId}`, address);
 
     if (address.default === 1) {
+      delete responseData.client;
       const updatedDefaultAddress = {
         ...profile,
         default_address: responseData,

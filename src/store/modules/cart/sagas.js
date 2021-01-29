@@ -5,10 +5,13 @@ import backend from '~/services/api';
 import {
   addToCartSuccess,
   removeFromCartSuccess,
+  removeFromCartFailure,
+  addToCartFailure,
   updateAmountSuccess,
   addToFavoritesSuccess,
   removeFromFavoritesSuccess,
   finishOrderFailure,
+  updateAmountFailure,
 } from './actions';
 
 import { signInSuccess } from '../auth/actions';
@@ -63,6 +66,7 @@ export function* addToCart({ payload }) {
       yield put(addToCartSuccess({ ...data, product: productData }));
     }
   } catch (error) {
+    yield put(addToCartFailure());
     console.log(error);
   }
 }
@@ -88,8 +92,8 @@ export function* removeFromCart({ payload }) {
 
     yield put(removeFromCartSuccess(id));
   } catch (err) {
-    console.log(err);
     alert('Erro na remoção');
+    yield put(removeFromCartFailure());
   }
 }
 
@@ -121,7 +125,7 @@ export function* updateAmount({ payload }) {
 
     yield put(updateAmountSuccess(id, qty));
   } catch (error) {
-    console.log(error);
+    yield put(updateAmountFailure());
   }
 }
 

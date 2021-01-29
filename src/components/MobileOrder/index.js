@@ -213,7 +213,9 @@ export default function Order({ order, isOpen, setOrder, index: orderIndex }) {
                       </small>
                       <small>{shippingAddress.country}</small>
                       <small>
-                        {!!profile.phone ? profile.phone : '00 000 00 00'}
+                        {!!profile.cellphone
+                          ? profile.cellphone
+                          : '00 000 00 00'}
                       </small>
                     </ShippingInfo>
                   )}

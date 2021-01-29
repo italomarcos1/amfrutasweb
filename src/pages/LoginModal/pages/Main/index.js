@@ -25,6 +25,7 @@ export default function Main({ setPage, isDesktop }) {
 
   const [toastVisible, setToastVisible] = useState(false);
   const [loginError, setLoginError] = useState(false);
+  const [loginPlatform, setLoginPlatform] = useState('Facebook');
 
   useEffect(() => {
     if (loginError) {
@@ -43,20 +44,10 @@ export default function Main({ setPage, isDesktop }) {
     }
   }, [loginError]);
 
-  const handleFbLogin = useCallback(
+  const handleLogin = useCallback(
     async response => {
       try {
-        dispatch(loginLoading());
-
-        const { userID, accessToken } = response;
-
-        const fbResponse = await backend.post('/auth/facebook', {
-          token: accessToken,
-          userID,
-          uuid,
-        });
-
-        const { token, user, cart } = fbResponse.data.data;
+        const { token, user, cart } = response;
 
         backend.defaults.headers.Authorization = `Bearer ${token}`;
 
@@ -105,13 +96,61 @@ export default function Main({ setPage, isDesktop }) {
         dispatch(signFailure());
       }
     },
-    [uuid, dispatch]
+    [dispatch]
   );
 
-  // const handleAppleLogin = useCallback(response => {
-  //   console.log(response);
-  //   alert('batata');
-  // }, []);
+  const handleFbLogin = useCallback(
+    async response => {
+      setLoginPlatform('Facebook');
+      dispatch(loginLoading());
+
+      const { userID, accessToken } = response;
+
+      const {
+        data: { data },
+      } = await backend.post('/auth/facebook', {
+        token: accessToken,
+        userID,
+        uuid,
+      });
+
+      console.log(data);
+
+      handleLogin(data);
+    },
+    [dispatch, handleLogin, uuid]
+  );
+
+  const handleAppleLogin = useCallback(
+    async appleAuthResponse => {
+      setLoginPlatform('Apple');
+      dispatch(loginLoading());
+
+      const { authorization } = appleAuthResponse;
+
+      let appleRequestData = {
+        authorization,
+        uuid,
+      };
+
+      console.log(!!appleAuthResponse.user);
+
+      if (!!appleAuthResponse.user)
+        appleRequestData = {
+          ...appleRequestData,
+          user: appleAuthResponse.user,
+        };
+
+      console.log(appleRequestData);
+
+      const {
+        data: { data },
+      } = await backend.post('/auth/apple', appleRequestData);
+
+      handleLogin(data);
+    },
+    [handleLogin, uuid]
+  );
 
   return (
     <>
@@ -155,13 +194,14 @@ export default function Main({ setPage, isDesktop }) {
         )}
       />
 
-      {/* <AppleLogin
+      <AppleLogin
         clientId="com.tgoo.service.amfrutas"
         redirectURI="https://amfrutas.pt/cliente/apple/callback"
         scope="name email"
         responseType="code id_token"
         responseMode="form_post"
         callback={handleAppleLogin}
+        usePopup
         render={({ onClick }) => (
           <Button
             onClick={onClick}
@@ -172,13 +212,13 @@ export default function Main({ setPage, isDesktop }) {
             Iniciar sessão com&nbsp;<b>Apple</b>
           </Button>
         )}
-      /> */}
+      />
       <SecureLogin isDesktop={isDesktop}>
         Secure <img src={lock} alt="Lock" /> Login
       </SecureLogin>
       {toastVisible && (
         <Toast
-          status="Não foi possível fazer login com Facebook, realize o login com seu email e senha."
+          status={`Não foi possível fazer login com ${loginPlatform}, realize o login com seu email e senha.`}
           color="#f56060"
         />
       )}

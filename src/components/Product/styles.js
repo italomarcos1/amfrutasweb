@@ -223,6 +223,11 @@ export const AddToCartButton = styled.button`
   background-color: #4fb78d;
   border-radius: 4px;
 
+  &[disabled] {
+    cursor: not-allowed;
+    background-color: ${darken(0.08, '#4fb78d')};
+  }
+
   &:hover {
     background-color: ${darken(0.08, '#4fb78d')};
   }

@@ -12,6 +12,10 @@ export function addToCartSuccess(product) {
   };
 }
 
+export function addToCartFailure() {
+  return { type: '@cart/ADD_TO_CART_FAILURE' };
+}
+
 export function pushToCart(products) {
   return {
     type: '@cart/PUSH_TO_CART',
@@ -38,6 +42,10 @@ export function removeFromCartSuccess(id) {
     type: '@cart/REMOVE_FROM_CART_SUCCESS',
     payload: { id },
   };
+}
+
+export function removeFromCartFailure() {
+  return { type: '@cart/REMOVE_FROM_CART_FAILURE' };
 }
 
 export function cleanCart() {
@@ -98,6 +106,12 @@ export function updateAmountSuccess(id, qty) {
   return {
     type: '@cart/UPDATE_AMOUNT_SUCCESS',
     payload: { id, qty },
+  };
+}
+
+export function updateAmountFailure() {
+  return {
+    type: '@cart/UPDATE_AMOUNT_FAILURE',
   };
 }
 

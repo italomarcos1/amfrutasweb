@@ -11,12 +11,24 @@ const INITIAL_STATE = {
   hasOrder: false,
   orderFinished: false,
   processingOrder: false,
+  addingProduct: false,
+  removingProduct: false,
+  updatingAmount: false,
   pages: 1,
 };
 
 export default function cart(state = INITIAL_STATE, { type, payload }) {
   return produce(state, draft => {
     switch (type) {
+      case '@cart/ADD_TO_CART_REQUEST': {
+        draft.addingProduct = true;
+        break;
+      }
+      case '@cart/ADD_TO_CART_FAILURE': {
+        draft.addingProduct = false;
+        break;
+      }
+
       case '@cart/ADD_TO_CART_SUCCESS': {
         const { product } = payload;
 
@@ -31,7 +43,13 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
 
         draft.price = formattedPrice;
         draft.saved = formattedSavedPrice;
+        draft.addingProduct = false;
 
+        break;
+      }
+
+      case '@cart/REMOVE_FROM_CART_REQUEST': {
+        draft.removingProduct = true;
         break;
       }
 
@@ -60,6 +78,7 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
 
         draft.price = formattedPrice;
         draft.saved = formattedSavedPrice;
+        draft.removingProduct = false;
 
         break;
       }
@@ -146,6 +165,11 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
         break;
       }
 
+      case '@cart/REMOVE_FROM_CART_FAILURE': {
+        draft.removingProduct = false;
+        break;
+      }
+
       case '@cart/REMOVE_FROM_FAVORITES_SUCCESS': {
         const { id } = payload;
         const productIndex = draft.favorites.findIndex(
@@ -154,6 +178,18 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
 
         if (productIndex >= 0) draft.favorites.splice(productIndex, 1);
         draft.updating = false;
+
+        break;
+      }
+
+      case '@cart/UPDATE_AMOUNT_REQUEST': {
+        draft.updatingAmount = true;
+
+        break;
+      }
+
+      case '@cart/UPDATE_AMOUNT_FAILURE': {
+        draft.updatingAmount = false;
 
         break;
       }
@@ -173,6 +209,7 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
 
         draft.price = formattedPrice;
         draft.saved = formattedSavedPrice;
+        draft.updatingAmount = false;
 
         break;
       }
@@ -186,6 +223,7 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
         draft.hasOrder = false;
         draft.orderFinished = false;
         draft.processingOrder = false;
+        draft.removingProduct = false;
         draft.pages = 1;
         break;
       }

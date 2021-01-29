@@ -153,7 +153,7 @@ export default function Confirmation() {
     return <Redirect to="/cesto" />;
   }
 
-  const { name, last_name, phone, email, birth, document } = finalProfile;
+  const { name, last_name, cellphone, email, birth, document } = finalProfile;
 
   return (
     <>
@@ -187,7 +187,7 @@ export default function Confirmation() {
               </Info>
               <Info>
                 <strong>Telemóvel</strong>
-                <small>{phone}</small>
+                <small>{cellphone}</small>
               </Info>
             </CustomInputContainer>
             <CustomInputContainer isDesktop={isDesktop}>

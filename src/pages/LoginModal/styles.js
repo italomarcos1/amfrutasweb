@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { Form } from '@unform/web';
 
 export const Background = styled.div`
@@ -19,6 +19,7 @@ export const Container = styled(Form)`
   align-items: center;
   width: ${({ isDesktop }) => (isDesktop ? '820px' : '90%')};
   height: ${({ isDesktop }) => (isDesktop ? '566px' : '92%')};
+  position: relative;
 `;
 
 export const LoginDetails = styled.div`
@@ -28,6 +29,30 @@ export const LoginDetails = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+const rotate = keyframes` /** animação para rotacionar o icon. */
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+export const LoginLoading = styled.div`
+  width: ${({ width }) => `${width}px`};
+  height: ${({ isDesktop }) => (isDesktop ? '566px' : '100%')};
+  background-color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+
+  svg {
+    animation: ${rotate} 2s linear infinite;
+  }
 `;
 
 export const Header = styled.div`

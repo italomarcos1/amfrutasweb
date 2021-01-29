@@ -41,7 +41,7 @@ export function* signIn({ payload }) {
     if (message === 'Não há produtos favoritados.') yield put(addFavorites([]));
     else yield put(addFavorites(favData));
 
-    if (name === '' && last_name === '') {
+    if (!name && !last_name) {
       const {
         data: { data },
       } = yield call(backend.put, 'clients', {
@@ -93,11 +93,7 @@ export function* signIn({ payload }) {
       yield put(populateAddresses([]));
     } else yield put(populateAddresses([...addresses]));
 
-    let userWithUuid = { ...user, uuid: newUuid };
-
-    if (typeof user.default_address !== 'undefined') {
-      userWithUuid = { ...userWithUuid, default_address: [] };
-    }
+    const userWithUuid = { ...user, uuid: newUuid };
 
     yield put(signInSuccess(token, userWithUuid));
   } catch (error) {

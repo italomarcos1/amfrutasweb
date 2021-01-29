@@ -3,6 +3,8 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
+import { FaSpinner } from 'react-icons/fa';
+
 import {
   Container,
   Content,
@@ -13,6 +15,7 @@ import {
   ShippingWarning,
   MinValueContainer,
   MinValue,
+  LoadingContainer,
 } from './styles';
 
 import logo from '~/assets/amfrutas-white.svg';
@@ -40,6 +43,7 @@ import backend from '~/services/api';
 export default function Basket() {
   const { products, price, saved } = useSelector(state => state.cart);
   const signed = useSelector(state => state.auth.signed);
+  const removingProduct = useSelector(state => state.cart.removingProduct);
   const dispatch = useDispatch();
   const history = useHistory();
   const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
@@ -159,7 +163,7 @@ export default function Basket() {
       )}
       <Container isDesktop={isDesktop}>
         <Content isDesktop={isDesktop}>
-          <div style={isDesktop ? {} : { width: '100%' }}>
+          <div style={isDesktop ? { width: 840 } : { width: '100%' }}>
             <Title>Cesto de Compras</Title>
             {shouldntProceed && (
               <MinValueContainer isDesktop={isDesktop}>
@@ -182,7 +186,12 @@ export default function Basket() {
               </MinValueContainer>
             )}
 
-            {!loginModal && products.length !== 0 ? (
+            {removingProduct ? (
+              <LoadingContainer isDesktop={isDesktop}>
+                <FaSpinner color="#666" size={38} />
+                <strong>Removendo o produto do carrinho, aguarde...</strong>
+              </LoadingContainer>
+            ) : !loginModal && products.length !== 0 ? (
               <ItemsList
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}

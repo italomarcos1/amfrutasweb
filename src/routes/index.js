@@ -8,6 +8,7 @@ import Content from '~/pages/Contents/pages/ViewContent';
 import Basket from '~/pages/Basket';
 import Delivery from '~/pages/Delivery';
 import Confirmation from '~/pages/Confirmation';
+import AppleSuccessful from '~/pages/LoginModal/pages/AppleLoginSuccessful';
 
 import IsMobile from '~/pages/IsMobile';
 import Menu from '~/pages/Menu';
@@ -36,6 +37,7 @@ export default function Routes() {
     <>
       <Switch>
         <Route path="/" exact component={Home} />
+        <Route path="/cliente/apple/callback" component={AppleSuccessful} />
         <Route path="/updating" exact component={IsMobile} />
         <Route path="/menu" component={Menu} />
         <Route path="/conteudos" component={Contents} />

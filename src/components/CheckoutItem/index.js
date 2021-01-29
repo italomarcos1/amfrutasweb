@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 // import { Container } from './styles';
 
@@ -18,6 +18,12 @@ export default function Item({ item, index, isDesktop }) {
     product: { thumbs, title, price_promotional, cback, has_promotion },
   } = item;
 
+  const [finalCback, setFinalCback] = useState(cback);
+
+  useEffect(() => {
+    setFinalCback((Math.round(Number(cback) * qty * 100) / 100).toFixed(2));
+  }, [qty, cback]);
+
   return (
     <Container
       key={id}
@@ -32,7 +38,7 @@ export default function Item({ item, index, isDesktop }) {
           <PriceAndAmount hasCback={!!cback}>
             {!!cback ? (
               cback !== '0.00' ? (
-                <b>Cashback €&nbsp;{cback}</b>
+                <b>Cashback €&nbsp;{finalCback}</b>
               ) : (
                 ''
               )

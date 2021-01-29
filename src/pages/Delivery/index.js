@@ -120,7 +120,14 @@ export default function Delivery() {
   const finalProfile = useSelector(state => state.user.finalProfile);
   const finalAddress = useSelector(state => state.addresses.finalAddress);
   const addresses = useSelector(state => state.addresses.addresses);
-  const [primaryAddress, setPrimaryAddress] = useState(profile.default_address);
+
+  const [primaryAddress, setPrimaryAddress] = useState(
+    !!profile.default_address
+      ? profile.default_address.length !== 0
+        ? { ...profile.default_address }
+        : null
+      : null
+  );
 
   const [formattedAddresses, setFormattedAddresses] = useState(null);
 
@@ -128,28 +135,21 @@ export default function Delivery() {
 
   const [zipcode, setZipcode] = useState(() => {
     if (!!primaryAddress) {
-      if (primaryAddress.length !== 0) {
-        const zipcodeAsArray = [...primaryAddress.zipcode];
+      const zipcodeAsArray = [...primaryAddress.zipcode];
 
-        const findHyphen = zipcodeAsArray.indexOf('-');
+      const findHyphen = zipcodeAsArray.indexOf('-');
 
-        if (findHyphen > -1) return primaryAddress.zipcode;
+      if (findHyphen > -1) return primaryAddress.zipcode;
 
-        const formattedZipcode = `${zipcodeAsArray[0]}${zipcodeAsArray[1]}${zipcodeAsArray[2]}${zipcodeAsArray[3]}-${zipcodeAsArray[4]}${zipcodeAsArray[5]}${zipcodeAsArray[6]}`;
-        return formattedZipcode;
-      }
+      const formattedZipcode = `${zipcodeAsArray[0]}${zipcodeAsArray[1]}${zipcodeAsArray[2]}${zipcodeAsArray[3]}-${zipcodeAsArray[4]}${zipcodeAsArray[5]}${zipcodeAsArray[6]}`;
+      return formattedZipcode;
     }
     return '';
   });
 
-  const [residence, setResidence] = useState(() => {
-    if (!!primaryAddress) {
-      if (primaryAddress.length !== 0) {
-        return primaryAddress.address;
-      }
-    }
-    return '';
-  });
+  const [residence, setResidence] = useState(
+    !!primaryAddress ? primaryAddress.address : ''
+  );
 
   const [hasLookup, setHasLookup] = useState(false);
 
@@ -527,7 +527,7 @@ export default function Delivery() {
       if (anyEmptyField) {
         setEmailError(!mailIsValid(formData.email));
         setInvalidDocument(!documentIsValid(formData.document));
-        setInvalidPhone(!phoneIsValid(formData.phone));
+        setInvalidPhone(!phoneIsValid(formData.cellphone));
         setInvalidMailCode(!mailCodeIsValid(formData.verification_code));
         setInvalidGender(nameIsValid(gender));
         setInvalidBirth(!dateIsValid(formData.birth));
@@ -550,10 +550,33 @@ export default function Delivery() {
         return;
       }
 
+      const allDataShipping = shippingInfoRef.current.getData();
+
+      const { destination_name } = allDataShipping;
+
+      const [newName, ...restOfName] = destination_name.split(' ');
+
+      const newNickname = restOfName.join(' ');
+
+      const shippingData = {
+        ...formData,
+        destination_name: newName,
+        destination_last_name: newNickname,
+        country,
+        zipcode,
+        default: 1,
+      };
+
       const profileData = {
         ...formData,
         gender,
+        default_address:
+          newPrimaryAddress && deliveryOption === 'delivery'
+            ? shippingData
+            : primaryAddress,
       };
+
+      // console.tron.log(profileData);
 
       dispatch(addFinalProfileRequest(profileData));
 
@@ -568,6 +591,10 @@ export default function Delivery() {
       deliveryDay,
       deliveryHour,
       deliveryOption,
+      newPrimaryAddress,
+      primaryAddress,
+      country,
+      zipcode,
     ]
   );
 
@@ -1007,7 +1034,7 @@ export default function Delivery() {
             </InputContainer>
             <InputContainer isDesktop={isDesktop}>
               <InputMask
-                name="phone"
+                name="cellphone"
                 type="phone"
                 title="Telemóvel"
                 error={invalidPhone}

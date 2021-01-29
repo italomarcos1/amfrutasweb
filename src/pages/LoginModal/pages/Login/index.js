@@ -84,7 +84,7 @@ export default function Login({ closeModal, setPage, isDesktop }) {
           title="E-mail"
           placeholder="Escreve o teu e-mail"
           customWidth={isDesktop ? 462 : '100%'}
-          style={{ marginTop: 20 }}
+          style={loading ? { marginTop: 20, opacity: 0.6 } : {}}
           setError={value => setEmailError(!mailIsValid(value))}
           value={email}
           onChange={({ target: { value } }) => onlyValues(value, setEmail)}
@@ -98,7 +98,13 @@ export default function Login({ closeModal, setPage, isDesktop }) {
           customWidth={isDesktop ? 462 : '100%'}
           value={password}
           onChange={({ target: { value } }) => setPassword(value)}
-          style={isDesktop ? { marginTop: 20 } : { marginTop: 10 }}
+          style={
+            loading && isDesktop
+              ? { marginTop: isDesktop ? 20 : 10, opacity: 0.6 }
+              : isDesktop
+              ? { marginTop: 20 }
+              : { marginTop: 10 }
+          }
           error={passwordError}
         />
         <ForgotPassword onClick={() => setPage('forgot')}>

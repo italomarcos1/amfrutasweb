@@ -1,4 +1,4 @@
-import { call, put, all, takeLatest } from 'redux-saga/effects';
+import { call, put, all, takeLatest, select } from 'redux-saga/effects';
 
 import backend from '~/services/api';
 
@@ -13,11 +13,13 @@ export function* updateProfile({ payload }) {
   try {
     const { data } = payload;
 
+    const { default_address } = yield select(s => s.user.profile);
+
     const {
       data: { data: profileData },
     } = yield call(backend.put, 'clients', data);
 
-    yield put(updateProfileSuccess(profileData));
+    yield put(updateProfileSuccess({ ...profileData, default_address }));
   } catch (error) {
     yield put(updateProfileFailure());
   }
@@ -27,11 +29,9 @@ export function* addFinalProfile({ payload }) {
   try {
     const { profile } = payload;
 
-    const {
-      data: { data },
-    } = yield call(backend.put, 'clients', profile);
+    yield call(backend.put, 'clients', profile);
 
-    yield put(addFinalProfileSuccess(data));
+    yield put(addFinalProfileSuccess(profile));
   } catch (error) {
     yield put(addFinalProfileFailure());
   }

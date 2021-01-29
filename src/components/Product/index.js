@@ -46,6 +46,7 @@ export default function Product({ product, index, setHeight }) {
   const favorites = useSelector(state => state.cart.favorites);
   const updating = useSelector(state => state.cart.updating);
   const signed = useSelector(state => state.auth.signed);
+  const addingProduct = useSelector(state => state.cart.addingProduct);
 
   const [qty, setQty] = useState(1);
 
@@ -180,7 +181,7 @@ export default function Product({ product, index, setHeight }) {
             type="button"
             onClick={handleAddToCart}
             isDesktop={isDesktop}
-            disabled={qty === 0}
+            disabled={qty === 0 || addingProduct}
           >
             <img
               src={basket_active}

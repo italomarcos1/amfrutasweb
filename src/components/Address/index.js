@@ -64,7 +64,7 @@ export default function Address({
       <small>{`${number} ${zipcode} ${district}`}</small>
 
       <small>Portugal</small>
-      <small>{!!profile ? profile.phone : '---'}</small>
+      <small>{!!profile ? profile.cellphone : '---'}</small>
 
       <StartStop selected={selected === id} style={{ marginRight: 30 }}>
         <button
