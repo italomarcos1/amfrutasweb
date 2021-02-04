@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form } from '@unform/web';
+import * as Yup from 'yup';
 
 import { FaSpinner } from 'react-icons/fa';
 
@@ -15,38 +16,31 @@ import {
 
 import { onlyValues } from '~/utils/onlyValues';
 
-import Input from '~/components/Input';
-import InputMask from '~/components/InputMask';
+import Input from '~/components/FormInput';
+import InputMask from '~/components/FormInputMask';
 import Toast from '~/components/Toast';
-import { nameIsValid, mailIsValid, dateIsValid } from '~/utils/validation';
 
-import { signUpRequest, cleanRegister } from '~/store/modules/auth/actions';
+import { signInSuccess, cleanRegister } from '~/store/modules/auth/actions';
 
 import lock from '~/assets/lock.svg';
+import getValidationErrors from '~/utils/validationErrors';
+import backend from '~/services/api';
 
 export default function Register({ closeModal, isDesktop }) {
-  const [name, setName] = useState('');
-  const [invalidName, setInvalidName] = useState(false);
-  const [lastName, setLastName] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [invalidLastName, setInvalidLastName] = useState(false);
-  const [invalidFullName, setInvalidFullName] = useState(false);
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState(false);
-  const [password, setPassword] = useState('');
-  const [passwordError, setPasswordError] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [confirmPasswordError, setConfirmPasswordError] = useState(false);
-
-  const [birthday, setBirthDate] = useState(isDesktop ? '' : '01/01/2020');
-  const [birthDateError, setBirthDateError] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
+  const [toastMessage, setToastMessage] = useState(
+    'O email informado já existe, faça login.'
+  );
 
   const signed = useSelector(state => state.auth.signed);
   const loading = useSelector(state => state.auth.loading);
   const registerError = useSelector(state => state.auth.registerError);
+  const sessionUuid = useSelector(state => state.auth.uuid);
 
   const dispatch = useDispatch();
+
+  const formRef = useRef();
+  const submitButtonRef = useRef();
 
   useEffect(() => {
     if (signed) closeModal();
@@ -68,81 +62,115 @@ export default function Register({ closeModal, isDesktop }) {
     }
   }, [dispatch, registerError]);
 
-  const handleSubmit = useCallback(() => {
-    try {
-      setInvalidName(false);
-      setInvalidLastName(false);
-      setInvalidFullName(false);
-      setEmailError(false);
-      setBirthDateError(false);
-      setPasswordError(false);
-      setConfirmPasswordError(false);
+  const handleLogin = useCallback(
+    async data => {
+      const response = await backend.post('auth/login', {
+        uuid: sessionUuid,
+        ...data,
+      });
 
-      setToastVisible(false);
+      const { token, user } = response.data.data;
 
-      if (
-        (isDesktop && nameIsValid(name)) ||
-        (isDesktop && nameIsValid(lastName)) ||
-        (!isDesktop && nameIsValid(fullName)) ||
-        !mailIsValid(email) ||
-        !dateIsValid(birthday) ||
-        nameIsValid(password) ||
-        nameIsValid(confirmPassword)
-      ) {
+      backend.defaults.headers.Authorization = `Bearer ${token}`;
+
+      await backend.put('clients', {
+        birth: data.birthday,
+      });
+
+      const updatedUser = { ...user, default_address: [] };
+
+      dispatch(signInSuccess(token, updatedUser));
+    },
+    [dispatch, sessionUuid]
+  );
+
+  const handleSubmit = useCallback(
+    async data => {
+      try {
+        formRef.current.setErrors({});
+        const schema = Yup.object().shape({
+          name: Yup.string().required('O nome é obrigatório'),
+          last_name: Yup.string().required('O apelido é obrigatório'),
+          email: Yup.string().required().email('Informe um e-mail válido'),
+          birthday: Yup.string()
+            .min(10)
+            .matches(/^[0-3][0-9]\/[0-1][0-9]\/[1-2][0|9][0-9][0-9]$/)
+            .required(),
+          password: Yup.string().min(6).required(),
+          confirmPassword: Yup.string()
+            .min(6)
+            .when('password', (p, field) =>
+              p ? field.required().oneOf([Yup.ref('password')]) : field
+            ),
+        });
+
+        const mobileSchema = Yup.object().shape({
+          full_name: Yup.string().required('O nome é obrigatório'),
+          email: Yup.string().required().email('Informe um e-mail válido'),
+          password: Yup.string().min(6).required(),
+          confirmPassword: Yup.string()
+            .min(6)
+            .when('password', (p, field) =>
+              p ? field.required().oneOf([Yup.ref('password')]) : field
+            ),
+        });
+
         if (isDesktop) {
-          setInvalidName(nameIsValid(name));
-          setInvalidLastName(nameIsValid(lastName));
+          delete data.full_name;
+
+          await schema.validate(data, { abortEarly: false });
+
+          setToastVisible(false);
+
+          delete data.confirmPassword;
+
+          await handleLogin(data);
+
+          return;
         }
-        if (!isDesktop && nameIsValid(fullName)) {
-          setInvalidFullName(nameIsValid(fullName));
-        }
-        setEmailError(!mailIsValid(email));
-        setBirthDateError(!dateIsValid(birthday));
-        setPasswordError(nameIsValid(password));
-        setConfirmPasswordError(nameIsValid(confirmPassword));
-        setToastVisible(true);
 
-        return;
-      }
+        delete data.name;
+        delete data.last_name;
+        delete data.birthday;
 
-      if (confirmPassword !== password) {
-        setConfirmPasswordError(true);
-        return;
-      }
+        await mobileSchema.validate(data, { abortEarly: false });
+        setToastVisible(false);
 
-      if (isDesktop) {
-        dispatch(signUpRequest({ name, lastName, email, password, birthday }));
+        const [currentName, ...restOfName] = data.full_name.split(' ');
 
-        return;
-      }
+        const currentLastName = restOfName.join(' ');
 
-      const [currentName, ...restOfName] = fullName.split(' ');
+        delete data.confirmPassword;
 
-      const currentLastName = restOfName.join(' ');
-
-      dispatch(
-        signUpRequest({
+        await handleLogin({
+          ...data,
           name: currentName,
-          lastName: currentLastName,
-          email,
-          password,
-          birthday,
-        })
-      );
-    } catch (err) {
-      console.log('Erro na newsletter');
-    }
-  }, [
-    dispatch,
-    name,
-    lastName,
-    email,
-    password,
-    birthday,
-    fullName,
-    confirmPassword,
-    isDesktop,
-  ]);
+          last_name: currentLastName,
+        });
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(data, err);
+
+          formRef.current?.setErrors(errors);
+          return;
+        }
+
+        const {
+          meta: { message },
+        } = err.response.data;
+        if (message === 'Credenciais incorretas') {
+          setToastMessage('O email informado já existe, faça login.');
+          setToastVisible(true);
+        }
+        if (message === 'Preencha com seu apelido!') {
+          setToastMessage('Preencha seu nome completo (nome e apelido)');
+          setToastVisible(true);
+          formRef.current.setFieldError('full_name', true);
+        }
+      }
+    },
+    [isDesktop, handleLogin]
+  );
 
   return (
     <>
@@ -151,7 +179,11 @@ export default function Register({ closeModal, isDesktop }) {
         <br />
         <b>CONTA COM E-MAIL E SEGURANÇA</b>
       </Title>
-      <Form onSubmit={handleSubmit} style={isDesktop ? {} : { width: '85%' }}>
+      <Form
+        onSubmit={handleSubmit}
+        style={isDesktop ? {} : { width: '85%' }}
+        ref={formRef}
+      >
         <InputContainer
           isDesktop={isDesktop}
           style={isDesktop ? {} : { height: 53 }}
@@ -162,18 +194,12 @@ export default function Register({ closeModal, isDesktop }) {
                 name="name"
                 title="Nome"
                 placeholder="Escreve o teu nome"
-                error={invalidName}
                 customWidth={isDesktop ? 221 : '100%'}
-                onChange={({ target: { value } }) => setName(value)}
-                value={name}
               />
               <Input
                 name="last_name"
                 title="Apelido"
                 placeholder="Escolhe o teu apelido"
-                error={invalidLastName}
-                onChange={({ target: { value } }) => setLastName(value)}
-                value={lastName}
                 customWidth={isDesktop ? 221 : '100%'}
               />
             </>
@@ -183,9 +209,6 @@ export default function Register({ closeModal, isDesktop }) {
               name="full_name"
               title="Nome completo"
               placeholder="Escreve o teu nome"
-              error={invalidLastName}
-              onChange={({ target: { value } }) => setFullName(value)}
-              value={fullName}
               customWidth="100%"
             />
           )}
@@ -198,10 +221,6 @@ export default function Register({ closeModal, isDesktop }) {
             name="email"
             title="E-mail"
             placeholder="Escreve o teu e-mail"
-            setError={value => setEmailError(!mailIsValid(value))}
-            value={email}
-            onChange={({ target: { value } }) => onlyValues(value, setEmail)}
-            error={emailError}
             customWidth={isDesktop ? 221 : '100%'}
           />
           {isDesktop && (
@@ -209,9 +228,6 @@ export default function Register({ closeModal, isDesktop }) {
               name="birthday"
               title="Data de Nascimento"
               placeholder="Data de Nascimento"
-              value={birthday}
-              onChange={({ target: { value } }) => setBirthDate(value)}
-              error={birthDateError}
               customWidth={isDesktop ? 221 : '100%'}
             />
           )}
@@ -222,9 +238,6 @@ export default function Register({ closeModal, isDesktop }) {
             title="Palavra-passe"
             placeholder="Escolhe a tua palavra-passe"
             type="password"
-            value={password}
-            onChange={({ target: { value } }) => setPassword(value)}
-            error={passwordError}
             customWidth={isDesktop ? 221 : '100%'}
           />
           <Input
@@ -232,16 +245,20 @@ export default function Register({ closeModal, isDesktop }) {
             title="Repita palavra-passe"
             placeholder="Repita a tua palavra-passe"
             type="password"
-            value={confirmPassword}
-            onChange={({ target: { value } }) => setConfirmPassword(value)}
-            error={confirmPasswordError}
             customWidth={isDesktop ? 221 : '100%'}
           />
+          <button
+            type="submit"
+            ref={submitButtonRef}
+            style={{ display: 'none' }}
+          >
+            submitButton
+          </button>
         </InputContainer>
       </Form>
 
       <Button
-        onClick={handleSubmit}
+        onClick={() => submitButtonRef.current.click()}
         color="#1DC167"
         shadowColor="#17A75B"
         style={isDesktop ? { marginTop: 47 } : { width: '85%', marginTop: 12 }}
@@ -251,12 +268,7 @@ export default function Register({ closeModal, isDesktop }) {
       <SecureLogin style={isDesktop ? { marginTop: 48 } : { marginTop: 12 }}>
         Secure <img src={lock} alt="Lock" /> Login
       </SecureLogin>
-      {toastVisible && (
-        <Toast
-          status="O email informado já existe, faça login."
-          color="#f56060"
-        />
-      )}
+      {toastVisible && <Toast status={toastMessage} color="#f56060" />}
     </>
   );
 }

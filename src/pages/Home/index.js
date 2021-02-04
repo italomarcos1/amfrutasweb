@@ -326,7 +326,7 @@ export default function Home() {
     'banners',
     loadBanners,
     {
-      staleTime: 1000 * 60 * 60 * 10,
+      staleTime: 1000 * 60 * 60 * 10, // 10 hours
     }
   );
 
@@ -334,7 +334,7 @@ export default function Home() {
     'whatsappAndShipping',
     loadWhatsappAndShipping,
     {
-      staleTime: 1000 * 60 * 60 * 10,
+      staleTime: 1000 * 60 * 60 * 10, // 10 hours
     }
   );
 

@@ -74,13 +74,20 @@ export default function Basket() {
     ];
 
     const {
-      data: { data },
-    } = await backend.get('/configurations', { keys });
+      data: {
+        data: {
+          shipping_cost,
+          min_value_shipping,
+          min_value_free_shipping,
+          min_value_withdrawinstore,
+        },
+      },
+    } = await backend.get(`/configurations?keys=${keys.join()}`);
 
-    setFixedShippingCost(data.shipping_cost);
-    setMinValueShipping(data.min_value_shipping);
-    setMinValueFreeShipping(data.min_value_free_shipping);
-    setMinValueWithdrawStore(data.min_value_withdrawinstore);
+    setFixedShippingCost(shipping_cost);
+    setMinValueShipping(min_value_shipping);
+    setMinValueFreeShipping(min_value_free_shipping);
+    setMinValueWithdrawStore(min_value_withdrawinstore);
   }, []);
 
   const loadShippingCost = useCallback(async () => {

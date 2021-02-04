@@ -39,7 +39,6 @@ export default function ListProducts() {
     for (let i = 0; i < lastPage; i += 1) {
       items.push(i);
     }
-    console.log('fook');
     setPaginationArray(items);
   }, [lastPage]);
 
@@ -142,7 +141,7 @@ export default function ListProducts() {
     ['products', currentPage, field, perPage],
     loadProducts,
     {
-      staleTime: 1000 * 60 * 30,
+      staleTime: 1000 * 60 * 30, // 30 mins
     }
   );
 
@@ -165,7 +164,7 @@ export default function ListProducts() {
   useEffect(() => {
     if (products.length === 0) return;
 
-    const height = Number(productHeight) < 290 ? 352 : productHeight;
+    const height = Number(productHeight) < 290 ? 368 : productHeight;
 
     let hasLastRow;
 
@@ -173,6 +172,9 @@ export default function ListProducts() {
       hasLastRow =
         products.length > 10 ? 1184 : Math.ceil(products.length / 5) * 404;
     else hasLastRow = Math.ceil(products.length / 2) * (height + 25);
+
+    console.log(hasLastRow);
+    console.log(productHeight);
 
     setPageHeight(hasLastRow);
   }, [isDesktop, products, productHeight]);

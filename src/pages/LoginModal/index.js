@@ -57,7 +57,7 @@ export default function LoginModal({ closeModal }) {
 
   return (
     <Background>
-      <Container onSubmit={() => {}} isDesktop={isDesktop} page={page}>
+      <Container isDesktop={isDesktop} page={page}>
         {isDesktop && (
           <ShopDetails>
             <img src={logo} alt="" width={190} />

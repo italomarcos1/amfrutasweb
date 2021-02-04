@@ -300,6 +300,10 @@ export default function Confirmation() {
             <Title style={isDesktop ? {} : { marginTop: 20 }}>Resumo</Title>
             <CheckoutDetails isDesktop={isDesktop}>
               <CheckoutItem>
+                <h1>Nº da Encomenda</h1>
+                <h2>{!!orderInfo ? `${orderInfo.id}` : '---'}</h2>
+              </CheckoutItem>
+              <CheckoutItem>
                 <h1>Produtos</h1>
                 <h2>€&nbsp;{!!orderInfo ? `${orderInfo.subtotal}` : '0.00'}</h2>
               </CheckoutItem>

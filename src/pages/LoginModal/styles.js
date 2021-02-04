@@ -14,7 +14,7 @@ export const Background = styled.div`
   z-index: 1099;
 `;
 
-export const Container = styled(Form)`
+export const Container = styled.div`
   display: flex;
   align-items: center;
   width: ${({ isDesktop }) => (isDesktop ? '820px' : '90%')};

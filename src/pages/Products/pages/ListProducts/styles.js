@@ -7,7 +7,7 @@ export const Container = styled.ul`
   flex-wrap: wrap;
   width: ${({ isDesktop }) => (isDesktop ? '995px' : '100%')};
 
-  height: ${({ pageHeight }) => pageHeight}px;
+  height: ${({ pageHeight }) => `${pageHeight}px`};
   margin-top: 18px;
 `;
 

@@ -95,9 +95,9 @@ export default function Product({ product, index, setHeight }) {
 
   useEffect(() => {
     if (isDesktop || !setHeight) return;
-    const el = document.getElementById(`product${index}`);
-    console.log(el);
-    setHeight(el.offsetHeight);
+
+    const { offsetHeight } = document.getElementById(`product${index}`);
+    setHeight(offsetHeight);
   }, [isDesktop, index, setHeight, product]);
 
   return (

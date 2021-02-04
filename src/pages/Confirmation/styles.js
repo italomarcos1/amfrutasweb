@@ -319,7 +319,7 @@ export const SectionTitle = styled.div`
 
 export const CheckoutDetails = styled.div`
   width: ${({ isDesktop }) => (isDesktop ? '360px' : '100%')};
-  height: ${({ isDesktop }) => (isDesktop ? 455 : 483)}px;
+  height: ${({ isDesktop }) => (isDesktop ? 492.5 : 530.5)}px;
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 6px;

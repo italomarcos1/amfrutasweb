@@ -142,10 +142,6 @@ export function* signUp({ payload }) {
 
     yield put(signInSuccess(token, updatedUser));
   } catch (error) {
-    // console.tron.log(error);
-    // console.log(error);
-    // console.log('ai');
-    // o endereço cadastrado já existe
     yield put(signUpFailure());
   }
 }

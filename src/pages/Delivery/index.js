@@ -167,6 +167,11 @@ export default function Delivery() {
       : '0.00'
   );
 
+  const [fixedShippingCost, setFixedShippingCost] = useState(0);
+  const [minValueShipping, setMinValueShipping] = useState(0);
+  const [minValueFreeShipping, setMinValueFreeShipping] = useState(0);
+  const [minValueWithdrawStore, setMinValueWithdrawStore] = useState(0);
+
   const [invalidFields, setInvalidFields] = useState([
     false,
     false,
@@ -280,12 +285,18 @@ export default function Delivery() {
   useEffect(() => loadShippingCost(), [loadShippingCost, price]);
 
   const loadData = useCallback(async () => {
-    const keys = ['withdrawinstore_message'];
+    const keys = [
+      'min_value_shipping',
+      'shipping_cost',
+      'min_value_free_shipping',
+      'min_value_withdrawinstore',
+      'withdrawinstore_message',
+    ];
 
     const [
       delivery,
       shipping,
-      withdraw,
+      configurationsResponse,
       availableCbackResponse,
     ] = await Promise.all([
       backend.get('checkout/delivery-intervals'),
@@ -303,8 +314,16 @@ export default function Delivery() {
     } = shipping;
 
     const {
-      data: { data: withdrawData },
-    } = withdraw;
+      data: {
+        data: {
+          min_value_shipping,
+          shipping_cost,
+          min_value_free_shipping,
+          min_value_withdrawinstore,
+          withdrawinstore_message,
+        },
+      },
+    } = configurationsResponse;
 
     const {
       data: { data: availableCback },
@@ -317,7 +336,12 @@ export default function Delivery() {
 
     setDeliveryDays(formattingDeliveryDays);
     setShippingMethods(shippingData);
-    setWithdrawMessage(withdrawData.withdrawinstore_message);
+
+    setFixedShippingCost(shipping_cost);
+    setMinValueShipping(min_value_shipping);
+    setMinValueFreeShipping(min_value_free_shipping);
+    setMinValueWithdrawStore(min_value_withdrawinstore);
+    setWithdrawMessage(withdrawinstore_message);
 
     if (clientCback !== availableCback) {
       dispatch(
@@ -938,9 +962,9 @@ export default function Delivery() {
             <ShippingWarning isDesktop={isDesktop}>
               Levantamento na loja:
               <b>Grátis</b>
-              <br /> Compras até € 30,00:
-              <b>Entrega € 5,00</b>
-              <br /> Compras acima de € 30,00:
+              <br /> Compras até € {minValueShipping}:
+              <b>Entrega € {fixedShippingCost}</b>
+              <br /> Compras acima de € {minValueFreeShipping}:
               <b>Entrega Grátis</b>
             </ShippingWarning>
           </DeliveryOptionsContainer>

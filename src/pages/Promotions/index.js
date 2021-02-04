@@ -171,7 +171,7 @@ export default function Promotions() {
     ['promotions', currentPage, field, perPage],
     loadProducts,
     {
-      staleTime: 1000 * 60 * 30,
+      staleTime: 1000 * 60 * 30, // 30 mins
     }
   );
 
@@ -194,7 +194,7 @@ export default function Promotions() {
   useEffect(() => {
     if (products.length === 0) return;
 
-    const height = Number(productHeight) < 290 ? 352 : productHeight;
+    const height = Number(productHeight) < 290 ? 368 : productHeight;
 
     let hasLastRow;
 
