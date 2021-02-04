@@ -12,7 +12,6 @@ export default function CustomInput({
   style,
   customWidth,
   verified,
-  setError,
   placeholder,
   inputStyle,
   titleStyle,
@@ -59,7 +58,7 @@ export default function CustomInput({
         active={active}
         type="text"
         onFocus={() => setActive(true)}
-        onBlur={({ target: { value } }) => setActive(false)}
+        onBlur={() => setActive(false)}
         {...rest}
       />
     </Container>
@@ -76,7 +75,6 @@ CustomInput.propTypes = {
   hasMarginLeft: PropTypes.bool,
   customWidth: PropTypes.number,
   resetValue: PropTypes.func,
-  setError: PropTypes.func,
   style: PropTypes.oneOfType([PropTypes.object]),
   inputStyle: PropTypes.oneOfType([PropTypes.object]),
   titleStyle: PropTypes.oneOfType([PropTypes.object]),
@@ -93,5 +91,4 @@ CustomInput.defaultProps = {
   inputStyle: {},
   titleStyle: {},
   resetValue: () => {},
-  setError: () => {},
 };

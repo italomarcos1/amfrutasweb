@@ -1,8 +1,15 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useHistory, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaSpinner } from 'react-icons/fa';
 import { useMediaQuery } from 'react-responsive';
+import * as Yup from 'yup';
 
 import {
   Container,
@@ -37,7 +44,6 @@ import backend from '~/services/api';
 import { InputContainer, Button, SecureLogin } from '~/components/LoginModal';
 
 import lock from '~/assets/lock.svg';
-import facebook from '~/assets/facebook.svg';
 import checked from '~/assets/checked.svg';
 
 import truckBlack from '~/assets/orders/truck-black.svg';
@@ -50,8 +56,8 @@ import Footer from '~/components/Footer';
 import TextArea from '~/components/TextArea';
 
 import NoTitleSelect from '~/components/NoTitleSelect';
-import Input from '~/components/Input';
-import InputMask from '~/components/InputMask';
+import Input from '~/components/FormInput';
+import InputMask from '~/components/FormInputMask';
 import Select from '~/components/Select';
 import ItemsList from '~/components/ItemsList';
 
@@ -82,6 +88,7 @@ import {
 } from '~/utils/validation';
 
 import fakeAddress from '~/utils/fakeAddress';
+import getValidationErrors from '~/utils/validationErrors';
 
 export default function Delivery() {
   const [deliveryOption, setDeliveryOption] = useState('delivery');
@@ -121,13 +128,21 @@ export default function Delivery() {
   const finalAddress = useSelector(state => state.addresses.finalAddress);
   const addresses = useSelector(state => state.addresses.addresses);
 
-  const [primaryAddress, setPrimaryAddress] = useState(
-    !!profile.default_address
+  const primaryAddress = useMemo(() => {
+    return !!profile.default_address
       ? profile.default_address.length !== 0
         ? { ...profile.default_address }
         : null
-      : null
-  );
+      : null;
+  }, [profile]);
+
+  // const primaryAddress = useMemo(() => {
+  //   return !!profile.default_address
+  //     ? profile.default_address.length !== 0
+  //       ? { ...profile.default_address }
+  //       : null
+  //     : null;
+  // }, [profile]);
 
   const [formattedAddresses, setFormattedAddresses] = useState(null);
 
@@ -172,30 +187,6 @@ export default function Delivery() {
   const [minValueFreeShipping, setMinValueFreeShipping] = useState(0);
   const [minValueWithdrawStore, setMinValueWithdrawStore] = useState(0);
 
-  const [invalidFields, setInvalidFields] = useState([
-    false,
-    false,
-    false,
-    false,
-    false,
-  ]);
-
-  const [locationInvalidFields, setLocationInvalidFields] = useState([
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-  ]);
-
-  const [invalidBirth, setInvalidBirth] = useState(false);
-
-  const [invalidDocument, setInvalidDocument] = useState(false);
-  const [invalidGender, setInvalidGender] = useState(false);
-  const [invalidPhone, setInvalidPhone] = useState(false);
-  const [invalidMailCode, setInvalidMailCode] = useState(false);
-  const [invalidResidence, setInvalidResidence] = useState(false);
   const [invalidPostcode, setInvalidPostcode] = useState(false);
   const [invalidLocation, setInvalidLocation] = useState(false);
 
@@ -371,23 +362,7 @@ export default function Delivery() {
   useEffect(() => {
     window.scrollTo(0, 0);
     formatAddresses();
-  }, []);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
     loadData();
-  }, []);
-
-  const validateData = useCallback((formData, invalidateFields) => {
-    const formattedData = Object.values(formData);
-
-    const anyEmptyField = formattedData.some(field => nameIsValid(field));
-
-    if (anyEmptyField) {
-      invalidateFields(formattedData.map(field => nameIsValid(field)));
-    }
-
-    return anyEmptyField;
   }, []);
 
   const populateAddress = useCallback(() => {
@@ -534,84 +509,103 @@ export default function Delivery() {
   }, [newAddress, hasLookup]);
 
   const handleSubmit = useCallback(
-    formData => {
-      invalidFields.fill(false);
-      setInvalidDocument(false);
-      setInvalidPhone(false);
-      setInvalidMailCode(false);
-      setInvalidGender(false);
-      setEmailError(false);
-      setInvalidBirth(false);
-      setInvalidDeliveryDay(false);
-      setInvalidDeliveryHour(false);
-      setValidUserInfo(false);
+    async formData => {
+      try {
+        console.log(formData);
 
-      const anyEmptyField = validateData(formData, setInvalidFields);
+        setValidUserInfo(false);
+        setInvalidDeliveryDay(false);
+        setInvalidDeliveryHour(false);
 
-      if (anyEmptyField) {
-        setEmailError(!mailIsValid(formData.email));
-        setInvalidDocument(!documentIsValid(formData.document));
-        setInvalidPhone(!phoneIsValid(formData.cellphone));
-        setInvalidMailCode(!mailCodeIsValid(formData.verification_code));
-        setInvalidGender(nameIsValid(gender));
-        setInvalidBirth(!dateIsValid(formData.birth));
+        profileInfoRef.current.setErrors({});
+
+        const schema = Yup.object().shape({
+          name: Yup.string().required('O nome é obrigatório'),
+          last_name: Yup.string().required('O apelido é obrigatório'),
+          email: Yup.string().required().email('Informe um e-mail válido'),
+          birth: Yup.string()
+            .min(10)
+            .matches(/^[0-3][0-9]\/[0-1][0-9]\/[1-2][0|9][0-9][0-9]$/)
+            .required(),
+          document: Yup.string()
+            .min(9)
+            .matches(/^[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$/)
+            .required(),
+          cellphone: Yup.string()
+            .min(12)
+            .matches(
+              /^[0-9][0-9][\s][0-9][0-9][0-9][\s][0-9][0-9][\s][0-9][0-9]$/
+            )
+            .required(),
+        });
+
+        const formDataWithEmail = { ...formData, email };
+
+        await schema.validate(formDataWithEmail, { abortEarly: false });
+
+        if (!!formData) {
+          return;
+        }
+
+        if (
+          deliveryOption === 'delivery' &&
+          (nameIsValid(deliveryDay) || nameIsValid(deliveryHour))
+        ) {
+          setInvalidDeliveryDay(nameIsValid(deliveryDay));
+          setInvalidDeliveryHour(nameIsValid(deliveryHour));
+
+          window.scrollTo(0, 0);
+          setFinishingOrder(false);
+
+          return;
+        }
+
+        const allDataShipping = shippingInfoRef.current.getData();
+
+        const { destination_name } = allDataShipping;
+
+        const [newName, ...restOfName] = destination_name.split(' ');
+
+        const newNickname = restOfName.join(' ');
+
+        const shippingData = {
+          ...formData,
+          destination_name: newName,
+          destination_last_name: newNickname,
+          country,
+          zipcode,
+          default: 1,
+        };
+
+        const profileData = {
+          ...formData,
+          gender,
+          default_address:
+            newPrimaryAddress && deliveryOption === 'delivery'
+              ? shippingData
+              : primaryAddress,
+        };
+
+        dispatch(addFinalProfileRequest(profileData));
+
+        setValidUserInfo(true);
+        setFinishingOrder(false);
+      } catch (err) {
+        const formDataWithEmail = { ...formData, email };
+
+        const errors = getValidationErrors(formDataWithEmail, err);
+
+        profileInfoRef.current.setErrors(errors);
         window.scrollTo(0, 0);
         setFinishingOrder(false);
 
-        return;
+        console.log(err);
       }
-
-      if (
-        deliveryOption === 'delivery' &&
-        (nameIsValid(deliveryDay) || nameIsValid(deliveryHour))
-      ) {
-        setInvalidDeliveryDay(nameIsValid(deliveryDay));
-        setInvalidDeliveryHour(nameIsValid(deliveryHour));
-
-        window.scrollTo(0, 0);
-        setFinishingOrder(false);
-
-        return;
-      }
-
-      const allDataShipping = shippingInfoRef.current.getData();
-
-      const { destination_name } = allDataShipping;
-
-      const [newName, ...restOfName] = destination_name.split(' ');
-
-      const newNickname = restOfName.join(' ');
-
-      const shippingData = {
-        ...formData,
-        destination_name: newName,
-        destination_last_name: newNickname,
-        country,
-        zipcode,
-        default: 1,
-      };
-
-      const profileData = {
-        ...formData,
-        gender,
-        default_address:
-          newPrimaryAddress && deliveryOption === 'delivery'
-            ? shippingData
-            : primaryAddress,
-      };
-
-      // console.tron.log(profileData);
-
-      dispatch(addFinalProfileRequest(profileData));
-
-      setValidUserInfo(true);
-      setFinishingOrder(false);
     },
     [
+      email,
       dispatch,
-      validateData,
       gender,
-      invalidFields,
       deliveryDay,
       deliveryHour,
       deliveryOption,
@@ -623,110 +617,112 @@ export default function Delivery() {
   );
 
   const handleShippingInfo = useCallback(
-    formData => {
+    async formData => {
       // validar pra caso seja o input ou select
-      locationInvalidFields.fill(false);
-      setInvalidResidence(false);
-      setInvalidPostcode(false);
-      setInvalidLocation(false);
-      setValidShippingInfo(false);
+      try {
+        setInvalidPostcode(false);
+        setInvalidLocation(false);
+        setValidShippingInfo(false);
 
-      delete formData.zipcode;
-      delete formData.residence;
+        shippingInfoRef.current.setErrors({});
 
-      const anyEmptyField = validateData(formData, setLocationInvalidFields);
+        const schema = Yup.object().shape({
+          destination_name: Yup.string().required(),
+          zipcode: Yup.string()
+            .required()
+            .matches(/^[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9]$/),
+          address: Yup.string().required(),
+          number: Yup.string().required(),
+          district: Yup.string().required(),
+          city: Yup.string().required(),
+          state: Yup.string().required(),
+          residence: Yup.string().required(),
+        });
 
-      if (anyEmptyField) {
-        setInvalidResidence(nameIsValid(residence));
-        setInvalidPostcode(!postcodeIsValid(zipcode));
-        setInvalidLocation(nameIsValid(country));
+        const formDataWithResidence = newAddress
+          ? formData
+          : { ...formData, residence };
+
+        await schema.validate(formDataWithResidence, { abortEarly: false });
+
+        console.log(formData);
+
+        if (!!formData) return;
+
+        if (
+          deliveryOption === 'delivery' &&
+          (nameIsValid(deliveryDay) || nameIsValid(deliveryHour))
+        ) {
+          setInvalidDeliveryDay(nameIsValid(deliveryDay));
+          setInvalidDeliveryHour(nameIsValid(deliveryHour));
+
+          window.scrollTo(0, 0);
+
+          setFinishingOrder(false);
+
+          return;
+        }
+
+        const allDataShipping = shippingInfoRef.current.getData();
+        const profileInfo = profileInfoRef.current.getData();
+
+        const { destination_name } = allDataShipping;
+
+        const [newName, ...restOfName] = destination_name.split(' ');
+
+        const newNickname = restOfName.join(' ');
+
+        const shippingData = {
+          ...formData,
+          destination_name: newName,
+          destination_last_name: newNickname,
+          country,
+          zipcode,
+        };
+
+        if (newAddress) {
+          dispatch(
+            addFinalAddressRequest({
+              address: { ...shippingData, default: newPrimaryAddress ? 1 : 0 },
+              profile: {
+                ...profileInfo,
+                gender,
+              },
+            })
+          );
+        } else {
+          dispatch(
+            updateFinalShippingInfoRequest({
+              address: { ...shippingData, default: newPrimaryAddress ? 1 : 0 },
+              profile: {
+                ...profileInfo,
+                gender,
+              },
+            })
+          );
+        }
+
+        // tratar o caso onde o residence está com o select
+
+        setValidShippingInfo(true);
+        setFinishingOrder(false);
+      } catch (err) {
+        const formDataWithResidence = newAddress
+          ? formData
+          : { ...formData, residence };
+
+        const errors = getValidationErrors(formDataWithResidence, err);
+
+        shippingInfoRef.current.setErrors(errors);
         window.scrollTo(0, 0);
         setFinishingOrder(false);
 
-        return;
+        console.log(err);
       }
-
-      if (!postcodeIsValid(zipcode)) {
-        setInvalidPostcode(!postcodeIsValid(zipcode));
-
-        window.scrollTo(0, 0);
-
-        setFinishingOrder(false);
-
-        return;
-      }
-
-      if (nameIsValid(residence)) {
-        setInvalidResidence(nameIsValid(residence));
-        window.scrollTo(0, 0);
-
-        setFinishingOrder(false);
-
-        return;
-      }
-
-      if (
-        deliveryOption === 'delivery' &&
-        (nameIsValid(deliveryDay) || nameIsValid(deliveryHour))
-      ) {
-        setInvalidDeliveryDay(nameIsValid(deliveryDay));
-        setInvalidDeliveryHour(nameIsValid(deliveryHour));
-
-        window.scrollTo(0, 0);
-
-        setFinishingOrder(false);
-
-        return;
-      }
-
-      const allDataShipping = shippingInfoRef.current.getData();
-      const profileInfo = profileInfoRef.current.getData();
-
-      const { destination_name } = allDataShipping;
-
-      const [newName, ...restOfName] = destination_name.split(' ');
-
-      const newNickname = restOfName.join(' ');
-
-      const shippingData = {
-        ...formData,
-        destination_name: newName,
-        destination_last_name: newNickname,
-        country,
-        zipcode,
-      };
-
-      if (newAddress) {
-        dispatch(
-          addFinalAddressRequest({
-            address: { ...shippingData, default: newPrimaryAddress ? 1 : 0 },
-            profile: {
-              ...profileInfo,
-              gender,
-            },
-          })
-        );
-      } else {
-        dispatch(
-          updateFinalShippingInfoRequest({
-            address: { ...shippingData, default: newPrimaryAddress ? 1 : 0 },
-            profile: {
-              ...profileInfo,
-              gender,
-            },
-          })
-        );
-      }
-
-      setValidShippingInfo(true);
-      setFinishingOrder(false);
     },
     [
       dispatch,
-      residence,
       country,
-      validateData,
-      locationInvalidFields,
       zipcode,
       newAddress,
       gender,
@@ -734,6 +730,7 @@ export default function Delivery() {
       deliveryDay,
       deliveryHour,
       deliveryOption,
+      residence,
     ]
   );
 
@@ -986,14 +983,12 @@ export default function Delivery() {
                 name="name"
                 title="Nome"
                 placeholder="Escreve o teu nome"
-                error={invalidFields[0]}
                 customWidth={isDesktop ? 221 : '100%'}
               />
               <Input
                 name="last_name"
                 title="Apelido"
                 placeholder="Escolhe o teu apelido"
-                error={invalidFields[1]}
                 customWidth={isDesktop ? 221 : '100%'}
               />
             </InputContainer>
@@ -1002,19 +997,16 @@ export default function Delivery() {
                 name="email"
                 title="Email"
                 placeholder="Escreve o teu e-mail"
-                setError={value => setEmailError(!mailIsValid(value))}
                 value={email}
                 onChange={({ target: { value } }) =>
                   onlyValues(value, setEmail)
                 }
-                error={emailError}
                 customWidth={isDesktop ? 221 : '100%'}
               />
 
               <InputMask
                 name="birth"
                 title="Data de nascimento"
-                error={invalidBirth}
                 customWidth={isDesktop ? 221 : '100%'}
               />
             </InputContainer>
@@ -1023,7 +1015,6 @@ export default function Delivery() {
                 name="document"
                 type="9d"
                 title="NIF"
-                error={invalidDocument}
                 customWidth={isDesktop ? 221 : '100%'}
               />
 
@@ -1035,7 +1026,6 @@ export default function Delivery() {
                   defaultValue={{ label: gender, value: gender }}
                   customWidth={isDesktop ? 221 : '100%'}
                   data={genderData}
-                  error={invalidGender}
                   clearValue
                 />
               ) : (
@@ -1045,7 +1035,6 @@ export default function Delivery() {
                   setValue={setGender}
                   customWidth={isDesktop ? 221 : '100%'}
                   data={genderData}
-                  error={invalidGender}
                 />
               )}
               <button
@@ -1061,11 +1050,11 @@ export default function Delivery() {
                 name="cellphone"
                 type="phone"
                 title="Telemóvel"
-                error={invalidPhone}
                 customWidth={isDesktop ? 221 : '100%'}
               />
             </InputContainer>
           </InfoContainer>
+
           <div style={isDesktop ? {} : { width: '100%' }}>
             {loading && (
               <LoadingContainer isDesktop={isDesktop}>
@@ -1119,7 +1108,6 @@ export default function Delivery() {
                     customWidth={isDesktop ? 325 : '100%'}
                     value={residence}
                     onChange={({ target: { value } }) => setResidence(value)}
-                    error={invalidResidence}
                     disabled={loading || deliveryOption === 'withdrawinstore'}
                   />
                 ) : (
@@ -1133,7 +1121,6 @@ export default function Delivery() {
                     }}
                     customWidth={isDesktop ? 325 : '100%'}
                     data={formattedAddresses}
-                    error={invalidResidence}
                     disabled={loading || deliveryOption === 'withdrawinstore'}
                   />
                 )}
@@ -1142,7 +1129,6 @@ export default function Delivery() {
                   title="Nome completo do destinatário"
                   placeholder="Escreve o nome do destinatário"
                   customWidth={isDesktop ? 283 : '100%'}
-                  error={locationInvalidFields[0]}
                   disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
               </InputContainer>
@@ -1160,7 +1146,6 @@ export default function Delivery() {
                   customWidth={isDesktop ? 90 : '100%'}
                   value={zipcode}
                   onChange={({ target: { value } }) => setZipcode(value)}
-                  error={invalidPostcode}
                   onBlur={lookupAddress}
                   disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
@@ -1169,7 +1154,6 @@ export default function Delivery() {
                   title="Morada"
                   placeholder="Escreve a tua morada"
                   customWidth={isDesktop ? 215 : '100%'}
-                  error={locationInvalidFields[1]}
                   disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
                 <Input
@@ -1177,7 +1161,6 @@ export default function Delivery() {
                   title="Número"
                   placeholder="Escreve o teu número"
                   customWidth={isDesktop ? 90 : '100%'}
-                  error={locationInvalidFields[2]}
                   disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
                 <Input
@@ -1185,7 +1168,6 @@ export default function Delivery() {
                   title="Distrito"
                   placeholder="Escreve o teu distrito"
                   customWidth={isDesktop ? 173 : '100%'}
-                  error={locationInvalidFields[3]}
                   disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
               </InputContainer>
@@ -1200,7 +1182,6 @@ export default function Delivery() {
                   title="Cidade"
                   placeholder="Escreve a tua cidade"
                   customWidth={isDesktop ? 194 : '100%'}
-                  error={locationInvalidFields[4]}
                   disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
                 <Input
@@ -1209,7 +1190,6 @@ export default function Delivery() {
                   placeholder="Escolha a Localidade"
                   defaultValue="Lisboa"
                   customWidth={isDesktop ? 221 : '100%'}
-                  error={locationInvalidFields[5]}
                   disabled={loading || deliveryOption === 'withdrawinstore'}
                   style={isDesktop ? {} : { marginTop: 0 }}
                 />
@@ -1218,6 +1198,7 @@ export default function Delivery() {
                   placeholder="Escolha o país"
                   setValue={setCountry}
                   defaultValue={{ value: 'Portugal', label: 'Portugal' }}
+                  data={[{ value: 'Portugal', label: 'Portugal' }]}
                   customWidth={isDesktop ? 173 : '100%'}
                   error={invalidLocation}
                   disabled={loading || deliveryOption === 'withdrawinstore'}
@@ -1443,8 +1424,10 @@ export default function Delivery() {
                 console.log('CLICADO');
                 setFinishingOrder(true);
                 accountButtonRef.current.click();
-                if (deliveryOption === 'delivery')
+                if (deliveryOption === 'delivery') {
+                  console.log('blinders');
                   shippingButtonRef.current.click();
+                }
               }}
               style={isDesktop ? { width: 309 } : { width: '100%' }}
               disabled={loading || processingOrder || finishingOrder}
