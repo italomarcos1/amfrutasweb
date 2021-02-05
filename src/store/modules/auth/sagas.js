@@ -32,7 +32,7 @@ export function* signIn({ payload }) {
     backend.defaults.headers.Authorization = `Bearer ${token}`;
 
     backend.interceptors.request.use(async config => {
-      config.headers.uuid = newUuid;
+      config.headers.common.uuid = newUuid;
 
       return config;
     });

@@ -192,14 +192,12 @@ export default function Order({ order, isOpen, setOrder }) {
       let prds = Object.values(data);
 
       if (typeof prds[0] === 'string') {
-        console.log('blinders');
         const formattedProduct = {
           ...data,
           product: data.options.product,
         };
-        console.log(formattedProduct);
+
         delete formattedProduct.options;
-        console.log(formattedProduct);
 
         prds = [formattedProduct];
       } else {
@@ -210,7 +208,6 @@ export default function Order({ order, isOpen, setOrder }) {
           return { ...p, product: currentProduct };
         });
       }
-      console.log(prds);
 
       dispatch(pushToCart(prds));
 
@@ -443,7 +440,7 @@ export default function Order({ order, isOpen, setOrder }) {
                 shadowColor="#17A75B"
                 onClick={handleReorder}
               >
-                Refazer compra
+                Comprar novamente
               </Button>
             </div>
 

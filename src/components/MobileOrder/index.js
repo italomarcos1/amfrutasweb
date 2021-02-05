@@ -135,19 +135,25 @@ export default function Order({ order, isOpen, setOrder, index: orderIndex }) {
         products: formattedProducts,
       });
 
-      const prds = [];
+      let prds = Object.values(data);
 
-      const formattedData = Object.entries(data);
+      if (typeof prds[0] === 'string') {
+        const formattedProduct = {
+          ...data,
+          product: data.options.product,
+        };
 
-      for (let i = 0; i < formattedData.length; ++i) {
-        // const currentProduct = { [formattedData[i][0]]: formattedData[i][1] };
-        // {[b[2][1]]: b[2][1]}
-        prds.push(formattedData[i][1]);
+        delete formattedProduct.options;
+
+        prds = [formattedProduct];
+      } else {
+        prds = prds.map(p => {
+          const currentProduct = p.options.product;
+          delete p.options;
+
+          return { ...p, product: currentProduct };
+        });
       }
-
-      console.log(prds);
-
-      // if (!!prds) return;
 
       dispatch(pushToCart(prds));
 
@@ -347,7 +353,7 @@ export default function Order({ order, isOpen, setOrder, index: orderIndex }) {
                   </ItemsList>
                 </>
               )}
-              {/* <div
+              <div
                 style={{
                   height: 55,
                   margin: '17px auto 0',
@@ -360,9 +366,9 @@ export default function Order({ order, isOpen, setOrder, index: orderIndex }) {
                   shadowColor="#17A75B"
                   onClick={handleReorder}
                 >
-                  Refazer compra
+                  Comprar novamente
                 </ReOrderButton>
-              </div> */}
+              </div>
             </div>
           </>
         )}
