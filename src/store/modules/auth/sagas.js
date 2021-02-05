@@ -135,7 +135,7 @@ export function* signUp({ payload }) {
     backend.defaults.headers.Authorization = `Bearer ${token}`;
 
     backend.interceptors.request.use(async config => {
-      config.headers.uuid = user.uuid;
+      config.headers.common.uuid = user.uuid;
 
       return config;
     });
