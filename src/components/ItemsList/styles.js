@@ -7,7 +7,11 @@ export const Container = styled.div`
   justify-content: space-between;
   margin-top: 30px;
   padding: 0;
-  /* width: ${({ containerWidth }) => containerWidth}; */
+  height: 708px;
+  width: ${({ isDesktop }) => (isDesktop ? '840px' : '100%')};
+  overflow-y: ${({ length, breakpoint }) =>
+    length > breakpoint ? 'scroll' : 'hidden'};
+  /* background-color: #f90; */
 `;
 
 export const List = styled.ul`
@@ -16,5 +20,6 @@ export const List = styled.ul`
   flex-direction: ${({ isDesktop }) => (isDesktop ? 'row' : 'column')};
   justify-content: space-between;
   flex-wrap: wrap;
-  height: ${({ containerHeight }) => containerHeight};
+
+  /* overflow-y: scroll; */
 `;

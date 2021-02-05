@@ -52,9 +52,15 @@ export default function MyFavorites() {
           <ItemsList
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
-            containerWidth={isDesktop ? 821 : '100%'}
             containerHeight={isDesktop ? 625 : currentContainerHeight}
-            style={{ backgroundColor: '#00000000' }}
+            style={
+              isDesktop
+                ? { width: 821, backgroundColor: '#00000000' }
+                : {
+                    width: '100%',
+                    backgroundColor: '#00000000',
+                  }
+            }
           >
             {paginatedProducts.map((item, index) => (
               <CheckoutItem

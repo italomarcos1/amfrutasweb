@@ -23,6 +23,13 @@ export function pushToCart(products) {
   };
 }
 
+export function redoOrder(products) {
+  return {
+    type: '@cart/REDO_ORDER',
+    payload: { products },
+  };
+}
+
 export function updatePages(pages) {
   return {
     type: '@cart/SET_PAGES',

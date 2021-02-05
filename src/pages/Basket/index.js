@@ -48,7 +48,6 @@ export default function Basket() {
   const history = useHistory();
   const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
 
-  const [paginatedProducts, setPaginatedProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loginModal, setLoginModal] = useState(false);
 
@@ -115,17 +114,6 @@ export default function Basket() {
     dispatch(processOrder(false));
   }, [dispatch]);
 
-  const handlePagination = useCallback(() => {
-    const pageIndex = 8 * (currentPage - 1);
-    const newPage = products.slice(pageIndex, pageIndex + 8);
-
-    setPaginatedProducts(newPage);
-  }, [currentPage, products]);
-
-  useEffect(() => {
-    handlePagination();
-  }, [products, handlePagination]);
-
   useEffect(() => {
     dispatch(processOrder(false));
   }, [dispatch]);
@@ -151,8 +139,8 @@ export default function Basket() {
   }, [price, minValueWithdrawStore]);
 
   useEffect(() => {
-    setCurrentContainerHeight(paginatedProducts.length * 167 - 20);
-  }, [paginatedProducts, currentContainerHeight]);
+    setCurrentContainerHeight(products.length * 167 - 20);
+  }, [products, currentContainerHeight]);
 
   return (
     <>
@@ -199,12 +187,8 @@ export default function Basket() {
                 <strong>Removendo o produto do carrinho, aguarde...</strong>
               </LoadingContainer>
             ) : !loginModal && products.length !== 0 ? (
-              <ItemsList
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                containerHeight={isDesktop ? 708 : currentContainerHeight}
-              >
-                {paginatedProducts.map((item, index) => (
+              <ItemsList length={products.length} breakpoint={8}>
+                {products.map((item, index) => (
                   <Item
                     key={item.id}
                     item={item}

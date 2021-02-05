@@ -31,6 +31,12 @@ export function* signIn({ payload }) {
 
     backend.defaults.headers.Authorization = `Bearer ${token}`;
 
+    backend.interceptors.request.use(async config => {
+      config.headers.uuid = newUuid;
+
+      return config;
+    });
+
     const {
       data: {
         meta: { message },
@@ -127,6 +133,12 @@ export function* signUp({ payload }) {
     const { token, user } = response.data.data;
 
     backend.defaults.headers.Authorization = `Bearer ${token}`;
+
+    backend.interceptors.request.use(async config => {
+      config.headers.uuid = user.uuid;
+
+      return config;
+    });
 
     const {
       data: { data },

@@ -1,6 +1,6 @@
 import produce from 'immer';
 
-import { calculatePrice } from '~/utils/calculatePrice';
+import { calculatePrice, customCalculatePrice } from '~/utils/calculatePrice';
 
 const INITIAL_STATE = {
   products: [],
@@ -89,9 +89,12 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
       }
 
       case '@cart/PUSH_TO_CART': {
-        draft.products = payload.products;
+        const currentProducts = draft.products;
+        const { products } = payload;
 
-        const { formattedPrice, formattedSavedPrice } = calculatePrice(
+        draft.products = [...currentProducts, ...products];
+
+        const { formattedPrice, formattedSavedPrice } = customCalculatePrice(
           draft.products
         );
 

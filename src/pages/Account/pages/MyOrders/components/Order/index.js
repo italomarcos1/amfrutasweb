@@ -20,6 +20,8 @@ import {
   ReviewContainer,
 } from './styles';
 
+import { Button } from '~/components/LoginModal';
+
 import CheckoutItem from '../OrderItem';
 import StatusContainer from '../StatusContainer';
 
@@ -42,7 +44,7 @@ import Toast from '~/components/Toast';
 import backend from '~/services/api';
 import { customCalculatePrice, formatPrice } from '~/utils/calculatePrice';
 
-import { updatePages } from '~/store/modules/cart/actions';
+import { pushToCart, updatePages } from '~/store/modules/cart/actions';
 
 // import { products } from '~/data';
 
@@ -73,7 +75,6 @@ export default function Order({ order, isOpen, setOrder }) {
   const [endHour, setEndHour] = useState('00:00');
   const [scheduledDate, setScheduledDate] = useState('---');
 
-  const [paginatedProducts, setPaginatedProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [price, setPrice] = useState('0.00');
@@ -102,19 +103,6 @@ export default function Order({ order, isOpen, setOrder }) {
     else setOrder(id);
   }, [id, isOpen, setOrder]);
 
-  const handlePagination = useCallback(() => {
-    if (!transaction) return;
-    const { products } = transaction;
-    const pageIndex = 8 * (currentPage - 1);
-    const newPage = products.slice(pageIndex, pageIndex + 8);
-
-    const totalPages = Math.ceil(products.length / 8);
-
-    dispatch(updatePages(totalPages));
-
-    setPaginatedProducts(newPage);
-  }, [currentPage, transaction, dispatch]);
-
   const loadTransaction = useCallback(async () => {
     if (isOpen !== id) return;
     setLoading(true);
@@ -141,10 +129,6 @@ export default function Order({ order, isOpen, setOrder }) {
       setLoading(false);
     }
   }, [id, isOpen]);
-
-  useEffect(() => {
-    handlePagination();
-  }, [transaction, handlePagination]);
 
   useEffect(() => {
     loadTransaction();
@@ -187,246 +171,332 @@ export default function Order({ order, isOpen, setOrder }) {
     }
   }, [id, rate, review]);
 
+  const handleReorder = useCallback(async () => {
+    try {
+      if (!transaction) return;
+
+      const { products } = transaction;
+
+      const formattedProducts = products.map(({ id: product_id, qty }) => ({
+        product_id,
+        quantity: qty,
+      }));
+
+      const {
+        data: { data },
+      } = await backend.post('/cart', {
+        uuid: profile.uuid,
+        products: formattedProducts,
+      });
+
+      let prds = Object.values(data);
+
+      if (typeof prds[0] === 'string') {
+        console.log('blinders');
+        const formattedProduct = {
+          ...data,
+          product: data.options.product,
+        };
+        console.log(formattedProduct);
+        delete formattedProduct.options;
+        console.log(formattedProduct);
+
+        prds = [formattedProduct];
+      } else {
+        prds = prds.map(p => {
+          const currentProduct = p.options.product;
+          delete p.options;
+
+          return { ...p, product: currentProduct };
+        });
+      }
+      console.log(prds);
+
+      dispatch(pushToCart(prds));
+
+      setToastStatus('Os produtos foram adicionados ao carrinho.');
+      setToastColor('#1dc167');
+
+      setToastVisible(true);
+    } catch (err) {
+      console.log(err);
+      setToastStatus('Erro ao adicionar  produtos no carrinho.');
+      setToastColor('#f56060');
+      setToastVisible(true);
+    } finally {
+      setTimeout(() => {
+        setToastVisible(false);
+      }, 2800);
+    }
+  }, [transaction, dispatch, profile]);
+
   return (
-    <Container
-      open={isOpen === id}
-      style={id !== 1 ? { marginTop: 20 } : {}}
-      onSubmit={() => {}}
-    >
-      <OrderStatus>
-        <StatusIcon
-          src={
-            statuses[0].name === 'Completo'
-              ? completo
-              : statuses[0].name === 'Cancelado'
-              ? cancelado
-              : novo
-          }
-        />
-        <Info>
-          <h1>
-            {statuses[0].name === 'Completo'
-              ? 'Completo'
-              : statuses[0].name === 'Cancelado'
-              ? 'Cancelado'
-              : 'Novo'}
-          </h1>
-          <OrderInfoContainer>
-            <OrderInfo>
-              <strong>Entrega programada para</strong>
-              <strong>
-                <b>
-                  {!!scheduledShipping
-                    ? `${scheduledDate} entre ${startHour}h e ${endHour}h`
-                    : '---'}
-                </b>
-              </strong>
-            </OrderInfo>
-            <OrderInfo>
-              <strong>Data do pedido</strong>
-              <strong>
-                <b>{date}</b>
-              </strong>
-            </OrderInfo>
-            <OrderInfo>
-              <strong>Número do pedido</strong>
-              <strong>
-                <b>{id}</b>
-              </strong>
-            </OrderInfo>
-            <OrderInfo>
-              <strong>Valor do pedido</strong>
-              <strong>
-                <b>€&nbsp;{formatPrice(total)}</b>
-              </strong>
-            </OrderInfo>
-            <OrderInfo>
-              <strong>Avaliação do serviço</strong>
-              <strong>
-                <b>{rate}</b>
-              </strong>
-            </OrderInfo>
-          </OrderInfoContainer>
-          <Separator />
-          <StatusContainer status={statuses[0].name} />
-        </Info>
-        <OpenTab onClick={handleOpenOrder}>
-          <img src={isOpen === id ? setaUp : setaDown} alt="" />
-        </OpenTab>
-      </OrderStatus>
-      {isOpen === id && (
-        <>
-          <div
-            style={
-              loading
-                ? { marginTop: 12.5 }
-                : { marginLeft: 69, marginTop: 12.5 }
+    <>
+      <Container
+        open={isOpen === id}
+        style={id !== 1 ? { marginTop: 20 } : {}}
+        onSubmit={() => {}}
+      >
+        <OrderStatus>
+          <StatusIcon
+            src={
+              statuses[0].name === 'Completo'
+                ? completo
+                : statuses[0].name === 'Cancelado'
+                ? cancelado
+                : novo
             }
-          >
-            {loading ? (
-              <LoadingContainer>
-                <FaSpinner color="#666" size={42} />
-                <strong>Carregando os dados da encomenda, aguarde...</strong>
-              </LoadingContainer>
-            ) : (
-              <>
-                <ShippingInfoSeparator open={isOpen === id} />
-                <div
-                  style={{
-                    display: 'flex',
-                    width: 590,
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  {!!scheduledShipping && (
+          />
+          <Info>
+            <h1>
+              {statuses[0].name === 'Completo'
+                ? 'Completo'
+                : statuses[0].name === 'Cancelado'
+                ? 'Cancelado'
+                : 'Novo'}
+            </h1>
+            <OrderInfoContainer>
+              <OrderInfo>
+                <strong>Entrega programada para</strong>
+                <strong>
+                  <b>
+                    {!!scheduledShipping
+                      ? `${scheduledDate} entre ${startHour}h e ${endHour}h`
+                      : '---'}
+                  </b>
+                </strong>
+              </OrderInfo>
+              <OrderInfo>
+                <strong>Data do pedido</strong>
+                <strong>
+                  <b>{date}</b>
+                </strong>
+              </OrderInfo>
+              <OrderInfo>
+                <strong>Número do pedido</strong>
+                <strong>
+                  <b>{id}</b>
+                </strong>
+              </OrderInfo>
+              <OrderInfo>
+                <strong>Valor do pedido</strong>
+                <strong>
+                  <b>€&nbsp;{formatPrice(total)}</b>
+                </strong>
+              </OrderInfo>
+              <OrderInfo>
+                <strong>Avaliação do serviço</strong>
+                <strong>
+                  <b>{rate}</b>
+                </strong>
+              </OrderInfo>
+            </OrderInfoContainer>
+            <Separator />
+            <StatusContainer status={statuses[0].name} />
+          </Info>
+          <OpenTab onClick={handleOpenOrder}>
+            <img src={isOpen === id ? setaUp : setaDown} alt="" />
+          </OpenTab>
+        </OrderStatus>
+        {isOpen === id && (
+          <>
+            <div
+              style={
+                loading
+                  ? { marginTop: 12.5 }
+                  : { marginLeft: 69, marginTop: 12.5 }
+              }
+            >
+              {loading ? (
+                <LoadingContainer>
+                  <FaSpinner color="#666" size={42} />
+                  <strong>Carregando os dados da encomenda, aguarde...</strong>
+                </LoadingContainer>
+              ) : (
+                <>
+                  <ShippingInfoSeparator open={isOpen === id} />
+                  <div
+                    style={{
+                      display: 'flex',
+                      width: 590,
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    {!!scheduledShipping && (
+                      <ShippingInfo open={isOpen === id}>
+                        <small>
+                          <b>Endereço de envio</b>
+                        </small>
+                        <small>
+                          {shippingAddress.destination_name}&nbsp;
+                          {shippingAddress.destination_last_name}
+                        </small>
+                        <small>{shippingAddress.address}</small>
+                        <small>
+                          {shippingAddress.number} {shippingAddress.zipcode}
+                        </small>
+                        <small>
+                          {shippingAddress.district}, {shippingAddress.city}
+                        </small>
+                        <small>{shippingAddress.country}</small>
+                        <small>
+                          {!!profile.cellphone
+                            ? profile.cellphone
+                            : '00 000 00 00'}
+                        </small>
+                      </ShippingInfo>
+                    )}
+                    <ShippingInfo
+                      open={isOpen === id}
+                      style={{ marginRight: 25, marginLeft: 15 }}
+                    >
+                      <small>
+                        <b>Forma de pagamento</b>
+                      </small>
+                      <small>Dinheiro na entrega</small>
+                      <small>
+                        <b>Método da Compra</b>
+                      </small>
+                      <small>{transaction.origin}</small>
+                    </ShippingInfo>
                     <ShippingInfo open={isOpen === id}>
                       <small>
-                        <b>Endereço de envio</b>
+                        <b>Resumo do pedido</b>
+                      </small>
+                      <small>Produtos</small>
+                      <small>Economizou</small>
+                      <small>Crédito utilizado</small>
+                      <small>Cupom de desconto</small>
+                      <small>Porte</small>
+                      <small>Crédito (CashBack)</small>
+                      <small style={{ fontFamily: 'SFProBold' }}>Total</small>
+                    </ShippingInfo>
+                    <ShippingInfo open={isOpen === id}>
+                      <small>&nbsp;</small>
+                      <small style={{ color: '#0CB68B' }}>€&nbsp;{price}</small>
+                      <small style={{ color: '#0CB68B' }}>
+                        €&nbsp;{savedPrice}
+                      </small>
+                      <small style={{ color: '#F64847' }}>
+                        €&nbsp;
+                        {transaction.cback_used === 0
+                          ? '0.00'
+                          : transaction.cback_used}
+                      </small>
+                      <small style={{ color: '#F64847' }}>
+                        €&nbsp;
+                        {transaction.discount === 0
+                          ? '0.00'
+                          : transaction.discount}
                       </small>
                       <small>
-                        {shippingAddress.destination_name}&nbsp;
-                        {shippingAddress.destination_last_name}
+                        €&nbsp;
+                        {transaction.shipping}.00
                       </small>
-                      <small>{shippingAddress.address}</small>
-                      <small>
-                        {shippingAddress.number} {shippingAddress.zipcode}
+                      <small
+                        style={{
+                          color: '#FF9D22',
+                          fontFamily: 'SFProBold',
+                        }}
+                      >
+                        €&nbsp;
+                        {transaction.cback_received}
                       </small>
-                      <small>
-                        {shippingAddress.district}, {shippingAddress.city}
-                      </small>
-                      <small>{shippingAddress.country}</small>
-                      <small>
-                        {!!profile.cellphone
-                          ? profile.cellphone
-                          : '00 000 00 00'}
+                      <small style={{ fontFamily: 'SFProBold' }}>
+                        €&nbsp;{transaction.total}
                       </small>
                     </ShippingInfo>
-                  )}
-                  <ShippingInfo
-                    open={isOpen === id}
-                    style={{ marginRight: 25, marginLeft: 15 }}
-                  >
-                    <small>
-                      <b>Forma de pagamento</b>
-                    </small>
-                    <small>Dinheiro na entrega</small>
-                    <small>
-                      <b>Método da Compra</b>
-                    </small>
-                    <small>{transaction.origin}</small>
-                  </ShippingInfo>
-                  <ShippingInfo open={isOpen === id}>
-                    <small>
-                      <b>Resumo do pedido</b>
-                    </small>
-                    <small>Produtos</small>
-                    <small>Economizou</small>
-                    <small>Crédito utilizado</small>
-                    <small>Cupom de desconto</small>
-                    <small>Porte</small>
-                    <small>Crédito (CashBack)</small>
-                    <small style={{ fontFamily: 'SFProBold' }}>Total</small>
-                  </ShippingInfo>
-                  <ShippingInfo open={isOpen === id}>
-                    <small>&nbsp;</small>
-                    <small style={{ color: '#0CB68B' }}>€&nbsp;{price}</small>
-                    <small style={{ color: '#0CB68B' }}>
-                      €&nbsp;{savedPrice}
-                    </small>
-                    <small style={{ color: '#F64847' }}>
-                      €&nbsp;
-                      {transaction.cback_used === 0
-                        ? '0.00'
-                        : transaction.cback_used}
-                    </small>
-                    <small style={{ color: '#F64847' }}>
-                      €&nbsp;
-                      {transaction.discount === 0
-                        ? '0.00'
-                        : transaction.discount}
-                    </small>
-                    <small>
-                      €&nbsp;
-                      {transaction.shipping}.00
-                    </small>
-                    <small
-                      style={{
-                        color: '#FF9D22',
-                        fontFamily: 'SFProBold',
-                      }}
-                    >
-                      €&nbsp;
-                      {transaction.cback_received}
-                    </small>
-                    <small style={{ fontFamily: 'SFProBold' }}>
-                      €&nbsp;{transaction.total}
-                    </small>
-                  </ShippingInfo>
-                </div>
-              </>
-            )}
-          </div>
+                  </div>
+                </>
+              )}
+            </div>
 
-          <ItemsList
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            containerWidth="100%"
-            style={{ backgroundColor: '#00000000' }}
-          >
-            {paginatedProducts.map((item, index) => (
-              <CheckoutItem key={item.id} item={item} index={index} isDesktop />
-            ))}
-          </ItemsList>
-
-          <div
-            style={
-              isOpen === id
-                ? { display: 'block', marginTop: 89 }
-                : { display: 'none' }
-            }
-          >
-            <RatingTitle>Avaliação do Serviço</RatingTitle>
-            <StarsContainer>
-              <button onClick={() => setRate(1)} type="button">
-                <img src={rate >= 1 ? starOn : starOff} alt="" />
-              </button>
-              <button onClick={() => setRate(2)} type="button">
-                <img src={rate >= 2 ? starOn : starOff} alt="" />
-              </button>
-              <button onClick={() => setRate(3)} type="button">
-                <img src={rate >= 3 ? starOn : starOff} alt="" />
-              </button>
-              <button onClick={() => setRate(4)} type="button">
-                <img src={rate >= 4 ? starOn : starOff} alt="" />
-              </button>
-              <button onClick={() => setRate(5)} type="button">
-                <img src={rate === 5 ? starOn : starOff} alt="" />
-              </button>
-            </StarsContainer>
-          </div>
-          <ReviewContainer isOpen={isOpen === id}>
-            <Input
-              name="comment"
-              title="Deixe seu comentário"
-              customWidth={660}
-              onChange={e => setReview(e.target.value)}
-              value={review}
-              placeholder="Digite seu comentário aqui"
-            />
-            <button
-              type="button"
-              disabled={!review || sending}
-              onClick={handleSubmitRating}
+            <ItemsList
+              length={!!transaction ? transaction.products.length : 8}
+              breakpoint={8}
+              style={{ width: '100%' }}
             >
-              Enviar
-            </button>
-          </ReviewContainer>
-          {toastVisible && (
-            <Toast status={toastStatus} color={toastColor} isDesktop />
-          )}
-        </>
-      )}
-    </Container>
+              {!!transaction &&
+                transaction.products.map((item, index) => (
+                  <CheckoutItem
+                    key={item.id}
+                    item={item}
+                    index={index}
+                    isDesktop
+                  />
+                ))}
+            </ItemsList>
+            <div
+              style={
+                isOpen === id
+                  ? {
+                      display: 'block',
+                      height: 55,
+                      marginTop: 17,
+                    }
+                  : { display: 'none' }
+              }
+            >
+              <Button
+                color="#1DC167"
+                style={{ margin: '0 auto' }}
+                shadowColor="#17A75B"
+                onClick={handleReorder}
+              >
+                Refazer compra
+              </Button>
+            </div>
+
+            <div
+              style={
+                isOpen === id
+                  ? { display: 'block', marginTop: 17 }
+                  : { display: 'none' }
+              }
+            >
+              <RatingTitle>Avaliação do Serviço</RatingTitle>
+              <StarsContainer>
+                <button onClick={() => setRate(1)} type="button">
+                  <img src={rate >= 1 ? starOn : starOff} alt="" />
+                </button>
+                <button onClick={() => setRate(2)} type="button">
+                  <img src={rate >= 2 ? starOn : starOff} alt="" />
+                </button>
+                <button onClick={() => setRate(3)} type="button">
+                  <img src={rate >= 3 ? starOn : starOff} alt="" />
+                </button>
+                <button onClick={() => setRate(4)} type="button">
+                  <img src={rate >= 4 ? starOn : starOff} alt="" />
+                </button>
+                <button onClick={() => setRate(5)} type="button">
+                  <img src={rate === 5 ? starOn : starOff} alt="" />
+                </button>
+              </StarsContainer>
+            </div>
+            <ReviewContainer isOpen={isOpen === id}>
+              <Input
+                name="comment"
+                title="Deixe seu comentário"
+                customWidth={660}
+                onChange={e => setReview(e.target.value)}
+                value={review}
+                placeholder="Digite seu comentário aqui"
+              />
+              <button
+                type="button"
+                disabled={!review || sending}
+                onClick={handleSubmitRating}
+              >
+                Enviar
+              </button>
+            </ReviewContainer>
+            {toastVisible && (
+              <Toast status={toastStatus} color={toastColor} isDesktop />
+            )}
+          </>
+        )}
+      </Container>
+    </>
   );
 }
 

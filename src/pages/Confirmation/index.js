@@ -70,9 +70,6 @@ export default function Confirmation() {
 
   const [totalCashback, setTotalCashback] = useState(0);
 
-  const [paginatedProducts, setPaginatedProducts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-
   const [orderInfo, setOrderInfo] = useState(null);
   const [saved, setSaved] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -103,6 +100,8 @@ export default function Confirmation() {
     );
     setSaved(formatPrice(formattedSavedPrice - formattedPrice));
 
+    console.log(data);
+
     setLoading(false);
     setOrderInfo(data);
   }, [order]);
@@ -127,23 +126,6 @@ export default function Confirmation() {
       dispatch(knightFall());
     };
   }, []);
-
-  const handlePagination = useCallback(() => {
-    if (!orderInfo) return;
-    const { products } = orderInfo;
-    const pageIndex = 8 * (currentPage - 1);
-    const newPage = products.slice(pageIndex, pageIndex + 8);
-
-    setPaginatedProducts(newPage);
-  }, [currentPage, orderInfo]);
-
-  useEffect(() => {
-    handlePagination();
-  }, [cart, handlePagination]);
-
-  useEffect(() => {
-    setCurrentContainerHeight(paginatedProducts.length * 102 - 20);
-  }, [paginatedProducts, currentContainerHeight]);
 
   if (!hasOrder) {
     return <Redirect to="/entrega" />;
@@ -277,13 +259,9 @@ export default function Confirmation() {
           <div style={isDesktop ? {} : { width: '100%' }}>
             <Title>Produtos</Title>
             {!loading ? (
-              <ItemsList
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                containerHeight={isDesktop ? 708 : currentContainerHeight}
-              >
-                {paginatedProducts.length !== 0 &&
-                  paginatedProducts.map((item, index) => (
+              <ItemsList length={!!orderInfo ? orderInfo.products.length : 12}>
+                {!!orderInfo &&
+                  orderInfo.products.map((item, index) => (
                     <Item
                       key={item.id}
                       item={item}
