@@ -21,7 +21,7 @@ export function* addToCart({ payload }) {
   try {
     const profile = yield select(state => state.user.profile);
     const signed = yield select(state => state.auth.signed);
-    const notSignedUuid = yield select(state => state.auth.uuid);
+    const sessionUuid = yield select(state => state.auth.uuid);
     const token = yield select(state => state.auth.token);
     const { product, qty } = payload;
     const products = yield select(state => state.cart.products);
@@ -29,10 +29,8 @@ export function* addToCart({ payload }) {
       return p.id === product.id;
     });
 
-    const newUuid = signed ? profile.uuid : notSignedUuid;
-
     const pushProduct = {
-      uuid: newUuid,
+      uuid: sessionUuid,
       product_id: product.id,
       quantity: qty,
     };
@@ -74,18 +72,12 @@ export function* removeFromCart({ payload }) {
   try {
     const { id } = payload;
 
-    const profile = yield select(state => state.user.profile);
-    const signed = yield select(state => state.auth.signed);
-    const notSignedUuid = yield select(state => state.auth.uuid);
-
     const products = yield select(state => state.cart.products);
     const findIndex = products.findIndex(p => {
       return p.id === id;
     });
 
     const { rowId } = products[findIndex];
-
-    const newUuid = signed ? profile.uuid : notSignedUuid;
 
     // yield call(backend.delete, `/cart/${newUuid}/${rowId}`);
     yield call(backend.delete, `/cart/${rowId}`);
@@ -99,9 +91,7 @@ export function* removeFromCart({ payload }) {
 
 export function* updateAmount({ payload }) {
   try {
-    const profile = yield select(state => state.user.profile);
-    const signed = yield select(state => state.auth.signed);
-    const notSignedUuid = yield select(state => state.auth.uuid);
+    const sessionUuid = yield select(state => state.auth.uuid);
     const products = yield select(state => state.cart.products);
     const { id, qty } = payload;
 
@@ -111,16 +101,8 @@ export function* updateAmount({ payload }) {
 
     const { rowId } = products[findIndex];
 
-    let newUuid;
-    newUuid = profile !== null ? profile.uuid : null;
-
-    if (!signed) {
-      newUuid = notSignedUuid;
-    } else {
-      newUuid = profile.uuid;
-    }
     yield call(backend.put, `/cart/${rowId}/${qty}`, {
-      uuid: newUuid,
+      uuid: sessionUuid,
     });
 
     yield put(updateAmountSuccess(id, qty));

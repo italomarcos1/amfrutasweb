@@ -235,6 +235,12 @@ export default function Home() {
 
   useEffect(() => {
     if (!uuid) dispatch(generateUuid());
+
+    backend.interceptors.request.use(async config => {
+      config.headers.common.uuid = uuid;
+
+      return config;
+    });
   }, [dispatch, uuid]);
 
   const handleSubmit = useCallback(

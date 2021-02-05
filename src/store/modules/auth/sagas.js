@@ -23,16 +23,12 @@ export function* signIn({ payload }) {
     });
     const { token, user, cart } = response.data.data;
 
-    const { name, last_name, uuid: userUuid } = user;
-
-    let newUuid;
-    if (!userUuid) newUuid = sessionUuid;
-    else newUuid = userUuid;
+    const { name, last_name } = user;
 
     backend.defaults.headers.Authorization = `Bearer ${token}`;
 
     backend.interceptors.request.use(async config => {
-      config.headers.common.uuid = newUuid;
+      config.headers.common.uuid = sessionUuid;
 
       return config;
     });
@@ -53,12 +49,12 @@ export function* signIn({ payload }) {
       } = yield call(backend.put, 'clients', {
         name: 'Cliente',
         last_name: 'AMFrutas',
-        uuid: newUuid,
+        uuid: sessionUuid,
       });
 
       const updatedUser = {
         ...data,
-        uuid: newUuid,
+        uuid: sessionUuid,
         default_address: [],
       };
 
@@ -68,7 +64,7 @@ export function* signIn({ payload }) {
     }
 
     yield call(backend.put, 'clients', {
-      uuid: newUuid,
+      uuid: sessionUuid,
     });
 
     if (!!cart) {
@@ -99,9 +95,7 @@ export function* signIn({ payload }) {
       yield put(populateAddresses([]));
     } else yield put(populateAddresses([...addresses]));
 
-    const userWithUuid = { ...user, uuid: newUuid };
-
-    yield put(signInSuccess(token, userWithUuid));
+    yield put(signInSuccess(token, user));
   } catch (error) {
     // console.tron.log(error);
     // console.log(error);
@@ -135,7 +129,7 @@ export function* signUp({ payload }) {
     backend.defaults.headers.Authorization = `Bearer ${token}`;
 
     backend.interceptors.request.use(async config => {
-      config.headers.common.uuid = user.uuid;
+      config.headers.common.uuid = sessionUuid;
 
       return config;
     });
