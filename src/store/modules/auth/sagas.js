@@ -155,11 +155,17 @@ export function* signUp({ payload }) {
 export function setToken({ payload }) {
   if (!payload) return;
 
-  const { token } = payload.auth;
+  const { token, uuid: sessionUuid } = payload.auth;
 
   if (token) {
     backend.defaults.headers.Authorization = `Bearer ${token}`;
   }
+
+  backend.interceptors.request.use(async config => {
+    config.headers.common.uuid = sessionUuid;
+
+    return config;
+  });
 }
 
 export function* signOut() {
