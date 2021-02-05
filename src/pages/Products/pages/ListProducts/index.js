@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
+import { useDispatch } from 'react-redux';
 
 import { FaSpinner } from 'react-icons/fa';
 
@@ -17,6 +18,8 @@ import { nameIsValid } from '~/utils/validation';
 
 import backend from '~/services/api';
 
+import { fixAddToCart } from '~/store/modules/cart/actions';
+
 export default function ListProducts() {
   const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
 
@@ -32,6 +35,8 @@ export default function ListProducts() {
   const [noProductsFound, setNoProductsFound] = useState(false);
 
   const [perPage, setPerPage] = useState(() => (isDesktop ? 15 : 16));
+
+  const dispatch = useDispatch();
 
   const generatePaginationArray = useCallback(() => {
     const items = [];
@@ -135,7 +140,8 @@ export default function ListProducts() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    dispatch(fixAddToCart());
+  }, [dispatch]);
 
   const { data, isLoading, status, isError } = useQuery(
     ['products', currentPage, field, perPage],

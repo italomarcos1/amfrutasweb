@@ -24,7 +24,13 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
         draft.addingProduct = true;
         break;
       }
+
       case '@cart/ADD_TO_CART_FAILURE': {
+        draft.addingProduct = false;
+        break;
+      }
+
+      case '@cart/FIX_ADD_TO_CART': {
         draft.addingProduct = false;
         break;
       }
@@ -33,6 +39,7 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
         const { product } = payload;
 
         draft.products.push(product);
+        draft.addingProduct = false;
 
         const totalPages = Math.ceil(draft.products.length / 8);
         draft.pages = totalPages;
@@ -43,7 +50,6 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
 
         draft.price = formattedPrice;
         draft.saved = formattedSavedPrice;
-        draft.addingProduct = false;
 
         break;
       }

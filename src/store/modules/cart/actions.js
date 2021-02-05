@@ -23,6 +23,12 @@ export function pushToCart(products) {
   };
 }
 
+export function fixAddToCart() {
+  return {
+    type: '@cart/FIX_ADD_TO_CART',
+  };
+}
+
 export function redoOrder(products) {
   return {
     type: '@cart/REDO_ORDER',

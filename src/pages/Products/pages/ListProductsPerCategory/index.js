@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { FaSpinner } from 'react-icons/fa';
 import { useMediaQuery } from 'react-responsive';
 import { useQuery } from 'react-query';
+import { useDispatch } from 'react-redux';
 import { Container, LoadingContainer } from './styles';
 
 import Product from '~/components/Product';
@@ -14,6 +15,8 @@ import FooterPagination from '~/components/FooterPagination';
 import { nameIsValid } from '~/utils/validation';
 
 import backend from '~/services/api';
+
+import { fixAddToCart } from '~/store/modules/cart/actions';
 
 export default function ListProductsPerCategory() {
   const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
@@ -28,6 +31,8 @@ export default function ListProductsPerCategory() {
   const [field, setField] = useState('title');
   const [searchInput, setSearchInput] = useState('');
   const [noProductsFound, setNoProductsFound] = useState(false);
+
+  const dispatch = useDispatch();
 
   const { state, pathname } = useLocation();
 
@@ -136,7 +141,8 @@ export default function ListProductsPerCategory() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    dispatch(fixAddToCart());
+  }, [dispatch]);
 
   useEffect(() => setSearchInput(''), [pathname]);
 
