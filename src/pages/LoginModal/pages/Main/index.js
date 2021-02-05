@@ -51,6 +51,12 @@ export default function Main({ setPage, isDesktop }) {
 
         backend.defaults.headers.Authorization = `Bearer ${token}`;
 
+        backend.interceptors.request.use(async config => {
+          config.headers.common.uuid = user.uuid;
+
+          return config;
+        });
+
         const {
           data: {
             meta: { message },
