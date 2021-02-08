@@ -535,9 +535,7 @@ export default function Delivery() {
 
         await schema.validate(formDataWithEmail, { abortEarly: false });
 
-        if (!!formData) {
-          return;
-        }
+        console.tron.log('bitch2');
 
         if (
           deliveryOption === 'delivery' &&
@@ -551,6 +549,8 @@ export default function Delivery() {
 
           return;
         }
+
+        console.log('fucl');
 
         const allDataShipping = shippingInfoRef.current.getData();
 
@@ -639,7 +639,7 @@ export default function Delivery() {
 
         console.log(formData);
 
-        if (!!formData) return;
+        console.tron.log('bitch');
 
         if (
           deliveryOption === 'delivery' &&
