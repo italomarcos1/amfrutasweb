@@ -77,15 +77,7 @@ import {
 
 import { finishOrderRequest } from '~/store/modules/cart/actions';
 
-import {
-  nameIsValid,
-  dateIsValid,
-  phoneIsValid,
-  documentIsValid,
-  mailCodeIsValid,
-  mailIsValid,
-  postcodeIsValid,
-} from '~/utils/validation';
+import { nameIsValid, postcodeIsValid } from '~/utils/validation';
 
 import fakeAddress from '~/utils/fakeAddress';
 import getValidationErrors from '~/utils/validationErrors';
@@ -734,20 +726,15 @@ export default function Delivery() {
     ]
   );
 
-  const handlePagination = useCallback(() => {
-    const pageIndex = 8 * (currentPage - 1);
-    const newPage = cart.slice(pageIndex, pageIndex + 8);
-
+  const handleCashback = useCallback(() => {
     const { formattedPrice } = calculateCashback(cart);
 
     setTotalCashback(formattedPrice);
-
-    setPaginatedProducts(newPage);
-  }, [currentPage, cart]);
+  }, [cart]);
 
   useEffect(() => {
-    handlePagination();
-  }, [cart, handlePagination]);
+    handleCashback();
+  }, [cart, handleCashback]);
 
   useEffect(() => {
     if (orderFinished) {
@@ -1311,12 +1298,8 @@ export default function Delivery() {
 
         <Content style={{ marginTop: 20 }} isDesktop={isDesktop}>
           <div>
-            <ItemsList
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              containerHeight={isDesktop ? 708 : currentContainerHeight}
-            >
-              {paginatedProducts.map((item, index) => (
+            <ItemsList length={cart.length} breakpoint={12}>
+              {cart.map((item, index) => (
                 <Item
                   key={item.id}
                   item={item}
