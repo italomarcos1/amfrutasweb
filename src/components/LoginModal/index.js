@@ -21,7 +21,7 @@ export const Button = styled.button`
   box-shadow: 0px 4px 0px
     ${({ shadowColor, disabled }) => (disabled ? '#444' : shadowColor)};
   border-radius: 4px;
-  font-family: 'SFPro';
+  font-family: ${({ bold }) => (bold ? 'SFProBold' : 'SFPro')};
   font-size: ${({ isDesktop }) => (isDesktop ? 18 : 16)}px;
   line-height: 22px;
   color: #fff;

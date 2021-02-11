@@ -6,7 +6,7 @@ export const Container = styled(Form)`
   display: flex;
   flex-direction: column;
   width: 840px;
-  height: ${({ open }) => (open ? '1181px' : '190px')};
+  height: ${({ open }) => (open ? 'auto' : '190px')};
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 4px;
@@ -103,7 +103,9 @@ export const StarsContainer = styled.div`
 export const OrderStatus = styled.div`
   display: flex;
   width: 100%;
-  height: 159.5px;
+  height: 169.5px;
+  min-height: 169.5px;
+  /* background-color: #f89; */
 `;
 
 export const StatusIcon = styled.img`
@@ -133,7 +135,7 @@ export const Info = styled.div`
   align-items: flex-start;
   text-align: left;
   width: 661px;
-  height: 139px;
+  height: 159px;
   /* background-color: #c0a; */
   margin-left: 21px;
   margin-top: 10px;
@@ -233,4 +235,14 @@ export const ShippingInfo = styled.div`
       margin-top: 5px;
     }
   }
+`;
+
+export const ReOrderContainer = styled.div`
+  display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
+  height: 55px;
+  margin-top: 55px;
+  width: 100%;
+  /* background-color: #f90; */
+  justify-content: space-between;
+  padding: 0;
 `;

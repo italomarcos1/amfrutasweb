@@ -39,6 +39,10 @@ export function loginLoading() {
   return { type: '@auth/LOADING' };
 }
 
+export function loginLoadingError() {
+  return { type: '@auth/LOADING_ERROR' };
+}
+
 export function signFailure() {
   return {
     type: '@auth/SIGN_FAILURE',

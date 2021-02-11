@@ -49,6 +49,11 @@ export default (state = INITIAL_STATE, { type, payload }) => {
         break;
       }
 
+      case '@auth/LOADING_ERROR': {
+        draft.loading = false;
+        break;
+      }
+
       case '@auth/CANCEL_FIRST_LOGIN': {
         draft.firstLogin = false;
         break;

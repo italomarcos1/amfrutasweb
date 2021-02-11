@@ -18,6 +18,7 @@ import {
   StarsContainer,
   LoadingContainer,
   ReviewContainer,
+  ReOrderContainer,
 } from './styles';
 
 import { Button } from '~/components/LoginModal';
@@ -387,8 +388,11 @@ export default function Order({ order, isOpen, setOrder }) {
                           : transaction.discount}
                       </small>
                       <small>
-                        €&nbsp;
-                        {transaction.shipping}.00
+                        {!!scheduledShipping ? (
+                          `€ ${transaction.shipping}.00`
+                        ) : (
+                          <b style={{ color: '#0CB68B' }}>Grátis</b>
+                        )}
                       </small>
                       <small
                         style={{
@@ -407,11 +411,31 @@ export default function Order({ order, isOpen, setOrder }) {
                 </>
               )}
             </div>
+            <ReOrderContainer isOpen={isOpen === id}>
+              <Button
+                color="#1DC167"
+                style={{ margin: '0 auto', width: 393 }}
+                shadowColor="#17A75B"
+                bold
+                onClick={handleReorder}
+              >
+                Encomendar Novamente
+              </Button>
+              <Button
+                color="#F03F39"
+                style={{ margin: '0 auto', width: 393 }}
+                shadowColor="#D02B21"
+                bold
+                onClick={() => {}}
+              >
+                Cancelar Encomenda
+              </Button>
+            </ReOrderContainer>
 
             <ItemsList
               length={!!transaction ? transaction.products.length : 8}
               breakpoint={8}
-              style={{ width: '100%' }}
+              style={{ width: '100%', height: 'auto' }}
             >
               {!!transaction &&
                 transaction.products.map((item, index) => (
@@ -423,26 +447,6 @@ export default function Order({ order, isOpen, setOrder }) {
                   />
                 ))}
             </ItemsList>
-            <div
-              style={
-                isOpen === id
-                  ? {
-                      display: 'block',
-                      height: 55,
-                      marginTop: 17,
-                    }
-                  : { display: 'none' }
-              }
-            >
-              <Button
-                color="#1DC167"
-                style={{ margin: '0 auto' }}
-                shadowColor="#17A75B"
-                onClick={handleReorder}
-              >
-                Comprar novamente
-              </Button>
-            </div>
 
             <div
               style={

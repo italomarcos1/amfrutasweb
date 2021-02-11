@@ -34,6 +34,10 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
         draft.addingProduct = false;
         break;
       }
+      case '@cart/FIX_ORDER_FINISHED': {
+        draft.orderFinished = false;
+        break;
+      }
 
       case '@cart/ADD_TO_CART_SUCCESS': {
         const { product } = payload;
@@ -199,6 +203,7 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
 
       case '@cart/UPDATE_AMOUNT_FAILURE': {
         draft.updatingAmount = false;
+        draft.addingProduct = false;
 
         break;
       }
@@ -219,6 +224,7 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
         draft.price = formattedPrice;
         draft.saved = formattedSavedPrice;
         draft.updatingAmount = false;
+        draft.addingProduct = false;
 
         break;
       }

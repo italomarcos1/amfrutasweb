@@ -27,7 +27,7 @@ import {
 import { nameIsValid, mailIsValid, dateIsValid } from '~/utils/validation';
 import { onlyValues } from '~/utils/onlyValues';
 
-import { fixAddToCart } from '~/store/modules/cart/actions';
+import { fixAddToCart, fixOrderFinished } from '~/store/modules/cart/actions';
 
 import Header from '~/components/Header';
 import Product from '~/components/Product';
@@ -90,6 +90,7 @@ export default function Home() {
   useEffect(() => {
     if (firstLogin) history.push('/painel');
     dispatch(fixAddToCart());
+    dispatch(fixOrderFinished());
   }, [history, dispatch, firstLogin]);
 
   useEffect(() => {

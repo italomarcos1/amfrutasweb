@@ -3,7 +3,7 @@ import { darken } from 'polished';
 
 export const Container = styled.li`
   width: ${({ isDesktop }) => (isDesktop ? '370px' : '100%')};
-  height: 120px;
+  height: 158px;
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 6px;
@@ -14,6 +14,7 @@ export const Container = styled.li`
 export const ItemPicture = styled.img`
   width: ${({ isDesktop }) => (isDesktop ? 70 : 56)}px;
   height: ${({ isDesktop }) => (isDesktop ? 70 : 56)}px;
+  border-radius: 4px;
 `;
 
 export const Title = styled.h1`
@@ -61,7 +62,7 @@ export const PriceAndAmount = styled.div`
 
   height: 21px;
 
-  small {
+  > small {
     text-align: right;
     font-family: 'SFProCustomBold';
     font-size: 14px;
@@ -69,9 +70,15 @@ export const PriceAndAmount = styled.div`
     letter-spacing: 0px;
     color: #393939;
     align-self: flex-end;
+
+    &.offPrice {
+      text-decoration: line-through;
+      font-size: 18px;
+      color: #f03f39;
+    }
   }
 
-  strong {
+  > strong {
     text-align: right;
     font-family: 'SFProCustomBold';
     font-size: 18px;
@@ -80,6 +87,41 @@ export const PriceAndAmount = styled.div`
     color: #393939;
     align-self: flex-end;
   }
+`;
+
+export const CBackContainer = styled.span`
+  padding: 0;
+  display: flex;
+  color: #e2a63b;
+  /* background-color: #63b; */
+  height: 21px;
+  width: 133px;
+
+  b {
+    font-weight: normal;
+    font-size: 12px;
+    font-family: 'SFProCustom';
+  }
+
+  height: 20px;
+  align-items: center;
+  letter-spacing: 0px;
+
+  /* background-color: #4f4; */
+
+  strong {
+    color: #e2a63b;
+    font-size: 12px;
+    font-family: 'SFProCustomBold';
+    margin-right: 3px;
+    letter-spacing: 0px;
+  }
+`;
+
+export const Coins = styled.img`
+  width: ${({ isDesktop }) => (isDesktop ? 30.3 : 21.21)}px;
+  height: ${({ isDesktop }) => (isDesktop ? 20.5 : 14.35)}px;
+  margin-right: ${({ isDesktop }) => (isDesktop ? 6 : 3)}px;
 `;
 
 export const Options = styled.div`

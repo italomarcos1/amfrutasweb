@@ -29,6 +29,12 @@ export function fixAddToCart() {
   };
 }
 
+export function fixOrderFinished() {
+  return {
+    type: '@cart/FIX_ORDER_FINISHED',
+  };
+}
+
 export function redoOrder(products) {
   return {
     type: '@cart/REDO_ORDER',

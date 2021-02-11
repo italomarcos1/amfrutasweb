@@ -18,8 +18,6 @@ import {
   LoadingContainer,
 } from './styles';
 
-import logo from '~/assets/amfrutas-white.svg';
-import alert from '~/assets/alert-circle.svg';
 import lock from '~/assets/lock.svg';
 
 import Footer from '~/components/Footer';
@@ -32,7 +30,7 @@ import EmptyCartContainer from '~/components/EmptyCartContainer';
 import Toast from '~/components/Toast';
 import LoginModal from '~/pages/LoginModal';
 
-import { processOrder } from '~/store/modules/cart/actions';
+import { processOrder, fixOrderFinished } from '~/store/modules/cart/actions';
 
 import { calculateCashback, formatPrice } from '~/utils/calculatePrice';
 
@@ -104,19 +102,13 @@ export default function Basket() {
   }, [products]);
 
   useEffect(() => {
-    loadData();
-  }, [loadData]);
-
-  useEffect(() => loadShippingCost(), [loadShippingCost, price]);
-
-  useEffect(() => {
     window.scrollTo(0, 0);
     dispatch(processOrder(false));
-  }, [dispatch]);
+    dispatch(fixOrderFinished());
+    loadData();
+  }, [loadData, dispatch]);
 
-  useEffect(() => {
-    dispatch(processOrder(false));
-  }, [dispatch]);
+  useEffect(() => loadShippingCost(), [loadShippingCost, price]);
 
   const handleProcessOrder = useCallback(() => {
     if (!signed) {

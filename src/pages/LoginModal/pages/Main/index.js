@@ -13,6 +13,7 @@ import {
   signInSuccess,
   signFailure,
   loginLoading,
+  loginLoadingError,
 } from '~/store/modules/auth/actions';
 import { addFavorites, pushToCart } from '~/store/modules/cart/actions';
 import { populateAddresses } from '~/store/modules/addresses/actions';
@@ -102,60 +103,72 @@ export default function Main({ setPage, isDesktop }) {
         dispatch(signFailure());
       }
     },
-    [dispatch]
+    [dispatch, uuid]
   );
 
   const handleFbLogin = useCallback(
     async response => {
-      setLoginPlatform('Facebook');
-      dispatch(loginLoading());
+      try {
+        setLoginPlatform('Facebook');
+        dispatch(loginLoading());
 
-      const { userID, accessToken } = response;
+        const { userID, accessToken } = response;
 
-      const {
-        data: { data },
-      } = await backend.post('/auth/facebook', {
-        token: accessToken,
-        userID,
-        uuid,
-      });
+        const {
+          data: { data },
+        } = await backend.post('/auth/facebook', {
+          token: accessToken,
+          userID,
+          uuid,
+        });
 
-      console.log(data);
+        console.log(data);
 
-      handleLogin(data);
+        handleLogin(data);
+      } catch (err) {
+        console.log('pogchamp');
+        console.log(err.response);
+        dispatch(loginLoadingError());
+      }
     },
     [dispatch, handleLogin, uuid]
   );
 
   const handleAppleLogin = useCallback(
     async appleAuthResponse => {
-      setLoginPlatform('Apple');
-      dispatch(loginLoading());
+      try {
+        setLoginPlatform('Apple');
+        dispatch(loginLoading());
 
-      const { authorization } = appleAuthResponse;
+        const { authorization } = appleAuthResponse;
 
-      let appleRequestData = {
-        authorization,
-        uuid,
-      };
-
-      console.log(!!appleAuthResponse.user);
-
-      if (!!appleAuthResponse.user)
-        appleRequestData = {
-          ...appleRequestData,
-          user: appleAuthResponse.user,
+        let appleRequestData = {
+          authorization,
+          uuid,
         };
 
-      console.log(appleRequestData);
+        console.log(!!appleAuthResponse.user);
 
-      const {
-        data: { data },
-      } = await backend.post('/auth/apple', appleRequestData);
+        if (!!appleAuthResponse.user)
+          appleRequestData = {
+            ...appleRequestData,
+            user: appleAuthResponse.user,
+          };
 
-      handleLogin(data);
+        console.log(appleRequestData);
+
+        const {
+          data: { data },
+        } = await backend.post('/auth/apple', appleRequestData);
+
+        handleLogin(data);
+      } catch (err) {
+        console.log('pogcuck');
+        console.log(err.response);
+        dispatch(loginLoadingError());
+      }
     },
-    [handleLogin, uuid]
+    [handleLogin, dispatch, uuid]
   );
 
   return (
