@@ -110,9 +110,7 @@ export const SecureLogin = styled.div`
   }
 `;
 
-export const ForgotPassword = styled.button.attrs({
-  type: 'button',
-})`
+export const ForgotPasswordButton = styled.div`
   text-align: left;
   font-family: 'SFPro';
   font-size: 12px;
@@ -126,13 +124,14 @@ export const ForgotPassword = styled.button.attrs({
   &::after {
     content: '';
     display: block;
-    width: 100%;
+    width: 172px;
     margin-top: 3px;
     height: 1px;
     background-color: #f03f39;
   }
 
   &:hover {
+    cursor: pointer;
     font-family: 'SFProBold';
   }
 `;

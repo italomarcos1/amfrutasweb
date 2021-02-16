@@ -50,7 +50,7 @@ import whatsappGreen from '~/assets/whatsapp_green.svg';
 import appStore from '~/assets/appStore.svg';
 import playStore from '~/assets/playStore.svg';
 
-import { generateUuid } from '~/store/modules/auth/actions';
+import { generateUuid, loginLoadingError } from '~/store/modules/auth/actions';
 
 export default function Home() {
   const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
@@ -91,6 +91,7 @@ export default function Home() {
     if (firstLogin) history.push('/painel');
     dispatch(fixAddToCart());
     dispatch(fixOrderFinished());
+    dispatch(loginLoadingError());
   }, [history, dispatch, firstLogin]);
 
   useEffect(() => {

@@ -128,6 +128,7 @@ export default function Main({ setPage, isDesktop }) {
       } catch (err) {
         console.log('pogchamp');
         console.log(err.response);
+      } finally {
         dispatch(loginLoadingError());
       }
     },
@@ -165,6 +166,7 @@ export default function Main({ setPage, isDesktop }) {
       } catch (err) {
         console.log('pogcuck');
         console.log(err.response);
+      } finally {
         dispatch(loginLoadingError());
       }
     },
@@ -200,6 +202,8 @@ export default function Main({ setPage, isDesktop }) {
         appId="314220626404166"
         callback={handleFbLogin}
         fields="name,email"
+        redirectUri="https://amfrutas.pt"
+        isMobile={false}
         usePopup
         render={({ onClick }) => (
           <Button

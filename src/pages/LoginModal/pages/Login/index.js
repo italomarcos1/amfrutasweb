@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import {
   Title,
-  ForgotPassword,
+  ForgotPasswordButton,
   Button,
   SecureLogin,
   GoBack,
@@ -107,9 +107,9 @@ export default function Login({ closeModal, setPage, isDesktop }) {
           }
           error={passwordError}
         />
-        <ForgotPassword onClick={() => setPage('forgot')}>
+        <ForgotPasswordButton onClick={() => setPage('forgot')}>
           Não se recorda da palavra-passe?
-        </ForgotPassword>
+        </ForgotPasswordButton>
       </Form>
       <Button
         color="#1DC167"

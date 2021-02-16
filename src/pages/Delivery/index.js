@@ -110,9 +110,6 @@ export default function Delivery() {
   const processingOrder = useSelector(state => state.cart.processingOrder);
   const orderFinished = useSelector(state => state.cart.orderFinished);
 
-  const [paginatedProducts, setPaginatedProducts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-
   const [newAddress, setNewAddress] = useState(false);
 
   const profile = useSelector(state => state.user.profile);
@@ -542,10 +539,7 @@ export default function Delivery() {
           setInvalidDeliveryDay(nameIsValid(deliveryDay));
           setInvalidDeliveryHour(nameIsValid(deliveryHour));
 
-          window.scrollTo(0, 0);
-          setFinishingOrder(false);
-
-          return;
+          throw new Error('Invalid delivery time.');
         }
 
         const allDataShipping = shippingInfoRef.current.getData();
@@ -642,11 +636,7 @@ export default function Delivery() {
           setInvalidDeliveryDay(nameIsValid(deliveryDay));
           setInvalidDeliveryHour(nameIsValid(deliveryHour));
 
-          window.scrollTo(0, 0);
-
-          setFinishingOrder(false);
-
-          return;
+          throw new Error('Invalid delivery time');
         }
 
         const allDataShipping = shippingInfoRef.current.getData();
@@ -736,10 +726,6 @@ export default function Delivery() {
       setFinishingOrder(false);
     }
   }, [orderFinished, history]);
-
-  useEffect(() => {
-    setCurrentContainerHeight(paginatedProducts.length * 102 - 20);
-  }, [paginatedProducts, currentContainerHeight]);
 
   useEffect(() => {
     const formattingPrice = formatPrice(

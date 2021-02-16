@@ -369,6 +369,22 @@ export default function Order({ order, isOpen, setOrder, index: orderIndex }) {
                   Comprar novamente
                 </ReOrderButton>
               </div>
+              <div
+                style={{
+                  height: 55,
+                  margin: '17px auto 0',
+                  width: '100%',
+                }}
+              >
+                <ReOrderButton
+                  color="#F03F39"
+                  style={{ margin: '0 auto', width: '85%' }}
+                  shadowColor="#D02B21"
+                  onClick={() => {}}
+                >
+                  Cancelar Encomenda
+                </ReOrderButton>
+              </div>
             </div>
           </>
         )}

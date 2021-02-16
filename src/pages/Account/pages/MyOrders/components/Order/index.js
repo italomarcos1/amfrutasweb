@@ -81,6 +81,10 @@ export default function Order({ order, isOpen, setOrder }) {
   const [price, setPrice] = useState('0.00');
   const [savedPrice, setSavedPrice] = useState('0.00');
 
+  const [currentStatus, setCurrentStatus] = useState(statuses[0].name);
+  const [reordering, setIsReordering] = useState(false);
+  const [cancelling, setIsCancelling] = useState(false);
+
   const [toastVisible, setToastVisible] = useState(false);
   const [toastStatus, setToastStatus] = useState('');
   const [toastColor, setToastColor] = useState('#1DC167');
@@ -175,7 +179,7 @@ export default function Order({ order, isOpen, setOrder }) {
   const handleReorder = useCallback(async () => {
     try {
       if (!transaction) return;
-
+      setIsReordering(true);
       const { products } = transaction;
 
       const formattedProducts = products.map(({ id: product_id, qty }) => ({
@@ -222,11 +226,41 @@ export default function Order({ order, isOpen, setOrder }) {
       setToastColor('#f56060');
       setToastVisible(true);
     } finally {
+      setIsReordering(false);
+
       setTimeout(() => {
         setToastVisible(false);
       }, 2800);
     }
   }, [transaction, dispatch, profile]);
+
+  const handleCancel = useCallback(async () => {
+    try {
+      if (!transaction) return;
+
+      setIsCancelling(true);
+      await backend.post(`/clients/transactions/statuses/${id}`);
+
+      setToastStatus('Sua encomenda foi cancelada.');
+
+      setToastColor('#1dc167');
+
+      setToastVisible(true);
+      setCurrentStatus('Cancelado');
+      setIsCancelling(false);
+    } catch (err) {
+      console.log(err);
+      setToastStatus('Erro ao cancelar a encomenda.');
+      setToastColor('#f56060');
+      setToastVisible(true);
+    } finally {
+      setIsCancelling(false);
+
+      setTimeout(() => {
+        setToastVisible(false);
+      }, 2800);
+    }
+  }, [id, transaction]);
 
   return (
     <>
@@ -238,18 +272,18 @@ export default function Order({ order, isOpen, setOrder }) {
         <OrderStatus>
           <StatusIcon
             src={
-              statuses[0].name === 'Completo'
+              currentStatus === 'Completo'
                 ? completo
-                : statuses[0].name === 'Cancelado'
+                : currentStatus === 'Cancelado'
                 ? cancelado
                 : novo
             }
           />
           <Info>
             <h1>
-              {statuses[0].name === 'Completo'
+              {currentStatus === 'Completo'
                 ? 'Completo'
-                : statuses[0].name === 'Cancelado'
+                : currentStatus === 'Cancelado'
                 ? 'Cancelado'
                 : 'Novo'}
             </h1>
@@ -290,7 +324,7 @@ export default function Order({ order, isOpen, setOrder }) {
               </OrderInfo>
             </OrderInfoContainer>
             <Separator />
-            <StatusContainer status={statuses[0].name} />
+            <StatusContainer status={currentStatus} />
           </Info>
           <OpenTab onClick={handleOpenOrder}>
             <img src={isOpen === id ? setaUp : setaDown} alt="" />
@@ -414,22 +448,34 @@ export default function Order({ order, isOpen, setOrder }) {
             <ReOrderContainer isOpen={isOpen === id}>
               <Button
                 color="#1DC167"
-                style={{ margin: '0 auto', width: 393 }}
+                style={{ margin: '0 auto', width: 370 }}
                 shadowColor="#17A75B"
                 bold
                 onClick={handleReorder}
+                disabled={reordering || cancelling}
               >
-                Encomendar Novamente
+                {reordering || cancelling ? (
+                  <FaSpinner color="#fff" size={20} />
+                ) : (
+                  'Encomendar Novamente'
+                )}
               </Button>
-              <Button
-                color="#F03F39"
-                style={{ margin: '0 auto', width: 393 }}
-                shadowColor="#D02B21"
-                bold
-                onClick={() => {}}
-              >
-                Cancelar Encomenda
-              </Button>
+              {currentStatus !== 'Cancelado' && (
+                <Button
+                  color="#F03F39"
+                  style={{ margin: '0 auto', width: 370 }}
+                  shadowColor="#D02B21"
+                  bold
+                  onClick={handleCancel}
+                  disabled={reordering || cancelling}
+                >
+                  {reordering || cancelling ? (
+                    <FaSpinner color="#fff" size={20} />
+                  ) : (
+                    'Cancelar Encomenda'
+                  )}
+                </Button>
+              )}
             </ReOrderContainer>
 
             <ItemsList
