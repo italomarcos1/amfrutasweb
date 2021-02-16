@@ -55,10 +55,6 @@ export default function LoginModal({ closeModal }) {
   //   } else setCustomHeight(566);
   // }, [page, isDesktop]);
 
-  useEffect(() => {
-    console.log(page);
-  }, [page]);
-
   return (
     <Background>
       <Container isDesktop={isDesktop} page={page}>
@@ -107,8 +103,7 @@ export default function LoginModal({ closeModal }) {
             <HeaderButton
               onClick={() => {
                 setActive('signUp');
-                setPage('forgot');
-                console.log('abc');
+                setPage('register');
               }}
               active={active === 'signUp'}
               isDesktop={isDesktop}
@@ -124,10 +119,7 @@ export default function LoginModal({ closeModal }) {
           ) : page === 'login' ? (
             <Login
               closeModal={closeModal}
-              setPage={value => {
-                console.log(value);
-                setPage(value);
-              }}
+              setPage={value => setPage(value)}
               isDesktop={isDesktop}
             />
           ) : page === 'forgot' ? (
