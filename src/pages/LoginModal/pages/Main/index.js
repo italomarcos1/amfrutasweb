@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import PropTypes from 'prop-types';
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import { useDispatch, useSelector } from 'react-redux';
 import AppleLogin from 'react-apple-login';
+import OneSignal from 'react-onesignal';
 
 import backend from '~/services/api';
 
@@ -58,6 +59,8 @@ export default function Main({ setPage, isDesktop }) {
           return config;
         });
 
+        await backend.put('/clients', { onesignal_subscribed: 1 });
+
         const {
           data: {
             meta: { message },
@@ -97,6 +100,8 @@ export default function Main({ setPage, isDesktop }) {
           dispatch(populateAddresses([]));
         } else dispatch(populateAddresses([...addresses]));
 
+        OneSignal.setExternalUserId(String(user.id));
+
         dispatch(signInSuccess(token, user));
       } catch {
         setLoginError(true);
@@ -126,7 +131,6 @@ export default function Main({ setPage, isDesktop }) {
 
         handleLogin(data);
       } catch (err) {
-        console.log('pogchamp');
         console.log(err.response);
       } finally {
         dispatch(loginLoadingError());
@@ -164,7 +168,6 @@ export default function Main({ setPage, isDesktop }) {
 
         handleLogin(data);
       } catch (err) {
-        console.log('pogcuck');
         console.log(err.response);
       } finally {
         dispatch(loginLoadingError());
@@ -205,8 +208,10 @@ export default function Main({ setPage, isDesktop }) {
         redirectUri="https://amfrutas.pt"
         isMobile={false}
         usePopup
+        disableMobileRedirect
         render={({ onClick }) => (
           <Button
+            disabled={false}
             onClick={onClick}
             color="#4267b2"
             shadowColor="#32549d"

@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import { differenceInMinutes, parseISO } from 'date-fns';
 import { useQuery } from 'react-query';
+import OneSignal from 'react-onesignal';
 
 import {
   Container,
@@ -50,7 +51,7 @@ import whatsappGreen from '~/assets/whatsapp_green.svg';
 import appStore from '~/assets/appStore.svg';
 import playStore from '~/assets/playStore.svg';
 
-import { generateUuid, loginLoadingError } from '~/store/modules/auth/actions';
+import { setUuid, loginLoadingError } from '~/store/modules/auth/actions';
 
 export default function Home() {
   const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
@@ -79,7 +80,6 @@ export default function Home() {
   const profile = useSelector(state => state.user.profile);
   const cart = useSelector(state => state.cart.products);
   const noFavorite = useSelector(state => state.auth.noFavorite);
-  const uuid = useSelector(state => state.auth.uuid);
 
   const [toastVisible, setToastVisible] = useState(false);
 
@@ -114,8 +114,6 @@ export default function Home() {
       data: { data },
     } = await backend.get(`configurations?keys=${keys.join()}`);
 
-    console.log(data);
-
     return data;
   }, []);
 
@@ -134,9 +132,6 @@ export default function Home() {
       },
     } = await backend.get(`/banner/${message[0].hash}`);
 
-    console.log('currentBanners');
-    console.log(banners);
-
     return banners;
   }, []);
 
@@ -145,7 +140,6 @@ export default function Home() {
       data: { data },
     } = await backend.get('/seller-points');
 
-    console.log(data);
     return data;
   }, []);
 
@@ -156,7 +150,6 @@ export default function Home() {
       },
     } = await backend.get('/blog/contents/categories/5?per_page=4');
 
-    console.log(data);
     return data;
   }, []);
 
@@ -236,14 +229,21 @@ export default function Home() {
   }, [isDesktop]);
 
   useEffect(() => {
-    if (!uuid) dispatch(generateUuid());
-
     backend.interceptors.request.use(async config => {
-      config.headers.common.uuid = uuid;
+      dispatch(setUuid(config.headers.common.uuid));
 
       return config;
     });
-  }, [dispatch, uuid]);
+
+    OneSignal.initialize('e6c7df22-1200-4ab7-bfff-8001bf13a921', {
+      subdomainName: 'https://amfrutas.pt',
+      notifyButton: {
+        enable: true,
+      },
+      autoRegister: true,
+      autoResubscribe: true,
+    });
+  }, [dispatch]);
 
   const handleSubmit = useCallback(
     async formData => {

@@ -427,6 +427,7 @@ export default function Delivery() {
     };
 
     if (couponIsValid) checkout = { ...checkout, voucher: coupon };
+    setValidUserInfo(false);
 
     dispatch(finishOrderRequest(checkout));
   }, [

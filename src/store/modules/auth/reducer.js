@@ -44,6 +44,11 @@ export default (state = INITIAL_STATE, { type, payload }) => {
         break;
       }
 
+      case '@SET_UUID': {
+        draft.uuid = payload.uuid;
+        break;
+      }
+
       case '@auth/LOADING': {
         draft.loading = true;
         break;

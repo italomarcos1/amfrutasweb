@@ -99,10 +99,9 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
       }
 
       case '@cart/PUSH_TO_CART': {
-        const currentProducts = draft.products;
         const { products } = payload;
 
-        draft.products = [...currentProducts, ...products];
+        draft.products = [...products];
 
         const { formattedPrice, formattedSavedPrice } = customCalculatePrice(
           draft.products

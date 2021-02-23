@@ -1,11 +1,23 @@
 import axios from 'axios';
+import uuid from 'react-uuid';
 
-const backend = axios.create({
-  baseURL: 'https://sandbox.amfrutas.pt/backend',
+axios.defaults.baseURL = 'https://sandbox.amfrutas.pt/backend';
+
+axios.interceptors.request.use(async config => {
+  const newUuid = uuid();
+  const currentUuid = localStorage.getItem('@uuid');
+
+  if (!currentUuid || typeof currentUuid !== 'string') {
+    localStorage.setItem('@uuid', newUuid);
+
+    config.headers.common.uuid = newUuid;
+
+    return config;
+  }
+
+  config.headers.common.uuid = currentUuid;
+
+  return config;
 });
 
-export const postcodes = axios.create({
-  baseURL: 'https://sandbox.amfrutas.pt/backend',
-});
-
-export default backend;
+export default axios;

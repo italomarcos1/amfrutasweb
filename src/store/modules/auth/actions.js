@@ -76,3 +76,7 @@ export function signOut() {
 export function generateUuid() {
   return { type: '@GENERATE_UUID' };
 }
+
+export function setUuid(uuid) {
+  return { type: '@SET_UUID', payload: { uuid } };
+}

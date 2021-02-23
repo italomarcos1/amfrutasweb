@@ -12,6 +12,7 @@ import {
   removeFromFavoritesSuccess,
   finishOrderFailure,
   updateAmountFailure,
+  cleanCart,
 } from './actions';
 
 import { signInSuccess } from '../auth/actions';
@@ -84,8 +85,9 @@ export function* removeFromCart({ payload }) {
 
     yield put(removeFromCartSuccess(id));
   } catch (err) {
-    alert('Erro na remoção');
-    yield put(removeFromCartFailure());
+    console.log(err);
+    yield put(removeFromCartSuccess(payload.id));
+    yield put(cleanCart());
   }
 }
 

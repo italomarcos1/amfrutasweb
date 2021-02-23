@@ -9469,6 +9469,11 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.1.tgz#5b3531bd76a645a4c9fb6e693ed36419e3301339"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
 
+react-onesignal@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/react-onesignal/-/react-onesignal-1.7.0.tgz#856b3b86567d16da4e5ca1fa7f8152644948ac09"
+  integrity sha512-iPMchTzpxBpqDISDX0aTjyYS3M6gRLtK9Teb+7X6kLOkW/+alZlL3zAvadexJrg0shKGar1VRSAEuK2/NEovLQ==
+
 react-only-when@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/react-only-when/-/react-only-when-1.0.2.tgz#a8a79b48dd6cfbd91ddc710674a94153e88039d3"

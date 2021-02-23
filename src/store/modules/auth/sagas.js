@@ -1,5 +1,6 @@
 import { call, put, all, select, takeLatest } from 'redux-saga/effects';
 import uuid from 'react-uuid';
+import OneSignal from 'react-onesignal';
 
 import backend from '~/services/api';
 
@@ -33,6 +34,8 @@ export function* signIn({ payload }) {
       return config;
     });
 
+    yield call(backend.put, '/clients', { onesignal_subscribed: 1 });
+
     const {
       data: {
         meta: { message },
@@ -59,6 +62,8 @@ export function* signIn({ payload }) {
       };
 
       yield put(signInSuccess(token, updatedUser));
+
+      OneSignal.setExternalUserId(String(updatedUser.id));
 
       return;
     }
@@ -94,6 +99,8 @@ export function* signIn({ payload }) {
     if (addressesMessage === 'Você ainda não tem endereços cadastrados.') {
       yield put(populateAddresses([]));
     } else yield put(populateAddresses([...addresses]));
+
+    OneSignal.setExternalUserId(String(user.id));
 
     yield put(signInSuccess(token, user));
   } catch (error) {
@@ -145,6 +152,9 @@ export function* signUp({ payload }) {
     // const notSignedCart = yield select(state => state.cart.products);
 
     // yield put(pushToCart([...notSignedCart]));
+    OneSignal.push(() => {
+      OneSignal.setExternalUserId(String(updatedUser.id));
+    });
 
     yield put(signInSuccess(token, updatedUser));
   } catch (error) {
