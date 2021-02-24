@@ -2,7 +2,7 @@ import axios from 'axios';
 import uuid from 'react-uuid';
 
 // axios.defaults.baseURL = 'https://sandbox.amfrutas.pt/backend';
-axios.defaults.baseURL = 'https://laravel58.amfrutas.pt/';
+axios.defaults.baseURL = 'https://laravel58.amfrutas.pt/backend';
 
 axios.interceptors.request.use(async config => {
   const newUuid = uuid();
