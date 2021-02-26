@@ -235,16 +235,16 @@ export default function Home() {
       return config;
     });
 
-    if (!window.OneSignal) {
-      OneSignal.initialize('e6c7df22-1200-4ab7-bfff-8001bf13a921', {
-        subdomainName: 'https://amfrutas.pt',
-        notifyButton: {
-          enable: true,
-        },
-        autoRegister: true,
-        autoResubscribe: true,
-      });
-    }
+    // if (!window.OneSignal) {
+    //   OneSignal.initialize('e6c7df22-1200-4ab7-bfff-8001bf13a921', {
+    //     subdomainName: 'https://amfrutas.pt',
+    //     notifyButton: {
+    //       enable: true,
+    //     },
+    //     autoRegister: true,
+    //     autoResubscribe: true,
+    //   });
+    // }
   }, [dispatch]);
 
   const handleSubmit = useCallback(
