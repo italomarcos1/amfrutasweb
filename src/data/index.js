@@ -13,6 +13,7 @@ import vinho from '~/assets/products/vinho@2x.png';
 export default [
   {
     id: 175,
+    qty: 1,
     title: 'Abóbora Menina Inteira Nacional unidade',
     slug: 'abobora-menina-inteira-nacional-unidade',
     category_id: 5,
@@ -24,9 +25,19 @@ export default [
       'https://amfrutas.pt/uploads/product_commerce/products/175/image/thumbs/3c194444-80ad-4d87-9942-cc3b0941a5f0-1ef0ff.jpeg',
     url: 'produto/horticolas/legumes/5/abobora-menina-inteira-nacional-unidade',
     has_promotion: true,
+    product: {
+      thumbs:
+        'https://amfrutas.pt/uploads/product_commerce/products/175/image/thumbs/3c194444-80ad-4d87-9942-cc3b0941a5f0-1ef0ff.jpeg',
+      title: 'Abóbora Menina Inteira Nacional unidade',
+      price: '5.69',
+      price_promotional: '4.17',
+      has_promotion: true,
+      cback: '0.17',
+    },
   },
   {
     id: 248,
+    qty: 1,
     title: 'Alface Frisada Nacional Unidade ',
     slug: 'alface-frisada-nacional-unidade',
     category_id: 12,
@@ -38,9 +49,19 @@ export default [
       'https://amfrutas.pt/uploads/product_commerce/products/248/image/thumbs/78ed409b-0ea1-4548-b82b-d8ef31df4a69-7b9b05.jpeg',
     url: 'produto/salada/12/alface-frisada-nacional-unidade',
     has_promotion: true,
+    product: {
+      title: 'Alface Frisada Nacional Unidade ',
+      price: '0.99',
+      price_promotional: '0.85',
+      thumbs:
+        'https://amfrutas.pt/uploads/product_commerce/products/248/image/thumbs/78ed409b-0ea1-4548-b82b-d8ef31df4a69-7b9b05.jpeg',
+      has_promotion: true,
+      cback: '0.17',
+    },
   },
   {
     id: 154,
+    qty: 1,
     title: 'Ameixa Vermelha Nacional Kg',
     slug: 'ameixa-vermelha-nacional-kg',
     category_id: 9,
@@ -52,9 +73,21 @@ export default [
       'https://amfrutas.pt/uploads/product_commerce/products/154/image/thumbs/d96b5e30-e4a6-487c-8294-8827aaa2152b-ed5ea7.jpeg',
     url: 'produto/frutas/frutas-da-epoca/9/ameixa-vermelha-nacional-kg',
     has_promotion: true,
+    product: {
+      title: 'Ameixa Vermelha Nacional Kg',
+      price: '2.69',
+      price_promotional: '1.89',
+      cback: '0.89',
+      banner:
+        'https://amfrutas.pt/uploads/product_commerce/products/154/image/d96b5e30-e4a6-487c-8294-8827aaa2152b-ed5ea7.jpeg',
+      thumbs:
+        'https://amfrutas.pt/uploads/product_commerce/products/154/image/thumbs/d96b5e30-e4a6-487c-8294-8827aaa2152b-ed5ea7.jpeg',
+      has_promotion: true,
+    },
   },
   {
     id: 20,
+    qty: 1,
     title: 'Batata Doce Laranja Nacional Kg',
     slug: 'batata-doce-laranja-nacional-kg',
     category_id: 3,
@@ -66,9 +99,19 @@ export default [
       'https://amfrutas.pt/uploads/product_commerce/products/20/image/thumbs/a25dccac-ba08-401d-a1ba-7dc8d8d9e221-027eae.jpeg',
     url: 'produto/tuberculos/3/batata-doce-laranja-nacional-kg',
     has_promotion: true,
+    product: {
+      title: 'Batata Doce Laranja Nacional Kg',
+      price: '1.69',
+      price_promotional: '1.39',
+      thumbs:
+        'https://amfrutas.pt/uploads/product_commerce/products/20/image/thumbs/a25dccac-ba08-401d-a1ba-7dc8d8d9e221-027eae.jpeg',
+      has_promotion: true,
+      cback: '0.39',
+    },
   },
   {
     id: 19,
+    qty: 1,
     title: 'Batata Doce Roxa Nacional Kg ',
     slug: 'batata-doce-roxa-nacional-kg',
     category_id: 3,
@@ -80,9 +123,19 @@ export default [
       'https://amfrutas.pt/uploads/product_commerce/products/19/image/thumbs/b4665164-d85b-4378-8e61-a0cc7653fab9-41def8.jpeg',
     url: 'produto/tuberculos/3/batata-doce-roxa-nacional-kg',
     has_promotion: true,
+    product: {
+      title: 'Batata Doce Roxa Nacional Kg ',
+      price: '1.69',
+      price_promotional: '1.39',
+      cback: '0.39',
+      thumbs:
+        'https://amfrutas.pt/uploads/product_commerce/products/19/image/thumbs/b4665164-d85b-4378-8e61-a0cc7653fab9-41def8.jpeg',
+      has_promotion: true,
+    },
   },
   {
     id: 172,
+    qty: 1,
     title: 'Batata Olho de Perdiz Nacional Kg',
     slug: 'batata-olho-de-perdiz-nacional-kg',
     category_id: 3,
@@ -94,6 +147,15 @@ export default [
       'https://amfrutas.pt/uploads/product_commerce/products/172/image/thumbs/18f386a6-564c-420f-a070-d921faacd71f-d4caf1.jpeg',
     url: 'produto/tuberculos/3/batata-olho-de-perdiz-nacional-kg',
     has_promotion: true,
+    product: {
+      title: 'Batata Olho de Perdiz Nacional Kg',
+      price: '1.19',
+      price_promotional: '0.99',
+      cback: '0.19',
+      thumbs:
+        'https://amfrutas.pt/uploads/product_commerce/products/172/image/thumbs/18f386a6-564c-420f-a070-d921faacd71f-d4caf1.jpeg',
+      has_promotion: true,
+    },
   },
 ];
 

@@ -18,8 +18,26 @@ const doesDateExists = date => {
   );
 };
 
+const periodicDoesDateExists = date => {
+  const [day, month, year] = date.split('/');
+
+  const formattedMonth = Number(month) - 1;
+  const formattedDay = Number(day);
+  const formattedYear = Number(year);
+  const currentYear = Number(getYear(new Date()));
+
+  return (
+    isExists(formattedYear, formattedMonth, formattedDay) &&
+    currentYear === formattedYear
+  );
+};
+
 export const dateIsValid = date => {
   return dateValidation.test(date) && doesDateExists(date);
+};
+
+export const periodicDateIsValid = date => {
+  return dateValidation.test(date) && periodicDoesDateExists(date);
 };
 
 const mailValidation = new RegExp(

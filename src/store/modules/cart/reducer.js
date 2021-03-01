@@ -14,6 +14,7 @@ const INITIAL_STATE = {
   addingProduct: false,
   removingProduct: false,
   updatingAmount: false,
+  productsUpdated: null,
   pages: 1,
 };
 
@@ -139,6 +140,13 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
         break;
       }
 
+      case '@cart/PERIODIC_UPDATING': {
+        const { id } = payload;
+        draft.productsUpdated = id;
+
+        break;
+      }
+
       case '@cart/SET_PAGES': {
         draft.pages = payload.pages;
         break;
@@ -238,6 +246,7 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
         draft.orderFinished = false;
         draft.processingOrder = false;
         draft.removingProduct = false;
+        draft.productsUpdated = null;
         draft.pages = 1;
         break;
       }

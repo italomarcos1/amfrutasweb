@@ -67,6 +67,10 @@ export function removeFromCartFailure() {
   return { type: '@cart/REMOVE_FROM_CART_FAILURE' };
 }
 
+export function periodicUpdating(id) {
+  return { type: '@cart/PERIODIC_UPDATING', payload: { id } };
+}
+
 export function cleanCart() {
   return {
     type: '@cart/CLEAN_CART',

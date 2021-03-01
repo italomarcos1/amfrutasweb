@@ -164,131 +164,158 @@ export const WithdrawContainer = styled.div`
   }
 `;
 
-// export const PeriodicDeliveryContainer = styled.div`
-//   width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
-//   height: 596px;
-//   background: #fff;
-//   border: 1px solid #e0e0e0;
-//   border-radius: 4px;
-//   padding: 22px 30px 103px;
-//   margin: 24px auto 0;
+export const PeriodicDeliveryContainer = styled.div`
+  width: ${({ isDesktop }) => (isDesktop ? '1240px' : '100%')};
+  /* height: 596px; */
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 22px 30px 73px;
+  margin: 24px auto 0;
 
-//   span {
-//     margin-left: 20px;
-//   }
+  span {
+    margin-left: 20px;
+  }
 
-//   p {
-//     font-family: 'SFPro';
-//     font-size: 22px;
-//     line-height: 29px;
-//     color: #555555;
-//     text-align: left;
-//   }
+  p {
+    font-family: 'SFPro';
+    font-size: 22px;
+    line-height: 29px;
+    color: #555555;
+    text-align: left;
+  }
 
-//   b {
-//     font-family: 'SFProBold';
-//   }
-// `;
+  b {
+    font-family: 'SFProBold';
+  }
+`;
 
-// export const PeriodicDeliveryItem = styled.button`
-//   display: flex;
-//   height: 53px;
-//   background: none;
-//   text-align: left;
-//   align-items: flex-start;
-//   margin: 40px 22px;
+export const PeriodicDeliveryItem = styled.button`
+  display: flex;
+  height: 53px;
+  background: none;
+  text-align: left;
+  align-items: flex-start;
+  margin: 40px 22px;
 
-//   span {
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//     width: 28px;
-//     height: 28px;
-//     background-color: #fff;
-//     border: 3px solid #0cb68b;
-//     border-color: ${({ selected }) => (selected ? '#0cb68b' : '#ccc')};
-//     border-radius: 50%;
-//     margin-left: 0;
-//     padding: 2px;
-//     text-align: center;
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background-color: #fff;
+    border: 3px solid #0cb68b;
+    border-color: ${({ selected }) => (selected ? '#0cb68b' : '#ccc')};
+    border-radius: 50%;
+    margin-left: 0;
+    padding: 2px;
+    text-align: center;
 
-//     img {
-//       display: ${({ selected }) => (selected ? 'block' : 'none')};
-//       width: 15px;
-//       height: 15px;
-//     }
-//   }
+    img {
+      display: ${({ selected }) => (selected ? 'block' : 'none')};
+      width: 15px;
+      height: 15px;
+    }
+  }
 
-//   div {
-//     margin-left: 23px;
-//     height: 50px;
-//     text-align: left;
+  div {
+    margin-left: 23px;
+    height: 50px;
+    text-align: left;
 
-//     strong {
-//       font-weight: bold;
-//       font-size: 18px;
-//       line-height: 29px;
-//       font-family: 'SFProBold';
-//       letter-spacing: 0px;
-//       color: #393939;
-//     }
+    strong {
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 29px;
+      font-family: 'SFProBold';
+      letter-spacing: 0px;
+      color: #393939;
+    }
 
-//     small {
-//       font-weight: normal;
-//       font-size: 18px;
-//       line-height: 29px;
-//       font-family: 'SFPro';
-//       letter-spacing: 0px;
-//       color: #393939;
-//     }
+    small {
+      font-weight: normal;
+      font-size: 18px;
+      line-height: 29px;
+      font-family: 'SFPro';
+      letter-spacing: 0px;
+      color: #393939;
+    }
 
-//     b {
-//       color: #0cb68b;
-//     }
-//   }
-// `;
+    b {
+      color: #0cb68b;
+    }
+  }
+`;
 
-// export const PeriodicDeliveryList = styled.ul`
-//   display: flex;
-//   height: 70px;
-//   margin-top: 39px;
-//   margin-left: 73px;
-// `;
+export const PeriodicDeliveryListContainer = styled.div`
+  width: ${({ isDesktop }) => (isDesktop ? '900px' : '72.5%')};
+  height: ${({ height }) => height}px;
+  margin: 39px 0 0 73px;
+`;
 
-// export const PeriodicDeliveryUnwantedProducts = styled.small`
-//   display: inline-block;
-//   margin-top: 16px;
-//   margin-left: 73px;
-//   font-weight: normal;
-//   font-size: 15px;
-//   line-height: 29px;
-//   font-family: 'SFPro';
-//   letter-spacing: 0px;
-//   color: #393939;
-// `;
+export const PeriodicDeliveryList = styled.ul`
+  display: flex;
+  height: ${({ height }) => height}px;
 
-// export const PeriodicDeliveryWannaReceive = styled.div`
-//   height: 45px;
-//   background: #fff;
-//   margin-left: 73px;
-//   margin-top: 20px;
-//   display: flex;
-//   text-align: left;
-//   align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
+`;
 
-//   small {
-//     font-weight: normal;
-//     font-size: 18px;
-//     line-height: 29px;
-//     font-family: 'SFPro';
-//     letter-spacing: 0px;
-//     color: #393939;
-//   }
+export const PeriodicDeliveryListItem = styled.button`
+  width: 70px;
+  min-width: 70px;
+  height: 70px;
+  border-radius: 4px;
+  background-image: ${({ picture }) => `url(${picture})}`};
+  background-size: 70px 70px;
+  background-color: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: ${({ index }) => (index % 9 !== 0 ? 30 : 0)}px;
+  border: 2px solid #00000000;
+  transition: all 0.2s;
 
-//   b {
-//     font-family: 'SFProBold';
-//   }
-// `;
+  &:hover {
+    border-color: #0cb68b;
+  }
+`;
+
+export const PeriodicDeliveryUnwantedProducts = styled.small`
+  display: inline-block;
+  margin-top: 16px;
+  margin-left: 73px;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 29px;
+  font-family: 'SFPro';
+  letter-spacing: 0px;
+  color: #393939;
+`;
+
+export const PeriodicDeliveryWannaReceive = styled.div`
+  height: 45px;
+  background: #fff;
+  margin-left: 73px;
+  margin-top: 20px;
+  display: flex;
+  text-align: left;
+  align-items: center;
+
+  small {
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 29px;
+    font-family: 'SFPro';
+    letter-spacing: 0px;
+    color: #393939;
+  }
+
+  b {
+    font-family: 'SFProBold';
+  }
+`;
 
 export const SectionTitle = styled.div`
   display: block;
@@ -374,31 +401,31 @@ export const ConfirmationText = styled.small`
   align-self: flex-start;
 `;
 
-// export const Options = styled.div`
-//   display: flex;
-//   align-items: center;
-//   justify-content: space-between;
-//   width: 103px;
-//   height: 45px;
-//   margin: 0 19px;
+export const Options = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 103px;
+  height: 45px;
+  margin: 0 19px;
 
-//   strong {
-//     font-size: 18px;
-//     line-height: 22px;
-//     font-weight: normal;
-//     font-family: 'SFPro';
-//     color: #393939;
-//     margin: 0 10px;
-//   }
+  strong {
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: normal;
+    font-family: 'SFPro';
+    color: #393939;
+    margin: 0 10px;
+  }
 
-//   button {
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//     flex: 1;
-//     padding: 10px;
-//     height: 45px;
-//     background-color: #f2f2f2;
-//     border-radius: 4px;
-//   }
-// `;
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 10px;
+    height: 45px;
+    background-color: #f2f2f2;
+    border-radius: 4px;
+  }
+`;

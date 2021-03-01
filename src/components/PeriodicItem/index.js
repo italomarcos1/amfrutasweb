@@ -9,10 +9,7 @@ import minus from '~/assets/icons/minus.svg';
 import plus from '~/assets/icons/plus.svg';
 import close from '~/assets/icons/close.svg';
 
-import {
-  removeFromCartRequest,
-  updateAmountRequest,
-} from '~/store/modules/cart/actions';
+import { periodicUpdating } from '~/store/modules/cart/actions';
 
 import {
   Container,
@@ -26,46 +23,75 @@ import {
   DeleteItem,
 } from './styles';
 
-export default function Item({ item, index, isDesktop }) {
+import backend from '~/services/api';
+
+export default function PeriodicItem({ item, index, isDesktop }) {
   const {
     id,
-    qty,
-    product: { thumbs, title, price, price_promotional, has_promotion, cback },
+    quantity,
+    thumbs,
+    title,
+    price,
+    price_promotional,
+    has_promotion,
+    cback,
   } = item;
 
-  console.log(item.product);
-
   const dispatch = useDispatch();
-  const updatingAmount = useSelector(state => state.cart.updatingAmount);
 
+  const [qty, setQty] = useState(quantity);
+  const [updatingAmount, setUpdatingAmount] = useState(false);
+  const [deletingAmount, setDeletingAmount] = useState(false);
   const [finalPrice, setFinalPrice] = useState(price);
   const [finalPromotionalPrice, setFinalPromotionalPrice] = useState(price);
   const [finalCback, setFinalCback] = useState(cback);
 
   useEffect(() => {
-    const newPrice = (Math.round(Number(price) * qty * 100) / 100).toFixed(2);
+    const newPrice = (Math.round(Number(price) * quantity * 100) / 100).toFixed(
+      2
+    );
 
     setFinalPrice(newPrice);
 
     const newPromotionalPrice = (
-      Math.round(Number(price_promotional) * qty * 100) / 100
+      Math.round(Number(price_promotional) * quantity * 100) / 100
     ).toFixed(2);
     setFinalPromotionalPrice(newPromotionalPrice);
 
-    const newCback = (Math.round(Number(cback) * qty * 100) / 100).toFixed(2);
+    const newCback = (Math.round(Number(cback) * quantity * 100) / 100).toFixed(
+      2
+    );
 
     setFinalCback(newCback);
-  }, [qty, price, price_promotional, cback]);
+  }, [quantity, price, price_promotional, cback]);
 
-  const handleRemoveFromCart = useCallback(() => {
-    dispatch(removeFromCartRequest(id));
+  const handleRemoveFromPeriodicDelivery = useCallback(async () => {
+    try {
+      setDeletingAmount(true);
+      await backend.delete(`/clients/scheduled-purchases/products/${id}`);
+      dispatch(periodicUpdating(id));
+    } catch (error) {
+      // toast
+    } finally {
+      setDeletingAmount(false);
+    }
   }, [id, dispatch]);
 
   const handleUpdateAmount = useCallback(
-    updatedAmount => {
-      dispatch(updateAmountRequest(id, updatedAmount));
+    async updatedAmount => {
+      try {
+        setUpdatingAmount(true);
+        await backend.put(
+          `/clients/scheduled-purchases/products/${id}/${updatedAmount}`
+        );
+        setQty(updatedAmount);
+      } catch (err) {
+        if (err.response.status === 404) handleRemoveFromPeriodicDelivery();
+      } finally {
+        setUpdatingAmount(false);
+      }
     },
-    [id, dispatch]
+    [id, handleRemoveFromPeriodicDelivery]
   );
 
   return (
@@ -102,8 +128,16 @@ export default function Item({ item, index, isDesktop }) {
       </div>
       <Separator />
       <Options isDesktop={isDesktop}>
-        <DeleteItem onClick={handleRemoveFromCart} isDesktop={isDesktop}>
-          <img src={close} alt="Delete Item" />
+        <DeleteItem
+          onClick={handleRemoveFromPeriodicDelivery}
+          isDesktop={isDesktop}
+          disabled={deletingAmount}
+        >
+          {deletingAmount ? (
+            <FaSpinner color="#fff" size={22} />
+          ) : (
+            <img src={close} alt="Delete Item" />
+          )}
         </DeleteItem>
         <div>
           <button
@@ -134,7 +168,7 @@ export default function Item({ item, index, isDesktop }) {
   );
 }
 
-Item.propTypes = {
+PeriodicItem.propTypes = {
   item: PropTypes.shape({
     product: PropTypes.shape({
       id: PropTypes.number,
@@ -143,7 +177,7 @@ Item.propTypes = {
       price_promotional: PropTypes.string,
       has_promotion: PropTypes.bool,
       price: PropTypes.string,
-      qty: PropTypes.number,
+      quantity: PropTypes.number,
     }),
   }).isRequired,
   index: PropTypes.number.isRequired,

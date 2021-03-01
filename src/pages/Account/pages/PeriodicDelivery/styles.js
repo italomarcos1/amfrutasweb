@@ -1,3 +1,4 @@
+import ReactInputMask from 'react-input-mask';
 import styled from 'styled-components';
 
 export const InfoContainer = styled.div`
@@ -11,61 +12,11 @@ export const InfoContainer = styled.div`
   }
 `;
 
-export const Receive = styled.div`
-  display: flex;
-  align-items: center;
-  width: 840px;
-  height: 74px;
-  background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  margin-top: 20px;
-  padding-left: 5px;
-  padding-right: 5px;
-
-  small {
-    display: inline-block;
-    font-weight: normal;
-    font-size: 15px;
-    line-height: 22px;
-    font-family: 'SFPro';
-    letter-spacing: 0px;
-    color: #393939;
-  }
-`;
-
-export const ReceiveContainer = styled.div`
-  display: flex;
-  align-items: center;
-  height: 74px;
-  padding: 0 15px;
-`;
-
-export const StartDate = styled.div`
-  display: flex;
-  height: 74px;
-  align-items: center;
-  justify-content: center;
-  border-left: 1px solid #e0e0e0;
-  border-right: 1px solid #e0e0e0;
-  padding-left: 26.5px;
-  padding-right: 25.5px;
-
-  strong {
-    font-weight: normal;
-    font-family: 'SFPro';
-    font-size: 15px;
-    line-height: 22px;
-    color: #393939;
-    margin-right: 12px;
-  }
-`;
-
 export const Options = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 103px;
+  width: 135px;
   height: 45px;
   margin: 0 12px;
 
@@ -85,8 +36,38 @@ export const Options = styled.div`
     flex: 1;
     padding: 10px;
     height: 45px;
+    max-width: 45px;
     background-color: #f2f2f2;
     border-radius: 4px;
+  }
+`;
+
+export const StartDateInput = styled(ReactInputMask)`
+  width: 171px;
+  height: 32px;
+  padding: 7px;
+  padding-left: 8px;
+  text-align: left;
+  color: #424242;
+  border: 1px solid #bec2c8;
+  border-color: ${({ active, error }) =>
+    active ? '#1DC167' : error ? '#f53030' : '#BEC2C8'};
+  border-width: ${({ active, error }) => (active || error ? 2 : 1)}px;
+  padding: ${({ active }) => (active ? 6 : 7)}px;
+
+  border-radius: 2px;
+  font-size: 12px;
+  background: #fff;
+
+  &::placeholder {
+    text-align: left;
+    font-style: italic;
+    font-size: 12px;
+    font-family: 'SFPro';
+    line-height: 16px;
+    letter-spacing: 0px;
+    color: #bbbfc6;
+    opacity: 1;
   }
 `;
 
@@ -180,19 +161,4 @@ export const Title = styled.h1`
   color: #000;
   font-weight: normal;
   margin-bottom: 18.5px;
-`;
-
-export const FirstProducts = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 400px;
-  height: 334px;
-`;
-
-export const ProductsContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 27px;
 `;

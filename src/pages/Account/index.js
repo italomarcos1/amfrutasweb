@@ -105,7 +105,10 @@ export default function Account({ children }) {
                 />
                 <strong>Minhas encomendas</strong>
               </Option>
-              <Option onClick={() => {}} active={active === '/entregas'}>
+              <Option
+                onClick={() => history.push('/entregas')}
+                active={active === '/entregas'}
+              >
                 <img
                   src={active === '/entregas' ? deliveryIcon : deliveryIconOff}
                   alt=""

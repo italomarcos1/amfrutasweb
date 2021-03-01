@@ -3,6 +3,7 @@ import { useHistory, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
+import { LineShareButton } from 'react-share';
 import {
   Container,
   Content,
@@ -16,22 +17,26 @@ import {
   SectionTitle,
   CustomInputContainer,
   CashbackCredit,
-  // PeriodicDeliveryContainer,
-  // PeriodicDeliveryItem,
-  // PeriodicDeliveryList,
-  // PeriodicDeliveryUnwantedProducts,
-  // PeriodicDeliveryWannaReceive,
-  // Options,
+  PeriodicDeliveryContainer,
+  PeriodicDeliveryItem,
+  PeriodicDeliveryListContainer,
+  PeriodicDeliveryList,
+  PeriodicDeliveryUnwantedProducts,
+  PeriodicDeliveryWannaReceive,
+  Options,
   WithdrawContainer,
+  PeriodicDeliveryListItem,
 } from './styles';
 
 import check from '~/assets/check_white.svg';
-// import checked from '~/assets/checked.svg';
+import checked from '~/assets/checked.svg';
 import cashback from '~/assets/cashback.svg';
-// import minus from '~/assets/icons/minus.svg';
-// import plus from '~/assets/icons/plus.svg';
+import minus from '~/assets/icons/minus.svg';
+import plus from '~/assets/icons/plus.svg';
+import periodicCheck from '~/assets/myAccount/periodic_check.svg';
+import periodicUncheck from '~/assets/myAccount/periodic_uncheck.svg';
 
-// import delivery from '~/assets/entrega-periodica.svg';
+import delivery from '~/assets/entrega-periodica.svg';
 
 import Footer from '~/components/Footer';
 
@@ -52,8 +57,10 @@ import { customCalculatePrice, formatPrice } from '~/utils/calculatePrice';
 
 export default function Confirmation() {
   const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
-  // const [qty, setQty] = useState(4);
-  // const [periodicDelivery, setPeriodicDelivery] = useState(true);
+  const [qty, setQty] = useState(4);
+  const [height, setHeight] = useState(80);
+  const [periodicDelivery, setPeriodicDelivery] = useState(true);
+  const [periodicDeliveryProducts, setPeriodicDeliveryProducts] = useState([]);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -120,6 +127,58 @@ export default function Confirmation() {
     loadData();
     loadCback();
   }, [loadData]);
+
+  const handlePeriodicDelivery = useCallback(async () => {
+    console.log('glock');
+    if (!periodicDeliveryProducts) return;
+    console.log('ada');
+
+    console.log(periodicDeliveryProducts);
+    const filteredProducts = periodicDeliveryProducts.filter(
+      p => p.itemSelected === true
+    );
+    console.log(filteredProducts);
+
+    const finalProducts = filteredProducts.map(({ id, quantity }) => {
+      return { id, quantity };
+    });
+    if (finalProducts.length === 0) return;
+    console.log(finalProducts);
+
+    await backend.post('clients/scheduled-purchases/products', {
+      products: finalProducts,
+    });
+    console.log('tadaptada');
+  }, [periodicDeliveryProducts]);
+
+  useEffect(() => {
+    if (!orderInfo) return;
+    const productsHeight = Math.ceil(orderInfo.products.length / 9) * 90;
+
+    setHeight(productsHeight);
+    setPeriodicDeliveryProducts(
+      orderInfo.products.map(({ id, thumbs, qty: productQty }) => {
+        return { id, thumbs, quantity: productQty, itemSelected: false };
+      })
+    );
+  }, [orderInfo]);
+
+  const handleSetProductForDelivery = useCallback(
+    id => {
+      if (!periodicDeliveryProducts) return;
+
+      setPeriodicDeliveryProducts(
+        periodicDeliveryProducts.map(p =>
+          p.id === id ? { ...p, itemSelected: true } : p
+        )
+      );
+    },
+    [periodicDeliveryProducts]
+  );
+
+  useEffect(() => {
+    console.log(periodicDeliveryProducts);
+  }, [periodicDeliveryProducts]);
 
   useEffect(() => {
     return () => {
@@ -259,7 +318,7 @@ export default function Confirmation() {
           <div style={isDesktop ? {} : { width: '100%' }}>
             <Title>Produtos</Title>
             {!loading ? (
-              <ItemsList length={!!orderInfo ? orderInfo.products.length : 12}>
+              <ItemsList>
                 {!!orderInfo &&
                   orderInfo.products.map((item, index) => (
                     <Item
@@ -333,7 +392,7 @@ export default function Confirmation() {
           </div>
         </Content>
 
-        {/* <PeriodicDeliveryContainer isDesktop={isDesktop}>
+        <PeriodicDeliveryContainer isDesktop={isDesktop}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <img
               src={delivery}
@@ -373,15 +432,37 @@ export default function Confirmation() {
               periodicDelivery ? { display: 'block' } : { display: 'none' }
             }
           >
-            <PeriodicDeliveryList>
-              {periodicProducts.map(({ id, picture, selected }) => (
-                <PeriodicDeliveryListItem
-                  key={id}
-                  image={picture}
-                  value={selected}
-                />
-              ))}
-            </PeriodicDeliveryList>
+            <PeriodicDeliveryListContainer
+              isDesktop={isDesktop}
+              height={height}
+            >
+              <PeriodicDeliveryList height={height}>
+                {!!orderInfo &&
+                  periodicDeliveryProducts.map(
+                    ({ id, itemSelected, thumbs }, index) => {
+                      console.log(index);
+                      return (
+                        <PeriodicDeliveryListItem
+                          key={id}
+                          picture={thumbs}
+                          index={index}
+                          isDesktop={isDesktop}
+                          onClick={() => handleSetProductForDelivery(id)}
+                        >
+                          <img
+                            alt="select for delivery"
+                            src={itemSelected ? periodicCheck : periodicUncheck}
+                            style={{
+                              width: 25,
+                              height: 25,
+                            }}
+                          />
+                        </PeriodicDeliveryListItem>
+                      );
+                    }
+                  )}
+              </PeriodicDeliveryList>
+            </PeriodicDeliveryListContainer>
             <PeriodicDeliveryUnwantedProducts>
               Desmarque os produtos que você não deseja incluir na sua Entrega
               Periódica.
@@ -415,6 +496,19 @@ export default function Confirmation() {
                 <b>semanas</b>&nbsp;(pode pausar ou cancelar a qualquer momento)
               </small>
             </PeriodicDeliveryWannaReceive>
+            <Button
+              color="#1DC167"
+              shadowColor="#17A75B"
+              style={{
+                width: 287,
+                marginTop: 49,
+                marginLeft: 'auto',
+                marginRight: 'auto',
+              }}
+              onClick={handlePeriodicDelivery}
+            >
+              Adicionar à&nbsp;<b>Compra Recorrente</b>
+            </Button>
           </div>
           <PeriodicDeliveryItem
             onClick={() => setPeriodicDelivery(false)}
@@ -430,7 +524,7 @@ export default function Confirmation() {
               </small>
             </div>
           </PeriodicDeliveryItem>
-        </PeriodicDeliveryContainer> */}
+        </PeriodicDeliveryContainer>
         <Button
           color="#2CBDD3"
           shadowColor="#26A5BB"
