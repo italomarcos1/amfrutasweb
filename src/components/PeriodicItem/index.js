@@ -69,10 +69,10 @@ export default function PeriodicItem({ item, index, isDesktop }) {
     try {
       setDeletingAmount(true);
       await backend.delete(`/clients/scheduled-purchases/products/${id}`);
-      dispatch(periodicUpdating(id));
     } catch (error) {
-      // toast
+      console.log(error);
     } finally {
+      dispatch(periodicUpdating(id));
       setDeletingAmount(false);
     }
   }, [id, dispatch]);
