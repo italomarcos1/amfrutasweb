@@ -37,7 +37,8 @@ import { periodicDateIsValid } from '~/utils/validation';
 export default function PeriodicDelivery() {
   const [qty, setQty] = useState(4);
   const [updatingDelivery, setUpdatingDelivery] = useState(false);
-  const [status, setSelected] = useState(1);
+  const [status, setStatus] = useState(1);
+  const [cbackCredit, setCbackCredit] = useState('---');
   const [periodicProducts, setPeriodicProducts] = useState(null);
   const [saved, setSaved] = useState('---');
   const [subtotal, setSubtotal] = useState('---');
@@ -59,6 +60,7 @@ export default function PeriodicDelivery() {
       setUpdatingDelivery(true);
 
       if (!periodicDateIsValid(nextPurchase)) {
+        console.log(nextPurchase);
         setToastStatus('Forneça uma data válida para a compra periódica.');
         setToastColor('#f56060');
 
@@ -79,7 +81,7 @@ export default function PeriodicDelivery() {
       }
 
       await backend.put(`/clients/scheduled-purchases`, {
-        interval: qty * 7,
+        interval: qty,
         status,
         next_purchase: status === 1 ? nextPurchase : '01/01/2021',
       });
@@ -105,11 +107,12 @@ export default function PeriodicDelivery() {
       const { scheduled_products: products } = data;
 
       setPeriodicProducts(products);
-
+      setStatus(data.status);
+      setCbackCredit(data.cback_credit);
       setSaved(data.saved_value);
       setSubtotal(data.subtotal);
       setTotal(data.total);
-      setNextPurchase(data.next_purchase);
+      setNextPurchase(data.next_purchase.replaceAll('-', '/'));
     } catch (err) {
       setPeriodicProducts(null);
     }
@@ -117,14 +120,15 @@ export default function PeriodicDelivery() {
 
   useEffect(() => {
     if (!removedProductId) return;
-    const productsAfterRemoval = periodicProducts.filter(
-      ({ id }) => id !== removedProductId
-    );
+    // const productsAfterRemoval = periodicProducts.filter(
+    //   ({ id }) => id !== removedProductId
+    // );
+    loadPeriodicDeliveryProducts();
 
-    setPeriodicProducts(productsAfterRemoval);
+    // setPeriodicProducts(productsAfterRemoval);
 
     dispatch(periodicUpdating(null));
-  }, [dispatch, removedProductId]);
+  }, [dispatch, removedProductId, loadPeriodicDeliveryProducts]);
 
   useEffect(() => {
     loadPeriodicDeliveryProducts();
@@ -174,7 +178,7 @@ export default function PeriodicDelivery() {
                 <img src={plus} alt="icon" />
               </button>
             </Options>
-            <h1>semanas</h1>
+            <h1>dias</h1>
           </CheckoutItem>
           <CheckoutItem
             style={{
@@ -198,13 +202,13 @@ export default function PeriodicDelivery() {
             }}
           >
             <StartStop selected={status === 1} style={{ marginRight: 30 }}>
-              <button type="button" onClick={() => setSelected(1)}>
+              <button type="button" onClick={() => setStatus(1)}>
                 <img src={checked} alt="Item selecionado" />
               </button>
               <strong>Iniciar</strong>
             </StartStop>
             <StartStop selected={status === 0}>
-              <button type="button" onClick={() => setSelected(0)}>
+              <button type="button" onClick={() => setStatus(0)}>
                 <img src={checked} alt="Item selecionado" />
               </button>
               <strong>Parar</strong>
@@ -243,7 +247,7 @@ export default function PeriodicDelivery() {
           </CheckoutItem>
           <CheckoutItem>
             <h1>Crédito Disponível</h1>
-            <h2 style={{ color: '#0CB68B' }}>€ 5,12</h2>
+            <h2 style={{ color: '#0CB68B' }}>€ {cbackCredit}</h2>
           </CheckoutItem>
           <CheckoutItem>
             <h2>Total</h2>

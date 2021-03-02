@@ -3,7 +3,6 @@ import { useHistory, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
-import { LineShareButton } from 'react-share';
 import {
   Container,
   Content,
@@ -22,8 +21,6 @@ import {
   PeriodicDeliveryListContainer,
   PeriodicDeliveryList,
   PeriodicDeliveryUnwantedProducts,
-  PeriodicDeliveryWannaReceive,
-  Options,
   WithdrawContainer,
   PeriodicDeliveryListItem,
 } from './styles';
@@ -129,9 +126,7 @@ export default function Confirmation() {
   }, [loadData]);
 
   const handlePeriodicDelivery = useCallback(async () => {
-    console.log('glock');
     if (!periodicDeliveryProducts) return;
-    console.log('ada');
 
     console.log(periodicDeliveryProducts);
     const filteredProducts = periodicDeliveryProducts.filter(
@@ -148,7 +143,6 @@ export default function Confirmation() {
     await backend.post('clients/scheduled-purchases/products', {
       products: finalProducts,
     });
-    console.log('tadaptada');
   }, [periodicDeliveryProducts]);
 
   useEffect(() => {
@@ -169,7 +163,7 @@ export default function Confirmation() {
 
       setPeriodicDeliveryProducts(
         periodicDeliveryProducts.map(p =>
-          p.id === id ? { ...p, itemSelected: true } : p
+          p.id === id ? { ...p, itemSelected: !p.itemSelected } : p
         )
       );
     },
@@ -418,12 +412,12 @@ export default function Confirmation() {
             </span>
             <div>
               <strong>
-                Sim, quero um <b>5% de desconto</b> em todas as minhas entregas
-                frequentes.
+                Sim, quero os <b>produtos</b> em todas as minhas
+                <b>entregas frequentes</b>
               </strong>
               <br />
               <small>
-                Poupe <b>5% com desconto</b> extra em entregas frequentes!
+                Poupe o <b>Trabalho</b> extra em entregas frequentes!
               </small>
             </div>
           </PeriodicDeliveryItem>
@@ -467,35 +461,7 @@ export default function Confirmation() {
               Desmarque os produtos que você não deseja incluir na sua Entrega
               Periódica.
             </PeriodicDeliveryUnwantedProducts>
-            <PeriodicDeliveryWannaReceive>
-              <small>
-                <b>Receber a cada</b>
-              </small>
-              <Options>
-                <button
-                  type="button"
-                  disabled={qty === 0}
-                  onClick={() => setQty(qty - 1)}
-                  style={{
-                    borderTopRightRadius: 0,
-                    borderBottomRightRadius: 0,
-                  }}
-                >
-                  <img src={minus} alt="icon" />
-                </button>
-                <strong>{qty}</strong>
-                <button
-                  type="button"
-                  onClick={() => setQty(qty + 1)}
-                  style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
-                >
-                  <img src={plus} alt="icon" />
-                </button>
-              </Options>
-              <small>
-                <b>semanas</b>&nbsp;(pode pausar ou cancelar a qualquer momento)
-              </small>
-            </PeriodicDeliveryWannaReceive>
+
             <Button
               color="#1DC167"
               shadowColor="#17A75B"

@@ -294,29 +294,6 @@ export const PeriodicDeliveryUnwantedProducts = styled.small`
   color: #393939;
 `;
 
-export const PeriodicDeliveryWannaReceive = styled.div`
-  height: 45px;
-  background: #fff;
-  margin-left: 73px;
-  margin-top: 20px;
-  display: flex;
-  text-align: left;
-  align-items: center;
-
-  small {
-    font-weight: normal;
-    font-size: 18px;
-    line-height: 29px;
-    font-family: 'SFPro';
-    letter-spacing: 0px;
-    color: #393939;
-  }
-
-  b {
-    font-family: 'SFProBold';
-  }
-`;
-
 export const SectionTitle = styled.div`
   display: block;
   text-align: left;
@@ -399,33 +376,4 @@ export const ConfirmationText = styled.small`
   color: #0cb68b;
   margin-top: 27.5px;
   align-self: flex-start;
-`;
-
-export const Options = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 103px;
-  height: 45px;
-  margin: 0 19px;
-
-  strong {
-    font-size: 18px;
-    line-height: 22px;
-    font-weight: normal;
-    font-family: 'SFPro';
-    color: #393939;
-    margin: 0 10px;
-  }
-
-  button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-    padding: 10px;
-    height: 45px;
-    background-color: #f2f2f2;
-    border-radius: 4px;
-  }
 `;

@@ -42,11 +42,12 @@ export default function MenuItem({ category, childrenSelected }) {
         active={pathname === `/${url}` || active}
       >
         <strong>{name}</strong>
-        {all_children_categories.length !== 0 && (
+        {!!all_children_categories && all_children_categories.length !== 0 && (
           <img src={arrowGreen} alt="Abrir menu" />
         )}
       </Container>
-      {all_children_categories.length !== 0 &&
+      {!!all_children_categories &&
+        all_children_categories.length !== 0 &&
         (pathname === `/${url}` || active) && (
           <ChildrenCategories>
             {all_children_categories.map(cc => (

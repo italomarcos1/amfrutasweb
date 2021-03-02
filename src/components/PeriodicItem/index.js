@@ -47,23 +47,19 @@ export default function PeriodicItem({ item, index, isDesktop }) {
   const [finalCback, setFinalCback] = useState(cback);
 
   useEffect(() => {
-    const newPrice = (Math.round(Number(price) * quantity * 100) / 100).toFixed(
-      2
-    );
+    const newPrice = (Math.round(Number(price) * qty * 100) / 100).toFixed(2);
 
     setFinalPrice(newPrice);
 
     const newPromotionalPrice = (
-      Math.round(Number(price_promotional) * quantity * 100) / 100
+      Math.round(Number(price_promotional) * qty * 100) / 100
     ).toFixed(2);
     setFinalPromotionalPrice(newPromotionalPrice);
 
-    const newCback = (Math.round(Number(cback) * quantity * 100) / 100).toFixed(
-      2
-    );
+    const newCback = (Math.round(Number(cback) * qty * 100) / 100).toFixed(2);
 
     setFinalCback(newCback);
-  }, [quantity, price, price_promotional, cback]);
+  }, [qty, price, price_promotional, cback]);
 
   const handleRemoveFromPeriodicDelivery = useCallback(async () => {
     try {
@@ -88,10 +84,11 @@ export default function PeriodicItem({ item, index, isDesktop }) {
       } catch (err) {
         if (err.response.status === 404) handleRemoveFromPeriodicDelivery();
       } finally {
+        dispatch(periodicUpdating(id));
         setUpdatingAmount(false);
       }
     },
-    [id, handleRemoveFromPeriodicDelivery]
+    [id, dispatch, handleRemoveFromPeriodicDelivery]
   );
 
   return (
