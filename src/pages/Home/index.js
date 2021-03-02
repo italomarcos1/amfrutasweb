@@ -244,6 +244,10 @@ export default function Home() {
         autoRegister: true,
         autoResubscribe: true,
       });
+
+      setTimeout(() => {
+        OneSignal.showNativePrompt();
+      }, 3000);
     }
   }, [dispatch]);
 
