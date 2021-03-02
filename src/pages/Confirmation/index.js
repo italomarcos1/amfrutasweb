@@ -412,7 +412,7 @@ export default function Confirmation() {
             </span>
             <div>
               <strong>
-                Sim, quero os <b>produtos</b> em todas as minhas
+                Sim, quero os <b>produtos</b> em todas as minhas&nbsp;
                 <b>entregas frequentes</b>
               </strong>
               <br />
