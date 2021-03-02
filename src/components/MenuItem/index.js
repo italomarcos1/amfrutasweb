@@ -5,7 +5,7 @@ import { Container, ChildrenCategories, ChildrenCategory } from './styles';
 import arrowGreen from '~/assets/icons/arrow_green.svg';
 
 export default function MenuItem({ category, childrenSelected }) {
-  const { id, name, slug, url, all_children_categories } = category;
+  const { id, name, slug, url, all_categories } = category;
 
   const { pathname } = useLocation();
 
@@ -42,15 +42,15 @@ export default function MenuItem({ category, childrenSelected }) {
         active={pathname === `/${url}` || active}
       >
         <strong>{name}</strong>
-        {!!all_children_categories && all_children_categories.length !== 0 && (
+        {!!all_categories && all_categories.length !== 0 && (
           <img src={arrowGreen} alt="Abrir menu" />
         )}
       </Container>
-      {!!all_children_categories &&
-        all_children_categories.length !== 0 &&
+      {!!all_categories &&
+        all_categories.length !== 0 &&
         (pathname === `/${url}` || active) && (
           <ChildrenCategories>
-            {all_children_categories.map(cc => (
+            {all_categories.map(cc => (
               <>
                 <ChildrenCategory
                   active={pathname === `/${cc.url}`}
@@ -60,16 +60,16 @@ export default function MenuItem({ category, childrenSelected }) {
                   }}
                 >
                   <strong>{cc.name}</strong>
-                  {cc.all_children_categories.length !== 0 && (
+                  {cc.all_categories.length !== 0 && (
                     <img src={arrowGreen} alt="Abrir menu" />
                   )}
                 </ChildrenCategory>
-                {cc.all_children_categories.length !== 0 &&
+                {cc.all_categories.length !== 0 &&
                   (childrenSelected === cc.id ||
                     pathname === `/${url}` ||
                     active) && (
                     <ChildrenCategories>
-                      {cc.all_children_categories.map(subc => (
+                      {cc.all_categories.map(subc => (
                         <ChildrenCategory
                           active={pathname === subc.url}
                           to={{
