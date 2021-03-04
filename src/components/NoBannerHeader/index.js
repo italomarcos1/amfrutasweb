@@ -75,7 +75,6 @@ export default function PageHeader({ login, active }) {
       data: { data: alert },
     } = alertMessage;
 
-    console.log(alert);
     setHeaderAlertMessage(alert.alert_message);
 
     data.splice(0, 1);

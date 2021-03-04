@@ -64,6 +64,7 @@ export function* signIn({ payload }) {
       yield put(signInSuccess(token, updatedUser));
 
       OneSignal.setExternalUserId(String(updatedUser.id));
+      OneSignal.showSlidedownPrompt();
 
       return;
     }
@@ -101,6 +102,7 @@ export function* signIn({ payload }) {
     } else yield put(populateAddresses([...addresses]));
 
     OneSignal.setExternalUserId(String(user.id));
+    OneSignal.showSlidedownPrompt();
 
     yield put(signInSuccess(token, user));
   } catch (error) {
@@ -152,9 +154,8 @@ export function* signUp({ payload }) {
     // const notSignedCart = yield select(state => state.cart.products);
 
     // yield put(pushToCart([...notSignedCart]));
-    OneSignal.push(() => {
-      OneSignal.setExternalUserId(String(updatedUser.id));
-    });
+    OneSignal.setExternalUserId(String(updatedUser.id));
+    OneSignal.showSlidedownPrompt();
 
     yield put(signInSuccess(token, updatedUser));
   } catch (error) {

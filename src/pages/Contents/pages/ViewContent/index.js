@@ -59,7 +59,6 @@ export default function ViewContent() {
     const formattingPathname = [...pathname];
     formattingPathname.splice(0, 1);
 
-    console.log(`/seos/${formattingPathname.join('')}`);
     const response = await backend.get(`/seos/${formattingPathname.join('')}`);
     const {
       data: {

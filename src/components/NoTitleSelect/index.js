@@ -75,7 +75,6 @@ export default function CustomSelect({
   hasMarginLeft,
   ...rest
 }) {
-  console.log(defaultValue);
   return (
     <Select
       placeholder={placeholder}

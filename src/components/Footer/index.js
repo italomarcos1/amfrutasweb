@@ -48,7 +48,7 @@ export default function Footer() {
     } = socialMedia;
 
     const footerData = { firstColumn, secondColumn, thirdColumn, social };
-    console.log(footerData);
+
     return footerData;
   }, [keys]);
 

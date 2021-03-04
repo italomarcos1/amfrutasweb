@@ -131,7 +131,6 @@ export default function ViewProduct() {
     } = shipping;
 
     setProduct(data);
-    console.log(data);
     setBanner(data.banner);
     setMinValueFreeShipping(shippingData.min_value_free_shipping);
 

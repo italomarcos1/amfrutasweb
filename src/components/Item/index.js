@@ -33,8 +33,6 @@ export default function Item({ item, index, isDesktop }) {
     product: { thumbs, title, price, price_promotional, has_promotion, cback },
   } = item;
 
-  console.log(item.product);
-
   const dispatch = useDispatch();
   const updatingAmount = useSelector(state => state.cart.updatingAmount);
 

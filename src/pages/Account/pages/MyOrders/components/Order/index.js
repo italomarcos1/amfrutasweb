@@ -91,7 +91,6 @@ export default function Order({ order, isOpen, setOrder }) {
 
   useEffect(() => {
     if (!scheduledShipping) return;
-    console.log(scheduledShipping);
     const formattingSchedule = scheduledShipping.split(' ');
     const formattingStartHour = formattingSchedule[1].substring(1);
     const formattingEndHour = formattingSchedule[3].substring(
@@ -145,8 +144,6 @@ export default function Order({ order, isOpen, setOrder }) {
 
       setSending(true);
 
-      console.log(review);
-      console.log(rate);
       await backend.post(`/clients/transactions/${id}/reviews`, {
         review,
         rate,
@@ -161,7 +158,6 @@ export default function Order({ order, isOpen, setOrder }) {
       setTimeout(() => {
         setToastVisible(false);
       }, 2800);
-      console.log('abc');
     } catch (err) {
       console.log(err);
       setToastVisible(true);

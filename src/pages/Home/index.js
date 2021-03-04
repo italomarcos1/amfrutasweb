@@ -124,8 +124,6 @@ export default function Home() {
       },
     } = await backend.get('/banner/blocks');
 
-    console.log(message);
-
     const {
       data: {
         data: { banners },
@@ -244,10 +242,6 @@ export default function Home() {
         autoRegister: true,
         autoResubscribe: true,
       });
-
-      setTimeout(() => {
-        OneSignal.showNativePrompt();
-      }, 3000);
     }
   }, [dispatch]);
 

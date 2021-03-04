@@ -22,8 +22,6 @@ export default function Item({ item, index, isDesktop }) {
     cback,
   } = item;
 
-  console.log(item);
-
   return (
     <Container
       key={id}

@@ -30,11 +30,9 @@ export default function Item({ item, index, isDesktop }) {
     price_promotional,
     has_promotion,
     qty,
-    cback = 12,
+    cback,
   } = item;
   const dispatch = useDispatch();
-
-  console.log(item);
 
   const [finalPrice, setFinalPrice] = useState(price);
   const [finalPromotionalPrice, setFinalPromotionalPrice] = useState(price);
@@ -84,7 +82,7 @@ export default function Item({ item, index, isDesktop }) {
               >
                 <Coins src={coins} alt="coins" isDesktop={isDesktop} />
                 <strong style={isDesktop ? {} : { fontSize: 9 }}>
-                  €&nbsp;{!!cback ? cback : '0.00'}
+                  €&nbsp;{!!cback ? finalCback : '0.00'}
                 </strong>
                 <b style={isDesktop ? {} : { fontSize: 9 }}>DE CRÉDITO</b>
               </CBackContainer>

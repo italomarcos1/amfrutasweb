@@ -60,7 +60,6 @@ export default function PeriodicDelivery() {
       setUpdatingDelivery(true);
 
       if (!periodicDateIsValid(nextPurchase)) {
-        console.log(nextPurchase);
         setToastStatus('Forneça uma data válida para a compra periódica.');
         setToastColor('#f56060');
 

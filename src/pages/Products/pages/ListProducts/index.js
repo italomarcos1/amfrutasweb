@@ -179,9 +179,6 @@ export default function ListProducts() {
         products.length > 10 ? 1184 : Math.ceil(products.length / 5) * 404;
     else hasLastRow = Math.ceil(products.length / 2) * (height + 25);
 
-    console.log(hasLastRow);
-    console.log(productHeight);
-
     setPageHeight(hasLastRow);
   }, [isDesktop, products, productHeight]);
 

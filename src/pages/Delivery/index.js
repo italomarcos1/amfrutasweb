@@ -501,8 +501,6 @@ export default function Delivery() {
   const handleSubmit = useCallback(
     async formData => {
       try {
-        console.log(formData);
-
         setValidUserInfo(false);
         setInvalidDeliveryDay(false);
         setInvalidDeliveryHour(false);
@@ -627,8 +625,6 @@ export default function Delivery() {
           : { ...formData, residence };
 
         await schema.validate(formDataWithResidence, { abortEarly: false });
-
-        console.log(formData);
 
         if (
           deliveryOption === 'delivery' &&
@@ -1389,7 +1385,6 @@ export default function Delivery() {
                 setFinishingOrder(true);
                 accountButtonRef.current.click();
                 if (deliveryOption === 'delivery') {
-                  console.log('blinders');
                   shippingButtonRef.current.click();
                 }
               }}

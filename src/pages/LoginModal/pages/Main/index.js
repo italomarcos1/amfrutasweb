@@ -101,6 +101,7 @@ export default function Main({ setPage, isDesktop }) {
         } else dispatch(populateAddresses([...addresses]));
 
         OneSignal.setExternalUserId(String(user.id));
+        OneSignal.showSlidedownPrompt();
 
         dispatch(signInSuccess(token, user));
       } catch {
@@ -127,8 +128,6 @@ export default function Main({ setPage, isDesktop }) {
           uuid,
         });
 
-        console.log(data);
-
         handleLogin(data);
       } catch (err) {
         console.log(err.response);
@@ -152,15 +151,11 @@ export default function Main({ setPage, isDesktop }) {
           uuid,
         };
 
-        console.log(!!appleAuthResponse.user);
-
         if (!!appleAuthResponse.user)
           appleRequestData = {
             ...appleRequestData,
             user: appleAuthResponse.user,
           };
-
-        console.log(appleRequestData);
 
         const {
           data: { data },

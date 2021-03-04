@@ -104,8 +104,6 @@ export default function Confirmation() {
     );
     setSaved(formatPrice(formattedSavedPrice - formattedPrice));
 
-    console.log(data);
-
     setLoading(false);
     setOrderInfo(data);
   }, [order]);
@@ -128,17 +126,14 @@ export default function Confirmation() {
   const handlePeriodicDelivery = useCallback(async () => {
     if (!periodicDeliveryProducts) return;
 
-    console.log(periodicDeliveryProducts);
     const filteredProducts = periodicDeliveryProducts.filter(
       p => p.itemSelected === true
     );
-    console.log(filteredProducts);
 
     const finalProducts = filteredProducts.map(({ id, quantity }) => {
       return { id, quantity };
     });
     if (finalProducts.length === 0) return;
-    console.log(finalProducts);
 
     await backend.post('clients/scheduled-purchases/products', {
       products: finalProducts,
@@ -169,10 +164,6 @@ export default function Confirmation() {
     },
     [periodicDeliveryProducts]
   );
-
-  useEffect(() => {
-    console.log(periodicDeliveryProducts);
-  }, [periodicDeliveryProducts]);
 
   useEffect(() => {
     return () => {
@@ -433,27 +424,24 @@ export default function Confirmation() {
               <PeriodicDeliveryList height={height}>
                 {!!orderInfo &&
                   periodicDeliveryProducts.map(
-                    ({ id, itemSelected, thumbs }, index) => {
-                      console.log(index);
-                      return (
-                        <PeriodicDeliveryListItem
-                          key={id}
-                          picture={thumbs}
-                          index={index}
-                          isDesktop={isDesktop}
-                          onClick={() => handleSetProductForDelivery(id)}
-                        >
-                          <img
-                            alt="select for delivery"
-                            src={itemSelected ? periodicCheck : periodicUncheck}
-                            style={{
-                              width: 25,
-                              height: 25,
-                            }}
-                          />
-                        </PeriodicDeliveryListItem>
-                      );
-                    }
+                    ({ id, itemSelected, thumbs }, index) => (
+                      <PeriodicDeliveryListItem
+                        key={id}
+                        picture={thumbs}
+                        index={index}
+                        isDesktop={isDesktop}
+                        onClick={() => handleSetProductForDelivery(id)}
+                      >
+                        <img
+                          alt="select for delivery"
+                          src={itemSelected ? periodicCheck : periodicUncheck}
+                          style={{
+                            width: 25,
+                            height: 25,
+                          }}
+                        />
+                      </PeriodicDeliveryListItem>
+                    )
                   )}
               </PeriodicDeliveryList>
             </PeriodicDeliveryListContainer>
