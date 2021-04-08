@@ -1,5 +1,15 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { darken } from 'polished';
+
+const rotate = keyframes` /** animação para rotacionar o icon. */
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+`;
 
 export const Container = styled.li`
   width: ${({ isDesktop }) => (isDesktop ? '370px' : '100%')};
@@ -136,7 +146,7 @@ export const Options = styled.div`
 export const Button = styled.button.attrs({ type: 'button' })`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: ${({ disabled }) => (disabled ? 'center' : 'space-between')};
 
   text-align: center;
   width: 185px;
@@ -168,5 +178,9 @@ export const Button = styled.button.attrs({ type: 'button' })`
     height: 17px;
     margin-right: 5px;
     margin-left: 0px;
+  }
+
+  svg {
+    animation: ${rotate} 2s linear infinite;
   }
 `;

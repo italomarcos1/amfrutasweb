@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
 import { Container } from './styles';
@@ -10,59 +10,22 @@ import ItemsList from '~/components/ItemsList';
 
 // import { products } from '~/data';
 
-import { updatePages } from '~/store/modules/cart/actions';
-
 export default function MyFavorites() {
-  const favorites = useSelector(state => state.cart.favorites);
-  const dispatch = useDispatch();
+  const favorites = useSelector(({ cart }) => cart.favorites);
   const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
 
-  const [paginatedProducts, setPaginatedProducts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const [currentContainerHeight, setCurrentContainerHeight] = useState(
-    paginatedProducts.length * 140 - 20
-  );
-
-  const handlePagination = useCallback(() => {
-    const pageIndex = 8 * (currentPage - 1);
-    const newPage = favorites.slice(pageIndex, pageIndex + 8);
-
-    const totalPages = Math.ceil(favorites.length / 8);
-
-    dispatch(updatePages(totalPages));
-
-    setPaginatedProducts(newPage);
-  }, [dispatch, currentPage, favorites]);
-
   useEffect(() => window.scrollTo(0, 0), []);
-
-  useEffect(() => {
-    handlePagination();
-  }, [favorites, handlePagination]);
-
-  useEffect(() => {
-    setCurrentContainerHeight(paginatedProducts.length * 140 - 20);
-  }, [paginatedProducts, currentContainerHeight]);
 
   return (
     <>
       <Container isDesktop={isDesktop}>
         {favorites.length !== 0 ? (
           <ItemsList
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            containerHeight={isDesktop ? 625 : currentContainerHeight}
-            style={
-              isDesktop
-                ? { width: 821, backgroundColor: '#00000000' }
-                : {
-                    width: '100%',
-                    backgroundColor: '#00000000',
-                  }
-            }
+            length={favorites.length}
+            breakpoint={12}
+            style={isDesktop ? { width: 821 } : { width: '100%' }}
           >
-            {paginatedProducts.map((item, index) => (
+            {favorites.map((item, index) => (
               <CheckoutItem
                 key={item.id}
                 item={item}

@@ -35,6 +35,7 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
         draft.addingProduct = false;
         break;
       }
+
       case '@cart/FIX_ORDER_FINISHED': {
         draft.orderFinished = false;
         break;

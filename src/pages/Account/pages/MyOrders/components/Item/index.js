@@ -1,12 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import PropTypes from 'prop-types';
+
+import { FaSpinner } from 'react-icons/fa';
 
 import {
   addToCartRequest,
   removeFromFavoritesRequest,
 } from '~/store/modules/cart/actions';
+
+import backend from '~/services/api';
+
+import Toast from '~/components/Toast';
 
 import delivery from '~/assets/myAccount/delivery_white.svg';
 import orders from '~/assets/myAccount/orders_white.svg';
@@ -26,6 +31,12 @@ import {
 export default function Item({ item, index, isDesktop }) {
   const { id, thumbs, title, price, price_promotional, has_promotion } = item;
   const dispatch = useDispatch();
+
+  const [loadingPeriodic, setLoadingPeriodic] = useState(false);
+
+  const [toastVisible, setToastVisible] = useState(false);
+  const [toastStatus, setToastStatus] = useState('');
+  const [toastColor, setToastColor] = useState('#1DC167');
 
   const products = useSelector(state => state.cart.products);
 
@@ -49,6 +60,32 @@ export default function Item({ item, index, isDesktop }) {
   const handleFavorite = () => {
     dispatch(removeFromFavoritesRequest(id));
   };
+
+  const handlePeriodicDelivery = useCallback(async () => {
+    try {
+      setLoadingPeriodic(true);
+      const finalProducts = [{ id, quantity: qty }];
+
+      await backend.post('clients/scheduled-purchases/products', {
+        products: finalProducts,
+      });
+
+      setToastStatus('O produto foi adicionado à compra periódica.');
+      setToastColor('#1dc167');
+      setToastVisible(true);
+    } catch (err) {
+      console.log(err.response);
+      setToastStatus('Erro ao adicionar o produto à compra periódica.');
+      setToastColor('#f56060');
+
+      setToastVisible(true);
+    } finally {
+      setTimeout(() => {
+        setToastVisible(false);
+        setLoadingPeriodic(false);
+      }, 2800);
+    }
+  }, [id, qty]);
 
   return (
     <Container
@@ -83,9 +120,19 @@ export default function Item({ item, index, isDesktop }) {
         <Button
           color="#0cb68b"
           style={isDesktop ? { width: 185 } : { width: '51%', fontSize: 10 }}
+          onClick={handlePeriodicDelivery}
+          disabled={loadingPeriodic}
         >
-          <img src={delivery} alt="" />
-          <small>Adicionar a entrega periódica</small>
+          {loadingPeriodic ? (
+            <FaSpinner color="#fff" size={14} />
+          ) : (
+            <>
+              <img src={delivery} alt="" />
+              <small style={isDesktop ? {} : { fontSize: 10 }}>
+                Adicionar a entrega periódica
+              </small>
+            </>
+          )}
         </Button>
         <Button
           color="#29B4CC"
@@ -96,6 +143,9 @@ export default function Item({ item, index, isDesktop }) {
           <small>Adicionar ao cesto</small>
         </Button>
       </Options>
+      {toastVisible && (
+        <Toast status={toastStatus} color={toastColor} isDesktop={false} />
+      )}
     </Container>
   );
 }
