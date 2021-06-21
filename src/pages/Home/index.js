@@ -442,7 +442,7 @@ export default function Home() {
               rel="noreferrer"
               target="_blank"
             >
-              <img src={appStore} alt="" />
+              <img src={appStore} alt="AppStore" />
             </StoreButton>
             <StoreButton
               href="https://play.google.com/store/apps/details?id=com.amfrutas&amp;hl=en_US&amp;gl=US"
