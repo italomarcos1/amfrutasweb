@@ -195,8 +195,8 @@ export default function MyAccount() {
             isDesktop={isDesktop}
           >
             <SectionTitle isDesktop={isDesktop}>
-              <strong>Morada de entrega</strong>
-              <small>Confira e atualize caso necessário.</small>
+              <strong>Address</strong>
+              <small>Check out and update your address.</small>
             </SectionTitle>
             <InputContainer
               isDesktop={isDesktop}
@@ -204,8 +204,8 @@ export default function MyAccount() {
             >
               <Input
                 name="destination_name"
-                title="Nome completo do destinatário"
-                placeholder="Escreve o teu nome"
+                title="Recipient's Name"
+                placeholder="Your name"
                 customWidth={isDesktop ? 215 : '100%'}
                 error={invalidFields[0]}
               />
@@ -218,7 +218,7 @@ export default function MyAccount() {
             >
               <InputMask
                 name="zipcode"
-                title="Código Postal"
+                title="Zipcode"
                 placeholder="0000-000"
                 mask="9999-999"
                 value={zipcode}
@@ -229,8 +229,8 @@ export default function MyAccount() {
               />
               <Input
                 name="address"
-                title="Morada"
-                placeholder="Morada"
+                title="Address"
+                placeholder="Your address"
                 customWidth={isDesktop ? 215 : '100%'}
                 error={invalidFields[2]}
                 disabled={addressInfo === {}}
@@ -238,8 +238,8 @@ export default function MyAccount() {
               />
               <Input
                 name="number"
-                title="Número"
-                placeholder="Nº da morada"
+                title="Number"
+                placeholder="Residence Nº"
                 customWidth={isDesktop ? 90 : '100%'}
                 error={invalidFields[3]}
                 disabled={addressInfo === {}}
@@ -247,8 +247,8 @@ export default function MyAccount() {
               />
               <Input
                 name="district"
-                title="Distrito"
-                placeholder="Escreve o teu distrito"
+                title="District"
+                placeholder="Your district"
                 customWidth={isDesktop ? 173 : '100%'}
                 error={invalidFields[4]}
                 disabled={addressInfo === {}}
@@ -263,23 +263,23 @@ export default function MyAccount() {
             >
               <Input
                 name="city"
-                title="Cidade"
-                placeholder="Escreve a tua cidade"
+                title="City"
+                placeholder="Your city"
                 customWidth={isDesktop ? 194 : '100%'}
                 error={invalidFields[5]}
                 disabled={addressInfo === {}}
               />
               <Input
                 name="state"
-                title="Localidade"
-                placeholder="Escolha a localidade"
+                title="State"
+                placeholder="Your state"
                 error={invalidFields[6]}
                 defaultValue="Lisboa"
                 hasMarginLeft={isDesktop}
               />
               <Select
-                title="País"
-                placeholder="Escolha o país"
+                title="Country"
+                placeholder="Your country"
                 setValue={setCountry}
                 customWidth={isDesktop ? 173 : '100%'}
                 defaultValue={{ label: 'Portugal', value: 'Portugal' }}
@@ -295,7 +295,7 @@ export default function MyAccount() {
               style={{ width: 221, marginTop: 40 }}
               type="submit"
             >
-              <b>{!!addressEdit ? 'Salvar' : 'Adicionar'}</b>
+              <b>{!!addressEdit ? 'Save' : 'Add'}</b>
             </Button>
           </InfoContainer>
         </Content>
@@ -313,7 +313,7 @@ export default function MyAccount() {
             ))}
           </AddressesCarousel>
         ) : (
-          <h1>Você ainda não tem nenhum endereço adicionado.</h1>
+          <h1>No addresses found.</h1>
         )}
       </Container>
       <div style={{ width: 840, height: 320 }} />

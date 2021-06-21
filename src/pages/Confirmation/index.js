@@ -191,28 +191,29 @@ export default function Confirmation() {
       <Container>
         <Content isDesktop={isDesktop}>
           <TopWarning isDesktop={isDesktop}>
-            <img src={check} alt="" />A sua encomenda está feita, os nossos
-            colaboradores vão entrar em contacto no dia da entrega. Em caso de
-            dúvidas não hesite em contactar nos através do 91 045 77 68.
+            <img src={check} alt="" />
+            Your order was successfully placed! We&apos;ll get in touch with you
+            at the delivery date. If you have any doubts, contact us at 91 045
+            77 68
           </TopWarning>
         </Content>
 
         <Content style={{ marginTop: 40 }} isDesktop={isDesktop}>
           <InfoContainer isDesktop={isDesktop}>
             <SectionTitle isDesktop={isDesktop}>
-              <strong>Seu pedido está confirmado</strong>
-              <small>Dados do comprador</small>
+              <strong>Your order was placed</strong>
+              <small>Buyer Info</small>
             </SectionTitle>
             <CustomInputContainer
               isDesktop={isDesktop}
               style={isDesktop ? {} : { marginTop: 20 }}
             >
               <Info>
-                <strong>Nome</strong>
+                <strong>Name</strong>
                 <small>{`${name} ${last_name}`}</small>
               </Info>
               <Info>
-                <strong>Telemóvel</strong>
+                <strong>Phone</strong>
                 <small>{cellphone}</small>
               </Info>
             </CustomInputContainer>
@@ -222,7 +223,7 @@ export default function Confirmation() {
                 <small>{email}</small>
               </Info>
               <Info>
-                <strong>Data de Nascimento</strong>
+                <strong>Birthdate</strong>
                 <small>{birth}</small>
               </Info>
             </CustomInputContainer>
@@ -239,26 +240,26 @@ export default function Confirmation() {
               style={isDesktop ? {} : { marginTop: 20, height: 434 }}
             >
               <SectionTitle isDesktop={isDesktop}>
-                <strong>Dados da entrega</strong>
-                <small>Morada</small>
+                <strong>Shipping Info</strong>
+                <small>Address</small>
               </SectionTitle>
               <CustomInputContainer isDesktop={isDesktop}>
                 <Info>
-                  <strong>Morada</strong>
+                  <strong>Address</strong>
                   <small>{finalAddress.address}</small>
                 </Info>
                 <Info>
-                  <strong>Cidade</strong>
+                  <strong>City</strong>
                   <small>{finalAddress.city}</small>
                 </Info>
               </CustomInputContainer>
               <CustomInputContainer isDesktop={isDesktop}>
                 <Info>
-                  <strong>Código Postal</strong>
+                  <strong>Zipcode</strong>
                   <small>{finalAddress.zipcode}</small>
                 </Info>
                 <Info>
-                  <strong>Localidade</strong>
+                  <strong>State</strong>
                   <small>{finalAddress.state}</small>
                 </Info>
               </CustomInputContainer>
@@ -268,7 +269,7 @@ export default function Confirmation() {
                   <small>{document}</small>
                 </Info>
                 <Info>
-                  <strong>País</strong>
+                  <strong>Country</strong>
                   <small>Portugal</small>
                 </Info>
               </CustomInputContainer>
@@ -276,7 +277,7 @@ export default function Confirmation() {
           ) : (
             <WithdrawContainer isDesktop={isDesktop}>
               <strong>
-                A retirada na loja deve ocorrer no endereço abaixo:
+                You can withdraw your order at the following address:
                 <br />
                 <b>Av. da República 1058 2775-271 Parede</b>
               </strong>
@@ -290,8 +291,8 @@ export default function Confirmation() {
             }
           >
             <SectionTitle isDesktop={isDesktop}>
-              <strong>Crédito Cashback</strong>
-              <small>Teu crédito para a próxima encomenda</small>
+              <strong>Cashback Credit</strong>
+              <small>Your credit for your next order</small>
             </SectionTitle>
             <CashbackCredit>
               <img src={cashback} alt="Cashback" />
@@ -301,7 +302,7 @@ export default function Confirmation() {
         </Content>
         <Content style={{ marginTop: 40 }} isDesktop={isDesktop}>
           <div style={isDesktop ? {} : { width: '100%' }}>
-            <Title>Produtos</Title>
+            <Title>Products</Title>
             {!loading ? (
               <ItemsList>
                 {!!orderInfo &&
@@ -315,44 +316,42 @@ export default function Confirmation() {
                   ))}
               </ItemsList>
             ) : (
-              <h1>Carregando...</h1>
+              <h1>Loading...</h1>
             )}
           </div>
           <div style={isDesktop ? {} : { width: '100%' }}>
-            <Title style={isDesktop ? {} : { marginTop: 20 }}>Resumo</Title>
+            <Title style={isDesktop ? {} : { marginTop: 20 }}>Details</Title>
             <CheckoutDetails isDesktop={isDesktop}>
               <CheckoutItem>
-                <h1>Nº da Encomenda</h1>
+                <h1>Order ID</h1>
                 <h2>{!!orderInfo ? `${orderInfo.id}` : '---'}</h2>
               </CheckoutItem>
               <CheckoutItem>
-                <h1>Produtos</h1>
+                <h1>Products</h1>
                 <h2>€&nbsp;{!!orderInfo ? `${orderInfo.subtotal}` : '0.00'}</h2>
               </CheckoutItem>
               <CheckoutItem>
-                <h1>Economizou</h1>
+                <h1>Saved</h1>
                 <h2>€&nbsp;{!!orderInfo ? saved : '0.00'}</h2>
               </CheckoutItem>
               <CheckoutItem>
-                <h1>Crédito Disponível</h1>
+                <h1>Available Credit</h1>
                 <h2 style={{ color: '#0CB68B' }}>€&nbsp;{clientCback}</h2>
               </CheckoutItem>
               <CheckoutItem>
-                <h1 style={isDesktop ? {} : { fontSize: 13.5 }}>
-                  Desconto do CUPOM
-                </h1>
+                <h1 style={isDesktop ? {} : { fontSize: 13.5 }}>Voucher</h1>
                 <h2 style={{ color: '#0CB68B' }}>
                   €&nbsp;{!!orderInfo ? `${orderInfo.discount}.00` : '0.00'}
                 </h2>
               </CheckoutItem>
               <CheckoutItem>
-                <h1>Porte</h1>
+                <h1>Shipping</h1>
                 <h2 style={{ color: '#0CB68B' }}>
                   {!!orderInfo
                     ? orderInfo.shipping !== 0
                       ? `€ ${orderInfo.shipping}.00`
-                      : 'Grátis'
-                    : 'Grátis'}
+                      : 'Free'
+                    : 'Free'}
                 </h2>
               </CheckoutItem>
               <CheckoutItem>
@@ -369,9 +368,8 @@ export default function Confirmation() {
                 </h2>
               </CheckoutItem>
               <ConfirmationText>
-                A confirmação da sua encomenda será feita <br />
-                através de contacto telefónico pelos nossos <br />
-                colaboradores no dia da entrega.
+                Your order will be confirmed via phone <br />
+                call by our employees at the delivery date. <br />
               </ConfirmationText>
             </CheckoutDetails>
           </div>
@@ -389,8 +387,8 @@ export default function Confirmation() {
             />
             <span>
               <p>
-                Entrega&nbsp;
-                <b>Periódica</b>
+                Periodic&nbsp;
+                <b>Delivery</b>
               </p>
             </span>
           </div>
@@ -403,12 +401,12 @@ export default function Confirmation() {
             </span>
             <div>
               <strong>
-                Sim, quero os <b>produtos</b> em todas as minhas&nbsp;
-                <b>entregas frequentes</b>
+                Yes, i want these <b>products</b> in all of mine&nbsp;
+                <b>recurrent deliveries.</b>
               </strong>
               <br />
               <small>
-                Poupe o <b>Trabalho</b> extra em entregas frequentes!
+                Save the <b>Extra Work</b> with recurrent deliveries!
               </small>
             </div>
           </PeriodicDeliveryItem>
@@ -446,8 +444,8 @@ export default function Confirmation() {
               </PeriodicDeliveryList>
             </PeriodicDeliveryListContainer>
             <PeriodicDeliveryUnwantedProducts>
-              Desmarque os produtos que você não deseja incluir na sua Entrega
-              Periódica.
+              Unselect the products you don&apos;t want to add to your periodic
+              delivery.
             </PeriodicDeliveryUnwantedProducts>
 
             <Button
@@ -461,7 +459,7 @@ export default function Confirmation() {
               }}
               onClick={handlePeriodicDelivery}
             >
-              Adicionar à&nbsp;<b>Compra Recorrente</b>
+              Add to&nbsp;<b>Periodic Purchases</b>
             </Button>
           </div>
           <PeriodicDeliveryItem
@@ -473,8 +471,8 @@ export default function Confirmation() {
             </span>
             <div>
               <small>
-                Não, Obrigado.
-                <br /> Eu só quero receber esse pedido uma vez.
+                No, thanks.
+                <br /> You&apos; buy it only this time.
               </small>
             </div>
           </PeriodicDeliveryItem>
@@ -493,7 +491,7 @@ export default function Confirmation() {
             history.push('/encomendas');
           }}
         >
-          Minhas&nbsp;<b>Encomendas</b>
+          My&nbsp;<b>Orders</b>
         </Button>
       </Container>
       <Footer />

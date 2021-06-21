@@ -60,7 +60,7 @@ export default function PeriodicDelivery() {
       setUpdatingDelivery(true);
 
       if (!periodicDateIsValid(nextPurchase)) {
-        setToastStatus('Forneça uma data válida para a compra periódica.');
+        setToastStatus('Set a valid date for periodic delivery.');
         setToastColor('#f56060');
 
         setToastVisible(true);
@@ -72,7 +72,7 @@ export default function PeriodicDelivery() {
       const desiredDate = addDays(new Date(), 2);
 
       if (!isAfter(parsedFormattedDate, desiredDate)) {
-        setToastStatus('Selecione uma data para ao menos daqui 3 dias.');
+        setToastStatus('Pick a date at least 3 days from today.');
         setToastColor('#f56060');
 
         setToastVisible(true);
@@ -85,7 +85,7 @@ export default function PeriodicDelivery() {
         next_purchase: status === 1 ? nextPurchase : '01/01/2021',
       });
 
-      setToastStatus('Sua compra periódica foi atualizada com sucesso.');
+      setToastStatus('Your periodic delivery was successfully updated.');
       setToastColor('#1dc167');
       setToastVisible(true);
     } catch (err) {
@@ -155,7 +155,7 @@ export default function PeriodicDelivery() {
               justifyContent: 'flex-start',
             }}
           >
-            <h1>Receber a cada</h1>
+            <h1>Receive every</h1>
             <Options>
               <button
                 type="button"
@@ -177,7 +177,7 @@ export default function PeriodicDelivery() {
                 <img src={plus} alt="icon" />
               </button>
             </Options>
-            <h1>dias</h1>
+            <h1>days</h1>
           </CheckoutItem>
           <CheckoutItem
             style={{
@@ -186,7 +186,7 @@ export default function PeriodicDelivery() {
               justifyContent: 'flex-start',
             }}
           >
-            <h1 style={{ marginRight: 30 }}>Início</h1>
+            <h1 style={{ marginRight: 30 }}>Start</h1>
             <StartDateInput
               mask="99/99/9999"
               placeholder="00/00/0000"
@@ -204,13 +204,13 @@ export default function PeriodicDelivery() {
               <button type="button" onClick={() => setStatus(1)}>
                 <img src={checked} alt="Item selecionado" />
               </button>
-              <strong>Iniciar</strong>
+              <strong>Start</strong>
             </StartStop>
             <StartStop selected={status === 0}>
               <button type="button" onClick={() => setStatus(0)}>
                 <img src={checked} alt="Item selecionado" />
               </button>
-              <strong>Parar</strong>
+              <strong>Stop</strong>
             </StartStop>
           </CheckoutItem>
           <Button
@@ -230,22 +230,22 @@ export default function PeriodicDelivery() {
             {updatingDelivery ? (
               <FaSpinner color="#fff" size={20} />
             ) : (
-              <b>Atualizar Entrega Periódica</b>
+              <b>Update Periodic Delivery</b>
             )}
           </Button>
         </div>
         <div style={{ marginLeft: 50, width: 400 }}>
-          <Title>Resumo</Title>
+          <Title>Details</Title>
           <CheckoutItem>
-            <h1>Produtos</h1>
+            <h1>Products</h1>
             <h2>€ {subtotal}</h2>
           </CheckoutItem>
           <CheckoutItem>
-            <h1>Economizou</h1>
+            <h1>Saved</h1>
             <h2>€ {saved}</h2>
           </CheckoutItem>
           <CheckoutItem>
-            <h1>Crédito Disponível</h1>
+            <h1>Available Credit</h1>
             <h2 style={{ color: '#0CB68B' }}>€ {cbackCredit}</h2>
           </CheckoutItem>
           <CheckoutItem>
@@ -267,7 +267,7 @@ export default function PeriodicDelivery() {
           ))
         ) : (
           <EmptyCartContainer
-            message="Você não tem produtos de compra periódica."
+            message="You don't have any product at periodic delivery."
             isDesktop={isDesktop}
           />
         )}

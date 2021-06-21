@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Translate } from 'react-auto-translate';
 import { Container, ChildrenCategories, ChildrenCategory } from './styles';
 
 import arrowGreen from '~/assets/icons/arrow_green.svg';
@@ -41,7 +42,9 @@ export default function MenuItem({ category, childrenSelected }) {
         }}
         active={pathname === `/${url}` || active}
       >
-        <strong>{name}</strong>
+        <strong>
+          <Translate>{name}</Translate>
+        </strong>
         {!!all_categories && all_categories.length !== 0 && (
           <img src={arrowGreen} alt="Abrir menu" />
         )}
@@ -59,7 +62,9 @@ export default function MenuItem({ category, childrenSelected }) {
                     state: { id: cc.id },
                   }}
                 >
-                  <strong>{cc.name}</strong>
+                  <strong>
+                    <Translate>{cc.name}</Translate>
+                  </strong>
                   {cc.all_categories.length !== 0 && (
                     <img src={arrowGreen} alt="Abrir menu" />
                   )}
@@ -78,7 +83,9 @@ export default function MenuItem({ category, childrenSelected }) {
                           }}
                           style={{ paddingLeft: 18.5 }}
                         >
-                          <strong>{subc.name}</strong>
+                          <strong>
+                            <Translate>{subc.name}</Translate>
+                          </strong>
                         </ChildrenCategory>
                       ))}
                     </ChildrenCategories>

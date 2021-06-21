@@ -59,14 +59,14 @@ export default function ForgotPassword({ setPage, isDesktop }) {
   return (
     <Container onSubmit={handleForgotPassword}>
       <Title isDesktop={isDesktop}>
-        ESCREVA O SEU E-MAIL E LHE
+        ENTER YOUR E-MAIL ADDRESS
         <br />
-        <b>ENVIAREMOS UMA NOVA {!isDesktop && <br />} PALAVRA-PASSE</b>
+        <b>WE&apos;LL SEND YOU A NEW {!isDesktop && <br />}PASSWORD</b>
       </Title>
       <Input
         name="email"
         title="E-mail"
-        placeholder="Escreve o teu e-mail"
+        placeholder="Your e-mail address"
         customWidth={isDesktop ? 462 : '85%'}
         style={{ marginTop: 20 }}
         setError={value => setEmailError(!mailIsValid(value))}
@@ -80,25 +80,21 @@ export default function ForgotPassword({ setPage, isDesktop }) {
         shadowColor="#17A75B"
         style={isDesktop ? { marginTop: 48 } : { width: '85%', marginTop: 48 }}
       >
-        {loading ? (
-          <FaSpinner color="#fff" size={20} />
-        ) : (
-          'Recuperar Palavra-passe'
-        )}
+        {loading ? <FaSpinner color="#fff" size={20} /> : 'Retrieve password'}
       </Button>
-      <GoBack onClick={() => setPage('main')}>Ou voltar</GoBack>
+      <GoBack onClick={() => setPage('main')}>Go back</GoBack>
       <SecureLogin style={{ marginTop: 139 }}>
         Secure <img src={lock} alt="Lock" /> Login
       </SecureLogin>
       {toastVisible && (
         <Toast
-          status="Enviamos um link de redefinição de senha para seu e-mail!"
+          status="We've sent a link to your e-mail to change your password!"
           color="#1DC167"
         />
       )}
       {failedToastVisible && (
         <Toast
-          status="O e-mail informado não pertence a nenhum usuário. Tente novamente"
+          status="This e-mail address isn't associated with any account."
           color="#f56060"
         />
       )}

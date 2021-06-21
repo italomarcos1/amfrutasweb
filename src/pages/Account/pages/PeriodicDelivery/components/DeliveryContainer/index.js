@@ -21,11 +21,11 @@ export default function MyAccount() {
       </div>
       <div>
         <strong>
-          Entrega&nbsp;<b>Periódica</b>
+          Periodic&nbsp;<b>Delivery</b>
         </strong>
         <small>
-          Compre uma vez e receba <br />
-          periodicamente em tua casa
+          Buy one time and receive <br />
+          recurrently at yor home
         </small>
       </div>
       <div
@@ -45,7 +45,7 @@ export default function MyAccount() {
         >
           <img src={check} alt="check icon" style={{ marginRight: 12.5 }} />
           <span>
-            <b>Máximo conforto.</b>&nbsp;Compre uma vez e esqueça!
+            <b>No drawbacks.</b>&nbsp;Buy once and forget it!
           </span>
         </Item>
         <Item
@@ -57,8 +57,7 @@ export default function MyAccount() {
         >
           <img src={check} alt="check icon" style={{ marginRight: 12.5 }} />
           <span>
-            <b>Os descontos e promoções mais vantajosos</b>&nbsp;sempre
-            aplicados.
+            <b>The best promotions and discounts</b>&nbsp;applied.
           </span>
         </Item>
         <Item
@@ -70,7 +69,7 @@ export default function MyAccount() {
         >
           <img src={check} alt="check icon" style={{ marginRight: 12.5 }} />
           <span>
-            <b>Cancelar, pausar ou editar</b>&nbsp;sempre que quiser.
+            <b>Cancel, pause or edit</b>&nbsp;anytime you want.
           </span>
         </Item>
       </div>

@@ -51,7 +51,7 @@ export default function CheckoutHeader({ active }) {
           </Logo>
           <SubHeader>
             <OptionContainer onClick={() => history.push('/cesto')}>
-              <OptionTitle>Cesto</OptionTitle>
+              <OptionTitle>Basket</OptionTitle>
               <OptionBorder active>
                 <OptionNumber active>1</OptionNumber>
               </OptionBorder>
@@ -60,7 +60,7 @@ export default function CheckoutHeader({ active }) {
               disabled={active === 1 || active === 3}
               onClick={() => history.push('/entrega')}
             >
-              <OptionTitle>Entrega</OptionTitle>
+              <OptionTitle>Delivery</OptionTitle>
               <OptionBorder active={active === 2 || active === 3}>
                 <OptionNumber
                   disabled={active === 3 || cart.length === 0}
@@ -74,7 +74,7 @@ export default function CheckoutHeader({ active }) {
               disabled={shouldNotAccessConfirmation}
               onClick={() => history.push('/confirmacao')}
             >
-              <OptionTitle>Confirmação</OptionTitle>
+              <OptionTitle>Confirmation</OptionTitle>
               <OptionBorder active={active === 3}>
                 <OptionNumber active={active === 3}>3</OptionNumber>
               </OptionBorder>
@@ -88,10 +88,10 @@ export default function CheckoutHeader({ active }) {
                 history.push('/encomendas');
               }}
             >
-              Minhas Encomendas
+              My Orders
             </MyOrdersButton>
           ) : (
-            <BackButton to={active === 2 ? 'cesto' : '/'}>Voltar</BackButton>
+            <BackButton to={active === 2 ? 'cesto' : '/'}>Go Back</BackButton>
           )}
         </HeaderContent>
       </div>

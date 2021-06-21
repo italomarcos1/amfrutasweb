@@ -21,6 +21,7 @@
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-apple-login": "^1.1.2",
+    "react-auto-translate": "^0.0.6",
     "react-dom": "^17.0.1",
     "react-elastic-carousel": "^0.9.5",
     "react-facebook-login": "^4.1.1",

@@ -58,7 +58,7 @@ export default function Account({ children }) {
         <Content isDesktop={isDesktop}>
           <Menu isDesktop={isDesktop}>
             <strong>
-              Olá,&nbsp;<b>{!!profile ? profile.name : 'Cliente'}</b>
+              Hi,&nbsp;<b>{!!profile ? profile.name : 'Customer'}</b>
             </strong>
             <div
               style={{
@@ -78,7 +78,7 @@ export default function Account({ children }) {
                   src={active === '/painel' ? controlPanel : controlPanelOff}
                   alt=""
                 />
-                <strong>Painel de Controlo</strong>
+                <strong>Dashboard</strong>
               </Option>
 
               <Option
@@ -90,7 +90,7 @@ export default function Account({ children }) {
                   alt=""
                   style={{ width: 22, height: 18 }}
                 />
-                <strong>Minha conta</strong>
+                <strong>My Account</strong>
               </Option>
               <Option
                 onClick={() => history.push('/encomendas')}
@@ -103,7 +103,7 @@ export default function Account({ children }) {
                   alt=""
                   style={{ width: 16.7, height: 18.5 }}
                 />
-                <strong>Minhas encomendas</strong>
+                <strong>My Orders</strong>
               </Option>
               <Option
                 onClick={() => history.push('/entregas')}
@@ -114,7 +114,7 @@ export default function Account({ children }) {
                   alt=""
                   style={{ width: 24.5, height: 22 }}
                 />
-                <strong>Entrega periódica</strong>
+                <strong>Periodic Delivery</strong>
               </Option>
               <Option
                 onClick={() => history.push('/endereco')}
@@ -125,7 +125,7 @@ export default function Account({ children }) {
                   alt=""
                   style={{ width: 15.6, height: 21 }}
                 />
-                <strong>Meu endereço</strong>
+                <strong>My Address</strong>
               </Option>
               <Option
                 onClick={() => history.push('/favoritos')}
@@ -136,7 +136,7 @@ export default function Account({ children }) {
                   alt=""
                   style={{ width: 18, height: 16.5 }}
                 />
-                <strong>Meus favoritos</strong>
+                <strong>My Favorites</strong>
               </Option>
             </div>
             <Button
@@ -145,7 +145,7 @@ export default function Account({ children }) {
               style={{ width: 246, marginTop: 20, height: 55 }}
               onClick={handleSignOut}
             >
-              <b>Sair do AMFrutas</b>
+              <b>Logout</b>
             </Button>
           </Menu>
           <div

@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
+
+import { Translate } from 'react-auto-translate';
+
 import Container from './styles';
 
 export default function BlogPost({ content, index, setHeight }) {
@@ -27,8 +30,12 @@ export default function BlogPost({ content, index, setHeight }) {
       id={`content${index}`}
     >
       <img src={thumbs} alt="Content" />
-      <strong>{title}</strong>
-      <small>{description}</small>
+      <strong>
+        <Translate>{title}</Translate>
+      </strong>
+      <small>
+        <Translate>{description}</Translate>
+      </small>
     </Container>
   );
 }

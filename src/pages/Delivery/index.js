@@ -11,6 +11,8 @@ import { FaSpinner } from 'react-icons/fa';
 import { useMediaQuery } from 'react-responsive';
 import * as Yup from 'yup';
 
+import { Translate } from 'react-auto-translate';
+
 import {
   Container,
   Content,
@@ -812,9 +814,9 @@ export default function Delivery() {
                       alt="Entrega"
                       style={{ width: 36, height: 30 }}
                     />
-                    Entrega Própria
+                    Delivery
                   </DeliveryButtonContent>
-                  <div>Grátis</div>
+                  <div>Free</div>
                 </DeliveryButtonContainer>
               </DeliveryButton>
               <DeliveryButton
@@ -857,15 +859,17 @@ export default function Delivery() {
                       alt="Retirar na loja"
                       style={{ width: 28, height: 25 }}
                     />
-                    Retirar
-                    {isDesktop && <br />} na {!isDesktop && <br />} Loja
+                    Withdraw
+                    {isDesktop && <br />} at {!isDesktop && <br />} store
                   </DeliveryButtonContent>
-                  <div>Grátis</div>
+                  <div>Free</div>
                 </DeliveryButtonContainer>
               </DeliveryButton>
             </div>
             {deliveryOption === 'withdrawinstore' ? (
-              <TakeOnShop isDesktop={isDesktop}>{withdrawMessage}</TakeOnShop>
+              <TakeOnShop isDesktop={isDesktop}>
+                <Translate>{withdrawMessage}</Translate>
+              </TakeOnShop>
             ) : (
               <DeliveryDateContainer
                 error={invalidDeliveryDay || invalidDeliveryHour}
@@ -889,7 +893,7 @@ export default function Delivery() {
                           }
                     }
                   >
-                    Selecione o melhor dia e horário para entrega
+                    Pick the best hour and day for your delivery
                   </strong>
                   <div
                     style={
@@ -907,13 +911,13 @@ export default function Delivery() {
                     <NoTitleSelect
                       setValue={setDeliveryDay}
                       customWidth={isDesktop ? 125 : 229}
-                      placeholder="Dia"
+                      placeholder="Day"
                       data={deliveryDays}
                     />
                     <NoTitleSelect
                       setValue={setDeliveryHour}
                       customWidth={isDesktop ? 125 : 229}
-                      placeholder="Hora"
+                      placeholder="Hour"
                       data={deliveryHours}
                     />
                   </div>
@@ -921,12 +925,12 @@ export default function Delivery() {
               </DeliveryDateContainer>
             )}
             <ShippingWarning isDesktop={isDesktop}>
-              Levantamento na loja:
-              <b>Grátis</b>
-              <br /> Compras até € {minValueShipping}:
-              <b>Entrega € {fixedShippingCost}</b>
-              <br /> Compras acima de € {minValueFreeShipping}:
-              <b>Entrega Grátis</b>
+              Store Balance:
+              <b>Free</b>
+              <br /> Purchases up to € {minValueShipping}:
+              <b>Delivery € {fixedShippingCost}</b>
+              <br /> Purchases over € {minValueFreeShipping}:
+              <b>Free Delivery</b>
             </ShippingWarning>
           </DeliveryOptionsContainer>
         </Content>
@@ -939,20 +943,20 @@ export default function Delivery() {
             isDesktop={isDesktop}
           >
             <SectionTitle>
-              <strong>Dados de contato</strong>
-              <small>Confira e atualize caso necessário.</small>
+              <strong>Contact Info</strong>
+              <small>Check out and update if needed.</small>
             </SectionTitle>
             <InputContainer isDesktop={isDesktop}>
               <Input
                 name="name"
-                title="Nome"
-                placeholder="Escreve o teu nome"
+                title="Name"
+                placeholder="Your name"
                 customWidth={isDesktop ? 221 : '100%'}
               />
               <Input
                 name="last_name"
-                title="Apelido"
-                placeholder="Escolhe o teu apelido"
+                title="Last Name"
+                placeholder="Your last name"
                 customWidth={isDesktop ? 221 : '100%'}
               />
             </InputContainer>
@@ -960,7 +964,7 @@ export default function Delivery() {
               <Input
                 name="email"
                 title="Email"
-                placeholder="Escreve o teu e-mail"
+                placeholder="Your e-mail address"
                 value={email}
                 onChange={({ target: { value } }) =>
                   onlyValues(value, setEmail)
@@ -970,7 +974,7 @@ export default function Delivery() {
 
               <InputMask
                 name="birth"
-                title="Data de nascimento"
+                title="Birthdate"
                 customWidth={isDesktop ? 221 : '100%'}
               />
             </InputContainer>
@@ -984,8 +988,8 @@ export default function Delivery() {
 
               {gender !== '' ? (
                 <Select
-                  title="Gênero"
-                  placeholder="Escolha o gênero"
+                  title="Gender"
+                  placeholder="Pick your gender"
                   setValue={setGender}
                   defaultValue={{ label: gender, value: gender }}
                   customWidth={isDesktop ? 221 : '100%'}
@@ -994,8 +998,8 @@ export default function Delivery() {
                 />
               ) : (
                 <Select
-                  title="Gênero"
-                  placeholder="Escolha o gênero"
+                  title="Gender"
+                  placeholder="Pick your gender"
                   setValue={setGender}
                   customWidth={isDesktop ? 221 : '100%'}
                   data={genderData}
@@ -1013,7 +1017,7 @@ export default function Delivery() {
               <InputMask
                 name="cellphone"
                 type="phone"
-                title="Telemóvel"
+                title="Phone"
                 customWidth={isDesktop ? 221 : '100%'}
               />
             </InputContainer>
@@ -1053,11 +1057,11 @@ export default function Delivery() {
               loading={loading}
             >
               <SectionTitle>
-                <strong>Morada de entrega</strong>
+                <strong>Shipping Address</strong>
                 <small>
                   {newAddress
-                    ? 'Registe um novo endereço.'
-                    : 'Confira e atualize caso necessário.'}
+                    ? 'Register a new address'
+                    : 'Check out and update if needed.'}
                 </small>
               </SectionTitle>
               <InputContainer
@@ -1067,8 +1071,8 @@ export default function Delivery() {
                 {newAddress ? (
                   <Input
                     name="residence"
-                    title="Nome da morada (para futuras entregas)"
-                    placeholder="Escreve o nome da morada"
+                    title="Address name (for upcoming deliveries)"
+                    placeholder="Your address name"
                     customWidth={isDesktop ? 325 : '100%'}
                     value={residence}
                     onChange={({ target: { value } }) => setResidence(value)}
@@ -1076,8 +1080,8 @@ export default function Delivery() {
                   />
                 ) : (
                   <Select
-                    title="Selecione a morada"
-                    placeholder="Escolha a morada"
+                    title="Choose your address"
+                    placeholder="Your address"
                     setValue={setResidence}
                     defaultValue={{
                       value: residence,
@@ -1090,8 +1094,8 @@ export default function Delivery() {
                 )}
                 <Input
                   name="destination_name"
-                  title="Nome completo do destinatário"
-                  placeholder="Escreve o nome do destinatário"
+                  title="Recipient's Name"
+                  placeholder="The recipient's name"
                   customWidth={isDesktop ? 283 : '100%'}
                   disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
@@ -1106,7 +1110,7 @@ export default function Delivery() {
                   name="zipcode"
                   mask="9999-999"
                   placeholder="0000-000"
-                  title="Código Postal"
+                  title="Zipcode"
                   customWidth={isDesktop ? 90 : '100%'}
                   value={zipcode}
                   onChange={({ target: { value } }) => setZipcode(value)}
@@ -1115,22 +1119,22 @@ export default function Delivery() {
                 />
                 <Input
                   name="address"
-                  title="Morada"
-                  placeholder="Escreve a tua morada"
+                  title="Address"
+                  placeholder="Your address"
                   customWidth={isDesktop ? 215 : '100%'}
                   disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
                 <Input
                   name="number"
-                  title="Número"
-                  placeholder="Escreve o teu número"
+                  title="Number"
+                  placeholder="Residence Nº"
                   customWidth={isDesktop ? 90 : '100%'}
                   disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
                 <Input
                   name="district"
                   title="Distrito"
-                  placeholder="Escreve o teu distrito"
+                  placeholder="Your district"
                   customWidth={isDesktop ? 173 : '100%'}
                   disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
@@ -1143,23 +1147,23 @@ export default function Delivery() {
               >
                 <Input
                   name="city"
-                  title="Cidade"
-                  placeholder="Escreve a tua cidade"
+                  title="City"
+                  placeholder="Your city"
                   customWidth={isDesktop ? 194 : '100%'}
                   disabled={loading || deliveryOption === 'withdrawinstore'}
                 />
                 <Input
                   name="state"
-                  title="Localidade"
-                  placeholder="Escolha a Localidade"
+                  title="State"
+                  placeholder="Your state"
                   defaultValue="Lisboa"
                   customWidth={isDesktop ? 221 : '100%'}
                   disabled={loading || deliveryOption === 'withdrawinstore'}
                   style={isDesktop ? {} : { marginTop: 0 }}
                 />
                 <Select
-                  title="País"
-                  placeholder="Escolha o país"
+                  title="Country"
+                  placeholder="Pick your country"
                   setValue={setCountry}
                   defaultValue={{ value: 'Portugal', label: 'Portugal' }}
                   data={[{ value: 'Portugal', label: 'Portugal' }]}
@@ -1199,11 +1203,11 @@ export default function Delivery() {
                       >
                         <img src={checked} alt="Item selecionado" />
                       </button>
-                      <strong>Definir como endereço principal</strong>
+                      <strong>Set as main address</strong>
                     </StartStop>
                     {addresses.length !== 0 && (
                       <UseAddress onClick={() => setNewAddress(false)}>
-                        <small>Usar um endereço já registado</small>
+                        <small>Pick a saved address</small>
                       </UseAddress>
                     )}
                   </div>
@@ -1225,7 +1229,7 @@ export default function Delivery() {
                       >
                         <img src={checked} alt="Item selecionado" />
                       </button>
-                      <strong>Definir como endereço principal</strong>
+                      <strong>Set as main address</strong>
                     </StartStop>
                     <UseAddress
                       onClick={() => {
@@ -1236,7 +1240,7 @@ export default function Delivery() {
                       }}
                       isDesktop={isDesktop}
                     >
-                      <small>Registar um novo endereço</small>
+                      <small>Store a new address</small>
                     </UseAddress>
                   </div>
                 )}
@@ -1266,10 +1270,10 @@ export default function Delivery() {
             style={{ width: 197, marginTop: 0 }}
             onClick={() => history.push('/cesto')}
           >
-            Editar&nbsp;<b>Produtos</b>
+            Edit&nbsp;<b>Products</b>
           </Button>
           <Title style={isDesktop ? { marginLeft: 685 } : { marginTop: 30 }}>
-            Resumo
+            Details
           </Title>
         </Content>
 
@@ -1286,9 +1290,9 @@ export default function Delivery() {
               ))}
             </ItemsList>
             <TextArea
-              title="Se não encontrou o que procura, digite abaixo que iremos verificar para si."
+              title="Couldn't find what you want? Tell us about it."
               name="notes"
-              placeholder="Informe aqui"
+              placeholder="Tell us what you want"
               style={
                 isDesktop
                   ? { width: 840, height: 108 }
@@ -1300,7 +1304,7 @@ export default function Delivery() {
           </div>
           <CheckoutDetails isDesktop={isDesktop}>
             <CheckoutItem>
-              <h1>Produtos</h1>
+              <h1>Products</h1>
               <h2>€&nbsp;{price}</h2>
             </CheckoutItem>
             <CheckoutItem>
@@ -1310,13 +1314,13 @@ export default function Delivery() {
               </h2>
             </CheckoutItem>
             <CheckoutItem>
-              <h1>Economizou</h1>
+              <h1>Saved</h1>
               <h2>
                 €&nbsp;{saved === '0.00' ? '0.00' : formatPrice(saved - price)}
               </h2>
             </CheckoutItem>
             <CheckoutItem>
-              <h1>Crédito Disponível</h1>
+              <h1>Available Credit</h1>
               <h2 style={{ color: '#0CB68B' }}>€&nbsp;{clientCback}</h2>
             </CheckoutItem>
             <CheckoutItem style={{ height: 77 }}>
@@ -1334,35 +1338,35 @@ export default function Delivery() {
                       setCouponDiscount(null);
                     }}
                   >
-                    {hoverCouponValid ? 'Remover Cupom' : 'Cupom Válido'}
+                    {hoverCouponValid ? 'Remove Voucher' : 'Valid Voucher'}
                   </CouponIsValid>
                 ) : (
                   <>
                     <CouponInput
-                      placeholder="CUPOM"
+                      placeholder="VOUCHER"
                       value={coupon}
                       onChange={({ target: { value } }) => setCoupon(value)}
                       isDesktop={isDesktop}
                     />
                     <SendButton onClick={validateCoupon} isDesktop={isDesktop}>
-                      Validar
+                      Validate
                     </SendButton>
                   </>
                 )}
               </div>
             </CheckoutItem>
             <CheckoutItem>
-              <h1>Desconto do Cupom</h1>
+              <h1>Voucher</h1>
               <h2 style={{ color: '#0CB68B' }}>€&nbsp;0,00</h2>
             </CheckoutItem>
             <CheckoutItem>
-              <h1>Porte</h1>
+              <h1>Shipping</h1>
               <h2 style={{ color: '#0CB68B' }}>
                 {deliveryOption === 'delivery'
                   ? shippingCost !== 0
                     ? `€ ${shippingCost}.00`
-                    : 'Grátis'
-                  : 'Grátis'}
+                    : 'Free'
+                  : 'Free'}
               </h2>
             </CheckoutItem>
             <CheckoutItem>
@@ -1373,9 +1377,8 @@ export default function Delivery() {
               </h2>
             </CheckoutItem>
             <ConfirmationText>
-              A confirmação da sua encomenda será feita <br />
-              através de contacto telefónico pelos nossos <br />
-              colaboradores no dia da entrega.
+              Your order will be confirmed via phone <br />
+              call by our employees at the delivery date. <br />
             </ConfirmationText>
             <Button
               color="#1DC167"
@@ -1394,11 +1397,11 @@ export default function Delivery() {
               {processingOrder ? (
                 <FaSpinner color="#fff" size={20} />
               ) : (
-                <b>Concluir a Encomenda</b>
+                <b>Finish Order</b>
               )}
             </Button>
             <SecureLogin style={{ marginTop: 23.5 }}>
-              Acesso <img src={lock} alt="Lock" /> Seguro
+              Safe <img src={lock} alt="Lock" /> Access
             </SecureLogin>
           </CheckoutDetails>
         </Content>
@@ -1406,7 +1409,7 @@ export default function Delivery() {
       <Footer />
       {toastVisible && (
         <Toast
-          status="Cupom inválido ou sua encomenda não cumpre todas as regras exigidas."
+          status="Invalid voucher or your order does not fit all of the requisites."
           color="#f56060"
         />
       )}

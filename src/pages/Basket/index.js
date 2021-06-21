@@ -144,18 +144,18 @@ export default function Basket() {
       {loginModal && <LoginModal closeModal={() => setLoginModal(false)} />}
       {toastVisible && (
         <Toast
-          status="Você deve fazer login ou se cadastrar antes de prosseguir."
+          status="You must log in or register before proceeding."
           color="#1DC167"
         />
       )}
       <Container isDesktop={isDesktop}>
         <Content isDesktop={isDesktop}>
           <div style={isDesktop ? { width: 840 } : { width: '100%' }}>
-            <Title>Cesto de Compras</Title>
+            <Title>Shopping Basket</Title>
             {shouldntProceed && (
               <MinValueContainer isDesktop={isDesktop}>
                 <MinValue isDesktop={isDesktop}>
-                  De momento o valor mínimo para encomendas é de €&nbsp;
+                  At the moment, our minimum value to set a order is €&nbsp;
                   {minValueWithdrawStore}
                 </MinValue>
                 <Button
@@ -168,7 +168,7 @@ export default function Basket() {
                       : { width: '100%', marginTop: 0 }
                   }
                 >
-                  <b>Voltar a comprar</b>
+                  <b>Back to the store</b>
                 </Button>
               </MinValueContainer>
             )}
@@ -176,7 +176,7 @@ export default function Basket() {
             {removingProduct ? (
               <LoadingContainer isDesktop={isDesktop}>
                 <FaSpinner color="#666" size={38} />
-                <strong>Removendo o produto do carrinho, aguarde...</strong>
+                <strong>Removing the selected product...</strong>
               </LoadingContainer>
             ) : !loginModal && products.length !== 0 ? (
               <ItemsList length={products.length} breakpoint={8}>
@@ -191,20 +191,20 @@ export default function Basket() {
               </ItemsList>
             ) : (
               <EmptyCartContainer
-                message="Seu cesto de compras está vazio."
+                message="Your shopping basket is empty."
                 isDesktop={isDesktop}
               />
             )}
           </div>
           <div>
-            <Title style={isDesktop ? {} : { marginTop: 30 }}>Resumo</Title>
+            <Title style={isDesktop ? {} : { marginTop: 30 }}>Details</Title>
             <CheckoutDetails isDesktop={isDesktop}>
               <CheckoutItem>
-                <h1>Produtos</h1>
+                <h1>Products</h1>
                 <h2>{products.length !== 0 ? `€ ${price}` : '---'}</h2>
               </CheckoutItem>
               <CheckoutItem>
-                <h1>Economizou</h1>
+                <h1>Saved</h1>
                 <h2>
                   {products.length !== 0
                     ? `€ ${
@@ -217,20 +217,20 @@ export default function Basket() {
                 style={isDesktop ? { height: 77 } : { height: 117 }}
               >
                 <h1>
-                  O seu crédito de <b>compras anteriores</b> <br />
-                  estará disponível no passo seguinte
+                  Your credit from <b>previous purchases</b> <br />
+                  are available in the next step.
                 </h1>
               </CheckoutItem>
               <CheckoutItem
                 style={isDesktop ? { height: 77 } : { height: 117 }}
               >
                 <h1>
-                  Tem um <b>cupão de desconto?</b> <br />
-                  Pode adicioná-lo no passo seguinte
+                  Do you have a <b>voucher?</b> <br />
+                  You can add it in the next step.
                 </h1>
               </CheckoutItem>
               <CheckoutItem>
-                <h1>Porte</h1>
+                <h1>Shipping</h1>
                 <h2 style={{ color: '#0CB68B' }}>
                   {shippingCost === 0 ? 'Grátis' : `€ ${shippingCost}.00`}
                 </h2>
@@ -253,11 +253,10 @@ export default function Basket() {
                 }
               >
                 {shouldntProceed
-                  ? `De momento o valor mínimo para encomendas é de \n
+                  ? `At the moment, our minimum value to set a order is \n
                   € ${minValueWithdrawStore}`
-                  : `A confirmação da sua encomenda será feita \n
-                através de contacto telefónico pelos nossos \n
-                colaboradores no dia da entrega.`}
+                  : `Your order will be confirmed by a phone \n
+                call by our employees on the delivery date.\n`}
               </ConfirmationText>
               {shouldntProceed ? (
                 <Button
@@ -266,7 +265,7 @@ export default function Basket() {
                   onClick={() => history.push('/produtos')}
                   style={isDesktop ? { width: 309 } : { width: '100%' }}
                 >
-                  <b>Voltar a comprar</b>
+                  <b>Back to Store</b>
                 </Button>
               ) : (
                 <Button
@@ -276,20 +275,20 @@ export default function Basket() {
                   onClick={() => handleProcessOrder()}
                   style={isDesktop ? { width: 309 } : { width: '100%' }}
                 >
-                  <b>Processar Encomenda</b>
+                  <b>Process Order</b>
                 </Button>
               )}
               <SecureLogin style={{ marginTop: 23.5 }}>
-                Acesso <img src={lock} alt="Lock" /> Seguro
+                Safe <img src={lock} alt="Lock" /> Access
               </SecureLogin>
             </CheckoutDetails>
             <ShippingWarning isDesktop={isDesktop}>
-              Levantamento na loja:
-              <b>Grátis</b>
-              <br /> Compras até € {minValueShipping}:
-              <b>Entrega € {fixedShippingCost}</b>
-              <br /> Compras acima de € {minValueFreeShipping}:
-              <b>Entrega Grátis</b>
+              Store Balance:
+              <b>Free</b>
+              <br /> Purchases up to € {minValueShipping}:
+              <b>Delivery € {fixedShippingCost}</b>
+              <br /> Purchases over € {minValueFreeShipping}:
+              <b>Free Delivery</b>
             </ShippingWarning>
           </div>
         </Content>

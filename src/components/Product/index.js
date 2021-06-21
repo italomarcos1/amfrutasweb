@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 
+import { Translate } from 'react-auto-translate';
+
 import coins from '~/assets/coins.svg';
 import basket_active from '~/assets/icons/basket_active.svg';
 import minus from '~/assets/icons/minus.svg';
@@ -129,7 +131,9 @@ export default function Product({ product, index, setHeight }) {
             state: { id },
           }}
         >
-          <Title isDesktop={isDesktop}>{title}</Title>
+          <Title isDesktop={isDesktop}>
+            <Translate>{title}</Translate>
+          </Title>
         </Link>
         <PriceContainer
           to={{
@@ -142,11 +146,11 @@ export default function Product({ product, index, setHeight }) {
             <strong style={isDesktop ? {} : { fontSize: 9 }}>
               €&nbsp;{!!cback ? cback : '0.00'}
             </strong>
-            <b style={isDesktop ? {} : { fontSize: 9 }}>DE CRÉDITO</b>
+            <b style={isDesktop ? {} : { fontSize: 9 }}>CASHBACK</b>
           </span>
           {has_promotion ? (
             <small>
-              antes
+              was
               <p>€&nbsp;{price}</p>
             </small>
           ) : (
@@ -193,7 +197,7 @@ export default function Product({ product, index, setHeight }) {
       </Container>
       {toastVisible && (
         <Toast
-          status={`O produto ${title} foi adicionado ao seu cesto de compras.`}
+          status="The product was successfully added to your shopping basket"
           color="#1DC167"
           isDesktop={isDesktop}
         />

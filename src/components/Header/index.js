@@ -4,6 +4,8 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useScrollYPosition } from 'react-use-scroll-position';
 import { useMediaQuery } from 'react-responsive';
 
+import { Translate } from 'react-auto-translate';
+
 import { useSelector } from 'react-redux';
 
 import { useQuery } from 'react-query';
@@ -150,7 +152,7 @@ export default function PageHeader({ login, active }) {
                   },
                 }}
               >
-                {name}
+                <Translate>{name}</Translate>
               </MenuItem>
             ))}
 
@@ -203,7 +205,7 @@ export default function PageHeader({ login, active }) {
         isDesktop={isDesktop}
         style={headerFixed ? { position: 'fixed', top: 41 } : {}}
       >
-        {!alertLoading && alert}
+        <Translate>{!alertLoading && alert}</Translate>
       </SubTitle>
     </>
   );

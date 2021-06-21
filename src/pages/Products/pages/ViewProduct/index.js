@@ -5,6 +5,8 @@ import { FacebookShareButton, WhatsappShareButton } from 'react-share';
 
 import { useMediaQuery } from 'react-responsive';
 
+import { Translate } from 'react-auto-translate';
+
 import {
   FullContainer,
   Container,
@@ -188,19 +190,21 @@ export default function ViewProduct() {
   return (
     <FullContainer>
       {loading ? (
-        <h1>Carregando...</h1>
+        <h1>Loading...</h1>
       ) : (
         <>
           <Container>
             <Content>
               <img src={banner} alt="" />
               <ProductInfo>
-                <Title>{product.title}</Title>
+                <Title>
+                  <Translate>{product.title}</Translate>
+                </Title>
                 <PriceAndInfoContainer>
                   <ShippingButtonContainer>
                     <PriceContainer>
                       {product.has_promotion ? (
-                        <small>de €&nbsp;{product.price} por</small>
+                        <small>from €&nbsp;{product.price} by</small>
                       ) : (
                         <small>&nbsp;</small>
                       )}
@@ -213,7 +217,7 @@ export default function ViewProduct() {
                       </strong>
                       {product.has_promotion ? (
                         <small style={{ color: '#FF2121' }}>
-                          Economize €&nbsp;
+                          Save €&nbsp;
                           {(
                             Math.round(
                               (product.price - product.price_promotional) * 100
@@ -265,7 +269,7 @@ export default function ViewProduct() {
                       </AmountAndTotalContainer>
                       {product.has_promotion ? (
                         <small style={{ color: '#FF2121', marginTop: 5 }}>
-                          Economize €&nbsp;
+                          Save €&nbsp;
                           {formatPrice(
                             qty * (product.price - product.price_promotional)
                           )}
@@ -283,7 +287,7 @@ export default function ViewProduct() {
                           backgroundColor: '#d6d6d6 ',
                         }}
                       >
-                        Envio
+                        Shipping
                       </ShippingButton>
                       <ShippingButton
                         style={{
@@ -296,7 +300,7 @@ export default function ViewProduct() {
                       </ShippingButton>
                     </ShippingContainer>
                     <FreeShipping>
-                      Envio gratuito para compras acima de&nbsp;
+                      Free shipping for purchases above&nbsp;
                       <b>€&nbsp;{minValueFreeShipping}</b>
                     </FreeShipping>
                   </ShippingButtonContainer>
@@ -308,7 +312,7 @@ export default function ViewProduct() {
                     <FlexStartContainer>
                       <FlexStartContainer>
                         <img src={barcode} alt="Barcode" />
-                        <FlexStartText>Código: 837922</FlexStartText>
+                        <FlexStartText>Code: 837922</FlexStartText>
                       </FlexStartContainer>
                     </FlexStartContainer>
                     <FlexStartContainer>
@@ -326,20 +330,20 @@ export default function ViewProduct() {
                         />
                       </FavoriteButton>
                       <FlexStartText style={{ color: '#FD8B2A' }}>
-                        Colocar em seus Favoritos
+                        Add to Favorites
                       </FlexStartText>
                     </FlexStartContainer>
                     <Warning>
-                      {` RECICLAMOS TODO O TIPO DE PLÁSTICO DESDE SACOS A EMBALAGENS, SE
-                PRETENDE AJUDAR O NOSSO PLANETA, ENVIE NOS PELOS NOSSOS
-                MOTORISTAS TODO O PLÁSTICO QUE NÃO PRECISA QUE NÓS DAMOS-LHE
-                OUTRA VIDA :)`}
+                      WE RECYCLE ALL TYPES OF PLASTIC FROM BAGS TO PACKAGING, IF
+                      INTEND TO HELP OUR PLANET, SEND US BY OURS DRIVERS ALL THE
+                      PLASTIC THAT DOESN&apos;T NEED THAT WE GIVE IT ANOTHER
+                      LIFE :&#41;
                     </Warning>
                   </ShippingButtonContainer>
                 </PriceAndInfoContainer>
 
                 <ShareThisProduct>
-                  <strong>Compartilhe esse produto:</strong>
+                  <strong>Share this product:</strong>
                   <div
                     style={{
                       display: 'flex',
@@ -352,7 +356,7 @@ export default function ViewProduct() {
                         `${message} https://${window.location.hostname}${pathname}`
                       )}`}
                       style={{ ...buttonStyle, backgroundColor: '#3ab879' }}
-                      title="Veja esse conteúdo no AMFrutas"
+                      title="Check this content at AMFrutas"
                       target="_blank"
                       rel="noreferrer"
                     >
@@ -362,7 +366,7 @@ export default function ViewProduct() {
                     <FacebookShareButton
                       url={`https://${window.location.hostname}${pathname}`}
                       quote={`AMFrutas | ${quote}`}
-                      hashtag="#VemProAMFrutas"
+                      hashtag="#JoinAMFrutas"
                       resetButtonStyle
                       style={buttonStyle}
                     >
@@ -382,7 +386,7 @@ export default function ViewProduct() {
                 onClick={handleAddToCart}
                 style={{ width: 525, marginTop: 48 }}
               >
-                <b>Adicionar ao Cesto</b>
+                <b>Add to Basket</b>
               </Button>
             </Details>
           </Container>
@@ -393,7 +397,7 @@ export default function ViewProduct() {
           />
           {toastVisible && (
             <Toast
-              status={`O produto ${product.title} foi adicionado ao seu cesto de compras.`}
+              status="This product was successfully added to your shopping basket."
               color="#1DC167"
               isDesktop={isDesktop}
             />

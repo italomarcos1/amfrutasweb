@@ -20,6 +20,7 @@ export const Container = styled(Link)`
     font-family: ${({ active }) => (active ? 'SFProBold' : 'SFPro')};
     letter-spacing: 0px;
     color: #141319;
+    text-transform: capitalize;
 
     &:hover {
       color: ${({ active }) => (active ? '#141319' : '#3AB879')};

@@ -174,9 +174,9 @@ export default function Main({ setPage, isDesktop }) {
   return (
     <>
       <Title isDesktop={isDesktop}>
-        INICIA SESSÃO PARA UMA
+        LOGIN WITH A
         <br />
-        <b>EXPERIÊNCIA PERSONALIZADA</b>
+        <b>CUSTOM EXPERIENCE</b>
       </Title>
       <Button
         onClick={() => setPage('login')}
@@ -194,7 +194,7 @@ export default function Main({ setPage, isDesktop }) {
               }
         }
       >
-        Iniciar sessão com&nbsp;<b>E-mail</b>
+        Login with&nbsp;<b>e-mail</b>
       </Button>
       <FacebookLogin
         appId="314220626404166"
@@ -212,7 +212,7 @@ export default function Main({ setPage, isDesktop }) {
             shadowColor="#32549d"
             style={isDesktop ? { width: 441 } : { width: '85%' }}
           >
-            Iniciar sessão com&nbsp;<b>Facebook</b>
+            Login with&nbsp;<b>Facebook</b>
           </Button>
         )}
       />
@@ -232,7 +232,7 @@ export default function Main({ setPage, isDesktop }) {
             shadowColor="#9c9c9c"
             style={isDesktop ? { width: 441 } : { width: '85%' }}
           >
-            Iniciar sessão com&nbsp;<b>Apple</b>
+            Login with&nbsp;<b>Apple</b>
           </Button>
         )}
       />
@@ -241,7 +241,7 @@ export default function Main({ setPage, isDesktop }) {
       </SecureLogin>
       {toastVisible && (
         <Toast
-          status={`Não foi possível fazer login com ${loginPlatform}, realize o login com seu email e senha.`}
+          status={`We couldn't log you in with ${loginPlatform}, please log in with email and password.`}
           color="#f56060"
         />
       )}

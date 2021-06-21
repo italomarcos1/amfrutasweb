@@ -6,6 +6,8 @@ import { differenceInMinutes, parseISO } from 'date-fns';
 import { useQuery } from 'react-query';
 import OneSignal from 'react-onesignal';
 
+import { Translate } from 'react-auto-translate';
+
 import {
   Container,
   OptionsContainer,
@@ -358,10 +360,10 @@ export default function Home() {
           <Option href="#" rel="noreferrer" isDesktop={isDesktop}>
             <img src={envio} alt="Envio Gratuito" />
             <div>
-              <strong>Envio Gratuito</strong>
+              <strong>Free Shipping</strong>
               {!menuLoading && (
                 <small>
-                  Para compras acima de €&nbsp;{data.min_value_free_shipping}
+                  For any purchase over €&nbsp;{data.min_value_free_shipping}
                 </small>
               )}
             </div>
@@ -370,7 +372,7 @@ export default function Home() {
             <img src={cashback} alt="Cashback" />
             <div>
               <strong>Cashback</strong>
-              <small>Receba euros nas compras</small>
+              <small>Earn euros on purchases</small>
             </div>
           </Option>
           <Option
@@ -383,18 +385,18 @@ export default function Home() {
           >
             <img src={whatsappGreen} alt="WhatsApp" />
             <div>
-              <strong>Atendimento</strong>
-              <small>Dúvidas online no WhatsApp</small>
+              <strong>Customer Service</strong>
+              <small>Get in touch via WhatsApp</small>
             </div>
           </Option>
         </OptionsContainer>
         <SectionTitle isDesktop={isDesktop}>
-          <strong>Produtos recomendados para ti</strong>
-          <small>Uma seleção especial com a qualidade garantida</small>
+          <strong>Recommended Products for You</strong>
+          <small>A special selection with guaranteed quality</small>
         </SectionTitle>
         <ProductsContainer isDesktop={isDesktop} id="productsContainer">
           {isLoading ? (
-            <h1>Carregando...</h1>
+            <h1>Loading...</h1>
           ) : (
             recommendedProducts.map((p, index) => (
               <Product key={p.id} index={index} product={p} />
@@ -403,21 +405,21 @@ export default function Home() {
         </ProductsContainer>
         <SecurityContainer isDesktop={isDesktop}>
           <span>
-            Segurança:&nbsp;
+            Safety:&nbsp;
             <b>
-              Pague
+              Pay it
               {isDesktop ? ' ' : <br />}
-              somente na entrega!
+              only at arrival!
             </b>
           </span>
         </SecurityContainer>
         <SectionTitle isDesktop={isDesktop}>
-          <strong>Mais vendidos</strong>
-          <small>Conheça os produtos mais vendidos todos os dias</small>
+          <strong>Most Sold</strong>
+          <small>The Most Sold products every day</small>
         </SectionTitle>
         <ProductsContainer isDesktop={isDesktop}>
           {mostSoldIsLoading ? (
-            <h1>Carregando...</h1>
+            <h1>Loading...</h1>
           ) : (
             mostSold.map((p, index) => (
               <Product key={p.id} index={index} product={p} />
@@ -429,10 +431,10 @@ export default function Home() {
           isDesktop={isDesktop}
         >
           <span>
-            Encomende com
-            {isDesktop ? ' ' : <br />}o App AM Frutas:
+            Order by
+            {isDesktop ? ' ' : <br />}the AMFrutas app:
             {isDesktop ? ' ' : <br />}
-            <b>Notificação na Entrega</b>
+            <b>Notification at Delivery</b>
           </span>
           <StoreButtonContainer isDesktop={isDesktop}>
             <StoreButton
@@ -471,7 +473,7 @@ export default function Home() {
                 </p>
                 <p>{seller.email}</p>
                 <a href={seller.location} target="_blank" rel="noreferrer">
-                  <strong>Localização</strong>
+                  <strong>Location</strong>
                 </a>
               </Location>
             ))}
@@ -492,23 +494,27 @@ export default function Home() {
                 }}
               >
                 <img src={post.thumbs} alt="" />
-                <strong>{post.title}</strong>
-                <small>{post.description}</small>
+                <strong>
+                  <Translate>{post.title}</Translate>
+                </strong>
+                <small>
+                  <Translate>{post.description}</Translate>
+                </small>
               </BlogPost>
             ))}
         </BlogsCarousel>
 
-        <Promotions>Receba promoções exclusivas</Promotions>
+        <Promotions>Get exclusive promotions</Promotions>
         <PromotionsSubTitle>
-          Deixe o seu e-mail e receba promoções e{isDesktop ? ' ' : <br />}
-          descontos {isDesktop && <br />}
-          exclusivos.
+          Leave your e-mail to get promotions and{isDesktop ? ' ' : <br />}
+          exclusives {isDesktop && <br />}
+          discounts.
         </PromotionsSubTitle>
         <SectionForm isDesktop={isDesktop}>
           <Input
             name="name"
             error={invalidFields[0]}
-            placeholder="Nome"
+            placeholder="Name"
             inputStyle={
               isDesktop
                 ? { width: 221, marginLeft: 0 }
@@ -518,7 +524,7 @@ export default function Home() {
           <Input
             name="last_name"
             error={invalidFields[1]}
-            placeholder="Apelido"
+            placeholder="Last name"
             inputStyle={
               isDesktop
                 ? { width: 221 }
@@ -528,7 +534,7 @@ export default function Home() {
           <InputMask
             name="birthday"
             error={invalidFields[2] || birthDateError}
-            placeholder="Data de Nascimento"
+            placeholder="Birthdate"
             value={birthday}
             onChange={({ target: { value } }) => setBirthDate(value)}
             inputStyle={isDesktop ? { width: 221 } : { width: '100%' }}
@@ -582,7 +588,7 @@ export default function Home() {
                     }
               }
             >
-              <strong>Enviar</strong>
+              <strong>Send</strong>
             </SendButton>
           </div>
         </SectionForm>
@@ -596,7 +602,7 @@ export default function Home() {
       )}
       {toastVisible && (
         <Toast
-          status="Bem-vindo ao AM Frutas."
+          status="Welcome to AM Frutas."
           color="#1DC167"
           isDesktop={isDesktop}
         />

@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { Translate } from 'react-auto-translate';
+
 import { Container, Content } from './styles';
 
 import chevron from '~/assets/chevron-right.svg';
@@ -18,8 +20,12 @@ export default function Info({
     <Container style={style}>
       <img src={icon} alt={alt} />
       <Content>
-        <strong style={titleStyle}>{title}</strong>
-        <small>{subTitle}</small>
+        <strong style={titleStyle}>
+          <Translate>{title}</Translate>
+        </strong>
+        <small>
+          <Translate>{subTitle}</Translate>
+        </small>
       </Content>
       {noButton && (
         <button type="button">

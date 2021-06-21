@@ -93,8 +93,8 @@ export default function Products({ children }) {
           {isDesktop && (
             <Menu>
               <MenuHeader>
-                <strong>Categorias</strong>
-                <small>Garantia de produtos frescos</small>
+                <strong>Categories</strong>
+                <small>Guarantee of fresh products</small>
               </MenuHeader>
               {categories.map(category => (
                 <MenuItem
@@ -117,8 +117,8 @@ export default function Products({ children }) {
       {isDesktop && currentRoute === 'produto' && (
         <PromotionsContainer>
           <SectionTitle>
-            <strong>Promoções da Semana</strong>
-            <small>Todas as semanas com promoções especiais</small>
+            <strong>Promotions of this week</strong>
+            <small>Special promotions every week</small>
           </SectionTitle>
           <ProductsContainer>
             {promotions.map((p, index) => (

@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { FacebookShareButton, WhatsappShareButton } from 'react-share';
 
+import { Translate } from 'react-auto-translate';
+
 import {
   FullContainer,
   Container,
@@ -193,20 +195,22 @@ export default function ViewProduct() {
   return (
     <FullContainer>
       {loading ? (
-        <h1>Carregando...</h1>
+        <h1>Loading...</h1>
       ) : (
         <>
           <Container>
             <Content>
               <span style={{ maxWidth: 280 }}>
-                <Title>{product.title}</Title>
+                <Title>
+                  <Translate>{product.title}</Translate>
+                </Title>
               </span>
               <ProductInfo>
                 <img src={banner} alt="" />
                 <PriceAndInfoContainer>
                   <PriceContainer>
                     {product.has_promotion ? (
-                      <small>de €&nbsp;{product.price} por</small>
+                      <small>from €&nbsp;{product.price} by</small>
                     ) : (
                       <small>&nbsp;</small>
                     )}
@@ -219,7 +223,7 @@ export default function ViewProduct() {
                     </strong>
                     {product.has_promotion ? (
                       <small style={{ color: '#FF2121' }}>
-                        Economize €&nbsp;
+                        Save €&nbsp;
                         {(
                           Math.round(
                             (product.price - product.price_promotional) * 100
@@ -268,7 +272,7 @@ export default function ViewProduct() {
                   </TotalContainer>
                   {product.has_promotion ? (
                     <small style={{ color: '#FF2121', marginTop: 5 }}>
-                      Economize €&nbsp;
+                      Save €&nbsp;
                       {formatPrice(
                         qty * (product.price - product.price_promotional)
                       )}
@@ -293,7 +297,7 @@ export default function ViewProduct() {
                       backgroundColor: '#d6d6d6 ',
                     }}
                   >
-                    Envio
+                    Shipping
                   </ShippingButton>
                   <ShippingButton
                     style={{
@@ -306,7 +310,7 @@ export default function ViewProduct() {
                   </ShippingButton>
                 </ShippingContainer>
                 <FreeShipping>
-                  Envio gratuito para compras acima de&nbsp;
+                  Free shipping for purchases above&nbsp;
                   <b>€&nbsp;{minValueFreeShipping}</b>
                 </FreeShipping>
               </ShippingButtonContainer>
@@ -319,7 +323,7 @@ export default function ViewProduct() {
                 <FlexStartContainer style={{ height: 72 }}>
                   <FlexStartContainer>
                     <img src={barcode} alt="Barcode" />
-                    <FlexStartText>Código: 837922</FlexStartText>
+                    <FlexStartText>Code: 837922</FlexStartText>
                   </FlexStartContainer>
                 </FlexStartContainer>
                 <FlexStartContainer style={{ marginTop: 22 }}>
@@ -334,13 +338,13 @@ export default function ViewProduct() {
                     <img src={favorite ? heartOn : heartOff} alt="Favorite" />
                   </FavoriteButton>
                   <FlexStartText style={{ color: '#FD8B2A' }}>
-                    Colocar em seus Favoritos
+                    Add to Favorites
                   </FlexStartText>
                 </FlexStartContainer>
               </ShippingButtonContainer>
 
               <ShareThisProduct>
-                <strong>Compartilhe esse produto:</strong>
+                <strong>Share this product:</strong>
                 <div
                   style={{
                     display: 'flex',
@@ -354,7 +358,7 @@ export default function ViewProduct() {
                       `${message} https://${window.location.hostname}${pathname}`
                     )}`}
                     style={{ ...buttonStyle, backgroundColor: '#3ab879' }}
-                    title="Veja esse conteúdo no AMFrutas"
+                    title="Check this content at AMFrutas"
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -364,7 +368,7 @@ export default function ViewProduct() {
                   <FacebookShareButton
                     url={`https://${window.location.hostname}${pathname}`}
                     quote={`AMFrutas | ${quote}`}
-                    hashtag="#VemProAMFrutas"
+                    hashtag="#JoinAMFrutas"
                     resetButtonStyle
                     style={buttonStyle}
                   >
@@ -381,7 +385,7 @@ export default function ViewProduct() {
                 onClick={handleAddToCart}
                 style={{ width: 525, marginTop: 80 }}
               >
-                <b>Adicionar ao Cesto</b>
+                <b>Add to Basket</b>
               </Button>
             </Details>
           </Container>
@@ -391,12 +395,12 @@ export default function ViewProduct() {
             }}
           />
           <SectionTitle>
-            <strong>Promoções da Semana</strong>
-            <small>Todas as semanas com promoções especiais</small>
+            <strong>This Week Promotions</strong>
+            <small>Special Promotions every week</small>
           </SectionTitle>
           <ProductsContainer>
             {loading ? (
-              <h1>Carregando...</h1>
+              <h1>Loading...</h1>
             ) : (
               recommendedProducts.map((p, index) => (
                 <Product key={p.id} index={index} product={p} />
@@ -405,7 +409,7 @@ export default function ViewProduct() {
           </ProductsContainer>
           {toastVisible && (
             <Toast
-              status={`O produto ${product.title} foi adicionado ao seu cesto de compras.`}
+              status="This product was successfully added to your shopping basket."
               color="#1DC167"
             />
           )}

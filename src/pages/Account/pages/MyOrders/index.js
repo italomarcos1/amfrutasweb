@@ -56,7 +56,7 @@ export default function MyOrders() {
         {loading ? (
           <LoadingContainer isDesktop={isDesktop}>
             <FaSpinner color="#666" size={isDesktop ? 42 : 38} />
-            <strong>Carregando suas encomendas, aguarde...</strong>
+            <strong>Loading your orders...</strong>
           </LoadingContainer>
         ) : transactions.length !== 0 ? (
           transactions.map((order, index) =>
@@ -77,7 +77,7 @@ export default function MyOrders() {
             )
           )
         ) : (
-          <EmptyCartContainer message="Você não efetuou nenhuma compra ainda" />
+          <EmptyCartContainer message="You hadn't made any purchases yet." />
         )}
       </Container>
       <div style={{ width: 840, height: 820 }} />

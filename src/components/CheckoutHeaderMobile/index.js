@@ -42,14 +42,14 @@ export default function CheckoutHeader({ active }) {
       </Header>
       <SubHeader>
         <OptionContainer onClick={() => history.push('/cesto')}>
-          <OptionTitle>Cesto</OptionTitle>
+          <OptionTitle>Basket</OptionTitle>
           <OptionNumber active>1</OptionNumber>
         </OptionContainer>
         <OptionContainer
           disabled={active === 1 || active === 3}
           onClick={() => history.push('/entrega')}
         >
-          <OptionTitle>Entrega</OptionTitle>
+          <OptionTitle>Delivery</OptionTitle>
           <OptionNumber
             disabled={active === 3 || cart.length === 0}
             active={active === 2 || active === 3}
@@ -61,7 +61,7 @@ export default function CheckoutHeader({ active }) {
           disabled={shouldNotAccessConfirmation}
           onClick={() => history.push('/confirmacao')}
         >
-          <OptionTitle>Confirmação</OptionTitle>
+          <OptionTitle>Confirmation</OptionTitle>
           <OptionNumber active={active === 3}>3</OptionNumber>
         </OptionContainer>
         <Line />

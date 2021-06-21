@@ -5,8 +5,8 @@ import { Container } from './styles';
 export default function AppleLoginSuccessful(props) {
   return (
     <Container>
-      <h1>Sucesso!</h1>
-      <small>Redirecionando...</small>
+      <h1>Success!</h1>
+      <small>Redirecting...</small>
     </Container>
   );
 }

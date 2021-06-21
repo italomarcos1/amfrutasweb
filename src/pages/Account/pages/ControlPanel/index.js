@@ -35,7 +35,7 @@ export default function ControlPanel() {
                 : '0.00'
               : '0.00'
           }`}
-          subTitle="Cashback - Crédito disponível"
+          subTitle="Cashback - Available Credit"
           titleStyle={{ color: '#0CB68B' }}
           imageStyle={isDesktop ? {} : { width: '20%', marginTop: 5 }}
           noButton={false}
@@ -43,11 +43,11 @@ export default function ControlPanel() {
         <Info
           icon={orders}
           alt="Encomendas"
-          title="As minhas encomendas"
+          title="My Orders"
           titleStyle={isDesktop ? {} : { fontSize: 15, width: '100% ' }}
           imageStyle={isDesktop ? {} : { width: '15%', marginTop: 15 }}
           style={isDesktop ? {} : { marginTop: 20 }}
-          subTitle="Você não tem pedidos em andamento"
+          subTitle="There's no ongoing orders"
           onClick={() => history.push('/encomendas')}
         />
       </InfoContainer>
@@ -60,22 +60,22 @@ export default function ControlPanel() {
           <Info
             icon={delivery}
             alt="Entrega"
-            title="Minhas entregas periódicas"
+            title="My Periodic Deliveries"
             contentStyle={isDesktop ? {} : { paddingTop: 0 }}
             style={isDesktop ? {} : { paddingTop: 10 }}
             titleStyle={isDesktop ? { fontSize: 20.5 } : { fontSize: 15 }}
             subTitleStyle={isDesktop ? {} : { fontSize: 12 }}
             imageStyle={isDesktop ? {} : { width: '20%', marginTop: 10 }}
-            subTitle="Você não tem pedidos em andamento"
+            subTitle="There's no ongoing orders"
             onClick={() => {}}
           />
           <Info
             icon={favorites}
             alt="Favoritos"
-            title="Produtos favoritos"
+            title="Favorite Products"
             imageStyle={isDesktop ? {} : { width: '19%' }}
             titleStyle={isDesktop ? {} : { fontSize: 18 }}
-            subTitle="Adicione ao cesto de compras"
+            subTitle="Add to your shopping basket"
             onClick={() => history.push('/favoritos')}
           />
         </DeliveryAndCardsContainer>

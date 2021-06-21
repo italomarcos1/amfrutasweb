@@ -34,15 +34,15 @@ export default function DeliveryModal({ closeModal }) {
               <PeriodDelivery>
                 <img src={delivery} alt="" />
                 <span>
-                  <p>Entrega</p>
+                  <p>Periodic</p>
                   <p style={{ fontFamily: 'SFProBold', color: '#555555' }}>
-                    periódica
+                    Delivery
                   </p>
                 </span>
               </PeriodDelivery>
 
               <Title>
-                Compre uma vez, <br /> <b>receba periodicamente em tua casa</b>
+                But once, <br /> <b>receive it recurrently at home.</b>
               </Title>
               <ItemsContainer
                 style={{
@@ -54,35 +54,31 @@ export default function DeliveryModal({ closeModal }) {
                 <Item>
                   <img src={check} alt="check icon" />
                   <span>
-                    <strong>
-                      O melhor preço e os descontos mais vantajosos
-                    </strong>
-                    <p>Sempre Garantido!</p>
+                    <strong>The best prices and the greatest discounts.</strong>
+                    <p>Take it for granted!</p>
                   </span>
                 </Item>
                 <Item>
                   <img src={check} alt="check icon" />
                   <span>
-                    <strong>Escolha a frequência de envio e os produtos</strong>
+                    <strong>Choose shipping frequency and products</strong>
+                    <p>Easily modify via the new control panel. </p>
+                  </span>
+                </Item>
+                <Item>
+                  <img src={check} alt="check icon" />
+                  <span>
+                    <strong>Cancel, pause or modify at any time.</strong>
+                    <p>No contracts.</p>
+                  </span>
+                </Item>
+                <Item>
+                  <img src={check} alt="check icon" />
+                  <span>
+                    <strong>Forget the queues and loading packages</strong>
                     <p>
-                      Modifique facilmente através do novo painel de controlo.
-                    </p>
-                  </span>
-                </Item>
-                <Item>
-                  <img src={check} alt="check icon" />
-                  <span>
-                    <strong>Cancelar, pausar ou modificar quando quiser</strong>
-                    <p>Sem contratos ou permanência.</p>
-                  </span>
-                </Item>
-                <Item>
-                  <img src={check} alt="check icon" />
-                  <span>
-                    <strong>Esqueça a fila e o carregamento de pacotes</strong>
-                    <p>
-                      Nós cuidamos de tudo para que você não precise se
-                      preocupar com nada.
+                      We take care of everything so you don&apos;t worry about
+                      nothing.
                     </p>
                   </span>
                 </Item>

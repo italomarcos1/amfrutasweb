@@ -96,5 +96,6 @@ export const Category = styled(Link)`
     letter-spacing: 0px;
     color: #000;
     margin-top: 15px;
+    text-transform: capitalize;
   }
 `;

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Translate } from 'react-auto-translate';
 import {
   Container,
   ContainerButton,
@@ -52,7 +53,9 @@ export default function MenuItem({
           }}
           active={pathname === `/${url}` || active}
         >
-          <strong>{name}</strong>
+          <strong>
+            <Translate>{name}</Translate>
+          </strong>
         </Container>
       ) : (
         <ContainerButton
@@ -65,7 +68,9 @@ export default function MenuItem({
           }}
           active={categoryActive === name}
         >
-          <strong>{name}</strong>
+          <strong>
+            <Translate>{name}</Translate>
+          </strong>
           {all_categories.length !== 0 && (
             <img src={arrowGreen} alt="Abrir menu" />
           )}
@@ -83,7 +88,9 @@ export default function MenuItem({
                     state: { id: cc.id },
                   }}
                 >
-                  <strong>{cc.name}</strong>
+                  <strong>
+                    <Translate>{cc.name}</Translate>
+                  </strong>
                   {cc.all_categories.length !== 0 && (
                     <img src={arrowGreen} alt="Abrir menu" />
                   )}
@@ -102,7 +109,9 @@ export default function MenuItem({
                           }}
                           style={{ paddingLeft: 18.5 }}
                         >
-                          <strong>{subc.name}</strong>
+                          <strong>
+                            <Translate>{subc.name}</Translate>
+                          </strong>
                         </ChildrenCategory>
                       ))}
                     </ChildrenCategories>

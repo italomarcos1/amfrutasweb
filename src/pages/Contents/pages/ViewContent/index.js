@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import { FacebookShareButton, WhatsappShareButton } from 'react-share';
 import { useMediaQuery } from 'react-responsive';
 
+import { Translate } from 'react-auto-translate';
+
 import {
   FullContainer,
   Container,
@@ -66,7 +68,7 @@ export default function ViewContent() {
       },
     } = response;
     setQuote(page_title);
-    setMessage(`Veja esse conteúdo no AMFrutas: ${page_title}`);
+    setMessage(`See this content at AMFrutas: ${page_title}`);
   }, [pathname]);
 
   const loadContent = useCallback(async () => {
@@ -127,7 +129,7 @@ export default function ViewContent() {
       <FullContainer>
         <Container isDesktop={isDesktop}>
           {loading ? (
-            <h1>Carregando...</h1>
+            <h1>Loading...</h1>
           ) : (
             <>
               <InfoContainer isDesktop={isDesktop}>
@@ -138,9 +140,11 @@ export default function ViewContent() {
                     style={isDesktop ? {} : { width: '100%', height: 'auto' }}
                   />
                   <TitleContainer isDesktop={isDesktop}>
-                    <Title isDesktop={isDesktop}>{product.title}</Title>
+                    <Title isDesktop={isDesktop}>
+                      <Translate>{product.title}</Translate>
+                    </Title>
                     <ShareThisProduct>
-                      <strong>Compartilhe esse produto:</strong>
+                      <strong>Share this product:</strong>
                       <div
                         style={{
                           display: 'flex',
@@ -153,7 +157,7 @@ export default function ViewContent() {
                             `${message} https://${window.location.hostname}${pathname}`
                           )}`}
                           style={{ ...buttonStyle, backgroundColor: '#3ab879' }}
-                          title="Veja esse conteúdo no AMFrutas: "
+                          title="See this content at AMFrutas: "
                           target="_blank"
                           rel="noreferrer"
                         >
@@ -163,7 +167,7 @@ export default function ViewContent() {
                         <FacebookShareButton
                           url={`https://${window.location.hostname}${pathname}`}
                           quote={`AMFrutas | ${quote}`}
-                          hashtag="#VemProAMFrutas"
+                          hashtag="#JoinAMFrutas"
                           resetButtonStyle
                           style={buttonStyle}
                         >

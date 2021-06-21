@@ -15,7 +15,7 @@ export default class BlogsCarousel extends Component {
             <div>
               <strong>Blog</strong>
               <small>
-                Dicas de receitas com {!isDesktop && <br />}frutas e verduras
+                Recipe tips with {!isDesktop && <br />}fruits and vegetables
               </small>
             </div>
           </SectionTitle>

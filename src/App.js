@@ -5,6 +5,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { persistWithLocalStorage } from 'react-query/persist-localstorage-experimental';
+import { Translator } from 'react-auto-translate';
 
 import Routes from '~/routes';
 import Helmet from '~/components/Helmet';
@@ -26,10 +27,16 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
         <PersistGate persistor={persistor}>
-          <BrowserRouter>
-            <Helmet />
-            <Routes />
-          </BrowserRouter>
+          <Translator
+            from="pt"
+            to="en"
+            googleApiKey="AIzaSyDy695bfPR_WVGe1GITrxfsSKmrflMUFc4"
+          >
+            <BrowserRouter>
+              <Helmet />
+              <Routes />
+            </BrowserRouter>
+          </Translator>
         </PersistGate>
       </Provider>
       <ReactQueryDevtools initialIsOpen={false} />

@@ -36,7 +36,7 @@ export default function MyFavorites() {
           </ItemsList>
         ) : (
           <EmptyCartContainer
-            message="Você não favoritou nenhum produto ainda."
+            message="You don't have any favorite products."
             isDesktop={isDesktop}
           />
         )}

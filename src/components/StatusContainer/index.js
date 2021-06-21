@@ -105,7 +105,7 @@ export default function StatusContainer({ status, id, disabled }) {
               status === 'Cancelado' ? { marginLeft: -5 } : { marginLeft: 0 }
             }
           >
-            {status === 'Cancelado' ? 'Cancelado' : 'Novo'}
+            {status === 'Cancelado' ? 'Cancelled' : 'New'}
           </BadgeTitle>
           <BadgeTitle
             active={
@@ -118,21 +118,21 @@ export default function StatusContainer({ status, id, disabled }) {
             }
             width={50}
           >
-            Validado
+            Validated
           </BadgeTitle>
           <BadgeTitle
             active={status === 'Em curso' || status === 'Completo'}
             width={126}
             style={{ marginLeft: 29 }}
           >
-            Em&nbsp;curso
+            Ongoing
           </BadgeTitle>
           <BadgeTitle
             active={status === 'Completo'}
             width={48}
             style={{ marginLeft: 14 }}
           >
-            Completo
+            Completed
           </BadgeTitle>
         </BadgeTitleContainer>
       </Container>

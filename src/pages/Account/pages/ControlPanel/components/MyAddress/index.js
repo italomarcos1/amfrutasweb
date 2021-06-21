@@ -19,8 +19,8 @@ export default function MyAddress() {
 
   const formatAddressMessage = useCallback(() => {
     if (addresses.length > 1)
-      setAddressMessage(`${addresses.length} endereços guardados`);
-    else setAddressMessage('Um endereço guardado');
+      setAddressMessage(`${addresses.length} stored addresses.`);
+    else setAddressMessage('One address stored.');
   }, [addresses]);
 
   useEffect(() => {
@@ -36,11 +36,9 @@ export default function MyAddress() {
           style={isDesktop ? {} : { width: '15%', marginTop: 10 }}
         />
         <Content isDesktop={isDesktop}>
-          <strong>Meu endereço</strong>
+          <strong>My Address</strong>
           <small>
-            {addresses.length !== 0
-              ? addressMessage
-              : 'Nenhum endereço guardado'}
+            {addresses.length !== 0 ? addressMessage : 'No addresses found'}
           </small>
         </Content>
         <button type="button">
@@ -51,7 +49,7 @@ export default function MyAddress() {
       <AddressInfo isDesktop={isDesktop}>
         {addressInfo[0] !== '' ? (
           <>
-            <small>ENDEREÇO PRINCIPAL</small>
+            <small>MAIN ADDRESS</small>
             <strong>
               <b>{addressInfo[0].full_name}</b>
             </strong>
@@ -72,8 +70,8 @@ export default function MyAddress() {
             }}
           >
             <h3>
-              Clique aqui para cadastrar <br />
-              um endereço de entrega
+              Click here to register <br />
+              your shipping address
             </h3>
           </div>
         )}

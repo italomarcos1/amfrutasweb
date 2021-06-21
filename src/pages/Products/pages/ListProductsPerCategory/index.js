@@ -206,13 +206,12 @@ export default function ListProductsPerCategory() {
       {loading || isLoading ? (
         <LoadingContainer>
           <FaSpinner color="#666" size={42} />
-          <strong>Carregando os produtos, aguarde...</strong>
+          <strong>Loading products...</strong>
         </LoadingContainer>
       ) : noProductsFound ? (
         <LoadingContainer>
           <strong>
-            Não encontramos nenhum produto com o nome informado. <br /> Tente
-            novamente.
+            We couldn&apos;t find any product with this name <br /> Try again.
           </strong>
         </LoadingContainer>
       ) : (

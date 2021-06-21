@@ -4,6 +4,8 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useScrollYPosition } from 'react-use-scroll-position';
 import { useMediaQuery } from 'react-responsive';
 
+import { Translate } from 'react-auto-translate';
+
 import { useQuery } from 'react-query';
 import {
   Header,
@@ -176,12 +178,12 @@ export default function MainMenu({ route }) {
                   },
                 }}
               >
-                {name}
+                <Translate>{name}</Translate>
               </MenuItem>
             ))}
         </ul>
         <Separator />
-        <Title>Produtos</Title>
+        <Title>Products</Title>
         <ul>
           {!isLoading &&
             data.categories.map(category => (
@@ -195,7 +197,7 @@ export default function MainMenu({ route }) {
             ))}
         </ul>
         <Separator />
-        <Title>Atendimento e Social</Title>
+        <Title>Customer Service and Social</Title>
         <ul>
           {!isLoading &&
             data.footerData.map(({ id, url, name }) => (
@@ -208,7 +210,7 @@ export default function MainMenu({ route }) {
                   },
                 }}
               >
-                {name}
+                <Translate>{name}</Translate>
               </MenuItem>
             ))}
           {!isLoading && (

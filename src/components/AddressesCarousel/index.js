@@ -18,8 +18,8 @@ export default class AddressesCarousel extends Component {
         <SectionTitleMenu isDesktop={isDesktop}>
           <SectionTitle style={{ margin: 0, width: 600 }}>
             <div>
-              <strong>Endereços</strong>
-              <small>Confira e edite seus endereços</small>
+              <strong>Addresses</strong>
+              <small>Check out and update your addresses</small>
             </div>
           </SectionTitle>
           <MenuButtons isDesktop={isDesktop}>

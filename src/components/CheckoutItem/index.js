@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 // import { Container } from './styles';
+import { Translate } from 'react-auto-translate';
 
 import {
   Container,
@@ -34,7 +35,9 @@ export default function Item({ item, index, isDesktop }) {
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <ItemPicture src={thumbs} />
         <ProductInfo>
-          <Title isDesktop={isDesktop}>{title}</Title>
+          <Title isDesktop={isDesktop}>
+            <Translate>{title}</Translate>
+          </Title>
           <PriceAndAmount hasCback={!!cback}>
             {!!cback ? (
               cback !== '0.00' ? (
@@ -45,7 +48,7 @@ export default function Item({ item, index, isDesktop }) {
             ) : (
               <></>
             )}
-            <small>{qty} unidades</small>
+            <small>{qty} units</small>
             <strong>€&nbsp;{has_promotion ? price_promotional : price}</strong>
           </PriceAndAmount>
         </ProductInfo>

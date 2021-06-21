@@ -33,10 +33,10 @@ export default function MyAccount() {
             style={isDesktop ? {} : { width: '100%' }}
           >
             <strong style={isDesktop ? {} : { fontSize: 20 }}>
-              Minha conta
+              My Account
             </strong>
             <small style={isDesktop ? {} : { width: '100%', fontSize: 13 }}>
-              Você é um cliente desde 12/10/2020
+              Customer since 12/10/2020
             </small>
           </Content>
         </IconAndDataContainer>
@@ -47,11 +47,11 @@ export default function MyAccount() {
       </InfoContainer>
       <UserInfoContainer isDesktop={isDesktop}>
         <UserInfo style={isDesktop ? {} : { marginLeft: 20, width: '100%' }}>
-          <strong>Nome</strong>
+          <strong>Name</strong>
           <small>{name}</small>
         </UserInfo>
         <UserInfo style={isDesktop ? {} : { marginLeft: 20, width: '100%' }}>
-          <strong>Apelido</strong>
+          <strong>Last name</strong>
           <small>{last_name}</small>
         </UserInfo>
         <UserInfo style={isDesktop ? {} : { marginLeft: 20, width: '100%' }}>
@@ -59,7 +59,7 @@ export default function MyAccount() {
           <small>{email}</small>
         </UserInfo>
         <UserInfo style={isDesktop ? {} : { marginLeft: 20, width: '100%' }}>
-          <strong>Contra-senha</strong>
+          <strong>Password</strong>
           <small>******</small>
         </UserInfo>
       </UserInfoContainer>

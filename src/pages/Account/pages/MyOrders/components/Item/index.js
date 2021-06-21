@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 
 import { FaSpinner } from 'react-icons/fa';
 
+import { Translate } from 'react-auto-translate';
+
 import {
   addToCartRequest,
   removeFromFavoritesRequest,
@@ -70,12 +72,12 @@ export default function Item({ item, index, isDesktop }) {
         products: finalProducts,
       });
 
-      setToastStatus('O produto foi adicionado à compra periódica.');
+      setToastStatus('Product added to periodic delivery.');
       setToastColor('#1dc167');
       setToastVisible(true);
     } catch (err) {
       console.log(err.response);
-      setToastStatus('Erro ao adicionar o produto à compra periódica.');
+      setToastStatus('Error adding your product to periodic delivery');
       setToastColor('#f56060');
 
       setToastVisible(true);
@@ -105,13 +107,15 @@ export default function Item({ item, index, isDesktop }) {
               alignItems: 'flex-start',
             }}
           >
-            <Title isDesktop={isDesktop}>{title}</Title>
+            <Title isDesktop={isDesktop}>
+              <Translate>{title}</Translate>
+            </Title>
             <DeleteItem onClick={handleFavorite}>
               <img src={close} alt="Delete Item" />
             </DeleteItem>
           </div>
           <PriceAndAmount isDesktop={isDesktop}>
-            {qty !== -1 ? <small>{qty} unidades</small> : <small>&nbsp;</small>}
+            {qty !== -1 ? <small>{qty} units</small> : <small>&nbsp;</small>}
             <strong>€&nbsp;{has_promotion ? price_promotional : price}</strong>
           </PriceAndAmount>
         </ProductInfo>
@@ -129,7 +133,7 @@ export default function Item({ item, index, isDesktop }) {
             <>
               <img src={delivery} alt="" />
               <small style={isDesktop ? {} : { fontSize: 10 }}>
-                Adicionar a entrega periódica
+                Add to periodic delivery
               </small>
             </>
           )}
@@ -140,7 +144,7 @@ export default function Item({ item, index, isDesktop }) {
           style={isDesktop ? { width: 132 } : { width: '37%', fontSize: 10 }}
         >
           <img src={orders} alt="" style={{ width: 15, height: 15 }} />
-          <small>Adicionar ao cesto</small>
+          <small>Add to your Basket</small>
         </Button>
       </Options>
       {toastVisible && (

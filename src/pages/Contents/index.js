@@ -224,13 +224,13 @@ export default function Contents() {
             {loading || isLoading ? (
               <LoadingContainer isDesktop={isDesktop}>
                 <FaSpinner color="#666" size={42} />
-                <strong>Carregando os conteúdos do blog, aguarde...</strong>
+                <strong>Loading blog contents...</strong>
               </LoadingContainer>
             ) : noContentsFound ? (
               <LoadingContainer isDesktop={isDesktop}>
                 <strong>
-                  Não encontramos nenhuma conteúdo com esse nome no blog. <br />{' '}
-                  Tente novamente.
+                  We couldn&apos;t find any content matching your search. <br />{' '}
+                  Try again.
                 </strong>
               </LoadingContainer>
             ) : (

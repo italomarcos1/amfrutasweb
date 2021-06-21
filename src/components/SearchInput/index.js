@@ -10,7 +10,7 @@ export default function SearchInput(props) {
 
   return (
     <Container isDesktop={isDesktop}>
-      <input type="text" placeholder="O que tu procuras?" {...props} />
+      <input type="text" placeholder="I'm looking for..." {...props} />
       <img src={search} alt="" />
     </Container>
   );

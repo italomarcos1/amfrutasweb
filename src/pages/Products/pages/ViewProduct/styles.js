@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { darken } from 'polished';
 
+import { Translate } from 'react-auto-translate';
+
 export const buttonStyle = {
   display: 'flex',
   alignItems: 'center',

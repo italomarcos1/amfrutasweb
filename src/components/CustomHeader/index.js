@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
+import { Translate } from 'react-auto-translate';
 
 import {
   Container,
@@ -26,7 +27,7 @@ export default function CustomHeader({
   inputValue,
   setInputValue,
 }) {
-  const [selectedOption, setSelectedOption] = useState('Mais Recentes');
+  const [selectedOption, setSelectedOption] = useState('Latest');
   const [menuIsOpen, setMenuIsOpen] = useState(false);
 
   const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
@@ -36,23 +37,23 @@ export default function CustomHeader({
       setSelectedOption(option);
       setMenuIsOpen(false);
       switch (option) {
-        case 'Mais Recentes': {
+        case 'Latest': {
           setField('latest');
           break;
         }
-        case 'Mais Vendidos': {
+        case 'Most Sold': {
           setField('most_selled');
           break;
         }
-        case 'Maior Preço': {
+        case 'Higher Price': {
           setField('price_desc');
           break;
         }
-        case 'Menor Preço': {
+        case 'Least Price': {
           setField('price_asc');
           break;
         }
-        case 'Ordem Alfabética': {
+        case 'Title': {
           setField('title');
           break;
         }
@@ -63,11 +64,11 @@ export default function CustomHeader({
   );
 
   const data = [
-    { id: 1, option: 'Mais Recentes' },
-    { id: 2, option: 'Mais Vendidos' },
-    { id: 3, option: 'Maior Preço' },
-    { id: 4, option: 'Menor Preço' },
-    { id: 5, option: 'Ordem Alfabética' },
+    { id: 1, option: 'Latest' },
+    { id: 2, option: 'Most Sold' },
+    { id: 3, option: 'Higher Price' },
+    { id: 4, option: 'Least Price' },
+    { id: 5, option: 'Title' },
   ];
 
   return (

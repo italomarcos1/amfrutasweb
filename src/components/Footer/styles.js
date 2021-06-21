@@ -48,6 +48,7 @@ export const Item = styled.div`
     line-height: 26px;
     letter-spacing: 0px;
     color: #000000;
+    text-transform: uppercase;
 
     a {
       color: #000000;

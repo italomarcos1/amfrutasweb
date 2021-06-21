@@ -50,7 +50,7 @@ export default function Address({
     <Container index={index} isDesktop={isDesktop}>
       <TitleContainer>
         <small>
-          <b>Endereço de envio</b>
+          <b>Shipping Address</b>
         </small>
         <button type="button" onClick={() => setVisible(!visible)}>
           <img src={options} alt="" />
@@ -76,7 +76,7 @@ export default function Address({
         >
           <img src={checked} alt="Item selecionado" />
         </button>
-        <strong style={{ width: '70%' }}>Endereço Principal</strong>
+        <strong style={{ width: '70%' }}>Main Address</strong>
       </StartStop>
       <Options visible={visible}>
         <button
@@ -90,7 +90,7 @@ export default function Address({
             setVisible(false);
           }}
         >
-          Editar
+          Edit
         </button>
         <button
           type="button"
@@ -104,7 +104,7 @@ export default function Address({
             setVisible(false);
           }}
         >
-          Deletar
+          Delete
         </button>
       </Options>
     </Container>

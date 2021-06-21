@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaSpinner } from 'react-icons/fa';
 
+import { Translate } from 'react-auto-translate';
+
 import {
   Container,
   OrderStatus,
@@ -150,7 +152,7 @@ export default function Order({ order, isOpen, setOrder }) {
       });
 
       setToastColor('#1DC167');
-      setToastStatus('Avaliação adicionada com sucesso.');
+      setToastStatus('Thanks for your review.');
 
       setReview('');
 
@@ -161,7 +163,7 @@ export default function Order({ order, isOpen, setOrder }) {
     } catch (err) {
       console.log(err);
       setToastVisible(true);
-      setToastStatus('Erro ao adicionar a avaliação.');
+      setToastStatus('Error adding your review.');
       setToastColor('#f56060');
 
       setSending(false);
@@ -212,13 +214,13 @@ export default function Order({ order, isOpen, setOrder }) {
 
       dispatch(pushToCart(prds));
 
-      setToastStatus('Os produtos foram adicionados ao carrinho.');
+      setToastStatus('Products added to basket.');
       setToastColor('#1dc167');
 
       setToastVisible(true);
     } catch (err) {
       console.log(err);
-      setToastStatus('Erro ao adicionar  produtos no carrinho.');
+      setToastStatus('Error addding products to cart.');
       setToastColor('#f56060');
       setToastVisible(true);
     } finally {
@@ -237,7 +239,7 @@ export default function Order({ order, isOpen, setOrder }) {
       setIsCancelling(true);
       await backend.post(`/clients/transactions/statuses/${id}`);
 
-      setToastStatus('Sua encomenda foi cancelada.');
+      setToastStatus('Your order was cancelled');
 
       setToastColor('#1dc167');
 
@@ -246,7 +248,7 @@ export default function Order({ order, isOpen, setOrder }) {
       setIsCancelling(false);
     } catch (err) {
       console.log(err);
-      setToastStatus('Erro ao cancelar a encomenda.');
+      setToastStatus('Error while cancelling order.');
       setToastColor('#f56060');
       setToastVisible(true);
     } finally {
@@ -278,42 +280,42 @@ export default function Order({ order, isOpen, setOrder }) {
           <Info>
             <h1>
               {currentStatus === 'Completo'
-                ? 'Completo'
+                ? 'Completed'
                 : currentStatus === 'Cancelado'
-                ? 'Cancelado'
-                : 'Novo'}
+                ? 'Cancelled'
+                : 'New'}
             </h1>
             <OrderInfoContainer>
               <OrderInfo>
-                <strong>Entrega programada para</strong>
+                <strong>Estimated time of arrival</strong>
                 <strong>
                   <b>
                     {!!scheduledShipping
-                      ? `${scheduledDate} entre ${startHour}h e ${endHour}h`
+                      ? `${scheduledDate} at ${startHour}h - ${endHour}h`
                       : '---'}
                   </b>
                 </strong>
               </OrderInfo>
               <OrderInfo>
-                <strong>Data do pedido</strong>
+                <strong>Order Date</strong>
                 <strong>
                   <b>{date}</b>
                 </strong>
               </OrderInfo>
               <OrderInfo>
-                <strong>Número do pedido</strong>
+                <strong>Order ID</strong>
                 <strong>
                   <b>{id}</b>
                 </strong>
               </OrderInfo>
               <OrderInfo>
-                <strong>Valor do pedido</strong>
+                <strong>Order Value</strong>
                 <strong>
                   <b>€&nbsp;{formatPrice(total)}</b>
                 </strong>
               </OrderInfo>
               <OrderInfo>
-                <strong>Avaliação do serviço</strong>
+                <strong>Review</strong>
                 <strong>
                   <b>{rate}</b>
                 </strong>
@@ -338,7 +340,7 @@ export default function Order({ order, isOpen, setOrder }) {
               {loading ? (
                 <LoadingContainer>
                   <FaSpinner color="#666" size={42} />
-                  <strong>Carregando os dados da encomenda, aguarde...</strong>
+                  <strong>Loading order info...</strong>
                 </LoadingContainer>
               ) : (
                 <>
@@ -353,7 +355,7 @@ export default function Order({ order, isOpen, setOrder }) {
                     {!!scheduledShipping && (
                       <ShippingInfo open={isOpen === id}>
                         <small>
-                          <b>Endereço de envio</b>
+                          <b>Shipping address</b>
                         </small>
                         <small>
                           {shippingAddress.destination_name}&nbsp;
@@ -379,24 +381,24 @@ export default function Order({ order, isOpen, setOrder }) {
                       style={{ marginRight: 25, marginLeft: 15 }}
                     >
                       <small>
-                        <b>Forma de pagamento</b>
+                        <b>Payment method</b>
                       </small>
-                      <small>Dinheiro na entrega</small>
+                      <small>Money at arrival</small>
                       <small>
-                        <b>Método da Compra</b>
+                        <b>Purchase Method</b>
                       </small>
                       <small>{transaction.origin}</small>
                     </ShippingInfo>
                     <ShippingInfo open={isOpen === id}>
                       <small>
-                        <b>Resumo do pedido</b>
+                        <b>Order Details</b>
                       </small>
-                      <small>Produtos</small>
-                      <small>Economizou</small>
-                      <small>Crédito utilizado</small>
-                      <small>Cupom de desconto</small>
-                      <small>Porte</small>
-                      <small>Crédito (CashBack)</small>
+                      <small>Products</small>
+                      <small>Saved</small>
+                      <small>Applied Cashback</small>
+                      <small>Voucher</small>
+                      <small>Shiping</small>
+                      <small>Credit (CashBack)</small>
                       <small style={{ fontFamily: 'SFProBold' }}>Total</small>
                     </ShippingInfo>
                     <ShippingInfo open={isOpen === id}>
@@ -421,7 +423,7 @@ export default function Order({ order, isOpen, setOrder }) {
                         {!!scheduledShipping ? (
                           `€ ${transaction.shipping}.00`
                         ) : (
-                          <b style={{ color: '#0CB68B' }}>Grátis</b>
+                          <b style={{ color: '#0CB68B' }}>Free</b>
                         )}
                       </small>
                       <small
@@ -453,7 +455,7 @@ export default function Order({ order, isOpen, setOrder }) {
                 {reordering || cancelling ? (
                   <FaSpinner color="#fff" size={20} />
                 ) : (
-                  'Encomendar Novamente'
+                  'Redo Order'
                 )}
               </Button>
               {currentStatus !== 'Cancelado' && (
@@ -468,7 +470,7 @@ export default function Order({ order, isOpen, setOrder }) {
                   {reordering || cancelling ? (
                     <FaSpinner color="#fff" size={20} />
                   ) : (
-                    'Cancelar Encomenda'
+                    'Cancel Order'
                   )}
                 </Button>
               )}
@@ -497,7 +499,7 @@ export default function Order({ order, isOpen, setOrder }) {
                   : { display: 'none' }
               }
             >
-              <RatingTitle>Avaliação do Serviço</RatingTitle>
+              <RatingTitle>Review</RatingTitle>
               <StarsContainer>
                 <button onClick={() => setRate(1)} type="button">
                   <img src={rate >= 1 ? starOn : starOff} alt="" />
@@ -519,18 +521,18 @@ export default function Order({ order, isOpen, setOrder }) {
             <ReviewContainer isOpen={isOpen === id}>
               <Input
                 name="comment"
-                title="Deixe seu comentário"
+                title="Comments"
                 customWidth={660}
                 onChange={e => setReview(e.target.value)}
                 value={review}
-                placeholder="Digite seu comentário aqui"
+                placeholder="Leave a comment..."
               />
               <button
                 type="button"
                 disabled={!review || sending}
                 onClick={handleSubmitRating}
               >
-                Enviar
+                Send
               </button>
             </ReviewContainer>
             {toastVisible && (

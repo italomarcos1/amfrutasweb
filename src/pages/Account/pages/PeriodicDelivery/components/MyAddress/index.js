@@ -11,8 +11,8 @@ export default function MyAddress() {
       <InfoContainer>
         <img src={location} alt="Seus endereços" />
         <Content>
-          <strong>Meu endereço</strong>
-          <small>1 endereço guardado</small>
+          <strong>My Address</strong>
+          <small>1 address saved.</small>
         </Content>
         <button type="button">
           <img src={chevron} alt="Abrir menu" />
@@ -20,7 +20,7 @@ export default function MyAddress() {
       </InfoContainer>
 
       <AddressInfo>
-        <small>ENDEREÇO PRINCIPAL</small>
+        <small>MAIN ADDRESS</small>
         <strong>
           <b>Isabella Oliveira</b>
         </strong>

@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { Translate } from 'react-auto-translate';
+
 import { FaSpinner } from 'react-icons/fa';
 
 import {
@@ -104,7 +106,7 @@ export default function Order({ order, isOpen, setOrder, index: orderIndex }) {
 
       setLoading(false);
     } catch {
-      alert('Erro no carregamento da transação, confira sua conexão.');
+      alert('Error loading your transaction info.');
       setLoading(false);
     }
   }, [id, isOpen]);
@@ -157,13 +159,13 @@ export default function Order({ order, isOpen, setOrder, index: orderIndex }) {
 
       dispatch(pushToCart(prds));
 
-      setToastStatus('Os produtos foram adicionados ao carrinho.');
+      setToastStatus('Your products were added to your basket.');
       setToastColor('#1dc167');
 
       setToastVisible(true);
     } catch (err) {
       console.log(err);
-      setToastStatus('Erro ao adicionar  produtos no carrinho.');
+      setToastStatus('There was an error adding your products.');
       setToastColor('#f56060');
       setToastVisible(true);
     } finally {
@@ -190,19 +192,19 @@ export default function Order({ order, isOpen, setOrder, index: orderIndex }) {
           <Info>
             <OrderInfoContainer>
               <OrderInfo>
-                <strong>Número do pedido</strong>
+                <strong>Order ID</strong>
                 <strong>
                   <b>{id}</b>
                 </strong>
               </OrderInfo>
               <OrderInfo>
-                <strong>Valor do pedido</strong>
+                <strong>Order Value</strong>
                 <strong>
                   <b>€ {total}</b>
                 </strong>
               </OrderInfo>
               <OrderInfo>
-                <strong>Data do pedido</strong>
+                <strong>Order Date</strong>
                 <strong>
                   <b>{date}</b>
                 </strong>
@@ -210,18 +212,18 @@ export default function Order({ order, isOpen, setOrder, index: orderIndex }) {
             </OrderInfoContainer>
             <OrderInfoContainer style={{ marginTop: 20, paddingRight: 0 }}>
               <OrderInfo style={{ width: 170 }}>
-                <strong>Entrega programada para</strong>
+                <strong>Estimated time of arrival</strong>
                 <strong>
                   <b>
                     {!!scheduledShipping
-                      ? `${date} entre ${startHour}h e ${endHour}h`
+                      ? `${date} at ${startHour}h - ${endHour}h`
                       : '---'}
                   </b>
                 </strong>
               </OrderInfo>
               <Button onClick={handleOpenOrder}>
                 {/* <img src={bag} alt="" /> */}
-                <small>Ver encomenda</small>
+                <small>Order Details</small>
               </Button>
             </OrderInfoContainer>
           </Info>
@@ -243,7 +245,7 @@ export default function Order({ order, isOpen, setOrder, index: orderIndex }) {
               {loading ? (
                 <LoadingContainer>
                   <FaSpinner color="#666" size={38} />
-                  <strong>Carregando os dados da encomenda, aguarde...</strong>
+                  <strong>Loading order info...</strong>
                 </LoadingContainer>
               ) : (
                 <>
@@ -258,7 +260,7 @@ export default function Order({ order, isOpen, setOrder, index: orderIndex }) {
                     {!!scheduledShipping && (
                       <ShippingInfo open={isOpen === id}>
                         <small>
-                          <b>Endereço de envio</b>
+                          <b>Shipping Address</b>
                         </small>
                         <small>
                           {shippingAddress.destination_name}&nbsp;
@@ -281,13 +283,15 @@ export default function Order({ order, isOpen, setOrder, index: orderIndex }) {
                     )}
                     <ShippingInfo open={isOpen === id}>
                       <small>
-                        <b>Forma de pagamento</b>
+                        <b>Payment Method</b>
                       </small>
-                      <small>Dinheiro na entrega</small>
+                      <small>Pay on Arrival</small>
                       <small>
-                        <b>Método da Compra</b>
+                        <b>Purchase Method</b>
                       </small>
-                      <small>{transaction.origin}</small>
+                      <small>
+                        <Translate>{transaction.origin}</Translate>
+                      </small>
                     </ShippingInfo>
                     <div
                       style={{
@@ -297,13 +301,13 @@ export default function Order({ order, isOpen, setOrder, index: orderIndex }) {
                     >
                       <ShippingInfo open={isOpen === id}>
                         <small>
-                          <b>Resumo do pedido</b>
+                          <b>Order Details</b>
                         </small>
-                        <small>Produtos</small>
-                        <small>Economizou</small>
-                        <small>Crédito utilizado</small>
-                        <small>Cupom de desconto</small>
-                        <small>Porte</small>
+                        <small>Products</small>
+                        <small>Saved</small>
+                        <small>Applied Cashback</small>
+                        <small>Voucher</small>
+                        <small>Shipping</small>
                         <small style={{ fontFamily: 'SFProBold' }}>Total</small>
                       </ShippingInfo>
                       <ShippingInfo open={isOpen === id}>
@@ -366,7 +370,7 @@ export default function Order({ order, isOpen, setOrder, index: orderIndex }) {
                   shadowColor="#17A75B"
                   onClick={handleReorder}
                 >
-                  Comprar novamente
+                  Redo Order
                 </ReOrderButton>
               </div>
               <div
@@ -382,7 +386,7 @@ export default function Order({ order, isOpen, setOrder, index: orderIndex }) {
                   shadowColor="#D02B21"
                   onClick={() => {}}
                 >
-                  Cancelar Encomenda
+                  Cancel Order
                 </ReOrderButton>
               </div>
             </div>

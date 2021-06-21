@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Translate } from 'react-auto-translate';
 // import { Container } from './styles';
 
 import minus from '~/assets/icons/minus.svg';
@@ -67,7 +68,9 @@ export default function Item({ item, index }) {
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <ItemPicture src={thumbs} />
         <ProductInfo>
-          <Title>{title}</Title>
+          <Title>
+            <Translate>{title}</Translate>
+          </Title>
           <PriceAndAmount>
             {has_promotion ? (
               <small>€&nbsp;{price}</small>

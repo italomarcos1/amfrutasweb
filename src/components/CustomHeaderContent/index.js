@@ -26,7 +26,7 @@ export default function CustomHeader({
   inputValue,
   setInputValue,
 }) {
-  const [selectedOption, setSelectedOption] = useState('Mais Recentes');
+  const [selectedOption, setSelectedOption] = useState('Latest');
   const [menuIsOpen, setMenuIsOpen] = useState(false);
 
   const isDesktop = useMediaQuery({ query: '(min-device-width: 900px)' });
@@ -37,18 +37,18 @@ export default function CustomHeader({
       setMenuIsOpen(false);
 
       switch (option) {
-        case 'Mais Antigas': {
+        case 'Oldest': {
           setOrderField('published_at');
           setOrderDirection('asc');
           break;
         }
-        case 'Mais Recentes': {
+        case 'Latest': {
           setOrderField('published_at');
           setOrderDirection('desc');
           break;
         }
 
-        case 'Ordem Alfabética': {
+        case 'Title': {
           setOrderField('title');
           setOrderDirection('asc');
           break;
@@ -60,9 +60,9 @@ export default function CustomHeader({
   );
 
   const data = [
-    { id: 1, option: 'Mais Antigas' },
-    { id: 2, option: 'Mais Recentes' },
-    { id: 3, option: 'Ordem Alfabética' },
+    { id: 1, option: 'Oldest' },
+    { id: 2, option: 'Latest' },
+    { id: 3, option: 'Title' },
   ];
 
   return (

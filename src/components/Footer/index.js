@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 
+import { Translate } from 'react-auto-translate';
+
 import { useQuery } from 'react-query';
 import {
   TopFooter,
@@ -73,7 +75,7 @@ export default function Footer() {
                       to={{ pathname: `${item.url}`, state: { id: item.url } }}
                       rel="noreferrer"
                     >
-                      {item.name}
+                      <Translate>{item.name}</Translate>
                     </Link>
                   )
                 )}
@@ -90,7 +92,7 @@ export default function Footer() {
                       to={{ pathname: `${item.url}`, state: { id: item.url } }}
                       rel="noreferrer"
                     >
-                      {item.name}
+                      <Translate>{item.name}</Translate>
                     </Link>
                   )
                 )}
@@ -108,7 +110,7 @@ export default function Footer() {
                       rel="noreferrer"
                       target="_blank"
                     >
-                      {item.name}
+                      <Translate>{item.name}</Translate>
                     </a>
                   )
                 )}
@@ -171,7 +173,7 @@ export default function Footer() {
               target="_blank"
             >
               <small>
-                Segurança <b>100%</b>
+                Safety <b>100%</b>
               </small>
               <img
                 src={google}

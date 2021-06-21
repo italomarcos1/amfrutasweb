@@ -74,15 +74,15 @@ export default function Login({ closeModal, setPage, isDesktop }) {
   return (
     <>
       <Title isDesktop={isDesktop}>
-        INICIA A TUA SESSÃO
+        LOGIN WITH
         <br />
-        <b>COM E-MAIL E SEGURANÇA</b>
+        <b>E-MAIL AND SAFETY</b>
       </Title>
       <Form onSubmit={handleSubmit} style={isDesktop ? {} : { width: '85%' }}>
         <Input
           name="email"
           title="E-mail"
-          placeholder="Escreve o teu e-mail"
+          placeholder="Your e-mail address"
           customWidth={isDesktop ? 462 : '100%'}
           style={loading ? { marginTop: 20, opacity: 0.6 } : {}}
           setError={value => setEmailError(!mailIsValid(value))}
@@ -92,8 +92,8 @@ export default function Login({ closeModal, setPage, isDesktop }) {
         />
         <Input
           name="password"
-          title="Palavra-passe"
-          placeholder="Escolhe a tua palavra-passe"
+          title="Password"
+          placeholder="Your password"
           type="password"
           customWidth={isDesktop ? 462 : '100%'}
           value={password}
@@ -108,7 +108,7 @@ export default function Login({ closeModal, setPage, isDesktop }) {
           error={passwordError}
         />
         <ForgotPasswordButton onClick={() => setPage('forgot')}>
-          Não se recorda da palavra-passe?
+          Forgot your password?
         </ForgotPasswordButton>
       </Form>
       <Button
@@ -123,20 +123,20 @@ export default function Login({ closeModal, setPage, isDesktop }) {
               }
         }
       >
-        {loading ? <FaSpinner color="#fff" size={20} /> : 'Iniciar sessão'}
+        {loading ? <FaSpinner color="#fff" size={20} /> : 'Login'}
       </Button>
       <GoBack
         style={isDesktop ? { marginTop: 28 } : { marginTop: 14 }}
         onClick={() => setPage('main')}
       >
-        Ou voltar
+        Go back
       </GoBack>
       <SecureLogin style={isDesktop ? { marginTop: 60 } : { marginTop: 19 }}>
         Secure <img src={lock} alt="Lock" /> Login
       </SecureLogin>
       {toastVisible && (
         <Toast
-          status="Houve um erro no login. Confira seus dados e tente novamente."
+          status="There was an error logging in, check your e-mail and password"
           color="#f56060"
         />
       )}

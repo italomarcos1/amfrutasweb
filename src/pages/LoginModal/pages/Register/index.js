@@ -159,11 +159,11 @@ export default function Register({ closeModal, isDesktop }) {
           meta: { message },
         } = err.response.data;
         if (message === 'Credenciais incorretas') {
-          setToastMessage('O email informado já existe, faça login.');
+          setToastMessage('This email is already taken, please log in.');
           setToastVisible(true);
         }
         if (message === 'Preencha com seu apelido!') {
-          setToastMessage('Preencha seu nome completo (nome e apelido)');
+          setToastMessage('Fill with your full name (name and last name)');
           setToastVisible(true);
           formRef.current.setFieldError('full_name', true);
         }
@@ -175,9 +175,9 @@ export default function Register({ closeModal, isDesktop }) {
   return (
     <>
       <Title isDesktop={isDesktop}>
-        CRIA A TUA
+        CREATE YOUR
         <br />
-        <b>CONTA COM E-MAIL E SEGURANÇA</b>
+        <b>ACCOUNT WITH AN E-MAIL ADDRESS</b>
       </Title>
       <Form
         onSubmit={handleSubmit}
@@ -192,14 +192,14 @@ export default function Register({ closeModal, isDesktop }) {
             <>
               <Input
                 name="name"
-                title="Nome"
-                placeholder="Escreve o teu nome"
+                title="Name"
+                placeholder="Tell us your name"
                 customWidth={isDesktop ? 221 : '100%'}
               />
               <Input
                 name="last_name"
-                title="Apelido"
-                placeholder="Escolhe o teu apelido"
+                title="Last name"
+                placeholder="Tell us your last name"
                 customWidth={isDesktop ? 221 : '100%'}
               />
             </>
@@ -207,8 +207,8 @@ export default function Register({ closeModal, isDesktop }) {
           {!isDesktop && (
             <Input
               name="full_name"
-              title="Nome completo"
-              placeholder="Escreve o teu nome"
+              title="Full Name"
+              placeholder="Tell is your full name"
               customWidth="100%"
             />
           )}
@@ -220,14 +220,14 @@ export default function Register({ closeModal, isDesktop }) {
           <Input
             name="email"
             title="E-mail"
-            placeholder="Escreve o teu e-mail"
+            placeholder="E-mail address"
             customWidth={isDesktop ? 221 : '100%'}
           />
           {isDesktop && (
             <InputMask
               name="birthday"
-              title="Data de Nascimento"
-              placeholder="Data de Nascimento"
+              title="Birthdate"
+              placeholder="Your Birthdate"
               customWidth={isDesktop ? 221 : '100%'}
             />
           )}
@@ -235,15 +235,15 @@ export default function Register({ closeModal, isDesktop }) {
         <InputContainer isDesktop={isDesktop} style={{ marginTop: 10 }}>
           <Input
             name="password"
-            title="Palavra-passe"
-            placeholder="Escolhe a tua palavra-passe"
+            title="Password"
+            placeholder="Your password"
             type="password"
             customWidth={isDesktop ? 221 : '100%'}
           />
           <Input
             name="confirmPassword"
-            title="Repita palavra-passe"
-            placeholder="Repita a tua palavra-passe"
+            title="Confirm Password"
+            placeholder="Repeat your password"
             type="password"
             customWidth={isDesktop ? 221 : '100%'}
           />
@@ -263,7 +263,7 @@ export default function Register({ closeModal, isDesktop }) {
         shadowColor="#17A75B"
         style={isDesktop ? { marginTop: 47 } : { width: '85%', marginTop: 12 }}
       >
-        {loading ? <FaSpinner color="#fff" size={20} /> : 'Criar conta'}
+        {loading ? <FaSpinner color="#fff" size={20} /> : 'Create Account'}
       </Button>
       <SecureLogin style={isDesktop ? { marginTop: 48 } : { marginTop: 12 }}>
         Secure <img src={lock} alt="Lock" /> Login

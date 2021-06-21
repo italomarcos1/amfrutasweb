@@ -62,19 +62,19 @@ export default function LoginModal({ closeModal }) {
           <ShopDetails>
             <img src={logo} alt="" width={190} />
             <p style={{ marginTop: 40 }}>
-              VARIEDADE DE PRODUTOS E <br /> MARCAS
+              A RANGE OF PRODUCTS AND <br /> BRANDS
             </p>
-            <p>SEMPRE PREÇOS BAIXOS</p>
+            <p>THE BEST PRICES</p>
             <p>
-              ECONOMIZA COM CADA <br /> COMPRA
-            </p>
-            <p>
-              OFERTAS EXCLUSIVAS PARA <br />
-              CLIENTES REGISTADOS
+              SAVE MONEY ON EACH <br /> PURCHASE
             </p>
             <p>
-              RECEBE EUROS DE CRÉDITO <br />
-              POR CADA COMPRA
+              EXCLUSIVE PROMOTIONS FOR <br />
+              REGISTERED CUSTOMERS
+            </p>
+            <p>
+              EARN EUROS OF CREDIT <br />
+              ON EACH PURCHASE
             </p>
           </ShopDetails>
         )}
@@ -98,7 +98,7 @@ export default function LoginModal({ closeModal }) {
               active={active === 'login'}
               isDesktop={isDesktop}
             >
-              Iniciar sessão
+              Enter session
             </HeaderButton>
             <HeaderButton
               onClick={() => {
@@ -108,7 +108,7 @@ export default function LoginModal({ closeModal }) {
               active={active === 'signUp'}
               isDesktop={isDesktop}
             >
-              Criar conta
+              Create an account
             </HeaderButton>
             <CloseButton onClick={handleCloseModal} isDesktop={isDesktop}>
               <img src={close} alt="Close panel" />

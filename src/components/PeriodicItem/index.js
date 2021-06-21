@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 // import { Container } from './styles';
 
+import { Translate } from 'react-auto-translate';
+
 import { FaSpinner } from 'react-icons/fa';
 
 import minus from '~/assets/icons/minus.svg';
@@ -101,7 +103,9 @@ export default function PeriodicItem({ item, index, isDesktop }) {
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <ItemPicture src={thumbs} />
         <ProductInfo>
-          <Title isDesktop={isDesktop}>{title}</Title>
+          <Title isDesktop={isDesktop}>
+            <Translate>{title}</Translate>
+          </Title>
           <PriceAndAmount hasCback={!!cback}>
             {!!cback ? (
               cback !== '0.00' ? (

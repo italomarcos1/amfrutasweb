@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Translate } from 'react-auto-translate';
 import {
   SectionTitleMenu,
   SectionTitle,
@@ -19,9 +20,9 @@ export default class CategoriesCarousel extends Component {
         <SectionTitleMenu isDesktop={isDesktop}>
           <SectionTitle style={{ margin: 0, width: 600 }}>
             <div>
-              <strong>Categorias</strong>
+              <strong>Categories</strong>
               <small>
-                Visite todas as categorias {!isDesktop && <br />}do site
+                Check out all categories {!isDesktop && <br />}of our site
               </small>
             </div>
           </SectionTitle>
@@ -53,7 +54,9 @@ export default class CategoriesCarousel extends Component {
               isDesktop={isDesktop}
             >
               <img src={thumbs} alt="" />
-              <small>{name}</small>
+              <small>
+                <Translate>{name}</Translate>
+              </small>
             </Category>
           ))}
         </Categories>

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { FaSpinner } from 'react-icons/fa';
+import { Translate } from 'react-auto-translate';
 import { addToCartRequest } from '~/store/modules/cart/actions';
 
 import Toast from '~/components/Toast';
@@ -76,12 +77,12 @@ export default function Item({ item, index, isDesktop }) {
         products,
       });
 
-      setToastStatus('O produto foi adicionado à compra periódica.');
+      setToastStatus('Product added to periodic delivery.');
       setToastColor('#1dc167');
       setToastVisible(true);
     } catch (err) {
       console.log(err.response);
-      setToastStatus('Erro ao adicionar o produto à compra periódica.');
+      setToastStatus('Error adding product to periodic delivery.');
       setToastColor('#f56060');
 
       setToastVisible(true);
@@ -110,7 +111,9 @@ export default function Item({ item, index, isDesktop }) {
               alignItems: 'flex-start',
             }}
           >
-            <Title isDesktop={isDesktop}>{title}</Title>
+            <Title isDesktop={isDesktop}>
+              <Translate>{title}</Translate>
+            </Title>
           </div>
           <PriceAndAmount isDesktop={isDesktop} style={{ width: '100%' }}>
             {!!cback ? (
@@ -121,7 +124,7 @@ export default function Item({ item, index, isDesktop }) {
                 <strong style={isDesktop ? {} : { fontSize: 9 }}>
                   €&nbsp;{!!cback ? finalCback : '0.00'}
                 </strong>
-                <b style={isDesktop ? {} : { fontSize: 9 }}>DE CRÉDITO</b>
+                <b style={isDesktop ? {} : { fontSize: 9 }}>CASHBACK</b>
               </CBackContainer>
             ) : (
               <></>
@@ -149,7 +152,7 @@ export default function Item({ item, index, isDesktop }) {
             width: '50%',
           }}
         >
-          <small>{qty} unidades</small>
+          <small>{qty} units</small>
           <strong>
             €&nbsp;{has_promotion ? finalPromotionalPrice : finalPrice}
           </strong>
@@ -168,7 +171,7 @@ export default function Item({ item, index, isDesktop }) {
             <>
               <img src={delivery} alt="" />
               <small style={isDesktop ? {} : { fontSize: 10 }}>
-                Adicionar a entrega periódica
+                Add to periodic delivery
               </small>
             </>
           )}
@@ -179,9 +182,7 @@ export default function Item({ item, index, isDesktop }) {
           style={isDesktop ? { width: 132 } : { width: '37%', fontSize: 10 }}
         >
           <img src={orders} alt="" style={{ width: 15, height: 15 }} />
-          <small style={isDesktop ? {} : { fontSize: 10 }}>
-            Adicionar ao cesto
-          </small>
+          <small style={isDesktop ? {} : { fontSize: 10 }}>Add to Basket</small>
         </Button>
       </Options>
       {toastVisible && (

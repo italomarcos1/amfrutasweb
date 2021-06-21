@@ -4,6 +4,8 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useScrollYPosition } from 'react-use-scroll-position';
 import { useMediaQuery } from 'react-responsive';
 
+import { Translate } from 'react-auto-translate';
+
 import { useSelector } from 'react-redux';
 
 import {
@@ -48,15 +50,15 @@ export default function PageHeader({ login, active }) {
 
   const [headerFixed, setHeaderFixed] = useState(false);
   const [headerAlertMessage, setHeaderAlertMessage] = useState(
-    'Bem-vindo ao AM Frutas'
+    'Welcome to AM Frutas'
   );
 
   const [menuItems, setMenuItems] = useState([
-    'Lojas e Contatos',
-    'Produtos',
-    'Promoções da Semana',
-    'Informações',
-    'Dicas e Receitas',
+    'Stores',
+    'Products',
+    'Promotions',
+    'Info',
+    'Tips and Recipes',
   ]);
 
   const loadMenu = useCallback(async () => {
@@ -114,7 +116,7 @@ export default function PageHeader({ login, active }) {
             isDesktop &&
             menuItems.map(({ id, name, url }) => (
               <MenuItem key={id} selected={pathname === `${url}`} to={`${url}`}>
-                {name}
+                <Translate>{name}</Translate>
               </MenuItem>
             ))}
 
@@ -161,7 +163,7 @@ export default function PageHeader({ login, active }) {
         style={headerFixed ? { position: 'fixed', top: 41 } : {}}
         isDesktop={isDesktop}
       >
-        {headerAlertMessage}
+        <Translate>{headerAlertMessage}</Translate>
       </SubTitle>
       {selectedPage === 'Menu' && (
         <Background onClick={() => setSelectedPage('none')}>
@@ -192,7 +194,7 @@ export default function PageHeader({ login, active }) {
                   style={{ width: '100%' }}
                   isDesktop={isDesktop}
                 >
-                  {name}
+                  <Translate>{name}</Translate>
                 </MenuItem>
               ))}
             {!loading && (
@@ -206,7 +208,7 @@ export default function PageHeader({ login, active }) {
                 }}
                 isDesktop={isDesktop}
               >
-                <strong>Fechar menu</strong>
+                <strong>Close menu</strong>
               </MenuItem>
             )}
           </MenuMobile>

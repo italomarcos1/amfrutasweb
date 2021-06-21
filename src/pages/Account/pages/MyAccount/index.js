@@ -98,28 +98,28 @@ export default function MyAccount() {
             isDesktop={isDesktop}
           >
             <SectionTitle isDesktop={isDesktop}>
-              <strong>Dados de contato</strong>
-              <small>Confira e atualize caso necessário.</small>
+              <strong>Contact Info</strong>
+              <small>Checkout and update your info.</small>
             </SectionTitle>
             <InputContainer isDesktop={isDesktop}>
               <Input
                 name="name"
-                title="Nome"
-                placeholder="Escreve o teu nome"
+                title="Name"
+                placeholder="Tell us your name"
                 error={invalidName}
               />
               <Input
                 name="last_name"
-                title="Apelido"
-                placeholder="Escolhe o teu apelido"
+                title="Last name"
+                placeholder="Tell us your last name"
                 error={invalidLastName}
               />
             </InputContainer>
             <InputContainer isDesktop={isDesktop}>
               <Input
                 name="email"
-                title="Email"
-                placeholder="Escreve o teu e-mail"
+                title="E-mail"
+                placeholder="E-mail address"
                 setError={value => setEmailError(!mailIsValid(value))}
                 value={email}
                 onChange={({ target: { value } }) =>
@@ -127,11 +127,7 @@ export default function MyAccount() {
                 }
                 error={emailError}
               />
-              <InputMask
-                name="birth"
-                title="Data de nascimento"
-                error={invalidBirth}
-              />
+              <InputMask name="birth" title="Birthdate" error={invalidBirth} />
             </InputContainer>
             <InputContainer isDesktop={isDesktop}>
               <InputMask
@@ -142,8 +138,8 @@ export default function MyAccount() {
               />
               {gender !== '' ? (
                 <Select
-                  title="Gênero"
-                  placeholder="Escolha o gênero"
+                  title="Gender"
+                  placeholder="Pick your gender"
                   setValue={setGender}
                   defaultValue={{ label: gender, value: gender }}
                   customWidth={221}
@@ -152,8 +148,8 @@ export default function MyAccount() {
                 />
               ) : (
                 <Select
-                  title="Gênero"
-                  placeholder="Escolha o gênero"
+                  title="Gender"
+                  placeholder="Pick your gender"
                   setValue={setGender}
                   customWidth={221}
                   data={genderData}
@@ -165,7 +161,7 @@ export default function MyAccount() {
               <InputMask
                 name="cellphone"
                 type="phone"
-                title="Telemóvel"
+                title="Phone"
                 error={invalidPhone}
               />
               {/* <InputMask
@@ -183,7 +179,7 @@ export default function MyAccount() {
               style={{ width: 221 }}
               type="submit"
             >
-              <b>Gravar</b>
+              <b>Save</b>
             </Button>
           </InfoContainer>
           <InfoContainer
@@ -192,21 +188,21 @@ export default function MyAccount() {
             isDesktop={isDesktop}
           >
             <SectionTitle>
-              <strong>Palavra-passe</strong>
-              <small>Com validação por email</small>
+              <strong>Password</strong>
+              <small>Validation by e-mail</small>
             </SectionTitle>
 
             <Input
               name="password"
-              title="Palavra-passe"
-              placeholder="Escolhe tua palavra-passe"
+              title="Password"
+              placeholder="Set your password"
               style={{ marginTop: 20 }}
               type="password"
             />
             <Input
               name="repeatPassword"
-              title="Repita palavra-passe"
-              placeholder="Repita a tua palavra-passe"
+              title="Confirm Password"
+              placeholder="Confirm your password"
               style={{ marginTop: 20 }}
               type="password"
             />
@@ -214,7 +210,7 @@ export default function MyAccount() {
               name="passwordMailCode"
               mask="99 99 99"
               placeholder="00 00 00"
-              title="Código de validação por e-mail"
+              title="Validation Code"
               style={{ marginTop: 20 }}
             />
 
@@ -224,7 +220,7 @@ export default function MyAccount() {
               shadowColor="#17A75B"
               style={{ width: 221, marginTop: 93 }}
             >
-              <b>Gravar</b>
+              <b>Save</b>
             </Button>
           </InfoContainer>
         </Content>
