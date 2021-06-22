@@ -3,9 +3,9 @@ import { Route, Redirect, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
-import Layout from '~/pages/Account';
+import Layout from '~/uk/pages/Account';
 
-// import Toast from '~/components/Toast';
+// import Toast from '~/uk/components/Toast';
 
 export default function CustomRoute({
   component: Component,

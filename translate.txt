@@ -1,0 +1,17 @@
+import { Redirect } from 'react-router-dom'
+import detectBrowserLanguage from 'detect-browser-language';
+
+
+const isEnglish = useMemo(() => {
+  console.log(detectBrowserLanguage());
+  const browserLanguage = detectBrowserLanguage();
+  const isEng = browserLanguage.split('-')[0] === 'en';
+  console.log('isBre-esh');
+  console.log(isEng);
+  // if (isEnglish) return <Redirect to="/uk" />;
+  return isEng;
+}, []);
+
+isEnglish ? (
+  <Redirect to="/menu/uk" />
+) :

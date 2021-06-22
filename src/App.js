@@ -8,7 +8,7 @@ import { persistWithLocalStorage } from 'react-query/persist-localstorage-experi
 import { Translator } from 'react-auto-translate';
 
 import Routes from '~/routes';
-import Helmet from '~/components/Helmet';
+import Helmet from '~/uk/components/Helmet';
 
 import { store, persistor } from '~/store';
 
