@@ -1,0 +1,44 @@
+{
+  type: 'persist/REHYDRATE',
+  payload: {
+    auth: {
+      token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvc2FuZGJveC5hbWZydXRhcy5wdFwvYmFja2VuZFwvYXV0aFwvbG9naW4iLCJpYXQiOjE2MDY2NzQ2MjEsIm5iZiI6MTYwNjY3NDYyMSwianRpIjoiOElWSFRUaWdxcnF6YktQOCIsInN1YiI6MjE3NCwicHJ2IjoiNDZlZGQxMDkyOTRmYzBkOGMwMTkyZjNjM2YxODVjNDhiMDM2ZjNhNyJ9.00-doeFHdmOTHAiiKQXhWuR2FrxD3zWcXQJ0pRrF50w',
+      signed: false,
+      loading: false,
+      loginError: false,
+      noFavorite: false,
+      firstLogin: false,
+      uuid: null,
+    },
+    user: {
+      profile: null,
+      order: null,
+      orders: [],
+      product: null,
+      category: null,
+      finalProfile: null,
+      active: '',
+    },
+    cart: {
+      products: [],
+      favorites: [],
+      price: '0.00',
+      saved: '0.00',
+      updating: false,
+      hasOrder: false,
+      orderFinished: false,
+      processingOrder: false,
+      pages: 1
+    },
+    addresses: {
+      addresses: [],
+      finalAddress: null
+    },
+    _persist: {
+      version: -1,
+      rehydrated: true
+    }
+  },
+  err: undefined,
+  key: 'root'
+}
